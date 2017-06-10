@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1198BDDC1EEBE18C00D0B238 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B705AB1EEBD3DF0039A863 /* Notebook.swift */; };
+		1198BDDE1EEBF7B100D0B238 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1198BDDD1EEBF7B100D0B238 /* main.swift */; };
 		11B7057F1EEB42570039A863 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B7057E1EEB42570039A863 /* AppDelegate.swift */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
 		11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11B705871EEB42570039A863 /* LaunchScreen.storyboard */; };
-		11B705941EEB42570039A863 /* QuNotesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B705931EEB42570039A863 /* QuNotesTests.swift */; };
+		11B705941EEB42570039A863 /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B705931EEB42570039A863 /* NotebookSpec.swift */; };
 		11B705A11EEBCB0E0039A863 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; };
 		11B705A21EEBCB0E0039A863 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; };
 		11B705A41EEBCB3E0039A863 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -44,13 +46,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1198BDDD1EEBF7B100D0B238 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		11B7057B1EEB42570039A863 /* QuNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11B7057E1EEB42570039A863 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		11B705851EEB42570039A863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11B705881EEB42570039A863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		11B7058A1EEB42570039A863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		11B7058F1EEB42570039A863 /* QuNotesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QuNotesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		11B705931EEB42570039A863 /* QuNotesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuNotesTests.swift; sourceTree = "<group>"; };
+		11B705931EEB42570039A863 /* NotebookSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
 		11B705951EEB42570039A863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		11B7059F1EEBCB0E0039A863 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		11B705A01EEBCB0E0039A863 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -102,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				11B7057E1EEB42570039A863 /* AppDelegate.swift */,
+				1198BDDD1EEBF7B100D0B238 /* main.swift */,
 				11B705AB1EEBD3DF0039A863 /* Notebook.swift */,
 				11B705A61EEBCD600039A863 /* Resources */,
 			);
@@ -111,7 +115,7 @@
 		11B705921EEB42570039A863 /* QuNotesTests */ = {
 			isa = PBXGroup;
 			children = (
-				11B705931EEB42570039A863 /* QuNotesTests.swift */,
+				11B705931EEB42570039A863 /* NotebookSpec.swift */,
 				11B705951EEB42570039A863 /* Info.plist */,
 			);
 			path = QuNotesTests;
@@ -196,6 +200,7 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = LB83DKTVND;
 						ProvisioningStyle = Automatic;
+						TestTargetID = 11B7057A1EEB42570039A863;
 					};
 				};
 			};
@@ -261,6 +266,7 @@
 			files = (
 				11B705AC1EEBD3DF0039A863 /* Notebook.swift in Sources */,
 				11B7057F1EEB42570039A863 /* AppDelegate.swift in Sources */,
+				1198BDDE1EEBF7B100D0B238 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -268,7 +274,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11B705941EEB42570039A863 /* QuNotesTests.swift in Sources */,
+				1198BDDC1EEBE18C00D0B238 /* Notebook.swift in Sources */,
+				11B705941EEB42570039A863 /* NotebookSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -427,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = LB83DKTVND;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -437,6 +445,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuNotes.app/QuNotes";
 			};
 			name = Debug;
 		};
@@ -444,6 +453,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = LB83DKTVND;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -454,6 +464,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuNotes.app/QuNotes";
 			};
 			name = Release;
 		};
@@ -476,6 +487,7 @@
 				11B7059A1EEB42570039A863 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		11B7059B1EEB42570039A863 /* Build configuration list for PBXNativeTarget "QuNotesTests" */ = {
 			isa = XCConfigurationList;
@@ -484,6 +496,7 @@
 				11B7059D1EEB42570039A863 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
