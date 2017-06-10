@@ -15,7 +15,18 @@ enum NotebookError: Error {
 
 class Notebook {
 
+    let uuid: String
+    let name: String
     private var notes = [String]()
+
+    init(name: String) {
+        self.name = name
+        self.uuid = UUID.init().uuidString
+    }
+
+    convenience init() {
+        self.init(name: "")
+    }
 
     func allNotes() -> [String] {
         return notes
@@ -31,5 +42,11 @@ class Notebook {
         } else {
             return .success(notes[i])
         }
+    }
+}
+
+extension Notebook: Equatable {
+    static func ==(lhs: Notebook, rhs: Notebook) -> Bool {
+        return lhs.uuid == rhs.uuid
     }
 }

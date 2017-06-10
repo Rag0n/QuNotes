@@ -8,6 +8,7 @@
 
 import Quick
 import Nimble
+import Result
 @testable import QuNotes
 
 class NotebookSpec: QuickSpec {
@@ -17,6 +18,24 @@ class NotebookSpec: QuickSpec {
 
         beforeEach {
             notebook = Notebook()
+        }
+
+        describe("-init(name)") {
+            it("sets passed name") {
+                let notebook = Notebook(name: "name fixture")
+                expect(notebook.name).to(equal("name fixture"))
+            }
+
+            it("sets uniq uuid") {
+                let anotherNotebook = Notebook()
+                expect(notebook.uuid).notTo(equal(anotherNotebook.uuid))
+            }
+        }
+
+        describe("-init") {
+            it("sets empty name") {
+                expect(notebook.name).to(equal(""))
+            }
         }
 
         describe("-addNote") {
