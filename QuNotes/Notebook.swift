@@ -8,3 +8,28 @@
 
 import Foundation
 import Result
+
+enum NotebookError: Error {
+    case noteIsNotExists
+}
+
+class Notebook {
+
+    private var notes = [String]()
+
+    func allNotes() -> [String] {
+        return notes
+    }
+
+    func addNote(_ note: String) {
+        notes.append(note)
+    }
+
+    func getNote(_ i: Int) -> Result<String, NotebookError> {
+        if i >= notes.count {
+            return .failure(.noteIsNotExists)
+        } else {
+            return .success(notes[i])
+        }
+    }
+}
