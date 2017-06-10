@@ -14,10 +14,11 @@ class QuNotesTests: QuickSpec {
     
     override func spec() {
         describe("it works") {
-            
             it("should work") {
                 expect(true).to(beTrue())
             }
+            
+            
         }
     }
 }

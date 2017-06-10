@@ -15,6 +15,8 @@
 		11B705A21EEBCB0E0039A863 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; };
 		11B705A41EEBCB3E0039A863 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11B705A51EEBCB3E0039A863 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		11B705A81EEBD3810039A863 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
+		11B705AC1EEBD3DF0039A863 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B705AB1EEBD3DF0039A863 /* Notebook.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +54,8 @@
 		11B705951EEB42570039A863 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		11B7059F1EEBCB0E0039A863 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		11B705A01EEBCB0E0039A863 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
+		11B705A71EEBD3810039A863 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		11B705AB1EEBD3DF0039A863 /* Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11B705A81EEBD3810039A863 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -97,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				11B7057E1EEB42570039A863 /* AppDelegate.swift */,
+				11B705AB1EEBD3DF0039A863 /* Notebook.swift */,
 				11B705A61EEBCD600039A863 /* Resources */,
 			);
 			path = QuNotes;
@@ -114,6 +120,7 @@
 		11B7059E1EEBCB0E0039A863 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				11B705A71EEBD3810039A863 /* Result.framework */,
 				11B7059F1EEBCB0E0039A863 /* Nimble.framework */,
 				11B705A01EEBCB0E0039A863 /* Quick.framework */,
 			);
@@ -140,6 +147,7 @@
 				11B705771EEB42570039A863 /* Sources */,
 				11B705781EEB42570039A863 /* Frameworks */,
 				11B705791EEB42570039A863 /* Resources */,
+				11B705AA1EEBD39F0039A863 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -229,11 +237,29 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		11B705AA1EEBD39F0039A863 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		11B705771EEB42570039A863 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11B705AC1EEBD3DF0039A863 /* Notebook.swift in Sources */,
 				11B7057F1EEB42570039A863 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -368,6 +394,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = LB83DKTVND;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = QuNotes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotes;
@@ -381,6 +411,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = LB83DKTVND;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = QuNotes/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotes;
