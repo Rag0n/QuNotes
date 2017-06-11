@@ -6,4 +6,20 @@
 import Foundation
 
 class Note {
+    let createdDate: Double
+    private(set) var updatedDate: Double
+    private var tags = Set<String>()
+
+    init() {
+        self.createdDate = Date().timeIntervalSince1970
+        self.updatedDate = self.createdDate
+    }
+
+    func allTags() -> [String] {
+        return Array(self.tags)
+    }
+    
+    func addTag(_ tag: String) {
+        self.tags.insert(tag)
+    }
 }
