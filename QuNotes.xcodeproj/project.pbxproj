@@ -23,9 +23,10 @@
 		11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11FBDBC21EED985100135646 /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FBDBAE1EED966A00135646 /* NotebookSpec.swift */; };
 		11FBDBC31EED985400135646 /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FBDBAD1EED966A00135646 /* LibrarySpec.swift */; };
-		11FBDBC61EED987400135646 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11FBDBC41EED987400135646 /* Info.plist */; };
-		11FBDBC71EED987400135646 /* QuNotesTestsInfo.plist in Resources */ = {isa = PBXBuildFile; fileRef = 11FBDBC51EED987400135646 /* QuNotesTestsInfo.plist */; };
+		B212572FF2C46BDD8511158F /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125B71EED6E86DA543D967 /* Note.swift */; };
 		B21259D146CCDE18A8905F40 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21252CCAC2E6A74E6D5225D /* Library.swift */; };
+		B2125BAEBCF69E05819F9A5C /* NoteSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125FB1FE9B2D60B8DD5DE9 /* NoteSpec.swift */; };
+		B2125CB8A807AB02BCEA4465 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125B71EED6E86DA543D967 /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,6 +70,8 @@
 		11FBDBC41EED987400135646 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		11FBDBC51EED987400135646 /* QuNotesTestsInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = QuNotesTestsInfo.plist; path = Resources/QuNotesTestsInfo.plist; sourceTree = "<group>"; };
 		B21252CCAC2E6A74E6D5225D /* Library.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
+		B2125B71EED6E86DA543D967 /* Note.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		B2125FB1FE9B2D60B8DD5DE9 /* NoteSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteSpec.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -150,6 +153,8 @@
 				11FBDBAE1EED966A00135646 /* NotebookSpec.swift */,
 				B21252CCAC2E6A74E6D5225D /* Library.swift */,
 				11FBDBAD1EED966A00135646 /* LibrarySpec.swift */,
+				B2125B71EED6E86DA543D967 /* Note.swift */,
+				B2125FB1FE9B2D60B8DD5DE9 /* NoteSpec.swift */,
 			);
 			path = Entity;
 			sourceTree = "<group>";
@@ -242,8 +247,6 @@
 			files = (
 				11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */,
 				11B705861EEB42570039A863 /* Assets.xcassets in Resources */,
-				11FBDBC71EED987400135646 /* QuNotesTestsInfo.plist in Resources */,
-				11FBDBC61EED987400135646 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,6 +285,7 @@
 				1198BDDE1EEBF7B100D0B238 /* main.swift in Sources */,
 				11CF990F1EEC510B00D82300 /* Notebook.swift in Sources */,
 				B21259D146CCDE18A8905F40 /* Library.swift in Sources */,
+				B212572FF2C46BDD8511158F /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,6 +297,8 @@
 				11FBDBC21EED985100135646 /* NotebookSpec.swift in Sources */,
 				11FBDBA91EED8ACD00135646 /* Notebook.swift in Sources */,
 				11FBDBAA1EED8ACD00135646 /* Library.swift in Sources */,
+				B2125BAEBCF69E05819F9A5C /* NoteSpec.swift in Sources */,
+				B2125CB8A807AB02BCEA4465 /* Note.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
