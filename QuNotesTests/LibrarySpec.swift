@@ -5,7 +5,7 @@
 
 import Quick
 import Nimble
-@testable import QuNotes
+import Result
 
 class LibrarySpec: QuickSpec {
     override func spec() {

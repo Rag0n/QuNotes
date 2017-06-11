@@ -18,6 +18,10 @@
 		11B705A51EEBCB3E0039A863 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11B705A81EEBD3810039A863 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11CF990F1EEC510B00D82300 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CF990E1EEC510B00D82300 /* Notebook.swift */; };
+		11FBDBA91EED8ACD00135646 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11CF990E1EEC510B00D82300 /* Notebook.swift */; };
+		11FBDBAA1EED8ACD00135646 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21252CCAC2E6A74E6D5225D /* Library.swift */; };
+		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
+		11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B21259D146CCDE18A8905F40 /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21252CCAC2E6A74E6D5225D /* Library.swift */; };
 		B2125A286044EB92EF763465 /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125B13DE5944B9AA592D84 /* LibrarySpec.swift */; };
 /* End PBXBuildFile section */
@@ -39,6 +43,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */,
 				11B705A41EEBCB3E0039A863 /* Nimble.framework in CopyFiles */,
 				11B705A51EEBCB3E0039A863 /* Quick.framework in CopyFiles */,
 			);
@@ -77,6 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */,
 				11B705A11EEBCB0E0039A863 /* Nimble.framework in Frameworks */,
 				11B705A21EEBCB0E0039A863 /* Quick.framework in Frameworks */,
 			);
@@ -213,7 +219,6 @@
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = LB83DKTVND;
 						ProvisioningStyle = Automatic;
-						TestTargetID = 11B7057A1EEB42570039A863;
 					};
 				};
 			};
@@ -288,6 +293,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11FBDBA91EED8ACD00135646 /* Notebook.swift in Sources */,
+				11FBDBAA1EED8ACD00135646 /* Library.swift in Sources */,
 				11B705941EEB42570039A863 /* NotebookSpec.swift in Sources */,
 				B2125A286044EB92EF763465 /* LibrarySpec.swift in Sources */,
 			);
@@ -448,7 +455,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = LB83DKTVND;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -459,7 +465,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuNotes.app/QuNotes";
 			};
 			name = Debug;
 		};
@@ -467,7 +472,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = LB83DKTVND;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -478,7 +482,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QuNotes.app/QuNotes";
 			};
 			name = Release;
 		};

@@ -9,7 +9,6 @@
 import Quick
 import Nimble
 import Result
-@testable import QuNotes
 
 class NotebookSpec: QuickSpec {
     override func spec() {
@@ -52,7 +51,7 @@ class NotebookSpec: QuickSpec {
                     notebook.addNote("second note fixture")
                     expect(notebook.allNotes().count).to(equal(2))
                 }
-            }
+           }
         }
 
         describe("-getNote") {
