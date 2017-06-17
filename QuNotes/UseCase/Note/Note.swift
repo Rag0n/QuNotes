@@ -5,21 +5,13 @@
 
 import Foundation
 
-class Note {
+struct Note {
     let createdDate: Double
-    private(set) var updatedDate: Double
-    private var tags = Set<String>()
+    let content: String
 
-    init() {
+    init(content: String) {
+        self.content = content
         self.createdDate = Date().timeIntervalSince1970
-        self.updatedDate = self.createdDate
-    }
-
-    func allTags() -> [String] {
-        return Array(self.tags)
-    }
-    
-    func addTag(_ tag: String) {
-        self.tags.insert(tag)
     }
 }
+
