@@ -15,3 +15,9 @@ struct Note {
     }
 }
 
+extension Note: Equatable {
+    static func ==(lhs: Note, rhs: Note) -> Bool {
+        // TODO: improve equal check based on uuid
+        return lhs.content == rhs.content
+    }
+}
