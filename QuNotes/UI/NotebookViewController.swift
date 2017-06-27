@@ -8,40 +8,45 @@
 
 import UIKit
 
-class NotebookViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+protocol NotebookViewControllerHandler: class {
+    func didTapAddNote()
+}
 
-    var noteUseCase: NoteUseCase!
-    
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var addButton: UIButton!
+class NotebookViewController: UIViewController {
 
-    // MARK: Life cycle
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        noteUseCase = NoteUseCase()
-        noteUseCase.addNote(withContent: "First note")
-        noteUseCase.addNote(withContent: "Second note")
+    func inject(handler: NotebookViewControllerHandler) {
+        self.handler = handler
     }
 
-    // MARK: Actions
-
-    @IBAction func addNote() {
-        noteUseCase.addNote(withContent: "New note")
+    func render(withViewModel viewModel: NotebookViewModel) {
+        self.viewModel = viewModel
         tableView.reloadData()
     }
 
-    // MARK: TableView
+    fileprivate weak var handler: NotebookViewControllerHandler?
+    fileprivate var viewModel: NotebookViewModel?
+    
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var addButton: UIButton!
 
+    @IBAction private func addNote() {
+        handler?.didTapAddNote()
+    }
+}
+
+extension NotebookViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return noteUseCase.getAllNotes().count
+        return viewModel?.notes.count ?? 0
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let allNotes = noteUseCase.getAllNotes()
         let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        cell.textLabel?.text = allNotes[indexPath.row].content
+        cell.textLabel?.text = viewModel?.notes[indexPath.row]
 
         return cell
     }
+}
+
+extension NotebookViewController: UITableViewDelegate {
+
 }

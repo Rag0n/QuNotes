@@ -8,14 +8,27 @@ import UIKit
 class AppCoordinator {
 
     private let window: UIWindow
+    fileprivate let noteUseCase: NoteUseCase
+    fileprivate var notebookViewController: NotebookViewController?
 
     init(withWindow window: UIWindow) {
         self.window = window
+        noteUseCase = NoteUseCase()
     }
 
     func start() {
-        let notebookVC = NotebookViewController()
-        window.rootViewController = notebookVC
+        notebookViewController = NotebookViewController()
+        notebookViewController!.inject(handler: self)
+        window.rootViewController = notebookViewController
         window.makeKeyAndVisible()
+    }
+}
+
+extension AppCoordinator: NotebookViewControllerHandler {
+    func didTapAddNote() {
+        noteUseCase.addNote(withContent: "note fixture")
+        let notes = noteUseCase.getAllNotes()
+        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.content })
+        notebookViewController?.render(withViewModel: notebookViewModel)
     }
 }
