@@ -19,16 +19,21 @@ class AppCoordinator {
     func start() {
         notebookViewController = NotebookViewController()
         notebookViewController!.inject(handler: self)
+        updateNotebookViewModel()
         window.rootViewController = notebookViewController
         window.makeKeyAndVisible()
+    }
+    
+    fileprivate func updateNotebookViewModel() {
+        let notes = noteUseCase.getAllNotes()
+        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.content })
+        notebookViewController?.render(withViewModel: notebookViewModel)
     }
 }
 
 extension AppCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
         noteUseCase.addNote(withContent: "note fixture")
-        let notes = noteUseCase.getAllNotes()
-        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.content })
-        notebookViewController?.render(withViewModel: notebookViewModel)
+        updateNotebookViewModel()
     }
 }
