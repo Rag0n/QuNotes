@@ -20,14 +20,19 @@ class NotebookViewController: UIViewController {
 
     func render(withViewModel viewModel: NotebookViewModel) {
         self.viewModel = viewModel
-        tableView.reloadData()
+        tableView?.reloadData()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationItem.title = "Notes"
     }
 
     fileprivate weak var handler: NotebookViewControllerHandler?
     fileprivate var viewModel: NotebookViewModel?
     
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var addButton: UIButton!
+    @IBOutlet private weak var tableView: UITableView?
+    @IBOutlet private weak var addButton: UIButton?
 
     @IBAction private func addNote() {
         handler?.didTapAddNote()

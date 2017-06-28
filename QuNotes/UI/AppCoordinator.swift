@@ -10,6 +10,7 @@ class AppCoordinator {
     private let window: UIWindow
     fileprivate let noteUseCase: NoteUseCase
     fileprivate var notebookViewController: NotebookViewController?
+    fileprivate var navigationController: UINavigationController!
 
     init(withWindow window: UIWindow) {
         self.window = window
@@ -20,7 +21,8 @@ class AppCoordinator {
         notebookViewController = NotebookViewController()
         notebookViewController!.inject(handler: self)
         updateNotebookViewModel()
-        window.rootViewController = notebookViewController
+        navigationController = UINavigationController(rootViewController: notebookViewController!)
+        window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
     
