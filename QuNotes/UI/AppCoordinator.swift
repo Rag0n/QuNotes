@@ -8,34 +8,28 @@ import UIKit
 class AppCoordinator {
 
     private let window: UIWindow
-    fileprivate let noteUseCase: NoteUseCase
-    fileprivate var notebookViewController: NotebookViewController?
+
     fileprivate var navigationController: UINavigationController!
+    fileprivate var childCoordinators = [NotebookCoordinator]()
 
     init(withWindow window: UIWindow) {
         self.window = window
-        noteUseCase = NoteUseCase()
     }
 
     func start() {
-        notebookViewController = NotebookViewController()
-        notebookViewController!.inject(handler: self)
-        updateNotebookViewModel()
-        navigationController = UINavigationController(rootViewController: notebookViewController!)
+        initializeNavigationController()
+        showNotebook()
+    }
+
+    private func initializeNavigationController() {
+        navigationController = UINavigationController()
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
-    
-    fileprivate func updateNotebookViewModel() {
-        let notes = noteUseCase.getAllNotes()
-        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.content })
-        notebookViewController?.render(withViewModel: notebookViewModel)
-    }
-}
 
-extension AppCoordinator: NotebookViewControllerHandler {
-    func didTapAddNote() {
-        noteUseCase.addNote(withContent: "note fixture")
-        updateNotebookViewModel()
+    private func showNotebook() {
+        let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController)
+        childCoordinators.append(notebookCoordinator)
+        notebookCoordinator.start()
     }
 }
