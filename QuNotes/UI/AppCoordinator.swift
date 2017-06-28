@@ -8,12 +8,14 @@ import UIKit
 class AppCoordinator {
 
     private let window: UIWindow
+    private let dependency: AppDependency
 
     fileprivate var navigationController: UINavigationController!
     fileprivate var childCoordinators = [NotebookCoordinator]()
 
     init(withWindow window: UIWindow) {
         self.window = window
+        dependency = AppDependency(noteUseCase: NoteUseCase())
     }
 
     func start() {
@@ -28,7 +30,7 @@ class AppCoordinator {
     }
 
     private func showNotebook() {
-        let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController)
+        let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController, dependencies: dependency)
         childCoordinators.append(notebookCoordinator)
         notebookCoordinator.start()
     }

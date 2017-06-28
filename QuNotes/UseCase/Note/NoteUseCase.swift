@@ -5,6 +5,10 @@
 
 import Foundation
 
+protocol HasNoteUseCase {
+    var noteUseCase: NoteUseCase { get }
+}
+
 class NoteUseCase {
     private var notes = [Note]()
 

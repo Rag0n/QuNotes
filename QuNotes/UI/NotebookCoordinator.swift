@@ -9,13 +9,15 @@
 import UIKit
 
 class NotebookCoordinator {
-    fileprivate let noteUseCase: NoteUseCase
+    typealias Dependencies = HasNoteUseCase
+
+    let dependencies: Dependencies
     fileprivate var notebookViewController: NotebookViewController?
     fileprivate let navigationController: UINavigationController
 
-    init(withNavigationController navigationController: UINavigationController) {
+    init(withNavigationController navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        noteUseCase = NoteUseCase()
+        self.dependencies = dependencies
     }
 
     func start() {
@@ -26,7 +28,7 @@ class NotebookCoordinator {
     }
 
     fileprivate func updateNotebookViewModel() {
-        let notes = noteUseCase.getAllNotes()
+        let notes = dependencies.noteUseCase.getAllNotes()
         let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.content })
         notebookViewController?.render(withViewModel: notebookViewModel)
     }
@@ -34,7 +36,7 @@ class NotebookCoordinator {
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
-        noteUseCase.addNote(withContent: "note fixture")
+        dependencies.noteUseCase.addNote(withContent: "note fixture")
         updateNotebookViewModel()
     }
 }
