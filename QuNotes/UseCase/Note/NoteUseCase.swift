@@ -15,6 +15,7 @@ class NoteUseCase {
     func addNote(withContent content: String) -> Note {
         let newNote = Note(content: content)
         notes.append(newNote)
+
         return newNote
     }
 
@@ -22,17 +23,16 @@ class NoteUseCase {
         return notes
     }
 
-    func updateNote(_ note: Note, newContent: String) -> Note {
-        removeNote(note)
-        return Note(content: newContent)
-
-    }
-
-    private func removeNote(_ note: Note) {
+    func updateNote(_ note: Note, newContent: String) -> Note? {
         guard let indexOfRemovedNote = notes.index(of: note) else {
-            return;
+            return nil;
         }
         notes.remove(at: indexOfRemovedNote)
+        let updatedNote = Note(content: newContent)
+        notes.append(updatedNote)
+
+        return updatedNote
+
     }
 }
 
