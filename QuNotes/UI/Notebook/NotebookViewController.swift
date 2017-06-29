@@ -10,6 +10,7 @@ import UIKit
 
 protocol NotebookViewControllerHandler: class {
     func didTapAddNote()
+    func didTapOnNoteWithIndex(index: Int)
 }
 
 class NotebookViewController: UIViewController {
@@ -53,5 +54,7 @@ extension NotebookViewController: UITableViewDataSource {
 }
 
 extension NotebookViewController: UITableViewDelegate {
-
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        handler?.didTapOnNoteWithIndex(index: indexPath.row)
+    }
 }

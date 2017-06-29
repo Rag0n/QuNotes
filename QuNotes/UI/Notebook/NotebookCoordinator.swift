@@ -39,4 +39,18 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         dependencies.noteUseCase.addNote(withContent: "note fixture")
         updateNotebookViewModel()
     }
+
+    func didTapOnNoteWithIndex(index: Int) {
+        let noteVC = NoteViewController()
+        noteVC.inject(handler: self)
+        let notes = dependencies.noteUseCase.getAllNotes()
+        noteVC.render(withViewModel: NoteViewModel(content: notes[index].content))
+        navigationController.pushViewController(noteVC, animated: true)
+    }
+}
+
+extension NotebookCoordinator: NoteViewControllerHandler {
+    func didChangeContent(newContent: String) {
+
+    }
 }
