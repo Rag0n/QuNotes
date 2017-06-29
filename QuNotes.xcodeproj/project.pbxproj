@@ -37,7 +37,9 @@
 		B21252A65C97C1E1853C1CE7 /* NoteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125F3249F1E2C3956C05CC /* NoteUseCase.swift */; };
 		B21254AD7C6672513717DCA5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125126D56FD2264621CE3E /* AppCoordinator.swift */; };
 		B21255EF73EBF10CAB7A7802 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21259B4CC388FCB7C739512 /* NoteViewModel.swift */; };
+		B212564285F4989AFA189F7E /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		B21256517D14048CE42633AC /* NotebookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B212595097B91381FC124A0F /* NotebookViewController.xib */; };
+		B21256FEB7CF647C61BEAD20 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125126D56FD2264621CE3E /* AppCoordinator.swift */; };
 		B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125BE33DD1D35B04A884A3 /* NoteRepository.swift */; };
 		B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125128CF1F8E978F890901 /* AppDelegate.swift */; };
@@ -373,6 +375,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B21256517D14048CE42633AC /* NotebookViewController.xib in Resources */,
+				B21256FEB7CF647C61BEAD20 /* NoteViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +442,7 @@
 				B21254AD7C6672513717DCA5 /* AppCoordinator.swift in Sources */,
 				B2125A410AE6B37BC2A8ABA3 /* AppDependency.swift in Sources */,
 				B21255EF73EBF10CAB7A7802 /* NoteViewModel.swift in Sources */,
+				B212564285F4989AFA189F7E /* NoteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

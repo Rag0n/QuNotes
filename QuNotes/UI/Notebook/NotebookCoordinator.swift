@@ -14,6 +14,7 @@ class NotebookCoordinator {
     let dependencies: Dependencies
     fileprivate var notebookViewController: NotebookViewController?
     fileprivate let navigationController: UINavigationController
+    fileprivate var activeNote: Note?
 
     init(withNavigationController navigationController: UINavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
@@ -44,13 +45,21 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         let noteVC = NoteViewController()
         noteVC.inject(handler: self)
         let notes = dependencies.noteUseCase.getAllNotes()
-        noteVC.render(withViewModel: NoteViewModel(content: notes[index].content))
+        activeNote = notes[index]
+        noteVC.render(withViewModel: NoteViewModel(content: activeNote!.content))
         navigationController.pushViewController(noteVC, animated: true)
     }
 }
 
 extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
+        if let activeNote = activeNote {
+            self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newContent: newContent)
+        }
+    }
 
+    func onBackButtonClick() {
+        updateNotebookViewModel()
+        self.navigationController.popViewController(animated: true)
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 
 protocol NoteViewControllerHandler: class {
     func didChangeContent(newContent: String)
+    func onBackButtonClick()
 }
 
 class NoteViewController: UIViewController {
@@ -28,11 +29,25 @@ class NoteViewController: UIViewController {
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
         }
+        setupBackButton()
     }
 
     fileprivate weak var handler: NoteViewControllerHandler?
     fileprivate var viewModel: NoteViewModel?
     @IBOutlet private weak var noteTextView: UITextView?
+
+    func onBackButtonClick() {
+        handler?.onBackButtonClick()
+    }
+
+    private func setupBackButton() {
+        self.navigationItem.hidesBackButton = true
+        let backButton = UIBarButtonItem(title: "Back",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(NoteViewController.onBackButtonClick))
+        self.navigationItem.leftBarButtonItem = backButton
+    }
 }
 
 extension NoteViewController: UITextViewDelegate {
