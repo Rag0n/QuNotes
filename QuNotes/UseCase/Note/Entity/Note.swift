@@ -8,16 +8,17 @@ import Foundation
 struct Note {
     let createdDate: Double
     let content: String
+    fileprivate let uuid: String
 
     init(content: String) {
         self.content = content
         self.createdDate = Date().timeIntervalSince1970
+        self.uuid = UUID.init().uuidString
     }
 }
 
 extension Note: Equatable {
     static func ==(lhs: Note, rhs: Note) -> Bool {
-        // TODO: improve equal check based on uuid
-        return lhs.content == rhs.content
+        return lhs.uuid == rhs.uuid
     }
 }

@@ -23,6 +23,19 @@ class NoteSpec: QuickSpec {
         it("sets passed content") {
             expect(note.content).to(equal("content fixture"))
         }
+
+        context("when comparing two different instances of equal content") {
+            it("returns false") {
+                let anotherNote = Note(content: note.content)
+                expect(note == anotherNote).to(beFalse())
+            }
+        }
+
+        context("when comparing same instance") {
+            it("return true") {
+                expect(note == note).to(beTrue())
+            }
+        }
     }
 }
 

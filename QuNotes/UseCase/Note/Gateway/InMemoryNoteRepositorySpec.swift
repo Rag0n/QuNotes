@@ -24,16 +24,19 @@ class InMemoryNoteRepositorySpec: QuickSpec {
 
             context("when notes are added") {
 
+                let firstAddedNote = Note(content: "First fixture note")
+                let secondAddedNote = Note(content: "Second fixture note")
+
                 beforeEach {
-                    noteRepository.save(note: Note(content: "First fixture note"))
-                    noteRepository.save(note: Note(content: "Second fixture note"))
+                    noteRepository.save(note: firstAddedNote)
+                    noteRepository.save(note: secondAddedNote)
                 }
 
                 it("returns all added notes") {
                     let allNotes = noteRepository.getAll()
                     expect(allNotes.count).to(equal(2))
-                    expect(allNotes).to(contain(Note(content: "First fixture note")))
-                    expect(allNotes).to(contain(Note(content: "Second fixture note")))
+                    expect(allNotes).to(contain(firstAddedNote))
+                    expect(allNotes).to(contain(secondAddedNote))
                 }
             }
         }
