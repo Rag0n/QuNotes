@@ -42,10 +42,15 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     func didTapOnNoteWithIndex(index: Int) {
+        let notes = dependencies.noteUseCase.getAllNotes()
+        guard (index < notes.count) else { return }
+        activeNote = notes[index]
+        showNote()
+    }
+
+    private func showNote() {
         let noteVC = NoteViewController()
         noteVC.inject(handler: self)
-        let notes = dependencies.noteUseCase.getAllNotes()
-        activeNote = notes[index]
         noteVC.render(withViewModel: NoteViewModel(content: activeNote!.content))
         navigationController.pushViewController(noteVC, animated: true)
     }
