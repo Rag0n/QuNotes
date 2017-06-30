@@ -14,6 +14,7 @@
 		112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D498C1EF539D800C75B6A /* LibrarySpec.swift */; };
 		112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
 		112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49941EF539D800C75B6A /* NotebookSpec.swift */; };
+		1154A5871F06E3610021CBEE /* CocoaMarkdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1154A5861F06E3610021CBEE /* CocoaMarkdown.framework */; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
@@ -86,6 +87,7 @@
 		112D498C1EF539D800C75B6A /* LibrarySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
 		112D49931EF539D800C75B6A /* Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		112D49941EF539D800C75B6A /* NotebookSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
+		1154A5861F06E3610021CBEE /* CocoaMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMarkdown.framework; path = Carthage/Build/iOS/CocoaMarkdown.framework; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		118ACCF91F058321002DF609 /* NoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		11B7057B1EEB42570039A863 /* QuNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -120,6 +122,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11B705A81EEBD3810039A863 /* Result.framework in Frameworks */,
+				1154A5871F06E3610021CBEE /* CocoaMarkdown.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +209,7 @@
 		11B7059E1EEBCB0E0039A863 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1154A5861F06E3610021CBEE /* CocoaMarkdown.framework */,
 				11B705A71EEBD3810039A863 /* Result.framework */,
 				11B7059F1EEBCB0E0039A863 /* Nimble.framework */,
 				11B705A01EEBCB0E0039A863 /* Quick.framework */,
@@ -389,8 +393,11 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/CocoaMarkdown.framework",
 			);
 			outputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Result.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaMarkdown.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

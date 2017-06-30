@@ -53,5 +53,8 @@ class NoteViewController: UIViewController {
 extension NoteViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
         handler?.didChangeContent(newContent: textView.text)
+//        let document = CMDocument(contentsOfFile: path, options: nil)
+//        let renderer = CMAttributedStringRenderer(document: document, attributes: CMTextAttributes())
+//        textView.attributedText = renderer.render()
     }
 }
