@@ -1,2 +1,2 @@
 github "antitypical/Result"
-git "https://github.com/indragiek/CocoaMarkdown.git" "master"
+github "SimonFairbairn/SwiftyMarkdown"

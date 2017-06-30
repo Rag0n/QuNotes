@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CocoaMarkdown
 
 protocol NoteViewControllerHandler: class {
     func didChangeContent(newContent: String)
@@ -34,7 +35,8 @@ class NoteViewController: UIViewController {
 
     fileprivate weak var handler: NoteViewControllerHandler?
     fileprivate var viewModel: NoteViewModel?
-    @IBOutlet private weak var noteTextView: UITextView?
+    @IBOutlet fileprivate weak var noteTextView: UITextView?
+    @IBOutlet fileprivate weak var noteLabel: UILabel?
 
     func onBackButtonClick() {
         handler?.onBackButtonClick()
@@ -53,8 +55,9 @@ class NoteViewController: UIViewController {
 extension NoteViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
         handler?.didChangeContent(newContent: textView.text)
+        let document = CMDocument(data: textView.text.data(using: .utf8))
 //        let document = CMDocument(contentsOfFile: path, options: nil)
-//        let renderer = CMAttributedStringRenderer(document: document, attributes: CMTextAttributes())
-//        textView.attributedText = renderer.render()
+        let renderer = CMAttributedStringRenderer(document: document, attributes: CMTextAttributes())
+        noteLabel?.attributedText = renderer?.render()
     }
 }
