@@ -37,7 +37,7 @@ class NotebookCoordinator {
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
-        dependencies.noteUseCase.addNote(withContent: "note fixture")
+        _ = dependencies.noteUseCase.addNote(withContent: "note fixture")
         updateNotebookViewModel()
     }
 

@@ -14,7 +14,10 @@
 		112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D498C1EF539D800C75B6A /* LibrarySpec.swift */; };
 		112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
 		112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49941EF539D800C75B6A /* NotebookSpec.swift */; };
-		1154A5871F06E3610021CBEE /* CocoaMarkdown.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1154A5861F06E3610021CBEE /* CocoaMarkdown.framework */; };
+		117D00F91F07A281009D8C1C /* UITextView+MarkNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F21F07A280009D8C1C /* UITextView+MarkNote.m */; };
+		117D00FA1F07A281009D8C1C /* SyntaxOccurance.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F51F07A280009D8C1C /* SyntaxOccurance.m */; };
+		117D00FB1F07A281009D8C1C /* SyntaxRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F61F07A281009D8C1C /* SyntaxRule.m */; };
+		117D00FC1F07A281009D8C1C /* MarkdownSyntaxProcesser.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F71F07A281009D8C1C /* MarkdownSyntaxProcesser.m */; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
@@ -23,7 +26,13 @@
 		11B705A21EEBCB0E0039A863 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; };
 		11B705A41EEBCB3E0039A863 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11B705A51EEBCB3E0039A863 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		11B705A81EEBD3810039A863 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
+		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
+		11F144BB1F07A9CC0073EBE6 /* UITextView+MarkNote.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F21F07A280009D8C1C /* UITextView+MarkNote.m */; };
+		11F144BC1F07A9CF0073EBE6 /* SyntaxRule.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F61F07A281009D8C1C /* SyntaxRule.m */; };
+		11F144BD1F07A9D20073EBE6 /* SyntaxOccurance.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F51F07A280009D8C1C /* SyntaxOccurance.m */; };
+		11F144BE1F07A9D50073EBE6 /* MarkdownSyntaxProcesser.m in Sources */ = {isa = PBXBuildFile; fileRef = 117D00F71F07A281009D8C1C /* MarkdownSyntaxProcesser.m */; };
+		11F144BF1F07AA7A0073EBE6 /* NotebookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */; };
+		11F144C01F07AA820073EBE6 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212582E0B9C2B7AC822B721 /* NotebookViewModel.swift */; };
@@ -38,14 +47,12 @@
 		B21252A65C97C1E1853C1CE7 /* NoteUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125F3249F1E2C3956C05CC /* NoteUseCase.swift */; };
 		B21254AD7C6672513717DCA5 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125126D56FD2264621CE3E /* AppCoordinator.swift */; };
 		B21255EF73EBF10CAB7A7802 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21259B4CC388FCB7C739512 /* NoteViewModel.swift */; };
-		B212564285F4989AFA189F7E /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		B21256517D14048CE42633AC /* NotebookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B212595097B91381FC124A0F /* NotebookViewController.xib */; };
 		B21256FEB7CF647C61BEAD20 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125126D56FD2264621CE3E /* AppCoordinator.swift */; };
 		B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125BE33DD1D35B04A884A3 /* NoteRepository.swift */; };
 		B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125128CF1F8E978F890901 /* AppDelegate.swift */; };
 		B2125A410AE6B37BC2A8ABA3 /* AppDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21257910994F34B22D87954 /* AppDependency.swift */; };
-		B2125AC934A84DEF0F4495C6 /* NotebookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */; };
 		B2125C2E94E6F1738A12F065 /* InMemoryNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125B01393BA1130EB3DD58 /* InMemoryNoteRepository.swift */; };
 		B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125BD3F1AC051B24F3DD4D /* NoteSpec.swift */; };
 		B2125C9A4D0564188D85C620 /* InMemoryNoteRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21256A7343A8B6FD0A71D99 /* InMemoryNoteRepositorySpec.swift */; };
@@ -88,6 +95,16 @@
 		112D49931EF539D800C75B6A /* Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		112D49941EF539D800C75B6A /* NotebookSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
 		1154A5861F06E3610021CBEE /* CocoaMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaMarkdown.framework; path = Carthage/Build/iOS/CocoaMarkdown.framework; sourceTree = "<group>"; };
+		1154A5881F07911E0021CBEE /* SwiftyMarkdown.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyMarkdown.framework; path = Carthage/Build/iOS/SwiftyMarkdown.framework; sourceTree = "<group>"; };
+		117D00F01F07A27F009D8C1C /* QuNotes-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QuNotes-Bridging-Header.h"; sourceTree = "<group>"; };
+		117D00F11F07A280009D8C1C /* SyntaxRule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyntaxRule.h; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/SyntaxRule.h"; sourceTree = "<group>"; };
+		117D00F21F07A280009D8C1C /* UITextView+MarkNote.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITextView+MarkNote.m"; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/UITextView+MarkNote.m"; sourceTree = "<group>"; };
+		117D00F31F07A280009D8C1C /* SyntaxOccurance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyntaxOccurance.h; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/SyntaxOccurance.h"; sourceTree = "<group>"; };
+		117D00F41F07A280009D8C1C /* UITextView+MarkNote.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITextView+MarkNote.h"; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/UITextView+MarkNote.h"; sourceTree = "<group>"; };
+		117D00F51F07A280009D8C1C /* SyntaxOccurance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyntaxOccurance.m; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/SyntaxOccurance.m"; sourceTree = "<group>"; };
+		117D00F61F07A281009D8C1C /* SyntaxRule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyntaxRule.m; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/SyntaxRule.m"; sourceTree = "<group>"; };
+		117D00F71F07A281009D8C1C /* MarkdownSyntaxProcesser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MarkdownSyntaxProcesser.m; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/MarkdownSyntaxProcesser.m"; sourceTree = "<group>"; };
+		117D00F81F07A281009D8C1C /* MarkdownSyntaxProcesser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MarkdownSyntaxProcesser.h; path = "../../../../../../../Volumes/My Passport/Downloads/MarkNoteView-master/MarkNoteView/MarkNoteView/MarkNoteView/MarkdownSyntaxProcesser.h"; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		118ACCF91F058321002DF609 /* NoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		11B7057B1EEB42570039A863 /* QuNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,8 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11B705A81EEBD3810039A863 /* Result.framework in Frameworks */,
-				1154A5871F06E3610021CBEE /* CocoaMarkdown.framework in Frameworks */,
+				11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +194,22 @@
 			path = Notebook;
 			sourceTree = "<group>";
 		};
+		117D00EF1F07A261009D8C1C /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				117D00F81F07A281009D8C1C /* MarkdownSyntaxProcesser.h */,
+				117D00F71F07A281009D8C1C /* MarkdownSyntaxProcesser.m */,
+				117D00F31F07A280009D8C1C /* SyntaxOccurance.h */,
+				117D00F51F07A280009D8C1C /* SyntaxOccurance.m */,
+				117D00F11F07A280009D8C1C /* SyntaxRule.h */,
+				117D00F61F07A281009D8C1C /* SyntaxRule.m */,
+				117D00F41F07A280009D8C1C /* UITextView+MarkNote.h */,
+				117D00F21F07A280009D8C1C /* UITextView+MarkNote.m */,
+				117D00F01F07A27F009D8C1C /* QuNotes-Bridging-Header.h */,
+			);
+			path = Dependencies;
+			sourceTree = "<group>";
+		};
 		11B705721EEB42560039A863 = {
 			isa = PBXGroup;
 			children = (
@@ -201,6 +233,7 @@
 			children = (
 				112D49871EF539D800C75B6A /* UseCase */,
 				B2125E1507F73CB41C346C5D /* UI */,
+				117D00EF1F07A261009D8C1C /* Dependencies */,
 				11B705A61EEBCD600039A863 /* Resources */,
 			);
 			path = QuNotes;
@@ -209,6 +242,7 @@
 		11B7059E1EEBCB0E0039A863 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1154A5881F07911E0021CBEE /* SwiftyMarkdown.framework */,
 				1154A5861F06E3610021CBEE /* CocoaMarkdown.framework */,
 				11B705A71EEBD3810039A863 /* Result.framework */,
 				11B7059F1EEBCB0E0039A863 /* Nimble.framework */,
@@ -328,17 +362,19 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = "Alexander Guschin";
 				TargetAttributes = {
 					11B7057A1EEB42570039A863 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = LB83DKTVND;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 					11B7058E1EEB42570039A863 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = LB83DKTVND;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -393,11 +429,9 @@
 			);
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/CocoaMarkdown.framework",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Result.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/CocoaMarkdown.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -412,14 +446,18 @@
 			files = (
 				118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */,
 				112D49831EF5391400C75B6A /* main.swift in Sources */,
+				117D00FC1F07A281009D8C1C /* MarkdownSyntaxProcesser.m in Sources */,
 				112D49951EF539D800C75B6A /* Library.swift in Sources */,
 				112D499D1EF539D800C75B6A /* Notebook.swift in Sources */,
 				B21252A65C97C1E1853C1CE7 /* NoteUseCase.swift in Sources */,
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
 				B2125C2E94E6F1738A12F065 /* InMemoryNoteRepository.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
+				117D00FA1F07A281009D8C1C /* SyntaxOccurance.m in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
+				117D00FB1F07A281009D8C1C /* SyntaxRule.m in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
+				117D00F91F07A281009D8C1C /* UITextView+MarkNote.m in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
@@ -432,24 +470,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11F144BD1F07A9D20073EBE6 /* SyntaxOccurance.m in Sources */,
 				112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */,
 				112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */,
 				112D499F1EF53A4500C75B6A /* Library.swift in Sources */,
+				11F144BE1F07A9D50073EBE6 /* MarkdownSyntaxProcesser.m in Sources */,
 				112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */,
 				B2125ECBCFABF4186AB515E5 /* NoteUseCase.swift in Sources */,
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
+				11F144BB1F07A9CC0073EBE6 /* UITextView+MarkNote.m in Sources */,
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
 				B21251D105998E14372BB4BD /* InMemoryNoteRepository.swift in Sources */,
 				B2125C9A4D0564188D85C620 /* InMemoryNoteRepositorySpec.swift in Sources */,
+				11F144BF1F07AA7A0073EBE6 /* NotebookCoordinator.swift in Sources */,
+				11F144BC1F07A9CF0073EBE6 /* SyntaxRule.m in Sources */,
+				11F144C01F07AA820073EBE6 /* NoteViewController.swift in Sources */,
 				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
 				B212512985214F3072C67564 /* Note.swift in Sources */,
-				B2125AC934A84DEF0F4495C6 /* NotebookCoordinator.swift in Sources */,
 				B21252081A4D0472BA9BED6A /* NotebookViewController.swift in Sources */,
 				B21251ADCBF36C9C9E25D016 /* NotebookViewModel.swift in Sources */,
 				B21254AD7C6672513717DCA5 /* AppCoordinator.swift in Sources */,
 				B2125A410AE6B37BC2A8ABA3 /* AppDependency.swift in Sources */,
 				B21255EF73EBF10CAB7A7802 /* NoteViewModel.swift in Sources */,
-				B212564285F4989AFA189F7E /* NoteViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,7 +527,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -493,7 +537,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -536,7 +584,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -544,7 +594,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -574,6 +628,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = LB83DKTVND;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -583,7 +638,10 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "QuNotes/Dependencies/QuNotes-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -591,6 +649,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = LB83DKTVND;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -600,7 +659,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotes;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "QuNotes/Dependencies/QuNotes-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
@@ -617,7 +678,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "QuNotes/Dependencies/QuNotes-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -634,7 +697,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
+				SWIFT_OBJC_BRIDGING_HEADER = "QuNotes/Dependencies/QuNotes-Bridging-Header.h";
+				SWIFT_SWIFT3_OBJC_INFERENCE = Off;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
