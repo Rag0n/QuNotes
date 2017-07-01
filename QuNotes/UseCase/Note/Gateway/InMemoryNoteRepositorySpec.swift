@@ -24,8 +24,8 @@ class InMemoryNoteRepositorySpec: QuickSpec {
 
             context("when notes are added") {
 
-                let firstAddedNote = Note(content: "First fixture note")
-                let secondAddedNote = Note(content: "Second fixture note")
+                let firstAddedNote = Note.noteFixtureWithContent("First note fixture")
+                let secondAddedNote = Note.noteFixtureWithContent("Second note fixture")
 
                 beforeEach {
                     noteRepository.save(note: firstAddedNote)
@@ -43,7 +43,7 @@ class InMemoryNoteRepositorySpec: QuickSpec {
 
         describe("-save") {
             it("creates new note") {
-                noteRepository.save(note: Note(content: "note fixture"))
+                noteRepository.save(note: Note.noteFixtureWithContent("note fixture"))
                 let allNotes = noteRepository.getAll()
                 expect(allNotes.first?.content).to(equal("note fixture"))
             }
@@ -54,7 +54,7 @@ class InMemoryNoteRepositorySpec: QuickSpec {
             var noteToRemove: Note!
 
             beforeEach {
-                noteToRemove = Note(content: "note fixture")
+                noteToRemove = Note.noteFixtureWithContent("note fixture")
             }
 
             context("when passed not was added") {
@@ -74,7 +74,7 @@ class InMemoryNoteRepositorySpec: QuickSpec {
                 var anotherNote: Note!
 
                 beforeEach {
-                    anotherNote = Note(content: "another note")
+                    anotherNote = Note.noteFixtureWithContent("another note")
                     noteRepository.save(note: anotherNote)
                 }
 
@@ -86,6 +86,12 @@ class InMemoryNoteRepositorySpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+extension Note {
+    static func noteFixtureWithContent(_ content: String) -> Note {
+        return Note(createdDate: 0, updatedDate: 0, content: content, title: "title", uuid: UUID.init().uuidString)
     }
 }
 

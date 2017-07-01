@@ -13,27 +13,20 @@ class NoteSpec: QuickSpec {
         var note: Note!
 
         beforeEach {
-            note = Note(content: "content fixture")
+            note = Note(createdDate: 5, updatedDate: 5, content: "context fixture", title: "title fixture", uuid: "uuid fixture")
         }
 
-        it("sets created date") {
-            expect(note.createdDate).toNot(beNil())
-        }
-
-        it("sets passed content") {
-            expect(note.content).to(equal("content fixture"))
-        }
-
-        context("when comparing two different instances of equal content") {
+        context("when comparing instances with not equal uuid") {
             it("returns false") {
-                let anotherNote = Note(content: note.content)
+                let anotherNote = Note(createdDate: note.createdDate, updatedDate: note.updatedDate, content: note.content, title: note.title, uuid: "another uuid fixture")
                 expect(note == anotherNote).to(beFalse())
             }
         }
 
-        context("when comparing same instance") {
+        context("when comparing instances with equal uuid") {
             it("return true") {
-                expect(note == note).to(beTrue())
+                let anotherNote = Note(createdDate: 6, updatedDate: 6, content: "another context fixture", title: "another title fixture", uuid: "uuid fixture")
+                expect(note == anotherNote).to(beTrue())
             }
         }
     }

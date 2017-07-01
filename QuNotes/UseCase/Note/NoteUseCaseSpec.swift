@@ -71,7 +71,7 @@ class NoteUseCaseSpec: QuickSpec {
                     }
 
                     it("doesnt change other notes") {
-                        let updatedNote = useCase.updateNote(existingNote, newContent: "new note fixture");
+                        _ = useCase.updateNote(existingNote, newContent: "new note fixture");
                         let allNotesContent = useCase.getAllNotes().map { note in note.content }
                         expect(allNotesContent).to(contain("second note fixture"))
                         expect(allNotesContent).to(contain("third note fixture"))
@@ -82,7 +82,7 @@ class NoteUseCaseSpec: QuickSpec {
 
             context("when updating not added note") {
 
-                let notAddedNote = Note(content: "note added content")
+                let notAddedNote = Note.noteFixtureWithContent("not added note fixture")
 
                 it("returns nil") {
                     let updatedNote = useCase.updateNote(notAddedNote, newContent: "new note fixture");
@@ -90,7 +90,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("doesnt add updated note") {
-                    let updatedNote = useCase.updateNote(notAddedNote, newContent: "new note fixture");
+                    _ = useCase.updateNote(notAddedNote, newContent: "new note fixture");
                     let allNotes = useCase.getAllNotes()
                     expect(allNotes).to(beEmpty())
                 }

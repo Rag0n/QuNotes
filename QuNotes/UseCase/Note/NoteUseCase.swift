@@ -17,7 +17,7 @@ class NoteUseCase {
     }
 
     func addNote(withContent content: String) -> Note {
-        let newNote = Note(content: content)
+        let newNote = Note(createdDate: 0, updatedDate: 0, content: content, title: "title", uuid: "uuid")
         noteRepository.save(note: newNote)
 
         return newNote
@@ -34,7 +34,7 @@ class NoteUseCase {
         }
 
         noteRepository.delete(note: note)
-        let updatedNote =  Note(content: newContent)
+        let updatedNote = Note(createdDate: 0, updatedDate: 0, content: newContent, title: "title", uuid: "uuid")
         noteRepository.save(note: updatedNote)
 
         return updatedNote

@@ -7,14 +7,10 @@ import Foundation
 
 struct Note {
     let createdDate: Double
+    let updatedDate: Double
     let content: String
+    let title: String
     let uuid: String
-
-    init(content: String) {
-        self.content = content
-        self.createdDate = Date().timeIntervalSince1970
-        self.uuid = UUID.init().uuidString
-    }
 }
 
 extension Note: Equatable {
