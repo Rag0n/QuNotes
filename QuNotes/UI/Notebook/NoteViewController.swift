@@ -22,33 +22,35 @@ class NoteViewController: UIViewController {
 
     func render(withViewModel viewModel: NoteViewModel) {
         self.viewModel = viewModel
-//        noteTextView?.text = viewModel.content
-        notepad?.text = viewModel.content
+        editor?.text = viewModel.content
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        notepad = Notepad(frame: view.bounds, themeFile: "one-dark")
-//        notepad = Notepad(frame: view.bounds)
-        guard let notepad = notepad else {
-            return;
-        }
-        notepad.delegate = self;
-        view.addSubview(notepad)
+        setupEditorTextView()
+        setupBackButton()
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
         }
-        setupBackButton()
     }
-
-    fileprivate var notepad: Notepad?
 
     fileprivate weak var handler: NoteViewControllerHandler?
     fileprivate var viewModel: NoteViewModel?
-    @IBOutlet fileprivate weak var noteTextView: UITextView?
+    fileprivate var editor: Notepad?
 
     @objc private func onBackButtonClick() {
         handler?.onBackButtonClick()
+    }
+
+    private func setupEditorTextView() {
+        editor = Notepad(frame: view.bounds, themeFile: "one-dark")
+        editor!.delegate = self;
+        view.addSubview(editor!)
+        editor!.translatesAutoresizingMaskIntoConstraints = false
+        editor!.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        editor!.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        editor!.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        editor!.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
     }
 
     private func setupBackButton() {
