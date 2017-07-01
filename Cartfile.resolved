@@ -1,3 +1,4 @@
 github "Quick/Nimble" "v7.0.1"
+github "Rag0n/Notepad" "80c6113abc86c37babe3a13fbc5bae11e06f020a"
 github "Quick/Quick" "v1.1.0"
 github "antitypical/Result" "3.2.3"

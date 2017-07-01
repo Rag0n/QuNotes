@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Notepad
 
 protocol NoteViewControllerHandler: class {
     func didChangeContent(newContent: String)
@@ -21,16 +22,26 @@ class NoteViewController: UIViewController {
 
     func render(withViewModel viewModel: NoteViewModel) {
         self.viewModel = viewModel
-        noteTextView?.text = viewModel.content
+//        noteTextView?.text = viewModel.content
+        notepad?.text = viewModel.content
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        notepad = Notepad(frame: view.bounds, themeFile: "one-dark")
+//        notepad = Notepad(frame: view.bounds)
+        guard let notepad = notepad else {
+            return;
+        }
+        notepad.delegate = self;
+        view.addSubview(notepad)
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
         }
         setupBackButton()
     }
+
+    fileprivate var notepad: Notepad?
 
     fileprivate weak var handler: NoteViewControllerHandler?
     fileprivate var viewModel: NoteViewModel?
@@ -53,6 +64,5 @@ class NoteViewController: UIViewController {
 extension NoteViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
         handler?.didChangeContent(newContent: textView.text)
-        textView.updateSyntax()
     }
 }
