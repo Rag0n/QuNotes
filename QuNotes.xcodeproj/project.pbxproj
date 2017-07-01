@@ -14,6 +14,8 @@
 		112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D498C1EF539D800C75B6A /* LibrarySpec.swift */; };
 		112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
 		112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49941EF539D800C75B6A /* NotebookSpec.swift */; };
+		117636361F07FA11000A5CFC /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
+		117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		11B6D7871F07C7F100017B4A /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
@@ -73,6 +75,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */,
 				11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */,
 				11B705A41EEBCB3E0039A863 /* Nimble.framework in CopyFiles */,
 				11B705A51EEBCB3E0039A863 /* Quick.framework in CopyFiles */,
@@ -133,6 +136,7 @@
 				11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */,
 				11B705A11EEBCB0E0039A863 /* Nimble.framework in Frameworks */,
 				11B705A21EEBCB0E0039A863 /* Quick.framework in Frameworks */,
+				117636361F07FA11000A5CFC /* Notepad.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

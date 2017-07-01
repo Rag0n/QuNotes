@@ -10,26 +10,32 @@ protocol HasNoteUseCase {
 }
 
 class NoteUseCase {
-    private var notes = [Note]()
+    let noteRepository: NoteRepository
+
+    init(withNoteReposiroty noteRepository: NoteRepository) {
+        self.noteRepository = noteRepository
+    }
 
     func addNote(withContent content: String) -> Note {
         let newNote = Note(content: content)
-        notes.append(newNote)
+        noteRepository.save(note: newNote)
 
         return newNote
     }
 
     func getAllNotes() -> [Note] {
-        return notes
+        return noteRepository.getAll()
     }
 
     func updateNote(_ note: Note, newContent: String) -> Note? {
-        guard let indexOfRemovedNote = notes.index(of: note) else {
+        let noteInRepository = noteRepository.get(noteId: note.uuid)
+        guard noteInRepository.value != nil else {
             return nil;
         }
-        notes.remove(at: indexOfRemovedNote)
-        let updatedNote = Note(content: newContent)
-        notes.append(updatedNote)
+
+        noteRepository.delete(note: note)
+        let updatedNote =  Note(content: newContent)
+        noteRepository.save(note: updatedNote)
 
         return updatedNote
 

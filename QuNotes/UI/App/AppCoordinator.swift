@@ -15,7 +15,8 @@ class AppCoordinator {
 
     init(withWindow window: UIWindow) {
         self.window = window
-        dependency = AppDependency(noteUseCase: NoteUseCase())
+        let noteRepository = InMemoryNoteRepository()
+        dependency = AppDependency(noteUseCase: NoteUseCase(withNoteReposiroty: noteRepository))
     }
 
     func start() {

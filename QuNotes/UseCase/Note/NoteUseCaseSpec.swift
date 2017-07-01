@@ -12,7 +12,7 @@ class NoteUseCaseSpec: QuickSpec {
         var useCase: NoteUseCase!
 
         beforeEach {
-            useCase = NoteUseCase()
+            useCase = NoteUseCase(withNoteReposiroty: InMemoryNoteRepository())
         }
 
         describe("-getAllNotes") {

@@ -8,7 +8,7 @@ import Foundation
 struct Note {
     let createdDate: Double
     let content: String
-    fileprivate let uuid: String
+    let uuid: String
 
     init(content: String) {
         self.content = content
