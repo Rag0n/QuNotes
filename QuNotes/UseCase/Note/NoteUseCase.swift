@@ -11,9 +11,23 @@ protocol HasNoteUseCase {
 
 class NoteUseCase {
     let noteRepository: NoteRepository
+    let currentDateService: CurrentDateService
 
-    init(withNoteReposiroty noteRepository: NoteRepository) {
+    init(withNoteReposiroty noteRepository: NoteRepository, currentDateService: CurrentDateService) {
         self.noteRepository = noteRepository
+        self.currentDateService = currentDateService
+    }
+
+    func addNote(withTitle title: String) -> Note {
+        let currentTimestamp = currentDateService.currentDate().timeIntervalSince1970
+        let newNote = Note(createdDate: currentTimestamp,
+                           updatedDate: currentTimestamp,
+                           content: "",
+                           title: title,
+                           uuid: UUID.init().uuidString)
+        noteRepository.save(note: newNote)
+        
+        return newNote
     }
 
     func addNote(withContent content: String) -> Note {

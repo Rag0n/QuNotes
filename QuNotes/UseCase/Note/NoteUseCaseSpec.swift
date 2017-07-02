@@ -10,9 +10,11 @@ class NoteUseCaseSpec: QuickSpec {
     override func spec() {
 
         var useCase: NoteUseCase!
+        var currentDateServiceStub: CurrentDateServiceStub!
 
         beforeEach {
-            useCase = NoteUseCase(withNoteReposiroty: InMemoryNoteRepository())
+            currentDateServiceStub = CurrentDateServiceStub(currentDateStub: Date(timeIntervalSince1970: 10))
+            useCase = NoteUseCase(withNoteReposiroty: InMemoryNoteRepository(), currentDateService: currentDateServiceStub)
         }
 
         describe("-getAllNotes") {
@@ -24,15 +26,39 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-addNote") {
-            it("creates new note") {
-                useCase.addNote(withContent: "note fixture")
-                let allNotes = useCase.getAllNotes()
-                expect(allNotes.first?.content).to(equal("note fixture"))
+            it("returns new note with title 'note title'") {
+                let note = useCase.addNote(withTitle: "note title")
+                expect(note.title).to(equal("note title"))
             }
 
-            it("returns created note") {
-                let createdNote = useCase.addNote(withContent: "note fixture");
-                expect(createdNote.content).to(equal("note fixture"))
+            it("adds note to all notes") {
+                _ = useCase.addNote(withTitle: "note title")
+                let allNotes = useCase.getAllNotes()
+                expect(allNotes.first?.title).to(equal("note title"))
+            }
+
+            it("returns note with uniq uuid") {
+                let firstNote = useCase.addNote(withTitle: "first note title")
+                let secondNote = useCase.addNote(withTitle: "second note title")
+                expect(firstNote.uuid).toNot(equal(secondNote.uuid))
+            }
+
+            it("returns note with empty content") {
+                let note = useCase.addNote(withTitle: "note title")
+                expect(note.content).to(beEmpty())
+            }
+
+            context("when currentDateService returns timestamp with value 15") {
+
+                beforeEach {
+                    currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 15)
+                }
+
+                it("returns note with createdDate and updatedDate equal to 15") {
+                    let note = useCase.addNote(withTitle: "note title")
+                    expect(note.createdDate).to(beCloseTo(15))
+                    expect(note.updatedDate).to(beCloseTo(15))
+                }
             }
         }
 
@@ -96,5 +122,17 @@ class NoteUseCaseSpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+class CurrentDateServiceStub: CurrentDateService {
+    var currentDateStub: Date
+
+    init(currentDateStub: Date) {
+        self.currentDateStub = currentDateStub
+    }
+
+    func currentDate() -> Date {
+        return currentDateStub
     }
 }
