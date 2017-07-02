@@ -16,6 +16,10 @@
 		112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49941EF539D800C75B6A /* NotebookSpec.swift */; };
 		117636361F07FA11000A5CFC /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
+		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
+		1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
+		1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		11B6D7871F07C7F100017B4A /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
@@ -90,6 +94,8 @@
 		112D498C1EF539D800C75B6A /* LibrarySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
 		112D49931EF539D800C75B6A /* Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		112D49941EF539D800C75B6A /* NotebookSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
+		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
+		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		118ACCF91F058321002DF609 /* NoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		119955FC1F07C0FD007AB79A /* Notepad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Notepad.framework; path = Carthage/Build/iOS/Notepad.framework; sourceTree = "<group>"; };
@@ -182,6 +188,23 @@
 			path = Notebook;
 			sourceTree = "<group>";
 		};
+		117636381F08E8F2000A5CFC /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				1176363C1F08E96B000A5CFC /* CurrentDateService */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		1176363C1F08E96B000A5CFC /* CurrentDateService */ = {
+			isa = PBXGroup;
+			children = (
+				117636391F08E92B000A5CFC /* CurrentDateService.swift */,
+				1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */,
+			);
+			path = CurrentDateService;
+			sourceTree = "<group>";
+		};
 		11B705721EEB42560039A863 = {
 			isa = PBXGroup;
 			children = (
@@ -203,6 +226,7 @@
 		11B7057D1EEB42570039A863 /* QuNotes */ = {
 			isa = PBXGroup;
 			children = (
+				117636381F08E8F2000A5CFC /* Service */,
 				112D49871EF539D800C75B6A /* UseCase */,
 				B2125E1507F73CB41C346C5D /* UI */,
 				11B705A61EEBCD600039A863 /* Resources */,
@@ -421,6 +445,7 @@
 				112D49951EF539D800C75B6A /* Library.swift in Sources */,
 				112D499D1EF539D800C75B6A /* Notebook.swift in Sources */,
 				B21252A65C97C1E1853C1CE7 /* NoteUseCase.swift in Sources */,
+				1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */,
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
 				B2125C2E94E6F1738A12F065 /* InMemoryNoteRepository.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
@@ -430,6 +455,7 @@
 				B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
+				1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
 				B2125CFC0386649BA54EA384 /* NoteViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -448,9 +474,11 @@
 				B21251D105998E14372BB4BD /* InMemoryNoteRepository.swift in Sources */,
 				B2125C9A4D0564188D85C620 /* InMemoryNoteRepositorySpec.swift in Sources */,
 				11F144BF1F07AA7A0073EBE6 /* NotebookCoordinator.swift in Sources */,
+				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
 				11F144C01F07AA820073EBE6 /* NoteViewController.swift in Sources */,
 				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
 				B212512985214F3072C67564 /* Note.swift in Sources */,
+				1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
 				B21252081A4D0472BA9BED6A /* NotebookViewController.swift in Sources */,
 				B21251ADCBF36C9C9E25D016 /* NotebookViewModel.swift in Sources */,
 				B21254AD7C6672513717DCA5 /* AppCoordinator.swift in Sources */,
