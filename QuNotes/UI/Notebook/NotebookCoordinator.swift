@@ -30,14 +30,14 @@ class NotebookCoordinator {
 
     fileprivate func updateNotebookViewModel() {
         let notes = dependencies.noteUseCase.getAllNotes()
-        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.content })
+        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.title })
         notebookViewController?.render(withViewModel: notebookViewModel)
     }
 }
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
-        _ = dependencies.noteUseCase.addNote(withContent: "note fixture")
+        _ = dependencies.noteUseCase.addNote(withTitle: "title fixture")
         updateNotebookViewModel()
     }
 

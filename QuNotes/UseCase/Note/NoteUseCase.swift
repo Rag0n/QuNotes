@@ -30,13 +30,6 @@ class NoteUseCase {
         return newNote
     }
 
-    func addNote(withContent content: String) -> Note {
-        let newNote = Note(createdDate: 0, updatedDate: 0, content: content, title: "title", uuid: "uuid")
-        noteRepository.save(note: newNote)
-
-        return newNote
-    }
-
     func getAllNotes() -> [Note] {
         return noteRepository.getAll()
     }
