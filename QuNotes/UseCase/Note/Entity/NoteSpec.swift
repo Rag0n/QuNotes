@@ -32,3 +32,12 @@ class NoteSpec: QuickSpec {
     }
 }
 
+extension Note {
+    static func noteFixtureWithContent(_ content: String) -> Note {
+        return Note(createdDate: 0, updatedDate: 0, content: content, title: "title", uuid: UUID.init().uuidString)
+    }
+
+    static func noteFixture() -> Note {
+        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString)
+    }
+}

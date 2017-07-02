@@ -26,7 +26,7 @@ class NoteUseCase {
                            title: title,
                            uuid: UUID.init().uuidString)
         noteRepository.save(note: newNote)
-        
+
         return newNote
     }
 
@@ -48,7 +48,11 @@ class NoteUseCase {
         }
 
         noteRepository.delete(note: note)
-        let updatedNote = Note(createdDate: 0, updatedDate: 0, content: newContent, title: "title", uuid: "uuid")
+        let updatedNote = Note(createdDate: note.createdDate,
+                               updatedDate: currentDateService.currentDate().timeIntervalSince1970,
+                               content: newContent,
+                               title: note.title,
+                               uuid: note.uuid)
         noteRepository.save(note: updatedNote)
 
         return updatedNote
