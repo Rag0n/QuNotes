@@ -23,8 +23,8 @@ class NoteViewController: UIViewController {
 
     func render(withViewModel viewModel: NoteViewModel) {
         self.viewModel = viewModel
-        editor?.text = viewModel.content
-        titleTextField?.text = viewModel.title
+        dirty = true
+        view?.setNeedsLayout()
     }
 
     override func viewDidLoad() {
@@ -37,11 +37,25 @@ class NoteViewController: UIViewController {
         }
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        guard dirty else { return }
+        guard let viewModel = viewModel else { return }
+        editor?.text = viewModel.content
+        titleTextField?.text = viewModel.title
+    }
+
+    override func viewDidLayoutSubviews() {
+        dirty = false
+    }
+
     fileprivate weak var handler: NoteViewControllerHandler?
     private var viewModel: NoteViewModel?
     private var editor: Notepad?
     @IBOutlet private var stackView: UIStackView?
     @IBOutlet private var titleTextField: UITextField?
+
+    private var dirty = false
 
     @objc private func onBackButtonClick() {
         handler?.onBackButtonClick()
