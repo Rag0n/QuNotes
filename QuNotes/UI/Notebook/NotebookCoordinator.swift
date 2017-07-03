@@ -49,18 +49,22 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     private func showNote() {
+        guard let activeNote = activeNote else { return }
         let noteVC = NoteViewController()
         noteVC.inject(handler: self)
-        noteVC.render(withViewModel: NoteViewModel(content: activeNote!.content))
+        noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content))
         navigationController.pushViewController(noteVC, animated: true)
     }
 }
 
 extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
-        if let activeNote = activeNote {
-            self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newContent: newContent)
-        }
+        guard let activeNote = activeNote else { return }
+        self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newContent: newContent)
+    }
+
+    func didChangeTitle(newTitle: String) {
+        guard let activeNote = activeNote else { return }
     }
 
     func onBackButtonClick() {

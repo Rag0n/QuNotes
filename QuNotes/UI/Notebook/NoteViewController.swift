@@ -11,6 +11,7 @@ import Notepad
 
 protocol NoteViewControllerHandler: class {
     func didChangeContent(newContent: String)
+    func didChangeTitle(newTitle: String)
     func onBackButtonClick()
 }
 
@@ -23,18 +24,20 @@ class NoteViewController: UIViewController {
     func render(withViewModel viewModel: NoteViewModel) {
         self.viewModel = viewModel
         editor?.text = viewModel.content
+        titleTextField?.text = viewModel.title
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupEditorTextView()
+        setupTitleTextField()
         setupBackButton()
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
         }
     }
 
-    private weak var handler: NoteViewControllerHandler?
+    fileprivate weak var handler: NoteViewControllerHandler?
     private var viewModel: NoteViewModel?
     private var editor: Notepad?
     @IBOutlet private var stackView: UIStackView?
@@ -44,10 +47,20 @@ class NoteViewController: UIViewController {
         handler?.onBackButtonClick()
     }
 
+    @objc private func onTitleTextFieldChange() {
+        handler?.didChangeTitle(newTitle: titleTextField!.text ?? "")
+    }
+
     private func setupEditorTextView() {
         editor = Notepad(frame: view.bounds, themeFile: "one-dark")
         editor!.delegate = self;
         stackView!.addArrangedSubview(editor!)
+    }
+
+    private func setupTitleTextField() {
+        titleTextField!.addTarget(self,
+                                  action: #selector(NoteViewController.onTitleTextFieldChange),
+                                  for: .editingChanged)
     }
 
     private func setupBackButton() {
