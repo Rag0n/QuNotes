@@ -51,6 +51,9 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     private func showNote() {
         guard let activeNote = activeNote else { return }
         let noteVC = NoteViewController()
+        if #available(iOS 11.0, *) {
+            noteVC.navigationItem.largeTitleDisplayMode = .never
+        }
         noteVC.inject(handler: self)
         noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content))
         navigationController.pushViewController(noteVC, animated: true)

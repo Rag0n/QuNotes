@@ -28,6 +28,9 @@ class AppCoordinator {
 
     private func initializeNavigationController() {
         navigationController = UINavigationController()
+        if #available(iOS 11.0, *) {
+            navigationController.navigationBar.prefersLargeTitles = true
+        }
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
     }
