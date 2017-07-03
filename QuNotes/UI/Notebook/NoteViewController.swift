@@ -34,9 +34,11 @@ class NoteViewController: UIViewController {
         }
     }
 
-    fileprivate weak var handler: NoteViewControllerHandler?
-    fileprivate var viewModel: NoteViewModel?
-    fileprivate var editor: Notepad?
+    private weak var handler: NoteViewControllerHandler?
+    private var viewModel: NoteViewModel?
+    private var editor: Notepad?
+    @IBOutlet private var stackView: UIStackView?
+    @IBOutlet private var titleTextField: UITextField?
 
     @objc private func onBackButtonClick() {
         handler?.onBackButtonClick()
@@ -45,12 +47,7 @@ class NoteViewController: UIViewController {
     private func setupEditorTextView() {
         editor = Notepad(frame: view.bounds, themeFile: "one-dark")
         editor!.delegate = self;
-        view.addSubview(editor!)
-        editor!.translatesAutoresizingMaskIntoConstraints = false
-        editor!.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
-        editor!.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
-        editor!.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
-        editor!.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
+        stackView!.addArrangedSubview(editor!)
     }
 
     private func setupBackButton() {
