@@ -65,6 +65,7 @@ extension NotebookCoordinator: NoteViewControllerHandler {
 
     func didChangeTitle(newTitle: String) {
         guard let activeNote = activeNote else { return }
+        self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newTitle: newTitle)
     }
 
     func onBackButtonClick() {

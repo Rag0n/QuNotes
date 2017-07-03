@@ -51,5 +51,22 @@ class NoteUseCase {
         return updatedNote
 
     }
+
+    func updateNote(_ note: Note, newTitle: String) -> Note? {
+        let noteInRepository = noteRepository.get(noteId: note.uuid)
+        guard noteInRepository.value != nil else {
+            return nil;
+        }
+
+        noteRepository.delete(note: note)
+        let updatedNote = Note(createdDate: note.createdDate,
+                               updatedDate: currentDateService.currentDate().timeIntervalSince1970,
+                               content: note.content,
+                               title: newTitle,
+                               uuid: note.uuid)
+        noteRepository.save(note: updatedNote)
+
+        return updatedNote
+    }
 }
 
