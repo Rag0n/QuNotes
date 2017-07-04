@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct Note {
+struct Note: Codable {
     let createdDate: Double
     let updatedDate: Double
     let content: String
