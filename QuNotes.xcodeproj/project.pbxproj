@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
+		111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
+		111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
 		112D49951EF539D800C75B6A /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49891EF539D800C75B6A /* Library.swift */; };
 		112D499D1EF539D800C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
@@ -89,6 +92,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
+		111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepositorySpec.swift; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		112D49891EF539D800C75B6A /* Library.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		112D498C1EF539D800C75B6A /* LibrarySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
@@ -263,6 +268,8 @@
 				B2125BE33DD1D35B04A884A3 /* NoteRepository.swift */,
 				B2125B01393BA1130EB3DD58 /* InMemoryNoteRepository.swift */,
 				B21256A7343A8B6FD0A71D99 /* InMemoryNoteRepositorySpec.swift */,
+				111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */,
+				111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */,
 			);
 			path = Gateway;
 			sourceTree = "<group>";
@@ -450,6 +457,7 @@
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
 				B2125C2E94E6F1738A12F065 /* InMemoryNoteRepository.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
+				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
@@ -468,6 +476,8 @@
 				112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */,
 				112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */,
 				112D499F1EF53A4500C75B6A /* Library.swift in Sources */,
+				111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
+				111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */,
 				112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */,
 				B2125ECBCFABF4186AB515E5 /* NoteUseCase.swift in Sources */,
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
