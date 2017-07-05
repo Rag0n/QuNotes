@@ -36,21 +36,18 @@ class FileNoteRepository: NoteRepository {
         }
     }
 
-    private func saveNoteToFile(note: Note) throws {
+    private func saveNoteToFile(_ note: Note) throws {
         let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         guard let documentsDirectoryPath = NSURL(string: documentsPath) else {
             // TODO: implement error handling
             return;
         }
         let jsonFilePath = documentsDirectoryPath.appendingPathComponent("\(note.uuid).qvnote")!
-        guard fileManager.createFile(atPath: jsonFilePath.absoluteString, contents: nil, attributes: nil) else {
+        let jsonData = try encoder.encode(note)
+        guard fileManager.createFile(atPath: jsonFilePath.absoluteString, contents: jsonData, attributes: nil) else {
             // TODO: implement error handling
             return;
         }
-
-        let jsonData = try encoder.encode(note)
-        let file = try FileHandle(forWritingTo: jsonFilePath)
-        file.write(jsonData)
     }
 
     func delete(note: Note) {
