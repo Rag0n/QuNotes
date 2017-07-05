@@ -45,7 +45,7 @@ class FileNoteRepositorySpec: QuickSpec {
 
             it("writes to correct file path") {
                 noteRepository.save(note: note)
-                expect(fileManagerFake.pathPassedInCreateFileMethod).to(contain("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+                expect(fileManagerFake.pathPassedInCreateFileMethod).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
             }
         }
         
@@ -64,5 +64,9 @@ class FileManagerFake: FileManager {
         dataPassedInCreateFileMethod = data
 
         return resultToBeReturnedFromCreateFileMethod
+    }
+
+    override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+        return [URL(string: "Documents")!]
     }
 }
