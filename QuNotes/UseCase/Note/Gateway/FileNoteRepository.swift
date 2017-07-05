@@ -57,9 +57,9 @@ class FileNoteRepository: NoteRepository {
             return;
         }
 
-        let jsonFilePath = documentsURL.appendingPathComponent("\(note.uuid).qvnote")
+        let jsonFilePath = documentsURL.appendingPathComponent("\(note.uuid)").appendingPathExtension("qvnote")
         let jsonData = try encoder.encode(note)
-        guard fileManager.createFile(atPath: jsonFilePath.absoluteString, contents: jsonData, attributes: nil) else {
+        guard fileManager.createFile(atPath: jsonFilePath.path, contents: jsonData, attributes: nil) else {
             // TODO: implement error handling
             return;
         }
