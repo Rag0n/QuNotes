@@ -20,7 +20,22 @@ class FileNoteRepository: NoteRepository {
     }
 
     func getAll() -> [Note] {
-        return []
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            // TODO: implement error handling
+            return [];
+        }
+        do {
+            let documentDirectoryContent = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [])
+            let qvnoteFiles = documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
+
+            return try qvnoteFiles.map { url in
+                let data = try Data(contentsOf: url)
+                return try decoder.decode(Note.self, from: data)
+            }
+        } catch {
+            // TODO: implement error handling
+            return []
+        }
     }
 
     func get(noteId: String) -> Result<Note, NoteRepositoryError> {
@@ -37,12 +52,12 @@ class FileNoteRepository: NoteRepository {
     }
 
     private func saveNoteToFile(_ note: Note) throws {
-        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-        guard let documentsDirectoryPath = NSURL(string: documentsPath) else {
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
             // TODO: implement error handling
             return;
         }
-        let jsonFilePath = documentsDirectoryPath.appendingPathComponent("\(note.uuid).qvnote")!
+
+        let jsonFilePath = documentsURL.appendingPathComponent("\(note.uuid).qvnote")
         let jsonData = try encoder.encode(note)
         guard fileManager.createFile(atPath: jsonFilePath.absoluteString, contents: jsonData, attributes: nil) else {
             // TODO: implement error handling
