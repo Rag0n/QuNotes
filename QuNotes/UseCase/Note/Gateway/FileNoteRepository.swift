@@ -29,26 +29,28 @@ class FileNoteRepository: NoteRepository {
 
     func save(note: Note) {
         do {
-            let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            let documentsDirectoryPath = NSURL(string: documentsPath)!
-            let jsonFilePath = documentsDirectoryPath.appendingPathComponent("\(note.uuid).qvnote")!
-
-            var isDirectory: ObjCBool = false
-            if !fileManager.fileExists(atPath: jsonFilePath.absoluteString, isDirectory: &isDirectory) {
-                let created = fileManager.createFile(atPath: jsonFilePath.absoluteString, contents: nil, attributes: nil)
-                if !created {
-                    // TODO: error handling
-                }
-            }
-
-            let file = try FileHandle(forWritingTo: jsonFilePath)
-            let jsonData = try encoder.encode(note)
-            file.write(jsonData)
-            print("JSON data was written to teh file successfully!")
+            try saveNoteToFile(note)
         } catch let error as NSError {
             // TODO: implement error handling
             print(error)
         }
+    }
+
+    private func saveNoteToFile(note: Note) throws {
+        let documentsPath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+        guard let documentsDirectoryPath = NSURL(string: documentsPath) else {
+            // TODO: implement error handling
+            return;
+        }
+        let jsonFilePath = documentsDirectoryPath.appendingPathComponent("\(note.uuid).qvnote")!
+        guard fileManager.createFile(atPath: jsonFilePath.absoluteString, contents: nil, attributes: nil) else {
+            // TODO: implement error handling
+            return;
+        }
+
+        let jsonData = try encoder.encode(note)
+        let file = try FileHandle(forWritingTo: jsonFilePath)
+        file.write(jsonData)
     }
 
     func delete(note: Note) {
