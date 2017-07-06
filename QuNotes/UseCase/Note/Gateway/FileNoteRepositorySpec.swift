@@ -12,6 +12,7 @@ import Nimble
 class FileNoteRepositorySpec: QuickSpec {
     override func spec() {
 
+        let note = Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57")
         var noteRepository: FileNoteRepository!
         var fileManagerFake: FileManagerFake!
 
@@ -24,9 +25,12 @@ class FileNoteRepositorySpec: QuickSpec {
 
         }
 
+        describe("-get:noteId") {
+
+        }
+
         describe("-save") {
 
-            let note = Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57")
             let expectedString = """
             {
               "createdDate" : 0,
@@ -50,6 +54,24 @@ class FileNoteRepositorySpec: QuickSpec {
         }
         
         describe("-delete") {
+            it("calls deleteItem of fileManager with correct URL") {
+                noteRepository.delete(note: note)
+                expect(fileManagerFake.urlPassedInDeleteItemMethod?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+            }
+
+            context("when fileManager successfuly removes file") {
+
+                beforeEach {
+                    fileManagerFake.remoteItemMethodThrows = false
+                }
+            }
+
+            context("when fileManager throws error when trying to remove file") {
+
+                beforeEach {
+                    fileManagerFake.remoteItemMethodThrows = true
+                }
+            }
         }
     }
 }
@@ -58,12 +80,21 @@ class FileManagerFake: FileManager {
     var pathPassedInCreateFileMethod: String?
     var dataPassedInCreateFileMethod: Data?
     var resultToBeReturnedFromCreateFileMethod = false
+    var urlPassedInDeleteItemMethod: URL?
+    var remoteItemMethodThrows = false
 
     override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
         pathPassedInCreateFileMethod = path
         dataPassedInCreateFileMethod = data
 
         return resultToBeReturnedFromCreateFileMethod
+    }
+
+    override func removeItem(at URL: URL) throws {
+        urlPassedInDeleteItemMethod = URL
+        if remoteItemMethodThrows {
+            throw NSError(domain: "domain", code: 0, userInfo: nil)
+        }
     }
 
     override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
