@@ -20,21 +20,26 @@ class FileNoteRepository: NoteRepository {
     }
 
     func getAll() -> [Note] {
+        do {
+            return try mapNoteFilesToNotes()
+        } catch {
+            // TODO: implement error handling
+            return []
+        }
+    }
+
+    private func mapNoteFilesToNotes() throws -> [Note] {
         guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
             // TODO: implement error handling
             return [];
         }
-        do {
-            let documentDirectoryContent = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [])
-            let qvnoteFiles = documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
 
-            return try qvnoteFiles.map { url in
-                let data = try Data(contentsOf: url)
-                return try decoder.decode(Note.self, from: data)
-            }
-        } catch {
-            // TODO: implement error handling
-            return []
+        let documentDirectoryContent = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [])
+        let noteFiles = documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
+
+        return try noteFiles.map { url in
+            let data = try Data(contentsOf: url)
+            return try decoder.decode(Note.self, from: data)
         }
     }
 
