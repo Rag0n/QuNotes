@@ -39,7 +39,23 @@ class FileNoteRepository: NoteRepository {
     }
 
     func get(noteId: String) -> Result<Note, NoteRepositoryError> {
-        return Result.failure(NoteRepositoryError.notFound)
+        do {
+            return try noteFromFile(withNoteUUID: noteId)
+        } catch {
+            return Result.failure(NoteRepositoryError.notFound)
+        }
+    }
+
+    private func noteFromFile(withNoteUUID noteUUID: String) throws -> Result<Note, NoteRepositoryError>  {
+        guard let noteFileURL = getNoteURLFromNoteId(noteId: noteUUID) else {
+            // TODO: implement error handling
+            return Result.failure(NoteRepositoryError.notFound)
+        }
+
+        let noteData = try Data(contentsOf: noteFileURL)
+        let note = try decoder.decode(Note.self, from: noteData)
+
+        return Result.success(note)
     }
 
     func save(note: Note) {
@@ -52,20 +68,39 @@ class FileNoteRepository: NoteRepository {
     }
 
     private func saveNoteToFile(_ note: Note) throws {
-        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+        guard let noteFileURL = getNoteURLFromNoteId(noteId: note.uuid) else {
             // TODO: implement error handling
             return;
         }
-
-        let jsonFilePath = documentsURL.appendingPathComponent("\(note.uuid)").appendingPathExtension("qvnote")
         let jsonData = try encoder.encode(note)
-        guard fileManager.createFile(atPath: jsonFilePath.path, contents: jsonData, attributes: nil) else {
+        guard fileManager.createFile(atPath: noteFileURL.path, contents: jsonData, attributes: nil) else {
             // TODO: implement error handling
             return;
         }
     }
 
     func delete(note: Note) {
+        do {
+            try deleteFileWithNoteUUID(noteUUID: note.uuid)
+        } catch {
+            // TODO: implement error handling
+        }
+    }
+
+    private func deleteFileWithNoteUUID(noteUUID: String) throws {
+        guard let noteFileURL = getNoteURLFromNoteId(noteId: noteUUID) else {
+            // TODO: implement error handling
+            return;
+        }
+
+        try fileManager.removeItem(at: noteFileURL)
+    }
+
+    private func getNoteURLFromNoteId(noteId: String) -> URL? {
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            return nil;
+        }
+        return documentsURL.appendingPathComponent("\(noteId)").appendingPathExtension("qvnote");
     }
 }
 
