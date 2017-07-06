@@ -58,6 +58,12 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content))
         navigationController.pushViewController(noteVC, animated: true)
     }
+
+    func didSwapeToDeleteNoteWithIndex(index: Int) {
+        let notes = dependencies.noteUseCase.getAllNotes()
+        guard (index < notes.count) else { return }
+        dependencies.noteUseCase.deleteNote(notes[index])
+    }
 }
 
 extension NotebookCoordinator: NoteViewControllerHandler {

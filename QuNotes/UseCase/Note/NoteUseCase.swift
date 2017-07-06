@@ -68,5 +68,9 @@ class NoteUseCase {
 
         return updatedNote
     }
+
+    func deleteNote(_ note: Note) {
+        
+    }
 }
 
