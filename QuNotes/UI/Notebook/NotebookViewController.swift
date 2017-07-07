@@ -28,6 +28,11 @@ class NotebookViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = "Notes"
+        self.tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+    }
+
+    private enum Constants {
+        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }
 
     fileprivate weak var handler: NotebookViewControllerHandler?
@@ -47,7 +52,7 @@ extension NotebookViewController: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath)
         cell.textLabel?.text = viewModel?.notes[indexPath.row]
 
         return cell
