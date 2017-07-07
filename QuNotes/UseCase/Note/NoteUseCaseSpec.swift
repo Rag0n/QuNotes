@@ -186,6 +186,16 @@ class NoteUseCaseSpec: QuickSpec {
                 }
             }
         }
+
+        describe("-deleteNote") {
+
+            let note = Note.noteFixture()
+
+            it("calls delete method of repository with passed note") {
+                useCase.deleteNote(note)
+                expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(note))
+            }
+        }
     }
 }
 

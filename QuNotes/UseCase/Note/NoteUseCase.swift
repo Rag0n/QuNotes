@@ -70,7 +70,7 @@ class NoteUseCase {
     }
 
     func deleteNote(_ note: Note) {
-        
+        noteRepository.delete(note: note)
     }
 }
 
