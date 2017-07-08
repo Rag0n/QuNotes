@@ -12,6 +12,7 @@ protocol NotebookViewControllerHandler: class {
     func didTapAddNote()
     func didTapOnNoteWithIndex(index: Int)
     func didSwapeToDeleteNoteWithIndex(index: Int)
+    func didUpdateSearchResults(withText text: String?)
 }
 
 class NotebookViewController: UIViewController {
@@ -27,11 +28,16 @@ class NotebookViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = "Notes"
+        self.navigationItem.title = Constants.title
         self.tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        navigationItem.searchController = searchController
     }
 
     private enum Constants {
+        static let title = "Notes"
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }
 
@@ -40,6 +46,7 @@ class NotebookViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView?
     @IBOutlet private weak var addButton: UIButton?
+    private let searchController = UISearchController(searchResultsController: nil)
 
     @IBAction private func addNote() {
         handler?.didTapAddNote()
@@ -75,5 +82,11 @@ extension NotebookViewController: UITableViewDelegate {
         configuration.performsFirstActionWithFullSwipe = true
 
         return configuration
+    }
+}
+
+extension NotebookViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        handler?.didUpdateSearchResults(withText: searchController.searchBar.text)
     }
 }

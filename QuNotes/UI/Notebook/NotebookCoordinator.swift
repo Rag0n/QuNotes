@@ -64,6 +64,10 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         guard (index < notes.count) else { return }
         dependencies.noteUseCase.deleteNote(notes[index])
     }
+
+    func didUpdateSearchResults(withText text: String?) {
+
+    }
 }
 
 extension NotebookCoordinator: NoteViewControllerHandler {
