@@ -28,8 +28,11 @@ class NotebookCoordinator {
         navigationController.pushViewController(notebookViewController!, animated: true)
     }
 
-    fileprivate func updateNotebookViewModel() {
-        let notes = dependencies.noteUseCase.getAllNotes()
+    fileprivate func updateNotebookViewModel(withNoteTitleFilter titleFilter: String = "") {
+        var notes = dependencies.noteUseCase.getAllNotes()
+        if titleFilter.count > 0 {
+            notes = notes.filter { note in note.title.lowercased().contains(titleFilter) }
+        }
         let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.title })
         notebookViewController?.render(withViewModel: notebookViewModel)
     }
@@ -66,7 +69,11 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     func didUpdateSearchResults(withText text: String?) {
-
+        if let titleFilter = text?.lowercased() {
+            updateNotebookViewModel(withNoteTitleFilter: titleFilter)
+        } else {
+            updateNotebookViewModel()
+        }
     }
 }
 
