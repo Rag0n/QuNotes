@@ -31,9 +31,9 @@ class NotebookCoordinator {
     fileprivate func updateNotebookViewModel(withNoteTitleFilter titleFilter: String = "") {
         var notes = dependencies.noteUseCase.getAllNotes()
         if titleFilter.count > 0 {
-            notes = notes.filter { note in note.title.lowercased().contains(titleFilter) }
+            notes = notes.filter { $0.title.lowercased().contains(titleFilter) }
         }
-        let notebookViewModel = NotebookViewModel(notes: notes.map { note in note.title })
+        let notebookViewModel = NotebookViewModel(notes: notes.map { $0.title })
         notebookViewController?.render(withViewModel: notebookViewModel)
     }
 }
