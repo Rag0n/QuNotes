@@ -28,15 +28,19 @@ class NotebookViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.title = Constants.title
-        self.tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+        navigationItem.title = Constants.title
+        tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+        setupSearchController()
+    }
+
+    private func setupSearchController() {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         navigationItem.searchController = searchController
     }
 
-    private enum Constants {
+    fileprivate enum Constants {
         static let title = "Notes"
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }

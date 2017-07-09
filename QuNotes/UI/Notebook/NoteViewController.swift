@@ -49,6 +49,11 @@ class NoteViewController: UIViewController {
         dirty = false
     }
 
+    private enum Constants {
+        static let themeName = "one-dark"
+        static let backButtonTitle = "backButtonTitle"
+    }
+
     fileprivate weak var handler: NoteViewControllerHandler?
     private var viewModel: NoteViewModel?
     private var editor: Notepad?
@@ -66,7 +71,7 @@ class NoteViewController: UIViewController {
     }
 
     private func setupEditorTextView() {
-        editor = Notepad(frame: view.bounds, themeFile: "one-dark")
+        editor = Notepad(frame: view.bounds, themeFile: Constants.themeName)
         editor!.delegate = self;
         stackView!.addArrangedSubview(editor!)
     }
@@ -79,7 +84,7 @@ class NoteViewController: UIViewController {
 
     private func setupBackButton() {
         self.navigationItem.hidesBackButton = true
-        let backButton = UIBarButtonItem(title: "Back",
+        let backButton = UIBarButtonItem(title: Constants.backButtonTitle,
                                          style: .plain,
                                          target: self,
                                          action: #selector(NoteViewController.onBackButtonClick))
