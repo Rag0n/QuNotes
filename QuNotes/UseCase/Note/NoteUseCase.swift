@@ -41,11 +41,7 @@ class NoteUseCase {
         }
 
         noteRepository.delete(note: note)
-        let updatedNote = Note(createdDate: note.createdDate,
-                               updatedDate: currentDateService.currentDate().timeIntervalSince1970,
-                               content: newContent,
-                               title: note.title,
-                               uuid: note.uuid)
+        let updatedNote = updateNote(note, content: newContent)
         noteRepository.save(note: updatedNote)
 
         return updatedNote
@@ -59,11 +55,7 @@ class NoteUseCase {
         }
 
         noteRepository.delete(note: note)
-        let updatedNote = Note(createdDate: note.createdDate,
-                               updatedDate: currentDateService.currentDate().timeIntervalSince1970,
-                               content: note.content,
-                               title: newTitle,
-                               uuid: note.uuid)
+        let updatedNote = updateNote(note, title: newTitle)
         noteRepository.save(note: updatedNote)
 
         return updatedNote
@@ -72,5 +64,12 @@ class NoteUseCase {
     func deleteNote(_ note: Note) {
         noteRepository.delete(note: note)
     }
-}
 
+    private func updateNote(_ note: Note, title: String? = nil, content: String? = nil) -> Note {
+        return Note(createdDate: note.createdDate,
+                    updatedDate: currentDateService.currentDate().timeIntervalSince1970,
+                    content: content ?? note.content,
+                    title: title ?? note.title,
+                    uuid: note.uuid)
+    }
+}
