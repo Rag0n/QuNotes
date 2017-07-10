@@ -13,19 +13,19 @@ class NoteSpec: QuickSpec {
         var note: Note!
 
         beforeEach {
-            note = Note(createdDate: 5, updatedDate: 5, content: "context fixture", title: "title fixture", uuid: "uuid fixture")
+            note = Note(createdDate: 5, updatedDate: 5, content: "context fixture", title: "title fixture", uuid: "uuid fixture", tags: ["tag fixture"])
         }
 
         context("when comparing instances with not equal uuid") {
             it("returns false") {
-                let anotherNote = Note(createdDate: note.createdDate, updatedDate: note.updatedDate, content: note.content, title: note.title, uuid: "another uuid fixture")
+                let anotherNote = Note(createdDate: note.createdDate, updatedDate: note.updatedDate, content: note.content, title: note.title, uuid: "another uuid fixture", tags: ["tag fixture"])
                 expect(note == anotherNote).to(beFalse())
             }
         }
 
         context("when comparing instances with equal uuid") {
             it("return true") {
-                let anotherNote = Note(createdDate: 6, updatedDate: 6, content: "another context fixture", title: "another title fixture", uuid: "uuid fixture")
+                let anotherNote = Note(createdDate: 6, updatedDate: 6, content: "another context fixture", title: "another title fixture", uuid: "uuid fixture", tags: ["another tag fixture"])
                 expect(note == anotherNote).to(beTrue())
             }
         }
@@ -34,10 +34,10 @@ class NoteSpec: QuickSpec {
 
 extension Note {
     static func noteFixtureWithContent(_ content: String) -> Note {
-        return Note(createdDate: 0, updatedDate: 0, content: content, title: "title", uuid: UUID.init().uuidString)
+        return Note(createdDate: 0, updatedDate: 0, content: content, title: "title", uuid: UUID.init().uuidString, tags: [])
     }
 
     static func noteFixture() -> Note {
-        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString)
+        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString, tags: [])
     }
 }

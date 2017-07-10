@@ -11,6 +11,7 @@ struct Note: Codable {
     let content: String
     let title: String
     let uuid: String
+    let tags: [String]
 }
 
 extension Note: Equatable {

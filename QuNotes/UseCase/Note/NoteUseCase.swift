@@ -24,7 +24,8 @@ class NoteUseCase {
                            updatedDate: currentTimestamp,
                            content: "",
                            title: title,
-                           uuid: UUID.init().uuidString)
+                           uuid: UUID.init().uuidString,
+                           tags: [])
         noteRepository.save(note: newNote)
 
         return newNote
@@ -65,11 +66,12 @@ class NoteUseCase {
         noteRepository.delete(note: note)
     }
 
-    private func updateNote(_ note: Note, title: String? = nil, content: String? = nil) -> Note {
+    private func updateNote(_ note: Note, title: String? = nil, content: String? = nil, tags: [String]? = nil) -> Note {
         return Note(createdDate: note.createdDate,
                     updatedDate: currentDateService.currentDate().timeIntervalSince1970,
                     content: content ?? note.content,
                     title: title ?? note.title,
-                    uuid: note.uuid)
+                    uuid: note.uuid,
+                    tags: tags ?? note.tags)
     }
 }

@@ -12,7 +12,7 @@ import Nimble
 class FileNoteRepositorySpec: QuickSpec {
     override func spec() {
 
-        let note = Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57")
+        let note = Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57", tags: ["tag fixture", "another tag fixture"])
         var noteRepository: FileNoteRepository!
         var fileManagerFake: FileManagerFake!
 
@@ -37,6 +37,10 @@ class FileNoteRepositorySpec: QuickSpec {
               "content" : "content",
               "updatedDate" : 0,
               "title" : "title",
+              "tags" : [
+                "tag fixture",
+                "another tag fixture"
+              ],
               "uuid" : "2F1535F5-0B62-4CFC-8B5A-2C399B718E57"
             }
             """
