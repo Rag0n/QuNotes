@@ -36,28 +36,11 @@ class NoteUseCase {
     }
 
     func updateNote(_ note: Note, newContent: String) -> Note? {
-        let noteInRepository = noteRepository.get(noteId: note.uuid)
-        guard noteInRepository.value != nil else {
-            return nil;
-        }
-
-        let updatedNote = updateNote(note, content: newContent)
-        noteRepository.save(note: updatedNote)
-
-        return updatedNote
-
+        return updateNoteIfPossible(note, updatedNote: updatedNote(withOldNote: note, content: newContent))
     }
 
     func updateNote(_ note: Note, newTitle: String) -> Note? {
-        let noteInRepository = noteRepository.get(noteId: note.uuid)
-        guard noteInRepository.value != nil else {
-            return nil;
-        }
-
-        let updatedNote = updateNote(note, title: newTitle)
-        noteRepository.save(note: updatedNote)
-
-        return updatedNote
+        return updateNoteIfPossible(note, updatedNote: updatedNote(withOldNote: note, title: newTitle))
     }
 
     func deleteNote(_ note: Note) {
@@ -65,18 +48,22 @@ class NoteUseCase {
     }
 
     func addTag(tag: String, toNote note: Note) -> Note? {
+        return updateNoteIfPossible(note, updatedNote: updatedNote(withOldNote: note, tags: note.tags + [tag]))
+    }
+
+    private func updateNoteIfPossible(_ note: Note, updatedNote: @autoclosure () -> Note) -> Note? {
         let noteInRepository = noteRepository.get(noteId: note.uuid)
         guard noteInRepository.value != nil else {
             return nil;
         }
 
-        let updatedNote = updateNote(note, tags: note.tags + [tag])
-        noteRepository.save(note: updatedNote)
+        let newNote = updatedNote()
+        noteRepository.save(note: newNote)
 
-        return updatedNote
+        return newNote
     }
 
-    private func updateNote(_ note: Note, title: String? = nil, content: String? = nil, tags: [String]? = nil) -> Note {
+    private func updatedNote(withOldNote note: Note, title: String? = nil, content: String? = nil, tags: [String]? = nil) -> Note {
         return Note(createdDate: note.createdDate,
                     updatedDate: currentDateService.currentDate().timeIntervalSince1970,
                     content: content ?? note.content,

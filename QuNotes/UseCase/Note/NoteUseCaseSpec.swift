@@ -68,7 +68,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-updateNote:newContent:") {
-
             context("when updating added note") {
 
                 var existingNote: Note!
@@ -123,7 +122,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-updateNote:newTitle:") {
-
             context("when updating added note") {
 
                 var existingNote: Note!
@@ -188,7 +186,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-addTag:toNote:") {
-
             context("when adding tag to added note") {
 
                 var existingNote: Note!
