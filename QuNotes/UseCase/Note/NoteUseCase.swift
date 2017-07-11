@@ -66,6 +66,19 @@ class NoteUseCase {
         noteRepository.delete(note: note)
     }
 
+    func addTag(tag: String, toNote note: Note) -> Note? {
+        let noteInRepository = noteRepository.get(noteId: note.uuid)
+        guard noteInRepository.value != nil else {
+            return nil;
+        }
+
+        noteRepository.delete(note: note)
+        let updatedNote = updateNote(note, tags: note.tags + [tag])
+        noteRepository.save(note: updatedNote)
+
+        return updatedNote
+    }
+
     private func updateNote(_ note: Note, title: String? = nil, content: String? = nil, tags: [String]? = nil) -> Note {
         return Note(createdDate: note.createdDate,
                     updatedDate: currentDateService.currentDate().timeIntervalSince1970,
