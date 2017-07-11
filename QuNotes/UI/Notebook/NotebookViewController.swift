@@ -29,8 +29,13 @@ class NotebookViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = Constants.title
-        tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+        setupTableView()
         setupSearchController()
+    }
+
+    private func setupTableView() {
+        tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+        tableView!.estimatedRowHeight = 0;
     }
 
     private func setupSearchController() {
