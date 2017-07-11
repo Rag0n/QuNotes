@@ -51,7 +51,7 @@ class NoteViewController: UIViewController {
 
     private enum Constants {
         static let themeName = "one-dark"
-        static let backButtonTitle = "backButtonTitle"
+        static let backButtonTitle = "back"
     }
 
     fileprivate weak var handler: NoteViewControllerHandler?
