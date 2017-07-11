@@ -79,11 +79,6 @@ class NoteUseCaseSpec: QuickSpec {
                     currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
                 }
 
-                it("calls delete method of repository with old note") {
-                    _ = useCase.updateNote(existingNote, newContent: "new note fixture");
-                    expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(existingNote))
-                }
-
                 it("calls save method of repository with note with same id, created date, title") {
                     _ = useCase.updateNote(existingNote, newContent: "new note fixture");
                     expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(existingNote.uuid))
@@ -137,11 +132,6 @@ class NoteUseCaseSpec: QuickSpec {
                     existingNote = useCase.addNote(withTitle: "title fixture")
                     noteRepositoryStub.resultToBeReturnedFromGetMethod = Result.success(existingNote)
                     currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
-                }
-
-                it("calls delete method of repository with old note") {
-                    _ = useCase.updateNote(existingNote, newTitle: "new note title fixture");
-                    expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(existingNote))
                 }
 
                 it("calls save method of repository with note with same id, created date, content") {

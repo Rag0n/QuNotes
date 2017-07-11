@@ -41,7 +41,6 @@ class NoteUseCase {
             return nil;
         }
 
-        noteRepository.delete(note: note)
         let updatedNote = updateNote(note, content: newContent)
         noteRepository.save(note: updatedNote)
 
@@ -55,7 +54,6 @@ class NoteUseCase {
             return nil;
         }
 
-        noteRepository.delete(note: note)
         let updatedNote = updateNote(note, title: newTitle)
         noteRepository.save(note: updatedNote)
 
@@ -72,7 +70,6 @@ class NoteUseCase {
             return nil;
         }
 
-        noteRepository.delete(note: note)
         let updatedNote = updateNote(note, tags: note.tags + [tag])
         noteRepository.save(note: updatedNote)
 
