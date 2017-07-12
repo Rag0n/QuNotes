@@ -13,6 +13,7 @@ protocol NoteViewControllerHandler: class {
     func didChangeContent(newContent: String)
     func didChangeTitle(newTitle: String)
     func onBackButtonClick()
+    func onDeleteButtonClick()
 }
 
 class NoteViewController: UIViewController {
@@ -67,7 +68,7 @@ class NoteViewController: UIViewController {
     }
 
     @objc private func onDeleteButtonClick() {
-
+        handler?.onDeleteButtonClick()
     }
 
     @objc private func onTitleTextFieldChange() {

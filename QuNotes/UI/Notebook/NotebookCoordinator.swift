@@ -90,4 +90,10 @@ extension NotebookCoordinator: NoteViewControllerHandler {
         updateNotebookViewModel()
         self.navigationController.popViewController(animated: true)
     }
+
+    func onDeleteButtonClick() {
+        guard let activeNote = activeNote else { return }
+        dependencies.noteUseCase.deleteNote(activeNote)
+        onBackButtonClick()
+    }
 }
