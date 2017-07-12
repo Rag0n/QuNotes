@@ -43,12 +43,22 @@ class NoteUseCase {
         return updateNoteIfPossible(note, updatedNote: updatedNote(withOldNote: note, title: newTitle))
     }
 
-    func deleteNote(_ note: Note) {
-        noteRepository.delete(note: note)
-    }
-
     func addTag(tag: String, toNote note: Note) -> Note? {
         return updateNoteIfPossible(note, updatedNote: updatedNote(withOldNote: note, tags: note.tags + [tag]))
+    }
+
+    func removeTag(tag: String, fromNote note: Note) -> Note? {
+        var newTags = note.tags
+        newTags.remove(object: tag)
+        if newTags.count == note.tags.count {
+            return note
+        } else {
+            return updateNoteIfPossible(note, updatedNote: updatedNote(withOldNote: note, tags: newTags))
+        }
+    }
+
+    func deleteNote(_ note: Note) {
+        noteRepository.delete(note: note)
     }
 
     private func updateNoteIfPossible(_ note: Note, updatedNote: @autoclosure () -> Note) -> Note? {

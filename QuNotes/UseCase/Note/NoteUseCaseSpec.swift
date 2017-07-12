@@ -253,6 +253,76 @@ class NoteUseCaseSpec: QuickSpec {
                 }
             }
         }
+
+        describe("-removeTag:fromNote:") {
+            context("when removing tag from added note") {
+
+                var existingNote: Note!
+
+                beforeEach {
+                    existingNote = useCase.addNote(withTitle: "title fixture")
+                    noteRepositoryStub.resultToBeReturnedFromGetMethod = Result.success(existingNote)
+                    currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
+                }
+
+                it("calls save method of repository with note with same id, created date, content, title") {
+                    _ = useCase.removeTag(tag: "tag fixture", fromNote: existingNote)
+                    expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(existingNote.uuid))
+                    expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(existingNote.createdDate))
+                    expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal(existingNote.content))
+                    expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal(existingNote.title))
+                }
+
+                context("when note doesnt have this tag") {
+                    it("returns note with without changing updatedDate") {
+                        let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: existingNote)
+                        expect(updatedNote?.uuid).to(equal(existingNote.uuid))
+                        expect(updatedNote?.createdDate).to(beCloseTo(existingNote.createdDate))
+                        expect(updatedNote?.title).to(equal(existingNote.title))
+                        expect(updatedNote?.content).to(equal(existingNote.content))
+                        expect(updatedNote?.updatedDate).to(beCloseTo(existingNote.updatedDate))
+                        expect(updatedNote?.tags).to(beEmpty())
+                    }
+                }
+
+                context("when note has this tag") {
+
+                    beforeEach {
+                        existingNote = useCase.addTag(tag: "tag fixture", toNote: existingNote)
+                        existingNote = useCase.addTag(tag: "another tag fixture", toNote: existingNote)
+                    }
+
+                    it("returns note with removed tag and new updatedDate") {
+                        let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: existingNote)
+                        expect(updatedNote?.uuid).to(equal(existingNote.uuid))
+                        expect(updatedNote?.createdDate).to(beCloseTo(existingNote.createdDate))
+                        expect(updatedNote?.title).to(equal(existingNote.title))
+                        expect(updatedNote?.content).to(equal(existingNote.content))
+                        expect(updatedNote?.updatedDate).to(beCloseTo(20))
+                        expect(updatedNote?.tags).to(equal(["another tag fixture"]))
+                    }
+                }
+            }
+
+            context("when removing tag from not added note") {
+
+                let notAddedNote = Note.noteFixtureWithContent("not added note fixture")
+
+                beforeEach {
+                    noteRepositoryStub.resultToBeReturnedFromGetMethod = Result.failure(NoteRepositoryError.notFound)
+                }
+
+                it("doesnt call save method of repository") {
+                    _ = useCase.removeTag(tag: "tag fixture", fromNote: notAddedNote)
+                    expect(noteRepositoryStub.notePassedInSaveMethod).to(beNil())
+                }
+                
+                it("returns passed note") {
+                    let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: notAddedNote)
+                    expect(updatedNote).to(equal(notAddedNote))
+                }
+            }
+        }
     }
 }
 
