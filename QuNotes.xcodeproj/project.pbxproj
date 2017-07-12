@@ -17,6 +17,8 @@
 		112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D498C1EF539D800C75B6A /* LibrarySpec.swift */; };
 		112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
 		112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49941EF539D800C75B6A /* NotebookSpec.swift */; };
+		1135042A1F16BA01001938FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
+		1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
 		117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
 		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
@@ -96,6 +98,7 @@
 		112D498C1EF539D800C75B6A /* LibrarySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
 		112D49931EF539D800C75B6A /* Notebook.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		112D49941EF539D800C75B6A /* NotebookSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
+		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
@@ -188,6 +191,22 @@
 			path = Notebook;
 			sourceTree = "<group>";
 		};
+		113504271F16B9C2001938FD /* Utility */ = {
+			isa = PBXGroup;
+			children = (
+				113504281F16B9D8001938FD /* Extensions */,
+			);
+			path = Utility;
+			sourceTree = "<group>";
+		};
+		113504281F16B9D8001938FD /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				113504291F16BA01001938FD /* Array+Extensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		117636381F08E8F2000A5CFC /* Service */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,6 +248,7 @@
 				117636381F08E8F2000A5CFC /* Service */,
 				112D49871EF539D800C75B6A /* UseCase */,
 				B2125E1507F73CB41C346C5D /* UI */,
+				113504271F16B9C2001938FD /* Utility */,
 				11B705A61EEBCD600039A863 /* Resources */,
 			);
 			path = QuNotes;
@@ -442,6 +462,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */,
+				1135042A1F16BA01001938FD /* Array+Extensions.swift in Sources */,
 				112D49831EF5391400C75B6A /* main.swift in Sources */,
 				112D49951EF539D800C75B6A /* Library.swift in Sources */,
 				112D499D1EF539D800C75B6A /* Notebook.swift in Sources */,
@@ -475,6 +496,7 @@
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
 				11F144BF1F07AA7A0073EBE6 /* NotebookCoordinator.swift in Sources */,
+				1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */,
 				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
 				11F144C01F07AA820073EBE6 /* NoteViewController.swift in Sources */,
 				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
