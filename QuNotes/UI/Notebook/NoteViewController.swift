@@ -31,7 +31,7 @@ class NoteViewController: UIViewController {
         super.viewDidLoad()
         setupEditorTextView()
         setupTitleTextField()
-        setupBackButton()
+        setupNavigationBar()
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
         }
@@ -66,6 +66,10 @@ class NoteViewController: UIViewController {
         handler?.onBackButtonClick()
     }
 
+    @objc private func onDeleteButtonClick() {
+
+    }
+
     @objc private func onTitleTextFieldChange() {
         handler?.didChangeTitle(newTitle: titleTextField!.text ?? "")
     }
@@ -82,6 +86,11 @@ class NoteViewController: UIViewController {
                                   for: .editingChanged)
     }
 
+    private func setupNavigationBar() {
+        setupBackButton()
+        setupDeleteButton()
+    }
+
     private func setupBackButton() {
         self.navigationItem.hidesBackButton = true
         let backButton = UIBarButtonItem(title: Constants.backButtonTitle,
@@ -89,6 +98,13 @@ class NoteViewController: UIViewController {
                                          target: self,
                                          action: #selector(NoteViewController.onBackButtonClick))
         self.navigationItem.leftBarButtonItem = backButton
+    }
+
+    private func setupDeleteButton() {
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
+                                           target: self,
+                                           action: #selector(NoteViewController.onDeleteButtonClick))
+        self.navigationItem.rightBarButtonItem = deleteButton
     }
 }
 
