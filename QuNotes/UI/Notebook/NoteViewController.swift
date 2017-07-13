@@ -38,6 +38,11 @@ class NoteViewController: UIViewController {
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.navigationController?.interactivePopGestureRecognizer?.delegate = self;
+    }
+
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         guard dirty else { return }
@@ -55,7 +60,6 @@ class NoteViewController: UIViewController {
 
     private enum Constants {
         static let themeName = "one-dark"
-        static let backButtonTitle = "back"
         static let backButtonIconName = "backIcon"
     }
 
@@ -98,7 +102,6 @@ class NoteViewController: UIViewController {
 
     private func setupBackButton() {
         self.navigationItem.hidesBackButton = true
-        let backButton = UIBarButtonItem(title: Constants.backButtonTitle,
         let backButton = UIBarButtonItem(image: UIImage(named: Constants.backButtonIconName),
                                          style: .plain,
                                          target: self,
@@ -117,5 +120,15 @@ class NoteViewController: UIViewController {
 extension NoteViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
         handler?.didChangeContent(newContent: textView.text)
+    }
+}
+
+extension NoteViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return gestureRecognizer is UIScreenEdgePanGestureRecognizer
     }
 }
