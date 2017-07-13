@@ -56,6 +56,7 @@ class NoteViewController: UIViewController {
     private enum Constants {
         static let themeName = "one-dark"
         static let backButtonTitle = "back"
+        static let backButtonIconName = "backIcon"
     }
 
     fileprivate weak var handler: NoteViewControllerHandler?
@@ -98,6 +99,7 @@ class NoteViewController: UIViewController {
     private func setupBackButton() {
         self.navigationItem.hidesBackButton = true
         let backButton = UIBarButtonItem(title: Constants.backButtonTitle,
+        let backButton = UIBarButtonItem(image: UIImage(named: Constants.backButtonIconName),
                                          style: .plain,
                                          target: self,
                                          action: #selector(NoteViewController.onBackButtonClick))
