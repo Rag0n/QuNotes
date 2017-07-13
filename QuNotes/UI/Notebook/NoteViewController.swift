@@ -44,6 +44,9 @@ class NoteViewController: UIViewController {
         guard let viewModel = viewModel else { return }
         editor?.text = viewModel.content
         titleTextField?.text = viewModel.title
+        if viewModel.isTitleActive {
+            titleTextField?.becomeFirstResponder()
+        }
     }
 
     override func viewDidLayoutSubviews() {

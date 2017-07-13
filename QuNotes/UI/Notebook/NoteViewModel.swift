@@ -6,5 +6,5 @@
 struct NoteViewModel {
     let title: String
     let content: String
+    let isTitleActive: Bool
 }
-

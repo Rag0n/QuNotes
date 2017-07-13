@@ -41,7 +41,7 @@ class NotebookCoordinator {
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
         activeNote = dependencies.noteUseCase.addNote(withTitle: "")
-        showNote()
+        showNote(withActiveTitle: true)
     }
 
     func didTapOnNoteWithIndex(index: Int) {
@@ -51,12 +51,12 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         showNote()
     }
 
-    private func showNote() {
+    private func showNote(withActiveTitle isTitleActive: Bool = false) {
         guard let activeNote = activeNote else { return }
         let noteVC = NoteViewController()
         noteVC.navigationItem.largeTitleDisplayMode = .never
         noteVC.inject(handler: self)
-        noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content))
+        noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content, isTitleActive: isTitleActive))
         navigationController.pushViewController(noteVC, animated: true)
     }
 
