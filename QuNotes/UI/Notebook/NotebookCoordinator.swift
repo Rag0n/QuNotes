@@ -56,7 +56,7 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         let noteVC = NoteViewController()
         noteVC.navigationItem.largeTitleDisplayMode = .never
         noteVC.inject(handler: self)
-        noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content, isTitleActive: isTitleActive))
+        noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content, isTitleActive: isTitleActive, tags: activeNote.tags))
         navigationController.pushViewController(noteVC, animated: true)
     }
 

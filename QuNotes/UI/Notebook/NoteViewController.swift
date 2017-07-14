@@ -8,12 +8,15 @@
 
 import UIKit
 import Notepad
+import WSTagsField
 
 protocol NoteViewControllerHandler: class {
     func didChangeContent(newContent: String)
     func didChangeTitle(newTitle: String)
     func onBackButtonClick()
     func onDeleteButtonClick()
+    func didAddTag(tag: String)
+    func didRemoveTag(tag: String)
 }
 
 class NoteViewController: UIViewController {
@@ -30,6 +33,7 @@ class NoteViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupTagView()
         setupEditorTextView()
         setupTitleTextField()
         setupNavigationBar()
@@ -52,6 +56,7 @@ class NoteViewController: UIViewController {
         if viewModel.isTitleActive {
             titleTextField?.becomeFirstResponder()
         }
+        viewModel.tags.forEach { self.tagView?.addTag($0) }
     }
 
     override func viewDidLayoutSubviews() {
@@ -66,6 +71,7 @@ class NoteViewController: UIViewController {
     fileprivate weak var handler: NoteViewControllerHandler?
     private var viewModel: NoteViewModel?
     private var editor: Notepad?
+    private var tagView: WSTagsField?
     @IBOutlet private var stackView: UIStackView?
     @IBOutlet private var titleTextField: UITextField?
 
@@ -81,6 +87,30 @@ class NoteViewController: UIViewController {
 
     @objc private func onTitleTextFieldChange() {
         handler?.didChangeTitle(newTitle: titleTextField!.text ?? "")
+    }
+
+    private func setupTagView() {
+        let tagView = WSTagsField()
+        tagView.backgroundColor = .white
+        tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        tagView.spaceBetweenTags = 10.0
+        tagView.font = .systemFont(ofSize: 12.0)
+        tagView.tintColor = .green
+        tagView.textColor = .black
+        tagView.fieldTextColor = .blue
+        tagView.selectedColor = .black
+        tagView.selectedTextColor = .red
+
+        tagView.onDidAddTag = { [weak self] _, tag in
+            self?.handler?.didAddTag(tag: tag.text)
+        }
+
+        tagView.onDidRemoveTag = { [weak self] _, tag in
+            self?.handler?.didRemoveTag(tag: tag.text)
+        }
+
+        stackView!.addArrangedSubview(tagView)
+        self.tagView = tagView
     }
 
     private func setupEditorTextView() {
