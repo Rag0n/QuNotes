@@ -96,4 +96,14 @@ extension NotebookCoordinator: NoteViewControllerHandler {
         dependencies.noteUseCase.deleteNote(activeNote)
         onBackButtonClick()
     }
+
+    func didAddTag(tag: String) {
+        guard let activeNote = activeNote else { return }
+        self.activeNote = dependencies.noteUseCase.addTag(tag: tag, toNote: activeNote)
+    }
+
+    func didRemoveTag(tag: String) {
+        guard let activeNote = activeNote else { return }
+        self.activeNote = dependencies.noteUseCase.removeTag(tag: tag, fromNote: activeNote)
+    }
 }
