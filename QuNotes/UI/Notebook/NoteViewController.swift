@@ -56,7 +56,9 @@ class NoteViewController: UIViewController {
         if viewModel.isTitleActive {
             titleTextField?.becomeFirstResponder()
         }
+        unsubscribeFromChangeTagEvents()
         viewModel.tags.forEach { self.tagView?.addTag($0) }
+        subscribeOnChangeTagEvents()
     }
 
     override func viewDidLayoutSubviews() {
@@ -100,6 +102,14 @@ class NoteViewController: UIViewController {
         tagView.fieldTextColor = .blue
         tagView.selectedColor = .black
         tagView.selectedTextColor = .red
+        subscribeOnChangeTagEvents()
+
+        stackView!.addArrangedSubview(tagView)
+        self.tagView = tagView
+    }
+
+    private func subscribeOnChangeTagEvents() {
+        guard let tagView = tagView else { return }
 
         tagView.onDidAddTag = { [weak self] _, tag in
             self?.handler?.didAddTag(tag: tag.text)
@@ -108,9 +118,13 @@ class NoteViewController: UIViewController {
         tagView.onDidRemoveTag = { [weak self] _, tag in
             self?.handler?.didRemoveTag(tag: tag.text)
         }
+    }
 
-        stackView!.addArrangedSubview(tagView)
-        self.tagView = tagView
+    private func unsubscribeFromChangeTagEvents() {
+        guard let tagView = tagView else { return }
+
+        tagView.onDidAddTag = nil;
+        tagView.onDidRemoveTag = nil;
     }
 
     private func setupEditorTextView() {
