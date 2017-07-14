@@ -1,2 +1,3 @@
 github "antitypical/Result"
 github "Rag0n/Notepad" "master"
+github "whitesmith/WSTagsField" "swift4.0"
