@@ -24,6 +24,10 @@
 		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
 		1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
+		118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
+		118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
+		118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */; };
+		118569181F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		1191D8C81F0AC3D6003B9085 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
@@ -103,6 +107,8 @@
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
+		118569131F1A1C1E00D3CF1B /* FileReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderService.swift; sourceTree = "<group>"; };
+		118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderServiceImp.swift; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		118ACCF91F058321002DF609 /* NoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		119955FC1F07C0FD007AB79A /* Notepad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Notepad.framework; path = Carthage/Build/iOS/Notepad.framework; sourceTree = "<group>"; };
@@ -215,6 +221,7 @@
 		117636381F08E8F2000A5CFC /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				118569121F1A1BFD00D3CF1B /* FileReaderService */,
 				1176363C1F08E96B000A5CFC /* CurrentDateService */,
 			);
 			path = Service;
@@ -227,6 +234,15 @@
 				1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */,
 			);
 			path = CurrentDateService;
+			sourceTree = "<group>";
+		};
+		118569121F1A1BFD00D3CF1B /* FileReaderService */ = {
+			isa = PBXGroup;
+			children = (
+				118569131F1A1C1E00D3CF1B /* FileReaderService.swift */,
+				118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */,
+			);
+			path = FileReaderService;
 			sourceTree = "<group>";
 		};
 		11B705721EEB42560039A863 = {
@@ -452,6 +468,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Notepad.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Notepad.framework.dSYM",
 				"$(SRCROOT)/Carthage/Build/iOS/WSTagsField.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/WSTagsField.framework.dSYM",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Result.framework",
@@ -483,6 +500,8 @@
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */,
+				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
+				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
@@ -497,9 +516,11 @@
 				112D49A61EF53A5E00C75B6A /* NotebookSpec.swift in Sources */,
 				112D49A01EF53A4A00C75B6A /* LibrarySpec.swift in Sources */,
 				112D499F1EF53A4500C75B6A /* Library.swift in Sources */,
+				118569181F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
 				111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */,
 				112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */,
+				118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
 				B2125ECBCFABF4186AB515E5 /* NoteUseCase.swift in Sources */,
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
