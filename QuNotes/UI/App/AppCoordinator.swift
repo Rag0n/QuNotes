@@ -15,7 +15,8 @@ class AppCoordinator {
 
     init(withWindow window: UIWindow) {
         self.window = window
-        let fileNoteRepository = FileNoteRepository(withFileManager: FileManager.default)
+        let fileReaderService = FileReaderServiceImp()
+        let fileNoteRepository = FileNoteRepository(withFileManager: FileManager.default, fileReader: fileReaderService)
         let currentDateService = CurrentDateServiceImp()
         let noteUseCase = NoteUseCase(withNoteReposiroty: fileNoteRepository, currentDateService: currentDateService)
         dependency = AppDependency(noteUseCase: noteUseCase)

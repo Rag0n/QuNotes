@@ -13,9 +13,11 @@ class FileNoteRepository: NoteRepository {
     private var encoder: JSONEncoder = JSONEncoder()
     private var decoder: JSONDecoder = JSONDecoder()
     private var fileManager: FileManager
+    private var fileReader: FileReaderService
 
-    init(withFileManager fileManager: FileManager) {
+    init(withFileManager fileManager: FileManager, fileReader: FileReaderService) {
         self.fileManager = fileManager
+        self.fileReader = fileReader
         encoder.outputFormatting = .prettyPrinted
     }
 
