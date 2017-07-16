@@ -59,14 +59,11 @@ class FileNoteRepository: NoteRepository {
             return Result.failure(NoteRepositoryError.notFound)
         }
 
-        let noteData = self.fileReader.dataFromFile(fileURL: noteFileURL)
-        if case let Result.success(noteData) = noteData {
-            let note = try decoder.decode(Note.self, from: noteData)
-            return Result.success(note)
-        } else {
-            // TODO: implement error handling
-            return .failure(NoteRepositoryError.notFound)
-        }
+        let noteData = try self.fileReader.dataFromFile(fileURL: noteFileURL)
+        let note = try decoder.decode(Note.self, from: noteData)
+
+        return Result.success(note)
+
     }
 
     func save(note: Note) {

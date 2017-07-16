@@ -10,5 +10,5 @@ import Foundation
 import Result
 
 protocol FileReaderService {
-    func dataFromFile(fileURL: URL) -> Result<Data, AnyError>
+    func dataFromFile(fileURL: URL) throws -> Data
 }

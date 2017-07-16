@@ -10,12 +10,7 @@ import Foundation
 import Result
 
 struct FileReaderServiceImp: FileReaderService {
-    func dataFromFile(fileURL: URL) -> Result<Data, AnyError> {
-        do {
-            let data = try Data(contentsOf: fileURL)
-            return Result.success(data)
-        } catch {
-            return Result.failure(AnyError(error))
-        }
+    func dataFromFile(fileURL: URL) throws -> Data {
+        return try Data(contentsOf: fileURL)
     }
 }
