@@ -10,7 +10,7 @@ import Foundation
 import Result
 
 struct FileReaderServiceImp: FileReaderService {
-    func dataFromFile(fileURL: URL) throws -> Data {
+    func dataFrom(fileURL: URL) throws -> Data {
         return try Data(contentsOf: fileURL)
     }
 }
