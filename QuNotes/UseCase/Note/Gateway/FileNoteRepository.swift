@@ -40,7 +40,7 @@ class FileNoteRepository: NoteRepository {
         let noteFiles = documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
 
         return try noteFiles.map { url in
-            let data = try Data(contentsOf: url)
+            let data = try self.fileReader.dataFromFile(fileURL: url)
             return try decoder.decode(Note.self, from: data)
         }
     }
