@@ -15,10 +15,12 @@ class FileNoteRepositorySpec: QuickSpec {
         let note = Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57", tags: ["tag fixture", "another tag fixture"])
         var noteRepository: FileNoteRepository!
         var fileManagerFake: FileManagerFake!
+        var fileReaderFake: FileReaderServiceFake!
 
         beforeEach {
             fileManagerFake = FileManagerFake()
-            noteRepository = FileNoteRepository(withFileManager: fileManagerFake)
+            fileReaderFake = FileReaderServiceFake()
+            noteRepository = FileNoteRepository(withFileManager: fileManagerFake, fileReader: fileReaderFake)
         }
 
         describe("-getAll") {
@@ -103,5 +105,15 @@ class FileManagerFake: FileManager {
 
     override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
         return [URL(string: "Documents")!]
+    }
+}
+
+class FileReaderServiceFake: FileReaderService {
+    var fileURLPassedInDataFromFileURLMethod: URL?
+    var resultToBeReturnedFromDataFromFileURLMethod: Data?
+
+    func dataFrom(fileURL: URL) throws -> Data {
+        fileURLPassedInDataFromFileURLMethod = fileURL
+        return resultToBeReturnedFromDataFromFileURLMethod ?? Data()
     }
 }
