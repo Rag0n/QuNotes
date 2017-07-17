@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 protocol FileReaderService {
     func dataFrom(fileURL: URL) throws -> Data

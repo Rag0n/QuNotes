@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 struct FileReaderServiceImp: FileReaderService {
     func dataFrom(fileURL: URL) throws -> Data {
