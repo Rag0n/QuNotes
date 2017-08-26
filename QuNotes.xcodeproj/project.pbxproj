@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		111743711F520C24006EDA89 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationViewController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
+		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
 		111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
 		111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
 		111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */; };
@@ -101,6 +102,7 @@
 
 /* Begin PBXFileReference section */
 		111743701F520C24006EDA89 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
+		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
 		111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepositorySpec.swift; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -170,6 +172,7 @@
 		1117436E1F520BC7006EDA89 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				111743731F521689006EDA89 /* Protocols */,
 				1117436F1F520C10006EDA89 /* NavigationViewController */,
 			);
 			path = Common;
@@ -181,6 +184,14 @@
 				111743701F520C24006EDA89 /* NavigationViewController.swift */,
 			);
 			path = NavigationViewController;
+			sourceTree = "<group>";
+		};
+		111743731F521689006EDA89 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				111743741F5216AC006EDA89 /* Coordinator.swift */,
+			);
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		112D49871EF539D800C75B6A /* UseCase */ = {
@@ -511,6 +522,7 @@
 				112D49951EF539D800C75B6A /* Library.swift in Sources */,
 				112D499D1EF539D800C75B6A /* Notebook.swift in Sources */,
 				B21252A65C97C1E1853C1CE7 /* NoteUseCase.swift in Sources */,
+				111743751F5216AC006EDA89 /* Coordinator.swift in Sources */,
 				1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */,
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
