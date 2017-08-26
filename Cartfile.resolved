@@ -1,5 +1,5 @@
 github "Quick/Nimble" "v7.0.1"
-github "Rag0n/Notepad" "ad9d3505df8855db9cdeda9e109bb4813d36093b"
+github "Rag0n/Notepad" "4be32ed58e308f2e8934f8b302fa737741b79f60"
 github "Quick/Quick" "v1.1.0"
 github "antitypical/Result" "3.2.3"
 github "whitesmith/WSTagsField" "595d2e0df6a565f5ffb3a84275445ed5018f05e8"

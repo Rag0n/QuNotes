@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		111743711F520C24006EDA89 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationViewController.swift */; };
+		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
 		111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
 		111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */; };
@@ -31,7 +33,6 @@
 		1186B5D61F1D4A9700C72928 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
-		1191D8C81F0AC3D6003B9085 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		1191D8C91F0AC3E4003B9085 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		11AD36AE1F1D4AC200D9E0A9 /* WSTagsField.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
@@ -99,6 +100,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		111743701F520C24006EDA89 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
 		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
 		111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepositorySpec.swift; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
@@ -144,8 +146,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				111743721F521295006EDA89 /* Notepad.framework in Frameworks */,
 				11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */,
-				1191D8C81F0AC3D6003B9085 /* Notepad.framework in Frameworks */,
 				11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -165,6 +167,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1117436E1F520BC7006EDA89 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				1117436F1F520C10006EDA89 /* NavigationViewController */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		1117436F1F520C10006EDA89 /* NavigationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				111743701F520C24006EDA89 /* NavigationViewController.swift */,
+			);
+			path = NavigationViewController;
+			sourceTree = "<group>";
+		};
 		112D49871EF539D800C75B6A /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
@@ -328,6 +346,7 @@
 		B2125E1507F73CB41C346C5D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				1117436E1F520BC7006EDA89 /* Common */,
 				B212595A5823D77A45366CC1 /* Notebook */,
 				B2125E416FA24EDECFDC71CF /* App */,
 			);
@@ -468,9 +487,7 @@
 			inputPaths = (
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Notepad.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Notepad.framework.dSYM",
 				"$(SRCROOT)/Carthage/Build/iOS/WSTagsField.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/WSTagsField.framework.dSYM",
 			);
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Result.framework",
@@ -500,6 +517,7 @@
 				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
+				111743711F520C24006EDA89 /* NavigationViewController.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */,
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
