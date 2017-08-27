@@ -9,7 +9,6 @@
 import UIKit
 
 final class NavigationViewController: UIViewController {
-
     // MARK: - API
 
     func pushCoordinator(coordinator: Coordinator, animated: Bool) {
@@ -35,8 +34,6 @@ final class NavigationViewController: UIViewController {
     private lazy var managedNavigationController: UINavigationController = {
         let vc = UINavigationController()
         vc.delegate = self
-        vc.interactivePopGestureRecognizer?.delegate = self
-
         return vc;
     }()
 
@@ -96,7 +93,4 @@ extension NavigationViewController: UINavigationControllerDelegate {
             }
         }
     }
-}
-
-extension NavigationViewController: UIGestureRecognizerDelegate {
 }
