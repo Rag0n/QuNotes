@@ -12,6 +12,24 @@ final class NavigationViewController: UIViewController {
 
     // MARK: - API
 
+    func pushCoordinator(coordinator: Coordinator, animated: Bool) {
+        viewControllerToCoordinatorMap[coordinator.rootViewController] = coordinator
+        coordinator.onStart()
+        pushViewController(viewController: coordinator.rootViewController, animated: animated)
+    }
+
+    func pushViewController(viewController: UIViewController, animated: Bool) {
+        managedNavigationController.pushViewController(viewController, animated: animated)
+    }
+
+    func popViewController(animated: Bool) {
+        managedNavigationController.popViewController(animated: animated)
+    }
+
+    func preferLargeTitles() {
+        managedNavigationController.navigationBar.prefersLargeTitles = true
+    }
+
     // MARK: - State
 
     private lazy var managedNavigationController: UINavigationController = {
@@ -21,6 +39,8 @@ final class NavigationViewController: UIViewController {
 
         return vc;
     }()
+
+    private var viewControllerToCoordinatorMap: [UIViewController: Coordinator] = [:]
 
     // MARK: - Life cycle
 
@@ -62,7 +82,20 @@ final class NavigationViewController: UIViewController {
     }
 }
 
+// MARK: - UINavigationControllerDelegate
+
 extension NavigationViewController: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        cleanUpChildCoordinators()
+    }
+
+    private func cleanUpChildCoordinators() {
+        for vc in viewControllerToCoordinatorMap.keys {
+            if !managedNavigationController.viewControllers.contains(vc) {
+                viewControllerToCoordinatorMap[vc] = nil
+            }
+        }
+    }
 }
 
 extension NavigationViewController: UIGestureRecognizerDelegate {
