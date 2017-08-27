@@ -5,13 +5,21 @@
 
 import UIKit
 
-class AppCoordinator {
+class AppCoordinator: Coordinator {
+    // MARK: - Coordinator
 
-    private let window: UIWindow
-    private let dependency: AppDependency
+    func onStart() {
+        configureWindow()
+        showNotebook()
+    }
 
-    fileprivate var navigationController: UINavigationController!
-    fileprivate var childCoordinators = [NotebookCoordinator]()
+    var rootViewController: UIViewController {
+        get {
+            return navigationController
+        }
+    }
+
+    // MARK: - Life cycle
 
     init(withWindow window: UIWindow) {
         self.window = window
@@ -22,21 +30,24 @@ class AppCoordinator {
         dependency = AppDependency(noteUseCase: noteUseCase)
     }
 
-    func start() {
-        initializeNavigationController()
-        showNotebook()
-    }
+    // MARK: - Private
 
-    private func initializeNavigationController() {
-        navigationController = UINavigationController()
-        navigationController.navigationBar.prefersLargeTitles = true
-        window.rootViewController = navigationController
+    private let window: UIWindow
+    private let dependency: AppDependency
+
+    private lazy var navigationController: NavigationViewController = {
+        let vc = NavigationViewController()
+        vc.preferLargeTitles()
+        return vc
+    }()
+
+    private func configureWindow() {
+        window.rootViewController = rootViewController
         window.makeKeyAndVisible()
     }
 
     private func showNotebook() {
         let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController, dependencies: dependency)
-        childCoordinators.append(notebookCoordinator)
-        notebookCoordinator.start()
+        navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true)
     }
 }

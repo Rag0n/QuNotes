@@ -9,12 +9,11 @@
 import UIKit
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
     var appCoordinator: AppCoordinator!
 
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         appCoordinator = AppCoordinator(withWindow: UIWindow(frame: UIScreen.main.bounds))
-        appCoordinator.start()
+        appCoordinator.onStart()
 
         return false
     }

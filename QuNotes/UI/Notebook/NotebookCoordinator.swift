@@ -8,25 +8,37 @@
 
 import UIKit
 
-class NotebookCoordinator {
-    typealias Dependencies = HasNoteUseCase
+class NotebookCoordinator: Coordinator {
+    // MARK: - Coordinator
 
-    let dependencies: Dependencies
-    fileprivate var notebookViewController: NotebookViewController?
-    fileprivate let navigationController: UINavigationController
+    func onStart() {
+        updateNotebookViewModel()
+    }
+
+    var rootViewController: UIViewController {
+        get {
+            return notebookViewController
+        }
+    }
+
+    // MARK: - Life cycle
+
+    typealias Dependencies = HasNoteUseCase
+    fileprivate let dependencies: Dependencies
+    fileprivate lazy var notebookViewController: NotebookViewController = {
+        let vc = NotebookViewController()
+        vc.inject(handler: self)
+        return vc
+    }()
+    fileprivate let navigationController: NavigationViewController
     fileprivate var activeNote: Note?
 
-    init(withNavigationController navigationController: UINavigationController, dependencies: Dependencies) {
+    init(withNavigationController navigationController: NavigationViewController, dependencies: Dependencies) {
         self.navigationController = navigationController
         self.dependencies = dependencies
     }
 
-    func start() {
-        notebookViewController = NotebookViewController()
-        notebookViewController!.inject(handler: self)
-        updateNotebookViewModel()
-        navigationController.pushViewController(notebookViewController!, animated: true)
-    }
+    // MARK: - Private
 
     fileprivate func updateNotebookViewModel(withNoteTitleFilter titleFilter: String = "") {
         var notes = dependencies.noteUseCase.getAllNotes()
@@ -34,9 +46,11 @@ class NotebookCoordinator {
             notes = notes.filter { $0.title.lowercased().contains(titleFilter) }
         }
         let notebookViewModel = NotebookViewModel(notes: notes.map { $0.title })
-        notebookViewController?.render(withViewModel: notebookViewModel)
+        notebookViewController.render(withViewModel: notebookViewModel)
     }
 }
+
+// MARK: - NotebookViewControllerHandler
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
@@ -57,7 +71,7 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         noteVC.navigationItem.largeTitleDisplayMode = .never
         noteVC.inject(handler: self)
         noteVC.render(withViewModel: NoteViewModel(title: activeNote.title, content: activeNote.content, isTitleActive: isTitleActive, tags: activeNote.tags))
-        navigationController.pushViewController(noteVC, animated: true)
+        navigationController.pushViewController(viewController: noteVC, animated: true)
     }
 
     func didSwapeToDeleteNoteWithIndex(index: Int) {
@@ -75,6 +89,8 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 }
 
+// MARK: - NoteViewControllerHandler
+
 extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
         guard let activeNote = activeNote else { return }
@@ -84,17 +100,14 @@ extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeTitle(newTitle: String) {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newTitle: newTitle)
-    }
-
-    func onBackButtonClick() {
         updateNotebookViewModel()
-        self.navigationController.popViewController(animated: true)
     }
 
     func onDeleteButtonClick() {
         guard let activeNote = activeNote else { return }
         dependencies.noteUseCase.deleteNote(activeNote)
-        onBackButtonClick()
+        updateNotebookViewModel()
+        navigationController.popViewController(animated: true)
     }
 
     func didAddTag(tag: String) {
