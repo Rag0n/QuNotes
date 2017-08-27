@@ -10,4 +10,11 @@ import UIKit
 
 protocol Coordinator {
     var rootViewController: UIViewController { get }
+    func onStart()
+}
+
+extension Coordinator {
+    func onStart() {
+        // No op
+    }
 }
