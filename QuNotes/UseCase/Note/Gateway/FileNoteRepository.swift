@@ -45,18 +45,17 @@ class FileNoteRepository: NoteRepository {
         }
     }
 
-    func get(noteId: String) -> Result<Note, NoteRepositoryError> {
+    func get(noteId: String) -> Result<Note, NoteUseCaseError> {
         do {
             return try noteFromFile(withNoteUUID: noteId)
         } catch {
-            return Result.failure(NoteRepositoryError.notFound)
+            return Result.failure(NoteUseCaseError.notFound)
         }
     }
 
-    private func noteFromFile(withNoteUUID noteUUID: String) throws -> Result<Note, NoteRepositoryError>  {
+    private func noteFromFile(withNoteUUID noteUUID: String) throws -> Result<Note, NoteUseCaseError>  {
         guard let noteFileURL = getNoteURLFromNoteId(noteId: noteUUID) else {
-            // TODO: implement error handling
-            return Result.failure(NoteRepositoryError.notFound)
+            return Result.failure(NoteUseCaseError.notFound)
         }
 
         let noteData = try self.fileReader.dataFrom(fileURL: noteFileURL)

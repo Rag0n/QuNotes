@@ -4,6 +4,9 @@
 //
 
 import Foundation
+enum NoteUseCaseError: Error {
+    case notFound
+}
 
 protocol HasNoteUseCase {
     var noteUseCase: NoteUseCase { get }
