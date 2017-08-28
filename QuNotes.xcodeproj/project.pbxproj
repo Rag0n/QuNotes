@@ -27,6 +27,8 @@
 		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
 		1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
+		117E1BE31F54A43A0046DC52 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE21F54A43A0046DC52 /* ThemeManager.swift */; };
+		117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
 		118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
 		118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
 		118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */; };
@@ -113,6 +115,8 @@
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
+		117E1BE21F54A43A0046DC52 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		117E1BE41F54A4990046DC52 /* DefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
 		118569131F1A1C1E00D3CF1B /* FileReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderService.swift; sourceTree = "<group>"; };
 		118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderServiceImp.swift; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
@@ -252,8 +256,8 @@
 		117636381F08E8F2000A5CFC /* Service */ = {
 			isa = PBXGroup;
 			children = (
-				118569121F1A1BFD00D3CF1B /* FileReaderService */,
 				1176363C1F08E96B000A5CFC /* CurrentDateService */,
+				118569121F1A1BFD00D3CF1B /* FileReaderService */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -265,6 +269,15 @@
 				1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */,
 			);
 			path = CurrentDateService;
+			sourceTree = "<group>";
+		};
+		117E1BE11F54A4260046DC52 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				117E1BE21F54A43A0046DC52 /* ThemeManager.swift */,
+				117E1BE41F54A4990046DC52 /* DefaultTheme.swift */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		118569121F1A1BFD00D3CF1B /* FileReaderService */ = {
@@ -357,9 +370,10 @@
 		B2125E1507F73CB41C346C5D /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				B2125E416FA24EDECFDC71CF /* App */,
 				1117436E1F520BC7006EDA89 /* Common */,
 				B212595A5823D77A45366CC1 /* Notebook */,
-				B2125E416FA24EDECFDC71CF /* App */,
+				117E1BE11F54A4260046DC52 /* Theme */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -516,6 +530,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				117E1BE31F54A43A0046DC52 /* ThemeManager.swift in Sources */,
 				118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */,
 				1135042A1F16BA01001938FD /* Array+Extensions.swift in Sources */,
 				112D49831EF5391400C75B6A /* main.swift in Sources */,
@@ -536,6 +551,7 @@
 				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
+				117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */,
 				1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
 				B2125CFC0386649BA54EA384 /* NoteViewModel.swift in Sources */,
 			);
