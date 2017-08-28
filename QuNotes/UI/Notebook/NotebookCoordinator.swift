@@ -78,6 +78,7 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         let notes = dependencies.noteUseCase.getAllNotes()
         guard (index < notes.count) else { return }
         dependencies.noteUseCase.deleteNote(notes[index])
+        updateNotebookViewModel()
     }
 
     func didUpdateSearchResults(withText text: String?) {
@@ -95,11 +96,13 @@ extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newContent: newContent)
+            .recover(activeNote)
     }
 
     func didChangeTitle(newTitle: String) {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newTitle: newTitle)
+            .recover(activeNote)
         updateNotebookViewModel()
     }
 
@@ -113,10 +116,12 @@ extension NotebookCoordinator: NoteViewControllerHandler {
     func didAddTag(tag: String) {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.addTag(tag: tag, toNote: activeNote)
+            .recover(activeNote)
     }
 
     func didRemoveTag(tag: String) {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.removeTag(tag: tag, fromNote: activeNote)
+            .recover(activeNote)
     }
 }
