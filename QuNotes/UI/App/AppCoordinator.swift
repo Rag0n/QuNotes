@@ -23,17 +23,21 @@ class AppCoordinator: Coordinator {
 
     init(withWindow window: UIWindow) {
         self.window = window
-        let fileReaderService = FileReaderServiceImp()
-        let fileNoteRepository = FileNoteRepository(withFileManager: FileManager.default, fileReader: fileReaderService)
-        let currentDateService = CurrentDateServiceImp()
-        let noteUseCase = NoteUseCase(withNoteReposiroty: fileNoteRepository, currentDateService: currentDateService)
-        dependency = AppDependency(noteUseCase: noteUseCase)
+        ThemeManager.applyThemeForWindow(window: window)
     }
 
     // MARK: - Private
 
     private let window: UIWindow
-    private let dependency: AppDependency
+
+    private lazy var dependency: AppDependency = {
+        let fileReaderService = FileReaderServiceImp()
+        let fileNoteRepository = FileNoteRepository(withFileManager: FileManager.default, fileReader: fileReaderService)
+        let currentDateService = CurrentDateServiceImp()
+        let noteUseCase = NoteUseCase(withNoteReposiroty: fileNoteRepository, currentDateService: currentDateService)
+
+        return AppDependency(noteUseCase: noteUseCase)
+    }()
 
     private lazy var navigationController: NavigationViewController = {
         let vc = NavigationViewController()
