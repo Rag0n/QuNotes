@@ -16,6 +16,7 @@ protocol NoteViewControllerHandler: class {
     func onDeleteButtonClick()
     func didAddTag(tag: String)
     func didRemoveTag(tag: String)
+    func willDisappear()
 }
 
 class NoteViewController: UIViewController {
@@ -39,6 +40,11 @@ class NoteViewController: UIViewController {
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
         }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        handler?.willDisappear()
     }
 
     override func viewWillLayoutSubviews() {

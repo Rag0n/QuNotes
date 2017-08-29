@@ -103,13 +103,12 @@ extension NotebookCoordinator: NoteViewControllerHandler {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newTitle: newTitle)
             .recover(activeNote)
-        updateNotebookViewModel()
     }
 
     func onDeleteButtonClick() {
         guard let activeNote = activeNote else { return }
         dependencies.noteUseCase.deleteNote(activeNote)
-        updateNotebookViewModel()
+        self.activeNote = nil
         navigationController.popViewController(animated: true)
     }
 
@@ -123,5 +122,9 @@ extension NotebookCoordinator: NoteViewControllerHandler {
         guard let activeNote = activeNote else { return }
         self.activeNote = dependencies.noteUseCase.removeTag(tag: tag, fromNote: activeNote)
             .recover(activeNote)
+    }
+
+    func willDisappear() {
+        updateNotebookViewModel()
     }
 }
