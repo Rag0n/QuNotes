@@ -39,7 +39,7 @@ final class NavigationViewController: UIViewController {
 
     private var viewControllerToCoordinatorMap: [UIViewController: Coordinator] = [:]
 
-    // MARK: - Life cycle
+    // MARK: - Life cycle & overrides
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -52,6 +52,10 @@ final class NavigationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupManagedNavigationController()
+    }
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     // MARK - Private
