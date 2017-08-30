@@ -8,6 +8,7 @@ import Result
 
 enum NoteUseCaseError: Error {
     case notFound
+    case savingError
 }
 
 protocol HasNoteUseCase {
@@ -70,7 +71,7 @@ class NoteUseCase {
         return noteRepository
             .get(noteId: note.uuid)
             .map(updateNote(noteUpdater: noteUpdater))
-            .map(saveNote)
+            .flatMap(noteRepository.save)
     }
 
     private func updateNote(noteUpdater: @escaping (_ oldNote: Note) -> Note) -> (Note) -> Note {
@@ -80,7 +81,7 @@ class NoteUseCase {
     }
 
     private func saveNote(note: Note) -> Note {
-        noteRepository.save(note: note)
+        _ = noteRepository.save(note: note)
         return note
     }
 

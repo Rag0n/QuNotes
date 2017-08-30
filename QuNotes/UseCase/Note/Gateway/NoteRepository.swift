@@ -8,6 +8,6 @@ import Result
 protocol NoteRepository {
     func getAll() -> [Note]
     func get(noteId: String) -> Result<Note, NoteUseCaseError>
-    func save(note: Note)
+    func save(note: Note) -> Result<Note, NoteUseCaseError>
     func delete(note: Note)
 }

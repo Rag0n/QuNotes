@@ -65,24 +65,22 @@ class FileNoteRepository: NoteRepository {
 
     }
 
-    func save(note: Note) {
+    func save(note: Note) -> Result<Note, NoteUseCaseError> {
         do {
             try saveNoteToFile(note)
-        } catch let error as NSError {
-            // TODO: implement error handling
-            print(error)
+            return .success(note);
+        } catch {
+            return .failure(NoteUseCaseError.savingError)
         }
     }
 
     private func saveNoteToFile(_ note: Note) throws {
         guard let noteFileURL = getNoteURLFromNoteId(noteId: note.uuid) else {
-            // TODO: implement error handling
-            return;
+            throw NoteUseCaseError.savingError
         }
         let jsonData = try encoder.encode(note)
         guard fileManager.createFile(atPath: noteFileURL.path, contents: jsonData, attributes: nil) else {
-            // TODO: implement error handling
-            return;
+            throw NoteUseCaseError.savingError
         }
     }
 
