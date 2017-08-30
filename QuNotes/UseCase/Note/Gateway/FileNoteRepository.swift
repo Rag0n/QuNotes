@@ -21,21 +21,18 @@ class FileNoteRepository: NoteRepository {
         encoder.outputFormatting = .prettyPrinted
     }
 
-    func getAll() -> [Note] {
+    func getAll() -> Result<[Note], NoteUseCaseError> {
         do {
-            return try mapNoteFilesToNotes()
+            return try .success(mapNoteFilesToNotes())
         } catch {
-            // TODO: implement error handling
-            return []
+            return .failure(NoteUseCaseError.brokenFormat)
         }
     }
 
     private func mapNoteFilesToNotes() throws -> [Note] {
         guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            // TODO: implement error handling
             return [];
         }
-
         let documentDirectoryContent = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [])
         let noteFiles = documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
 
@@ -62,7 +59,6 @@ class FileNoteRepository: NoteRepository {
         let note = try decoder.decode(Note.self, from: noteData)
 
         return Result.success(note)
-
     }
 
     func save(note: Note) -> Result<Note, NoteUseCaseError> {

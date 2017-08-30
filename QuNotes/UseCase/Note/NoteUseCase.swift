@@ -9,6 +9,7 @@ import Result
 enum NoteUseCaseError: Error {
     case notFound
     case savingError
+    case brokenFormat
 }
 
 protocol HasNoteUseCase {
@@ -38,7 +39,7 @@ class NoteUseCase {
     }
 
     func getAllNotes() -> [Note] {
-        return noteRepository.getAll()
+        return noteRepository.getAll().recover([])
     }
 
     func updateNote(_ note: Note, newContent: String) -> Result<Note, NoteUseCaseError> {
