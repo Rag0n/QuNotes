@@ -61,8 +61,8 @@ class NoteUseCase {
                           noteUpdater: updatedNote(withNewTags: newTagsForNote(note: note, removedTag: tag)))
     }
 
-    func deleteNote(_ note: Note) {
-        noteRepository.delete(note: note)
+    func deleteNote(_ note: Note) -> Result<Note, NoteUseCaseError> {
+        return noteRepository.delete(note: note)
     }
 
     // MARK - Private

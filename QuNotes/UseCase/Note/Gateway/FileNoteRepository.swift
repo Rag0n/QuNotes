@@ -84,20 +84,19 @@ class FileNoteRepository: NoteRepository {
         }
     }
 
-    func delete(note: Note) {
+    func delete(note: Note) -> Result<Note, NoteUseCaseError> {
         do {
             try deleteFileWithNoteUUID(noteUUID: note.uuid)
+            return .success(note)
         } catch {
-            // TODO: implement error handling
+            return .failure(NoteUseCaseError.savingError)
         }
     }
 
     private func deleteFileWithNoteUUID(noteUUID: String) throws {
         guard let noteFileURL = getNoteURLFromNoteId(noteId: noteUUID) else {
-            // TODO: implement error handling
-            return;
+            throw NoteUseCaseError.savingError
         }
-
         try fileManager.removeItem(at: noteFileURL)
     }
 

@@ -9,5 +9,5 @@ protocol NoteRepository {
     func getAll() -> [Note]
     func get(noteId: String) -> Result<Note, NoteUseCaseError>
     func save(note: Note) -> Result<Note, NoteUseCaseError>
-    func delete(note: Note)
+    func delete(note: Note) -> Result<Note, NoteUseCaseError>
 }
