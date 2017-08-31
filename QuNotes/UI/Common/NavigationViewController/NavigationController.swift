@@ -8,7 +8,7 @@
 
 import UIKit
 
-final class NavigationViewController: UIViewController {
+final class NavigationController: UIViewController {
     // MARK: - API
 
     func pushCoordinator(coordinator: Coordinator, animated: Bool) {
@@ -85,7 +85,7 @@ final class NavigationViewController: UIViewController {
 
 // MARK: - UINavigationControllerDelegate
 
-extension NavigationViewController: UINavigationControllerDelegate {
+extension NavigationController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         cleanUpChildCoordinators()
     }

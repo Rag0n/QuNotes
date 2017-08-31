@@ -30,10 +30,10 @@ class NotebookCoordinator: Coordinator {
         vc.inject(handler: self)
         return vc
     }()
-    fileprivate let navigationController: NavigationViewController
+    fileprivate let navigationController: NavigationController
     fileprivate var activeNote: Note?
 
-    init(withNavigationController navigationController: NavigationViewController, dependencies: Dependencies) {
+    init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
         self.dependencies = dependencies
     }

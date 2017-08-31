@@ -39,8 +39,8 @@ class AppCoordinator: Coordinator {
         return AppDependency(noteUseCase: noteUseCase)
     }()
 
-    private lazy var navigationController: NavigationViewController = {
-        let vc = NavigationViewController()
+    private lazy var navigationController: NavigationController = {
+        let vc = NavigationController()
         vc.preferLargeTitles()
         return vc
     }()

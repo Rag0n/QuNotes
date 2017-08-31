@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		111743711F520C24006EDA89 /* NavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationViewController.swift */; };
+		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
 		111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
@@ -103,7 +103,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		111743701F520C24006EDA89 /* NavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationViewController.swift; sourceTree = "<group>"; };
+		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
 		111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepositorySpec.swift; sourceTree = "<group>"; };
@@ -185,7 +185,7 @@
 		1117436F1F520C10006EDA89 /* NavigationViewController */ = {
 			isa = PBXGroup;
 			children = (
-				111743701F520C24006EDA89 /* NavigationViewController.swift */,
+				111743701F520C24006EDA89 /* NavigationController.swift */,
 			);
 			path = NavigationViewController;
 			sourceTree = "<group>";
@@ -544,7 +544,7 @@
 				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
-				111743711F520C24006EDA89 /* NavigationViewController.swift in Sources */,
+				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */,
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
