@@ -74,11 +74,12 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         navigationController.pushViewController(viewController: noteVC, animated: true)
     }
 
-    func didSwapeToDeleteNoteWithIndex(index: Int) {
+    func didSwapeToDeleteNoteWithIndex(index: Int) -> Bool {
         let notes = dependencies.noteUseCase.getAllNotes()
-        guard (index < notes.count) else { return }
-        dependencies.noteUseCase.deleteNote(notes[index])
+        guard (index < notes.count) else { return false }
+        guard dependencies.noteUseCase.deleteNote(notes[index]).error == nil else { return false }
         updateNotebookViewModel()
+        return true;
     }
 
     func didUpdateSearchResults(withText text: String?) {
@@ -107,7 +108,7 @@ extension NotebookCoordinator: NoteViewControllerHandler {
 
     func onDeleteButtonClick() {
         guard let activeNote = activeNote else { return }
-        dependencies.noteUseCase.deleteNote(activeNote)
+        guard dependencies.noteUseCase.deleteNote(activeNote).error == nil else { return }
         self.activeNote = nil
         navigationController.popViewController(animated: true)
     }

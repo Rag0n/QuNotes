@@ -11,7 +11,7 @@ import UIKit
 protocol NotebookViewControllerHandler: class {
     func didTapAddNote()
     func didTapOnNoteWithIndex(index: Int)
-    func didSwapeToDeleteNoteWithIndex(index: Int)
+    func didSwapeToDeleteNoteWithIndex(index: Int) -> Bool
     func didUpdateSearchResults(withText text: String?)
 }
 
@@ -35,7 +35,7 @@ class NotebookViewController: UIViewController {
 
     private func setupTableView() {
         tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
-        tableView!.estimatedRowHeight = 0;
+        tableView!.estimatedRowHeight = 0
     }
 
     private func setupSearchController() {
@@ -82,8 +82,8 @@ extension NotebookViewController: UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, success) in
-            self.handler?.didSwapeToDeleteNoteWithIndex(index: indexPath.row)
-            success(true)
+            let result = self.handler?.didSwapeToDeleteNoteWithIndex(index: indexPath.row) ?? false
+            success(result)
         }
         deleteAction.backgroundColor = .red
 
