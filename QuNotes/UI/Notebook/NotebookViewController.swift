@@ -16,6 +16,7 @@ protocol NotebookViewControllerHandler: class {
 }
 
 class NotebookViewController: UIViewController {
+    // MARK: - API
 
     func inject(handler: NotebookViewControllerHandler) {
         self.handler = handler
@@ -25,6 +26,8 @@ class NotebookViewController: UIViewController {
         self.viewModel = viewModel
         tableView?.reloadData()
     }
+
+    // MARK: - Life cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +35,8 @@ class NotebookViewController: UIViewController {
         setupTableView()
         setupSearchController()
     }
+
+    // MARK: - Private
 
     private func setupTableView() {
         tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
@@ -62,6 +67,8 @@ class NotebookViewController: UIViewController {
     }
 }
 
+// MARK: - UITableViewDataSource
+
 extension NotebookViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel?.notes.count ?? 0
@@ -74,6 +81,8 @@ extension NotebookViewController: UITableViewDataSource {
         return cell
     }
 }
+
+// MARK: - UITableViewDelegate
 
 extension NotebookViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -93,6 +102,8 @@ extension NotebookViewController: UITableViewDelegate {
         return configuration
     }
 }
+
+// MARK: - UISearchResultsUpdating
 
 extension NotebookViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {

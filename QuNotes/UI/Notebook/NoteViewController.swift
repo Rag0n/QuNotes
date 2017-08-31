@@ -20,6 +20,7 @@ protocol NoteViewControllerHandler: class {
 }
 
 class NoteViewController: UIViewController {
+    // MARK: - API
 
     func inject(handler: NoteViewControllerHandler) {
         self.handler = handler
@@ -30,6 +31,8 @@ class NoteViewController: UIViewController {
         dirty = true
         view?.setNeedsLayout()
     }
+
+    // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,6 +67,8 @@ class NoteViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         dirty = false
     }
+
+    // MARK: - Private
 
     private enum Constants {
         static let themeName = "one-dark"
@@ -142,6 +147,8 @@ class NoteViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = deleteButton
     }
 }
+
+// MARK: - UITextViewDelegate
 
 extension NoteViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
