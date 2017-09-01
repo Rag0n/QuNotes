@@ -43,23 +43,19 @@ class NoteUseCase {
     }
 
     func updateNote(_ note: Note, newContent: String) -> Result<Note, NoteUseCaseError> {
-        return updateNote(note,
-                          noteUpdater: updatedNote(withNewContent: newContent))
+        return noteRepository.save <| updatedNote(withNewContent: newContent) <| note
     }
 
     func updateNote(_ note: Note, newTitle: String) -> Result<Note, NoteUseCaseError> {
-        return updateNote(note,
-                          noteUpdater: updatedNote(withNewTitle: newTitle))
+        return noteRepository.save <| updatedNote(withNewTitle: newTitle) <| note
     }
 
     func addTag(tag: String, toNote note: Note) -> Result<Note, NoteUseCaseError> {
-        return updateNote(note,
-                          noteUpdater: updatedNote(withNewTags: note.tags + [tag]))
+        return noteRepository.save <| updatedNote(withNewTags: note.tags + [tag]) <| note
     }
 
     func removeTag(tag: String, fromNote note: Note) -> Result<Note, NoteUseCaseError> {
-        return updateNote(note,
-                          noteUpdater: updatedNote(withNewTags: newTagsForNote(note: note, removedTag: tag)))
+        return noteRepository.save <| updatedNote(withNewTags: newTagsForNote(note: note, removedTag: tag)) <| note
     }
 
     func deleteNote(_ note: Note) -> Result<Note, NoteUseCaseError> {
@@ -67,19 +63,6 @@ class NoteUseCase {
     }
 
     // MARK - Private
-
-    private func updateNote(_ note: Note, noteUpdater: @escaping (_ oldNote: Note) -> Note) -> Result<Note, NoteUseCaseError> {
-        return noteRepository
-            .get(noteId: note.uuid)
-            .map(updateNote(noteUpdater: noteUpdater))
-            .flatMap(noteRepository.save)
-    }
-
-    private func updateNote(noteUpdater: @escaping (_ oldNote: Note) -> Note) -> (Note) -> Note {
-        return { oldNote -> Note in
-            return noteUpdater(oldNote)
-        }
-    }
 
     private func saveNote(note: Note) -> Note {
         _ = noteRepository.save(note: note)
