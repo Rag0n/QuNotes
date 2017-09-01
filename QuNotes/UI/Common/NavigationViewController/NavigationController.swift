@@ -31,13 +31,13 @@ final class NavigationController: UIViewController {
 
     // MARK: - State
 
-    private lazy var managedNavigationController: UINavigationController = {
+    fileprivate lazy var managedNavigationController: UINavigationController = {
         let vc = UINavigationController()
         vc.delegate = self
         return vc;
     }()
 
-    private var viewControllerToCoordinatorMap: [UIViewController: Coordinator] = [:]
+    fileprivate var viewControllerToCoordinatorMap: [UIViewController: Coordinator] = [:]
 
     // MARK: - Life cycle & overrides
 

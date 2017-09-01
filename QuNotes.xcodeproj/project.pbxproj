@@ -14,6 +14,9 @@
 		111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
 		111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */; };
 		111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */; };
+		112A9D8D1F59F035003DF85D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
+		112A9D8E1F59F037003DF85D /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
+		112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
 		112D49951EF539D800C75B6A /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49891EF539D800C75B6A /* Library.swift */; };
 		112D499D1EF539D800C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
@@ -572,7 +575,10 @@
 				111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */,
 				112D49A51EF53A5B00C75B6A /* Notebook.swift in Sources */,
+				112A9D8E1F59F037003DF85D /* NavigationController.swift in Sources */,
 				118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
+				112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */,
+				112A9D8D1F59F035003DF85D /* Coordinator.swift in Sources */,
 				B2125ECBCFABF4186AB515E5 /* NoteUseCase.swift in Sources */,
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
