@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
@@ -103,6 +104,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		11096D291F59EF4F00E1623C /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 		113504271F16B9C2001938FD /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				11096D291F59EF4F00E1623C /* Operators.swift */,
 				113504281F16B9D8001938FD /* Extensions */,
 			);
 			path = Utility;
@@ -546,6 +549,7 @@
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
+				11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */,
 				B21250C33DC8472362900F1D /* NotebookViewModel.swift in Sources */,
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
 				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
