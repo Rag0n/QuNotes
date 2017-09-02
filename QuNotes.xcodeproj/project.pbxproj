@@ -17,6 +17,8 @@
 		112A9D8D1F59F035003DF85D /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
 		112A9D8E1F59F037003DF85D /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
+		112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112A9D901F5AF3B5003DF85D /* Curry.swift */; };
+		112A9D921F5AF3B5003DF85D /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112A9D901F5AF3B5003DF85D /* Curry.swift */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
 		112D49951EF539D800C75B6A /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49891EF539D800C75B6A /* Library.swift */; };
 		112D499D1EF539D800C75B6A /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49931EF539D800C75B6A /* Notebook.swift */; };
@@ -112,6 +114,7 @@
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
 		111EE56C1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepositorySpec.swift; sourceTree = "<group>"; };
+		112A9D901F5AF3B5003DF85D /* Curry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		112D49891EF539D800C75B6A /* Library.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		112D498C1EF539D800C75B6A /* LibrarySpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
@@ -245,6 +248,7 @@
 		113504271F16B9C2001938FD /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				112A9D901F5AF3B5003DF85D /* Curry.swift */,
 				11096D291F59EF4F00E1623C /* Operators.swift */,
 				113504281F16B9D8001938FD /* Extensions */,
 			);
@@ -557,6 +561,7 @@
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
 				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
+				112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */,
 				1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
@@ -584,6 +589,7 @@
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
 				11F144BF1F07AA7A0073EBE6 /* NotebookCoordinator.swift in Sources */,
 				1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */,
+				112A9D921F5AF3B5003DF85D /* Curry.swift in Sources */,
 				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
 				11F144C01F07AA820073EBE6 /* NoteViewController.swift in Sources */,
 				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
