@@ -21,13 +21,29 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-getAllNotes") {
+            context("when repository returns error") {
 
-            beforeEach {
-                noteRepositoryStub.notesToBeReturnedFromGetAllMethod = [Note.noteFixture(), Note.noteFixture()]
+                beforeEach {
+                    noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .failure(.brokenFormat)
+                }
+
+                it("returns empty array") {
+                    expect(useCase.getAllNotes()).to(beEmpty())
+                }
             }
 
-            it("returns notes from getAll method of repository") {
-                expect(useCase.getAllNotes()).to(equal(noteRepositoryStub.notesToBeReturnedFromGetAllMethod))
+            context("when repository returns array of notes") {
+
+                var notesFromRepository: [Note]!
+
+                beforeEach() {
+                    notesFromRepository = [Note.noteFixture(), Note.noteFixture()]
+                    noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .success(notesFromRepository)
+                }
+
+                it("returns notes from repository") {
+                    expect(useCase.getAllNotes()).to(equal(notesFromRepository))
+                }
             }
         }
 
