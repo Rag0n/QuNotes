@@ -139,55 +139,56 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-updateNote:newTitle:") {
-            context("when updating added note") {
 
-                var existingNote: Note!
+            var note: Note!
+
+            beforeEach {
+                note = Note.noteFixture()
+                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
+            }
+
+            it("calls save method of repository with note with same id, created date, content") {
+                _ = useCase.updateNote(note, newTitle: "new note title fixture");
+                expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(note.uuid))
+                expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(note.createdDate))
+                expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal(note.content))
+            }
+
+            it("calls save method of repository with note with updated date and title") {
+                _ = useCase.updateNote(note, newTitle: "new note title fixture");
+                expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
+                expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal("new note title fixture"))
+            }
+
+            context("when save method succedes") {
 
                 beforeEach {
-                    existingNote = useCase.addNote(withTitle: "title fixture")
-                    noteRepositoryStub.resultToBeReturnedFromGetMethod = Result.success(existingNote)
-                    currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .success(note)
                 }
 
-                it("calls save method of repository with note with same id, created date, content") {
-                    _ = useCase.updateNote(existingNote, newTitle: "new note title fixture");
-                    expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(existingNote.uuid))
-                    expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(existingNote.createdDate))
-                    expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal(existingNote.content))
-                }
-
-                it("calls save method of repository with note with updated date and title") {
-                    _ = useCase.updateNote(existingNote, newTitle: "new note title fixture");
-                    expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
-                    expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal("new note title fixture"))
-                }
-
-                it("returns updated note") {
-                    let updatedNote = useCase.updateNote(existingNote, newTitle: "new note title fixture");
-                    expect(updatedNote?.uuid).to(equal(existingNote.uuid))
-                    expect(updatedNote?.createdDate).to(beCloseTo(existingNote.createdDate))
+                it("returns result with updated note") {
+                    let result = useCase.updateNote(note, newContent: "new note fixture");
+                    let updatedNote = result.value
+                    expect(updatedNote).toNot(beNil())
+                    expect(updatedNote?.uuid).to(equal(note.uuid))
+                    expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
                     expect(updatedNote?.title).to(equal("new note title fixture"))
                     expect(updatedNote?.updatedDate).to(beCloseTo(20))
-                    expect(updatedNote?.content).to(equal(existingNote.content))
+                    expect(updatedNote?.content).to(equal(note.content))
                 }
             }
 
-            context("when updating not added note") {
-
-                let notAddedNote = Note.noteFixtureWithContent("not added note fixture")
+            context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromGetMethod = Result.failure(NoteRepositoryError.notFound)
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
                 }
 
-                it("returns nil") {
-                    let updatedNote = useCase.updateNote(notAddedNote, newTitle: "new note title fixture");
-                    expect(updatedNote).to(beNil())
-                }
-
-                it("doesnt call save method of repository") {
-                    _ = useCase.updateNote(notAddedNote, newTitle: "new note title fixture");
-                    expect(noteRepositoryStub.notePassedInSaveMethod).to(beNil())
+                it("return result with save error") {
+                    let result = useCase.updateNote(note, newContent: "new note fixture");
+                    let error = result.error
+                    expect(error).toNot(beNil())
+                    expect(error).to(equal(NoteUseCaseError.savingError))
                 }
             }
         }
