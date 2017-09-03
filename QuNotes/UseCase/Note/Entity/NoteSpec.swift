@@ -40,4 +40,8 @@ extension Note {
     static func noteFixture() -> Note {
         return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString, tags: [])
     }
+
+    static func noteFixtureWithTags(_ tags: [String]) -> Note {
+        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString, tags: tags)
+    }
 }
