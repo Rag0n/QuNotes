@@ -197,8 +197,32 @@ class NoteUseCaseSpec: QuickSpec {
             let note = Note.noteFixture()
 
             it("calls delete method of repository with passed note") {
-                useCase.deleteNote(note)
+                _ = useCase.deleteNote(note)
                 expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(note))
+            }
+            
+            context("when repository failes to delete note") {
+
+                beforeEach() {
+                    noteRepositoryStub.resultToBeReturnedFromGetMethod = .failure(.savingError)
+                }
+
+                it("returns result with error from repository") {
+                    let result = useCase.deleteNote(note)
+                    expect(result.error).to(equal(NoteUseCaseError.savingError))
+                }
+            }
+
+            context("when repository successes to delete note") {
+
+                beforeEach() {
+                    noteRepositoryStub.resultToBeReturnedFromGetMethod = .success(note)
+                }
+
+                it("return result with deleted note") {
+                    let result = useCase.deleteNote(note)
+                    expect(result.value).to(equal(note))
+                }
             }
         }
 
