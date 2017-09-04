@@ -54,8 +54,16 @@ class NotebookCoordinator: Coordinator {
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
-        activeNote = dependencies.noteUseCase.addNote(withTitle: "")
-        showNote(withActiveTitle: true)
+        let addingResult = dependencies.noteUseCase.addNote(withTitle: "")
+        switch (addingResult) {
+            case let .success(note):
+                activeNote = note
+                showNote(withActiveTitle: true)
+            case .failure(_):
+                // TODO: show alert with error message or smth like that
+                return
+        }
+
     }
 
     func didTapOnNoteWithIndex(index: Int) {

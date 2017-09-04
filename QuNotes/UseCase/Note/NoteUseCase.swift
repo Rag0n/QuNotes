@@ -27,15 +27,8 @@ class NoteUseCase {
 
     // MARK: - API
 
-    func addNote(withTitle title: String) -> Note {
-        let currentTimestamp = currentDateService.currentDate().timeIntervalSince1970
-        let newNote = Note(createdDate: currentTimestamp,
-                           updatedDate: currentTimestamp,
-                           content: "",
-                           title: title,
-                           uuid: UUID.init().uuidString,
-                           tags: [])
-        return saveNote(note: newNote)
+    func addNote(withTitle title: String) -> Result<Note, NoteUseCaseError> {
+        return noteRepository.save <| newNoteWithTitle <| title
     }
 
     func getAllNotes() -> [Note] {
@@ -64,9 +57,14 @@ class NoteUseCase {
 
     // MARK - Private
 
-    private func saveNote(note: Note) -> Note {
-        _ = noteRepository.save(note: note)
-        return note
+    private func newNoteWithTitle(title: String) -> Note {
+        let currentTimestamp = currentDateService.currentDate().timeIntervalSince1970
+        return Note(createdDate: currentTimestamp,
+                    updatedDate: currentTimestamp,
+                    content: "",
+                    title: title,
+                    uuid: UUID.init().uuidString,
+                    tags: [])
     }
 
     private func updatedNote(withNewTitle newTitle: String? = nil, withNewContent newContent: String? = nil, withNewTags newTags: [String]? = nil) -> (Note) -> Note {
