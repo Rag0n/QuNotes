@@ -48,37 +48,45 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-addNote") {
-            it("returns new note with title 'note title'") {
-                let note = useCase.addNote(withTitle: "note title")
-                expect(note.title).to(equal("note title"))
-            }
-
-            it("calls save method of repository") {
-                let addedNote = useCase.addNote(withTitle: "note title")
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(addedNote))
-            }
-
-            it("returns note with uniq uuid") {
-                let firstNote = useCase.addNote(withTitle: "first note title")
-                let secondNote = useCase.addNote(withTitle: "second note title")
-                expect(firstNote.uuid).toNot(equal(secondNote.uuid))
-            }
-
-            it("returns note with empty content") {
-                let note = useCase.addNote(withTitle: "note title")
-                expect(note.content).to(beEmpty())
-            }
-
-            context("when currentDateService returns timestamp with value 15") {
+            context("when save method succedes") {
 
                 beforeEach {
-                    currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 15)
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .success(note)
                 }
 
-                it("returns note with createdDate and updatedDate equal to 15") {
-                    let note = useCase.addNote(withTitle: "note title")
-                    expect(note.createdDate).to(beCloseTo(15))
-                    expect(note.updatedDate).to(beCloseTo(15))
+                context("when currentDateService returns timestamp with value 15") {
+
+                    beforeEach {
+                        currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 15)
+                    }
+
+                    it("returns note with passed title, empty content, correct created and updated dates") {
+                        let note = useCase.addNote(withTitle: "note title")
+                        expect(note.title).to(equal("note title"))
+                        expect(note.content).to(beEmpty())
+                        expect(note.createdDate).to(beCloseTo(15))
+                        expect(note.updatedDate).to(beCloseTo(15))
+                    }
+
+                    it("returns note with uniq uuid") {
+                        let firstNote = useCase.addNote(withTitle: "first note title")
+                        let secondNote = useCase.addNote(withTitle: "second note title")
+                        expect(firstNote.uuid).toNot(equal(secondNote.uuid))
+                    }
+                }
+            }
+
+            context("when save method fails") {
+
+                beforeEach {
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
+                }
+
+                it("return result with save error") {
+                    let result = useCase.updateNote(note, newContent: "new note fixture");
+                    let error = result.error
+                    expect(error).toNot(beNil())
+                    expect(error).to(equal(NoteUseCaseError.savingError))
                 }
             }
         }
