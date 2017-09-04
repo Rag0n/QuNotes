@@ -20,7 +20,7 @@ class NoteUseCaseSpec: QuickSpec {
             useCase = NoteUseCase(withNoteReposiroty: noteRepositoryStub, currentDateService: currentDateServiceStub)
         }
 
-        describe("-getAllNotes") {
+        describe("-getAll") {
             context("when repository returns error") {
 
                 beforeEach {
@@ -28,7 +28,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("returns empty array") {
-                    expect(useCase.getAllNotes()).to(beEmpty())
+                    expect(useCase.getAll()).to(beEmpty())
                 }
             }
 
@@ -42,12 +42,12 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("returns notes from repository") {
-                    expect(useCase.getAllNotes()).to(equal(notesFromRepository))
+                    expect(useCase.getAll()).to(equal(notesFromRepository))
                 }
             }
         }
 
-        describe("-addNote") {
+        describe("-add:") {
             context("when save method succedes") {
 
                 beforeEach {
@@ -61,7 +61,7 @@ class NoteUseCaseSpec: QuickSpec {
                     }
 
                     it("returns note with passed title, empty content, correct created and updated dates") {
-                        let note = useCase.addNote(withTitle: "note title")
+                        let note = useCase.add(withTitle: "note title")
                         expect(note.title).to(equal("note title"))
                         expect(note.content).to(beEmpty())
                         expect(note.createdDate).to(beCloseTo(15))
@@ -69,8 +69,8 @@ class NoteUseCaseSpec: QuickSpec {
                     }
 
                     it("returns note with uniq uuid") {
-                        let firstNote = useCase.addNote(withTitle: "first note title")
-                        let secondNote = useCase.addNote(withTitle: "second note title")
+                        let firstNote = useCase.add(withTitle: "first note title")
+                        let secondNote = useCase.add(withTitle: "second note title")
                         expect(firstNote.uuid).toNot(equal(secondNote.uuid))
                     }
                 }
@@ -83,15 +83,14 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("return result with save error") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
-                    let error = result.error
+                    let error = useCase.add(withTitle: "note title").error
                     expect(error).toNot(beNil())
                     expect(error).to(equal(NoteUseCaseError.savingError))
                 }
             }
         }
 
-        describe("-updateNote:newContent:") {
+        describe("-update:newContent:") {
 
             var note: Note!
 
@@ -101,14 +100,14 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             it("calls save method of repository with note with same id, created date, title") {
-                _ = useCase.updateNote(note, newContent: "new note fixture");
+                _ = useCase.update(note, newContent: "new note fixture");
                 expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(note.uuid))
                 expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(note.createdDate))
                 expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal(note.title))
             }
 
             it("calls save method of repository with note with updated date and content") {
-                _ = useCase.updateNote(note, newContent: "new note fixture");
+                _ = useCase.update(note, newContent: "new note fixture");
                 expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
                 expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal("new note fixture"))
             }
@@ -120,7 +119,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("returns result with updated note") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
+                    let result = useCase.update(note, newContent: "new note fixture");
                     let updatedNote = result.value
                     expect(updatedNote).toNot(beNil())
                     expect(updatedNote?.uuid).to(equal(note.uuid))
@@ -138,15 +137,14 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("return result with save error") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
-                    let error = result.error
+                    let result = useCase.update(note, newContent: "new note fixture").error
                     expect(error).toNot(beNil())
                     expect(error).to(equal(NoteUseCaseError.savingError))
                 }
             }
         }
 
-        describe("-updateNote:newTitle:") {
+        describe("-update:newTitle:") {
 
             var note: Note!
 
@@ -156,14 +154,14 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             it("calls save method of repository with note with same id, created date, content") {
-                _ = useCase.updateNote(note, newTitle: "new note title fixture");
+                _ = useCase.update(note, newTitle: "new note title fixture");
                 expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(note.uuid))
                 expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(note.createdDate))
                 expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal(note.content))
             }
 
             it("calls save method of repository with note with updated date and title") {
-                _ = useCase.updateNote(note, newTitle: "new note title fixture");
+                _ = useCase.update(note, newTitle: "new note title fixture");
                 expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
                 expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal("new note title fixture"))
             }
@@ -175,7 +173,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("returns result with updated note") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
+                    let result = useCase.update(note, newTitle: "new note title fixture");
                     let updatedNote = result.value
                     expect(updatedNote).toNot(beNil())
                     expect(updatedNote?.uuid).to(equal(note.uuid))
@@ -193,20 +191,19 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("return result with save error") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
-                    let error = result.error
+                    let error = useCase.updateNote(note, newTitle: "new note title fixture").error
                     expect(error).toNot(beNil())
                     expect(error).to(equal(NoteUseCaseError.savingError))
                 }
             }
         }
 
-        describe("-deleteNote") {
+        describe("-delete") {
 
             let note = Note.noteFixture()
 
             it("calls delete method of repository with passed note") {
-                _ = useCase.deleteNote(note)
+                _ = useCase.delete(note)
                 expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(note))
             }
             
@@ -217,7 +214,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("returns result with error from repository") {
-                    let result = useCase.deleteNote(note)
+                    let result = useCase.delete(note)
                     expect(result.error).to(equal(NoteUseCaseError.savingError))
                 }
             }
@@ -229,7 +226,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("return result with deleted note") {
-                    let result = useCase.deleteNote(note)
+                    let result = useCase.delete(note)
                     expect(result.value).to(equal(note))
                 }
             }
@@ -301,8 +298,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("return result with save error") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
-                    let error = result.error
+                    let error = useCase.addTag(tag: "another tag fixture", toNote: note).error
                     expect(error).toNot(beNil())
                     expect(error).to(equal(NoteUseCaseError.savingError))
                 }
@@ -361,8 +357,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 it("return result with save error") {
-                    let result = useCase.updateNote(note, newContent: "new note fixture");
-                    let error = result.error
+                    let error = useCase.removeTag(tag: "tag fixture", fromNote: note).error
                     expect(error).toNot(beNil())
                     expect(error).to(equal(NoteUseCaseError.savingError))
                 }

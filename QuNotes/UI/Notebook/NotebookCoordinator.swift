@@ -41,7 +41,7 @@ class NotebookCoordinator: Coordinator {
     // MARK: - Private
 
     fileprivate func updateNotebookViewModel(withNoteTitleFilter titleFilter: String = "") {
-        var notes = dependencies.noteUseCase.getAllNotes()
+        var notes = dependencies.noteUseCase.getAll()
         if titleFilter.count > 0 {
             notes = notes.filter { $0.title.lowercased().contains(titleFilter) }
         }
@@ -54,7 +54,7 @@ class NotebookCoordinator: Coordinator {
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
-        let addingResult = dependencies.noteUseCase.addNote(withTitle: "")
+        let addingResult = dependencies.noteUseCase.add(withTitle: "")
         switch (addingResult) {
             case let .success(note):
                 activeNote = note
@@ -67,7 +67,7 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     func didTapOnNoteWithIndex(index: Int) {
-        let notes = dependencies.noteUseCase.getAllNotes()
+        let notes = dependencies.noteUseCase.getAll()
         guard (index < notes.count) else { return }
         activeNote = notes[index]
         showNote()
@@ -83,9 +83,9 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     func didSwapeToDeleteNoteWithIndex(index: Int) -> Bool {
-        let notes = dependencies.noteUseCase.getAllNotes()
+        let notes = dependencies.noteUseCase.getAll()
         guard (index < notes.count) else { return false }
-        guard dependencies.noteUseCase.deleteNote(notes[index]).error == nil else { return false }
+        guard dependencies.noteUseCase.delete(notes[index]).error == nil else { return false }
         updateNotebookViewModel()
         return true;
     }
@@ -104,19 +104,19 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
 extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
         guard let activeNote = activeNote else { return }
-        self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newContent: newContent)
+        self.activeNote = dependencies.noteUseCase.update(activeNote, newContent: newContent)
             .recover(activeNote)
     }
 
     func didChangeTitle(newTitle: String) {
         guard let activeNote = activeNote else { return }
-        self.activeNote = dependencies.noteUseCase.updateNote(activeNote, newTitle: newTitle)
+        self.activeNote = dependencies.noteUseCase.update(activeNote, newTitle: newTitle)
             .recover(activeNote)
     }
 
     func onDeleteButtonClick() {
         guard let activeNote = activeNote else { return }
-        guard dependencies.noteUseCase.deleteNote(activeNote).error == nil else { return }
+        guard dependencies.noteUseCase.delete(activeNote).error == nil else { return }
         self.activeNote = nil
         navigationController.popViewController(animated: true)
     }
