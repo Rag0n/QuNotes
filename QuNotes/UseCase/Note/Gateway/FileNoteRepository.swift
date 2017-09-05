@@ -42,23 +42,18 @@ class FileNoteRepository: NoteRepository {
         }
     }
 
-    func get(noteId: String) -> Result<Note, NoteUseCaseError> {
-        do {
-            return try noteFromFile(withNoteUUID: noteId)
-        } catch {
-            return Result.failure(NoteUseCaseError.notFound)
-        }
+    func get(noteId: String) -> Result<Note, AnyError> {
+        return Result(try noteFromFile(withNoteUUID: noteId))
     }
 
-    private func noteFromFile(withNoteUUID noteUUID: String) throws -> Result<Note, NoteUseCaseError>  {
+    private func noteFromFile(withNoteUUID noteUUID: String) throws -> Note  {
         guard let noteFileURL = getNoteURLFromNoteId(noteId: noteUUID) else {
-            return Result.failure(NoteUseCaseError.notFound)
+            throw NoteUseCaseError.notFound
         }
-
         let noteData = try self.fileReader.dataFrom(fileURL: noteFileURL)
         let note = try decoder.decode(Note.self, from: noteData)
 
-        return Result.success(note)
+        return note
     }
 
     func save(note: Note) -> Result<Note, NoteUseCaseError> {
