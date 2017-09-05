@@ -10,8 +10,8 @@ import Foundation
 import Result
 
 class FileNoteRepository: NoteRepository {
-    private var encoder: JSONEncoder = JSONEncoder()
-    private var decoder: JSONDecoder = JSONDecoder()
+    private lazy var encoder = JSONEncoder()
+    private lazy var decoder = JSONDecoder()
     private var fileManager: FileManager
     private var fileReader: FileReaderService
 
@@ -20,6 +20,8 @@ class FileNoteRepository: NoteRepository {
         self.fileReader = fileReader
         encoder.outputFormatting = .prettyPrinted
     }
+
+    // MARK: - API
 
     func getAll() -> Result<[Note], AnyError> {
         return Result(try mapNoteFilesToNotes())
@@ -33,13 +35,8 @@ class FileNoteRepository: NoteRepository {
         return Result(try saveNoteToFile(note))
     }
 
-    func delete(note: Note) -> Result<Note, NoteUseCaseError> {
-        do {
-            try deleteFileWithNoteUUID(noteUUID: note.uuid)
-            return .success(note)
-        } catch {
-            return .failure(NoteUseCaseError.savingError)
-        }
+    func delete(note: Note) -> Result<Note, AnyError> {
+        return Result(try deleteNote(note))
     }
 
     // MARK: - Private
@@ -53,7 +50,6 @@ class FileNoteRepository: NoteRepository {
             return [];
         }
         let documentDirectoryContent = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [])
-
         return documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
     }
 
@@ -67,9 +63,7 @@ class FileNoteRepository: NoteRepository {
             throw NoteUseCaseError.notFound
         }
         let noteData = try self.fileReader.dataFrom(fileURL: noteFileURL)
-        let note = try decoder.decode(Note.self, from: noteData)
-
-        return note
+        return try decoder.decode(Note.self, from: noteData)
     }
 
     private func getNoteURLFromNoteId(noteId: String) -> URL? {
@@ -87,11 +81,15 @@ class FileNoteRepository: NoteRepository {
         guard fileManager.createFile(atPath: noteFileURL.path, contents: jsonData, attributes: nil) else {
             throw NoteUseCaseError.savingError
         }
-
         return note
     }
 
-    private func deleteFileWithNoteUUID(noteUUID: String) throws {
+    private func deleteNote(_ note: Note) throws -> Note {
+        try deleteFileWithNoteUUID(note.uuid)
+        return note
+    }
+
+    private func deleteFileWithNoteUUID(_ noteUUID: String) throws {
         guard let noteFileURL = getNoteURLFromNoteId(noteId: noteUUID) else {
             throw NoteUseCaseError.savingError
         }
