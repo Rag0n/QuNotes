@@ -29,13 +29,8 @@ class FileNoteRepository: NoteRepository {
         return Result(try noteFromFile(withNoteUUID: noteId))
     }
 
-    func save(note: Note) -> Result<Note, NoteUseCaseError> {
-        do {
-            try saveNoteToFile(note)
-            return .success(note);
-        } catch {
-            return .failure(NoteUseCaseError.savingError)
-        }
+    func save(note: Note) -> Result<Note, AnyError> {
+        return Result(try saveNoteToFile(note))
     }
 
     func delete(note: Note) -> Result<Note, NoteUseCaseError> {
@@ -84,7 +79,7 @@ class FileNoteRepository: NoteRepository {
         return documentsURL.appendingPathComponent("\(noteId)").appendingPathExtension("qvnote");
     }
 
-    private func saveNoteToFile(_ note: Note) throws {
+    private func saveNoteToFile(_ note: Note) throws -> Note {
         guard let noteFileURL = getNoteURLFromNoteId(noteId: note.uuid) else {
             throw NoteUseCaseError.savingError
         }
@@ -92,6 +87,8 @@ class FileNoteRepository: NoteRepository {
         guard fileManager.createFile(atPath: noteFileURL.path, contents: jsonData, attributes: nil) else {
             throw NoteUseCaseError.savingError
         }
+
+        return note
     }
 
     private func deleteFileWithNoteUUID(noteUUID: String) throws {
