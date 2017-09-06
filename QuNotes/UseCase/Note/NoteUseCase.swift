@@ -6,12 +6,6 @@
 import Foundation
 import Result
 
-enum NoteUseCaseError: Error {
-    case notFound
-    case savingError
-    case brokenFormat
-}
-
 protocol HasNoteUseCase {
     var noteUseCase: NoteUseCase { get }
 }
