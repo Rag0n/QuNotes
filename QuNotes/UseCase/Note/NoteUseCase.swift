@@ -27,7 +27,7 @@ class NoteUseCase {
 
     // MARK: - API
 
-    func add(withTitle title: String) -> Result<Note, NoteUseCaseError> {
+    func add(withTitle title: String) -> Result<Note, AnyError> {
         return noteRepository.save <| newNoteWithTitle <| title
     }
 
@@ -35,23 +35,23 @@ class NoteUseCase {
         return noteRepository.getAll().recover([])
     }
 
-    func update(_ note: Note, newContent: String) -> Result<Note, NoteUseCaseError> {
+    func update(_ note: Note, newContent: String) -> Result<Note, AnyError> {
         return noteRepository.save <| updatedNote(withNewContent: newContent) <| note
     }
 
-    func update(_ note: Note, newTitle: String) -> Result<Note, NoteUseCaseError> {
+    func update(_ note: Note, newTitle: String) -> Result<Note, AnyError> {
         return noteRepository.save <| updatedNote(withNewTitle: newTitle) <| note
     }
 
-    func addTag(tag: String, toNote note: Note) -> Result<Note, NoteUseCaseError> {
+    func addTag(tag: String, toNote note: Note) -> Result<Note, AnyError> {
         return noteRepository.save <| updatedNote(withNewTags: note.tags + [tag]) <| note
     }
 
-    func removeTag(tag: String, fromNote note: Note) -> Result<Note, NoteUseCaseError> {
+    func removeTag(tag: String, fromNote note: Note) -> Result<Note, AnyError> {
         return noteRepository.save <| updatedNote(withNewTags: newTagsForNote(note: note, removedTag: tag)) <| note
     }
 
-    func delete(_ note: Note) -> Result<Note, NoteUseCaseError> {
+    func delete(_ note: Note) -> Result<Note, AnyError> {
         return noteRepository.delete(note: note)
     }
 
