@@ -24,7 +24,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when repository returns error") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .failure(.brokenFormat)
+                    noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
 
                 it("returns empty array") {
@@ -51,7 +51,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method succedes") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .success(note)
+                    noteRepositoryStub.returnNotePassedInSaveMethod = true
                 }
 
                 context("when currentDateService returns timestamp with value 15") {
@@ -61,17 +61,19 @@ class NoteUseCaseSpec: QuickSpec {
                     }
 
                     it("returns note with passed title, empty content, correct created and updated dates") {
-                        let note = useCase.add(withTitle: "note title")
-                        expect(note.title).to(equal("note title"))
-                        expect(note.content).to(beEmpty())
-                        expect(note.createdDate).to(beCloseTo(15))
-                        expect(note.updatedDate).to(beCloseTo(15))
+                        let note = useCase.add(withTitle: "note title").value
+                        expect(note?.title).to(equal("note title"))
+                        expect(note?.content).to(beEmpty())
+                        expect(note?.createdDate).to(beCloseTo(15))
+                        expect(note?.updatedDate).to(beCloseTo(15))
                     }
 
                     it("returns note with uniq uuid") {
-                        let firstNote = useCase.add(withTitle: "first note title")
-                        let secondNote = useCase.add(withTitle: "second note title")
-                        expect(firstNote.uuid).toNot(equal(secondNote.uuid))
+                        let firstNote = useCase.add(withTitle: "first note title").value
+                        let secondNote = useCase.add(withTitle: "second note title").value
+                        expect(firstNote).toNot(beNil())
+                        expect(secondNote).toNot(beNil())
+                        expect(firstNote?.uuid).toNot(equal(secondNote?.uuid))
                     }
                 }
             }
@@ -79,67 +81,14 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
 
                 it("return result with save error") {
                     let error = useCase.add(withTitle: "note title").error
-                    expect(error).toNot(beNil())
-                    expect(error).to(equal(NoteUseCaseError.savingError))
-                }
-            }
-        }
-
-        describe("-update:newContent:") {
-
-            var note: Note!
-
-            beforeEach {
-                note = Note.noteFixture()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
-            }
-
-            it("calls save method of repository with note with same id, created date, title") {
-                _ = useCase.update(note, newContent: "new note fixture");
-                expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(note.uuid))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(note.createdDate))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal(note.title))
-            }
-
-            it("calls save method of repository with note with updated date and content") {
-                _ = useCase.update(note, newContent: "new note fixture");
-                expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal("new note fixture"))
-            }
-
-            context("when save method succedes") {
-
-                beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .success(note)
-                }
-
-                it("returns result with updated note") {
-                    let result = useCase.update(note, newContent: "new note fixture");
-                    let updatedNote = result.value
-                    expect(updatedNote).toNot(beNil())
-                    expect(updatedNote?.uuid).to(equal(note.uuid))
-                    expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
-                    expect(updatedNote?.title).to(equal(note.title))
-                    expect(updatedNote?.updatedDate).to(beCloseTo(20))
-                    expect(updatedNote?.content).to(equal("new note fixture"))
-                }
-            }
-
-            context("when save method fails") {
-
-                beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
-                }
-
-                it("return result with save error") {
-                    let result = useCase.update(note, newContent: "new note fixture").error
-                    expect(error).toNot(beNil())
-                    expect(error).to(equal(NoteUseCaseError.savingError))
+                    let receivedError = error?.error as? FileNoteRepositoryError
+                    expect(receivedError).toNot(beNil())
+                    expect(receivedError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
             }
         }
