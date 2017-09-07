@@ -206,7 +206,7 @@ class NoteUseCaseSpec: QuickSpec {
                 _ = useCase.delete(note)
                 expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(note))
             }
-            
+
             context("when repository failes to delete note") {
 
                 beforeEach() {
@@ -379,29 +379,35 @@ class CurrentDateServiceFake: CurrentDateService {
 }
 
 class NoteRepositoryFake: NoteRepository {
-    var resultToBeReturnedFromGetAllMethod: Result<[Note], NoteUseCaseError>?
-    var resultToBeReturnedFromGetMethod: Result<Note, NoteUseCaseError>?
-    var resultToBeReturnedFromSaveMethod: Result<Note, NoteUseCaseError>?
+    var resultToBeReturnedFromGetAllMethod: Result<[Note], AnyError>?
+    var resultToBeReturnedFromGetMethod: Result<Note, AnyError>?
+    var resultToBeReturnedFromSaveMethod: Result<Note, AnyError>?
     var returnNotePassedInSaveMethod = false
-    var resultToBeReturnedFromDeleteMethod: Result<Note, NoteUseCaseError>?
+    var resultToBeReturnedFromDeleteMethod: Result<Note, AnyError>?
     private(set) var notePassedInSaveMethod: Note?
     private(set) var notePassedInDeleteMethod: Note?
 
-    func getAll() -> Result<[Note], NoteUseCaseError> {
-        return resultToBeReturnedFromGetAllMethod ?? .failure(NoteUseCaseError.brokenFormat)
+    func getAll() -> Result<[Note], AnyError> {
+        return resultToBeReturnedFromGetAllMethod ?? .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
     }
 
-    func get(noteId: String) -> Result<Note, NoteUseCaseError> {
-        return resultToBeReturnedFromGetMethod ?? .failure(NoteUseCaseError.notFound)
+    func get(noteId: String) -> Result<Note, AnyError> {
+        return resultToBeReturnedFromGetMethod ?? defaultFailure()
     }
 
-    func save(note: Note) -> Result<Note, NoteUseCaseError> {
+    func save(note: Note) -> Result<Note, AnyError> {
         notePassedInSaveMethod = note
-        return returnNotePassedInSaveMethod ? note : (resultToBeReturnedFromSaveMethod ?? .failure(NoteUseCaseError.savingError))
+        let resultToBeReturned = resultToBeReturnedFromSaveMethod ?? defaultFailure()
+        return returnNotePassedInSaveMethod ? .success(note) : resultToBeReturned
     }
 
-    func delete(note: Note) -> Result<Note, NoteUseCaseError> {
+    func delete(note: Note) -> Result<Note, AnyError> {
         notePassedInDeleteMethod = note
-        return resultToBeReturnedFromDeleteMethod ?? .failure(NoteUseCaseError.savingError)
+        return resultToBeReturnedFromDeleteMethod ?? defaultFailure()
+    }
+
+    private func defaultFailure() -> Result<Note, AnyError> {
+        return .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
     }
 }
+
