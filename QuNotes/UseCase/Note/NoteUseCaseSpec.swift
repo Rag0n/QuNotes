@@ -159,19 +159,20 @@ class NoteUseCaseSpec: QuickSpec {
             context("when repository failes to delete note") {
 
                 beforeEach() {
-                    noteRepositoryStub.resultToBeReturnedFromGetMethod = .failure(.savingError)
+                    noteRepositoryStub.resultToBeReturnedFromGetMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
 
                 it("returns result with error from repository") {
-                    let result = useCase.delete(note)
-                    expect(result.error).to(equal(NoteUseCaseError.savingError))
+                    let error = useCase.delete(note).error
+                    let receivedError = error?.error as? FileNoteRepositoryError
+                    expect(receivedError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
             }
 
             context("when repository successes to delete note") {
 
                 beforeEach() {
-                    noteRepositoryStub.resultToBeReturnedFromGetMethod = .success(note)
+                    noteRepositoryStub.returnNotePassedInDeleteMethod = true
                 }
 
                 it("return result with deleted note") {
@@ -333,6 +334,7 @@ class NoteRepositoryFake: NoteRepository {
     var resultToBeReturnedFromSaveMethod: Result<Note, AnyError>?
     var returnNotePassedInSaveMethod = false
     var resultToBeReturnedFromDeleteMethod: Result<Note, AnyError>?
+    var returnNotePassedInDeleteMethod = false
     private(set) var notePassedInSaveMethod: Note?
     private(set) var notePassedInDeleteMethod: Note?
 
@@ -352,7 +354,8 @@ class NoteRepositoryFake: NoteRepository {
 
     func delete(note: Note) -> Result<Note, AnyError> {
         notePassedInDeleteMethod = note
-        return resultToBeReturnedFromDeleteMethod ?? defaultFailure()
+        let resultToBeReturned = resultToBeReturnedFromDeleteMethod ?? defaultFailure()
+        return returnNotePassedInDeleteMethod ? .success(note) : resultToBeReturned
     }
 
     private func defaultFailure() -> Result<Note, AnyError> {
