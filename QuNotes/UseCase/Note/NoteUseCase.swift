@@ -42,7 +42,9 @@ class NoteUseCase {
     }
 
     func removeTag(tag: String, fromNote note: Note) -> Result<Note, AnyError> {
-        return noteRepository.save <| updatedNote(withNewTags: newTagsForNote(note: note, removedTag: tag)) <| note
+        let (tagsWereUpdated, tags) = updatedTagsWith(removedTag: tag, forNote: note)
+        if (!tagsWereUpdated) { return .success(note) }
+        return noteRepository.save <| updatedNote(withNewTags: tags) <| note
     }
 
     func delete(_ note: Note) -> Result<Note, AnyError> {
@@ -72,9 +74,13 @@ class NoteUseCase {
         }
     }
 
-    private func newTagsForNote(note: Note, removedTag: String) -> [String] {
-        var newTags = note.tags
-        newTags.remove(object: removedTag)
-        return newTags
+    private func updatedTagsWith(removedTag: String, forNote note: Note) -> (Bool, [String]) {
+        var tags = note.tags
+        if let removedTagIndex = tags.index(of: removedTag) {
+            tags.remove(at: removedTagIndex)
+            return (true, tags)
+        } else {
+            return (false, tags)
+        }
     }
 }
