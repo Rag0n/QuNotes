@@ -88,7 +88,7 @@ class NoteUseCaseSpec: QuickSpec {
                     let error = useCase.add(withTitle: "note title").error
                     let receivedError = error?.error as? FileNoteRepositoryError
                     expect(receivedError).toNot(beNil())
-                    expect(receivedError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
                 }
             }
         }
@@ -165,7 +165,7 @@ class NoteUseCaseSpec: QuickSpec {
                 it("returns result with error from repository") {
                     let error = useCase.delete(note).error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
                 }
             }
 
