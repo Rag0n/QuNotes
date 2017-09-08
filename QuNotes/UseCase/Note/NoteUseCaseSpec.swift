@@ -93,6 +93,61 @@ class NoteUseCaseSpec: QuickSpec {
             }
         }
 
+        describe("-update:newContent:") {
+
+            var note: Note!
+
+            beforeEach {
+                note = Note.noteFixture()
+                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
+            }
+
+            it("calls save method of repository with note with same id, created date, title") {
+                _ = useCase.update(note, newContent: "new note fixture");
+                expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(note.uuid))
+                expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(note.createdDate))
+                expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal(note.title))
+            }
+
+            it("calls save method of repository with note with updated date and content") {
+                _ = useCase.update(note, newContent: "new note fixture");
+                expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
+                expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal("new note fixture"))
+            }
+
+            context("when save method succedes") {
+
+                beforeEach {
+                    noteRepositoryStub.returnNotePassedInSaveMethod = true
+                }
+
+                it("returns result with updated note") {
+                    let result = useCase.update(note, newContent: "new note fixture");
+                    let updatedNote = result.value
+                    expect(updatedNote).toNot(beNil())
+                    expect(updatedNote?.uuid).to(equal(note.uuid))
+                    expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
+                    expect(updatedNote?.title).to(equal(note.title))
+                    expect(updatedNote?.updatedDate).to(beCloseTo(20))
+                    expect(updatedNote?.content).to(equal("new note fixture"))
+                }
+            }
+
+            context("when save method fails") {
+
+                beforeEach {
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                }
+
+                it("return result with save error") {
+                    let error = useCase.add(withTitle: "note title").error
+                    let receivedError = error?.error as? FileNoteRepositoryError
+                    expect(receivedError).toNot(beNil())
+                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
+                }
+            }
+        }
+
         describe("-update:newTitle:") {
 
             var note: Note!
@@ -118,7 +173,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method succedes") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .success(note)
+                    noteRepositoryStub.returnNotePassedInSaveMethod = true
                 }
 
                 it("returns result with updated note") {
@@ -136,13 +191,14 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
+                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
 
                 it("return result with save error") {
-                    let error = useCase.updateNote(note, newTitle: "new note title fixture").error
-                    expect(error).toNot(beNil())
-                    expect(error).to(equal(NoteUseCaseError.savingError))
+                    let error = useCase.add(withTitle: "note title").error
+                    let receivedError = error?.error as? FileNoteRepositoryError
+                    expect(receivedError).toNot(beNil())
+                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
                 }
             }
         }
@@ -178,138 +234,6 @@ class NoteUseCaseSpec: QuickSpec {
                 it("return result with deleted note") {
                     let result = useCase.delete(note)
                     expect(result.value).to(equal(note))
-                }
-            }
-        }
-
-        describe("-addTag:toNote:") {
-
-            var note: Note!
-
-            beforeEach {
-                note = Note.noteFixture()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
-            }
-
-            it("calls save method of repository with note with same id, created date, content, title") {
-                _ = useCase.addTag(tag: "tag fixture", toNote: note)
-                expect(noteRepositoryStub.notePassedInSaveMethod?.uuid).to(equal(note.uuid))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.createdDate).to(beCloseTo(note.createdDate))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.content).to(equal(note.content))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.title).to(equal(note.title))
-            }
-
-            it("calls save method of repository with note with updated date and tags") {
-                _ = useCase.addTag(tag: "tag fixture", toNote: note)
-                expect(noteRepositoryStub.notePassedInSaveMethod?.updatedDate).to(beCloseTo(20))
-                expect(noteRepositoryStub.notePassedInSaveMethod?.tags).to(equal(["tag fixture"]))
-            }
-
-            context("when save method succedes") {
-
-                beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
-                }
-
-                context("when note doesnt have any tags") {
-                    it("returns result with note with new tag") {
-                        let updatedNote = useCase.addTag(tag: "tag fixture", toNote: note).value
-                        expect(updatedNote?.uuid).to(equal(note.uuid))
-                        expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
-                        expect(updatedNote?.title).to(equal(note.title))
-                        expect(updatedNote?.content).to(equal(note.content))
-                        expect(updatedNote?.updatedDate).to(beCloseTo(20))
-                        expect(updatedNote?.tags).to(equal(["tag fixture"]))
-                    }
-                }
-
-                context("when note already has some tags") {
-
-                    beforeEach {
-                        note = Note.noteFixtureWithTags(["tag fixture"])
-                    }
-
-                    it("returns updated note with appended tag") {
-                        let updatedNote = useCase.addTag(tag: "another tag fixture", toNote: note).value
-                        expect(updatedNote?.uuid).to(equal(note.uuid))
-                        expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
-                        expect(updatedNote?.title).to(equal(note.title))
-                        expect(updatedNote?.content).to(equal(note.content))
-                        expect(updatedNote?.updatedDate).to(beCloseTo(20))
-                        expect(updatedNote?.tags).to(equal(["tag fixture", "another tag fixture"]))
-                    }
-                }
-            }
-
-            context("when save method fails") {
-
-                beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
-                }
-
-                it("return result with save error") {
-                    let error = useCase.addTag(tag: "another tag fixture", toNote: note).error
-                    expect(error).toNot(beNil())
-                    expect(error).to(equal(NoteUseCaseError.savingError))
-                }
-            }
-        }
-
-        describe("-removeTag:fromNote:") {
-
-            var note: Note!
-
-            beforeEach {
-                note = Note.noteFixture()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
-            }
-
-            context("when save method succedes") {
-
-                beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
-                }
-
-                context("when note doesnt have this tag") {
-                    it("returns note with without changing updatedDate") {
-                        let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: note).value
-                        expect(updatedNote?.uuid).to(equal(note.uuid))
-                        expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
-                        expect(updatedNote?.title).to(equal(note.title))
-                        expect(updatedNote?.content).to(equal(note.content))
-                        expect(updatedNote?.updatedDate).to(beCloseTo(note.updatedDate))
-                        expect(updatedNote?.tags).to(beEmpty())
-                    }
-                }
-
-                context("when note has this tag") {
-
-                    beforeEach {
-                        note = Note.noteFixtureWithTags(["tag fixture", "another tag fixture"])
-                    }
-
-                    it("returns note with removed tag and new updatedDate") {
-                        let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: note).value
-                        expect(updatedNote?.uuid).to(equal(note.uuid))
-                        expect(updatedNote?.createdDate).to(beCloseTo(note.createdDate))
-                        expect(updatedNote?.title).to(equal(note.title))
-                        expect(updatedNote?.content).to(equal(note.content))
-                        expect(updatedNote?.updatedDate).to(beCloseTo(20))
-                        expect(updatedNote?.tags).to(equal(["another tag fixture"]))
-                    }
-                }
-            }
-
-            context("when save method fails") {
-
-                beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(NoteUseCaseError.savingError)
-                }
-
-                it("return result with save error") {
-                    let error = useCase.removeTag(tag: "tag fixture", fromNote: note).error
-                    expect(error).toNot(beNil())
-                    expect(error).to(equal(NoteUseCaseError.savingError))
                 }
             }
         }
