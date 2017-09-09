@@ -28,7 +28,31 @@ class FileNoteRepositorySpec: QuickSpec {
         }
 
         describe("-get:noteId") {
+            it("passed correct url to fileReaderService") {
+                _ = noteRepository.get(noteId: "noteId")
+                expect(fileReaderFake.fileURLPassedInDataFromFileURLMethod?.absoluteString).to(equal("Documents/noteId.qvnote"))
+            }
 
+            context("when fileReaderService throws an error") {
+
+                beforeEach {
+                    fileReaderFake.dataFromFileURLMethodThrowsError = true
+                }
+
+                it("returns notFound result") {
+
+                }
+            }
+
+            context("when fileReaderService doesnt throw an error") {
+                context("when fileReaderService returns invalid data") {
+                    
+                }
+
+                context("when fileReaderService returns valid data") {
+
+                }
+            }
         }
 
         describe("-save") {
@@ -111,9 +135,13 @@ class FileManagerFake: FileManager {
 class FileReaderServiceFake: FileReaderService {
     var fileURLPassedInDataFromFileURLMethod: URL?
     var resultToBeReturnedFromDataFromFileURLMethod: Data?
+    var dataFromFileURLMethodThrowsError = false
 
     func dataFrom(fileURL: URL) throws -> Data {
         fileURLPassedInDataFromFileURLMethod = fileURL
+        if dataFromFileURLMethodThrowsError {
+            throw NSError(domain: "", code: 0, userInfo: nil)
+        }
         return resultToBeReturnedFromDataFromFileURLMethod ?? Data()
     }
 }
