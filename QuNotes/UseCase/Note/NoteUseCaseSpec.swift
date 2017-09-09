@@ -81,7 +81,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
                 }
 
                 it("return result with save error") {
@@ -136,7 +136,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
                 }
 
                 it("return result with save error") {
@@ -191,7 +191,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
                 }
 
                 it("return result with save error") {
@@ -300,7 +300,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
                 }
 
                 it("return result with save error") {
@@ -360,7 +360,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromSaveMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
                 }
 
                 it("return result with save error") {
@@ -389,35 +389,33 @@ class CurrentDateServiceFake: CurrentDateService {
 class NoteRepositoryFake: NoteRepository {
     var resultToBeReturnedFromGetAllMethod: Result<[Note], AnyError>?
     var resultToBeReturnedFromGetMethod: Result<Note, AnyError>?
-    var resultToBeReturnedFromSaveMethod: Result<Note, AnyError>?
+    var saveMethodError: AnyError?
     var returnNotePassedInSaveMethod = false
-    var resultToBeReturnedFromDeleteMethod: Result<Note, AnyError>?
+    var deleteMethodEror: AnyError?
     var returnNotePassedInDeleteMethod = false
     private(set) var notePassedInSaveMethod: Note?
     private(set) var notePassedInDeleteMethod: Note?
 
     func getAll() -> Result<[Note], AnyError> {
-        return resultToBeReturnedFromGetAllMethod ?? .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+        return resultToBeReturnedFromGetAllMethod ?? .failure(defaultError())
     }
 
     func get(noteId: String) -> Result<Note, AnyError> {
-        return resultToBeReturnedFromGetMethod ?? defaultFailure()
+        return resultToBeReturnedFromGetMethod ?? .failure(defaultError())
     }
 
     func save(note: Note) -> Result<Note, AnyError> {
         notePassedInSaveMethod = note
-        let resultToBeReturned = resultToBeReturnedFromSaveMethod ?? defaultFailure()
-        return returnNotePassedInSaveMethod ? .success(note) : resultToBeReturned
+        return returnNotePassedInSaveMethod ? .success(note) : .failure((saveMethodError ?? defaultError()))
     }
 
     func delete(note: Note) -> Result<Note, AnyError> {
         notePassedInDeleteMethod = note
-        let resultToBeReturned = resultToBeReturnedFromDeleteMethod ?? defaultFailure()
-        return returnNotePassedInDeleteMethod ? .success(note) : resultToBeReturned
+        return returnNotePassedInDeleteMethod ? .success(note) : .failure((deleteMethodEror ?? defaultError()))
     }
 
-    private func defaultFailure() -> Result<Note, AnyError> {
-        return .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+    private func defaultError() -> AnyError {
+        return AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
     }
 }
 
