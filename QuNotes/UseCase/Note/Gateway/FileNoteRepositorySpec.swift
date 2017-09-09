@@ -72,20 +72,20 @@ class FileNoteRepositorySpec: QuickSpec {
             """
 
             it("writes correct content to file") {
-                noteRepository.save(note: note)
+                _ = noteRepository.save(note: note)
                 let stringFromPassedData = String(data: fileManagerFake.dataPassedInCreateFileMethod!, encoding: .utf8)
                 expect(stringFromPassedData).to(equal(expectedString))
             }
 
             it("writes to correct file path") {
-                noteRepository.save(note: note)
+                _ = noteRepository.save(note: note)
                 expect(fileManagerFake.pathPassedInCreateFileMethod).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
             }
         }
         
         describe("-delete") {
             it("calls deleteItem of fileManager with correct URL") {
-                noteRepository.delete(note: note)
+                _ = noteRepository.delete(note: note)
                 expect(fileManagerFake.urlPassedInDeleteItemMethod?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
             }
 
