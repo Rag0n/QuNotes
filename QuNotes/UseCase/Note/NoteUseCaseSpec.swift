@@ -7,6 +7,8 @@ import Quick
 import Nimble
 import Result
 
+// MARK: - NoteUseCaseSpec
+
 class NoteUseCaseSpec: QuickSpec {
     override func spec() {
 
@@ -374,6 +376,8 @@ class NoteUseCaseSpec: QuickSpec {
     }
 }
 
+// MARK: - CurrentDateServiceFake
+
 class CurrentDateServiceFake: CurrentDateService {
     var currentDateStub: Date
 
@@ -385,6 +389,8 @@ class CurrentDateServiceFake: CurrentDateService {
         return currentDateStub
     }
 }
+
+// MARK: - NoteRepositoryFake
 
 class NoteRepositoryFake: NoteRepository {
     var resultToBeReturnedFromGetAllMethod: Result<[Note], AnyError>?
@@ -416,6 +422,55 @@ class NoteRepositoryFake: NoteRepository {
 
     private func defaultError() -> AnyError {
         return AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
+    }
+}
+
+// MARK: - Custom matchers
+
+func equal(note expectedNote: Note,
+           withNewCreatedDate createdDate: Double? = nil,
+           withNewUpdatedDate updatedDate: Double? = nil,
+           withNewContent content: String? = nil,
+           withNewTitle title: String? = nil,
+           withNewUUID uuid: String? = nil,
+           withNewTags tags: [String]? = nil) -> Predicate<Note> {
+    return Predicate { (actualExpression: Expression<Note>) throws -> PredicateResult in
+        var msg = ExpectationMessage.expectedTo("receive equal note with new properties:")
+        guard let note = try actualExpression.evaluate() else {
+            return PredicateResult(
+                status: .fail,
+                message: msg.appendedBeNilHint()
+            )
+        }
+
+        let expectedCreatedDate = createdDate ?? expectedNote.createdDate
+        let isCreatedDateEqual = fabs(note.createdDate - expectedCreatedDate) < Double.ulpOfOne
+        msg = isCreatedDateEqual ? msg : msg.appended(details: "createdDate is not equal. Expected \(expectedCreatedDate), got \(note.createdDate)")
+
+        let expectedUpdatedDate = updatedDate ?? expectedNote.updatedDate
+        let isUpdatedDateEqual = fabs(note.updatedDate - expectedUpdatedDate) < Double.ulpOfOne
+        msg = isUpdatedDateEqual ? msg : msg.appended(details: "updatedDate is not equal. Expected \(expectedUpdatedDate), got \(note.updatedDate)")
+
+        let expectedContent = content ?? expectedNote.content
+        let isContentEqual = note.content == expectedContent
+        msg = isContentEqual ? msg : msg.appended(details: "content is not equal. Expected \(expectedContent), got \(note.content)")
+
+        let expectedTitle = title ?? expectedNote.title
+        let isTitleEqual = note.title == expectedTitle
+        msg = isTitleEqual ? msg : msg.appended(details: "title is not equal. Expected \(expectedTitle), got \(note.title)")
+
+        let expectedUUID = uuid ?? expectedNote.uuid
+        let isUUIDEqual = note.uuid == expectedUUID
+        msg = isUUIDEqual ? msg : msg.appended(details: "uuid is not equal. Expected \(expectedUUID), got \(note.uuid)")
+
+        let expectedTags = tags ?? expectedNote.tags
+        let areTagsEqual = note.tags == expectedTags
+        msg = areTagsEqual ? msg : msg.appended(details: "tags are not equal. Expected \(expectedTags), got \(note.tags)")
+
+        return PredicateResult(
+            bool: isUpdatedDateEqual && isCreatedDateEqual && isContentEqual && isTitleEqual && isUUIDEqual && areTagsEqual,
+            message: msg
+        )
     }
 }
 
