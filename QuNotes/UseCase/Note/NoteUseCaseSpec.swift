@@ -435,7 +435,7 @@ func equal(note expectedNote: Note,
            withNewUUID uuid: String? = nil,
            withNewTags tags: [String]? = nil) -> Predicate<Note> {
     return Predicate { (actualExpression: Expression<Note>) throws -> PredicateResult in
-        var msg = ExpectationMessage.expectedTo("receive equal note with new properties:")
+        var msg = ExpectationMessage.expectedTo("receive equal note with new properties: ")
         guard let note = try actualExpression.evaluate() else {
             return PredicateResult(
                 status: .fail,
@@ -443,29 +443,33 @@ func equal(note expectedNote: Note,
             )
         }
 
+        var details = ""
+
         let expectedCreatedDate = createdDate ?? expectedNote.createdDate
         let isCreatedDateEqual = fabs(note.createdDate - expectedCreatedDate) < Double.ulpOfOne
-        msg = isCreatedDateEqual ? msg : msg.appended(details: "createdDate is not equal. Expected \(expectedCreatedDate), got \(note.createdDate)")
+        details = isCreatedDateEqual ? details : details.appending("CreatedDate is not equal. Expected \(expectedCreatedDate), got \(note.createdDate) ")
 
         let expectedUpdatedDate = updatedDate ?? expectedNote.updatedDate
         let isUpdatedDateEqual = fabs(note.updatedDate - expectedUpdatedDate) < Double.ulpOfOne
-        msg = isUpdatedDateEqual ? msg : msg.appended(details: "updatedDate is not equal. Expected \(expectedUpdatedDate), got \(note.updatedDate)")
+        details = isUpdatedDateEqual ? details : details.appending("UpdatedDate is not equal. Expected \(expectedUpdatedDate), got \(note.updatedDate) ")
 
         let expectedContent = content ?? expectedNote.content
         let isContentEqual = note.content == expectedContent
-        msg = isContentEqual ? msg : msg.appended(details: "content is not equal. Expected \(expectedContent), got \(note.content)")
+        details = isContentEqual ? details : details.appending("Content is not equal: expected \(expectedContent), got \(note.content) ")
 
         let expectedTitle = title ?? expectedNote.title
         let isTitleEqual = note.title == expectedTitle
-        msg = isTitleEqual ? msg : msg.appended(details: "title is not equal. Expected \(expectedTitle), got \(note.title)")
+        details = isTitleEqual ? details : details.appending("Title is not equal: expected \(expectedTitle), got \(note.title) ")
 
         let expectedUUID = uuid ?? expectedNote.uuid
         let isUUIDEqual = note.uuid == expectedUUID
-        msg = isUUIDEqual ? msg : msg.appended(details: "uuid is not equal. Expected \(expectedUUID), got \(note.uuid)")
+        details = isUUIDEqual ? details : details.appending("UUID is not equal: expected \(expectedUUID), got \(note.uuid) ")
 
         let expectedTags = tags ?? expectedNote.tags
         let areTagsEqual = note.tags == expectedTags
-        msg = areTagsEqual ? msg : msg.appended(details: "tags are not equal. Expected \(expectedTags), got \(note.tags)")
+        details = areTagsEqual ? details : details.appending("Tags are not equal: expected \(expectedTags), got \(note.tags) ")
+
+        msg = details.isEmpty ? msg : msg.appended(details: details)
 
         return PredicateResult(
             bool: isUpdatedDateEqual && isCreatedDateEqual && isContentEqual && isTitleEqual && isUUIDEqual && areTagsEqual,
