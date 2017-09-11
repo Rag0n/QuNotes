@@ -59,16 +59,14 @@ class FileNoteRepositorySpec: QuickSpec {
         describe("-save") {
             context("when fileManager is unable to get document directory") {
 
-                let thrownError = FileNoteRepositoryError.failedToFindDocumentDirectory
-
                 beforeEach {
                     fileManagerFake.urlsToReturnFromUrlsMethod = []
                 }
 
-                it("returns result with throw error wrapped in AnyError") {
+                it("returns result with failedToFindDocumentDirectory error") {
                     let error = noteRepository.delete(note: note).error
                     let underlyingError = (error!.error) as? FileNoteRepositoryError
-                    expect(underlyingError).to(equal(thrownError))
+                    expect(underlyingError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
             }
 
@@ -124,16 +122,14 @@ class FileNoteRepositorySpec: QuickSpec {
         describe("-delete") {
             context("when fileManager is unable to get document directory") {
 
-                let thrownError = FileNoteRepositoryError.failedToFindDocumentDirectory
-
                 beforeEach {
                     fileManagerFake.urlsToReturnFromUrlsMethod = []
                 }
 
-                it("returns result with throws error wrapped in AnyError") {
+                it("returns result with failedToFindDocumentDirectory error") {
                     let error = noteRepository.delete(note: note).error
                     let underlyingError = (error!.error) as? FileNoteRepositoryError
-                    expect(underlyingError).to(equal(thrownError))
+                    expect(underlyingError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
             }
 
@@ -151,7 +147,7 @@ class FileNoteRepositorySpec: QuickSpec {
                         fileManagerFake.errorToThrowInRemoveItemMethod = thrownError
                     }
 
-                    it("returns result with throws error wrapped in AnyError") {
+                    it("returns result with throw error") {
                         let error = noteRepository.delete(note: note).error
                         let underlyingError = (error!.error) as NSError
                         expect(underlyingError).to(equal(thrownError))
