@@ -8,6 +8,7 @@
 
 import Quick
 import Nimble
+import Result
 
 class FileNoteRepositorySpec: QuickSpec {
     override func spec() {
@@ -89,17 +90,47 @@ class FileNoteRepositorySpec: QuickSpec {
                 expect(fileManagerFake.urlPassedInDeleteItemMethod?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
             }
 
-            context("when fileManager successfuly removes file") {
+            context("when fileManager is unable to get document directory") {
+
+                let thrownError = FileNoteRepositoryError.failedToFindDocumentDirectory
 
                 beforeEach {
-                    fileManagerFake.remoteItemMethodThrows = false
+                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                }
+
+                it("returns result with throws error wrapped in AnyError") {
+                    let error = noteRepository.delete(note: note).error
+                    let underlyingError = (error!.error) as? FileNoteRepositoryError
+                    expect(underlyingError).to(equal(thrownError))
                 }
             }
 
-            context("when fileManager throws error when trying to remove file") {
+            context("when fileManager successfully gets document directory") {
+                context("when fileManager throws error while removing file") {
 
-                beforeEach {
-                    fileManagerFake.remoteItemMethodThrows = true
+                    let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
+
+                    beforeEach {
+                        fileManagerFake.errorToThrowInRemoveItemMethod = thrownError
+                    }
+
+                    it("returns result with throws error wrapped in AnyError") {
+                        let error = noteRepository.delete(note: note).error
+                        let underlyingError = (error!.error) as NSError
+                        expect(underlyingError).to(equal(thrownError))
+                    }
+                }
+
+                context("when fileManager successfuly removes file") {
+
+                    beforeEach {
+                        fileManagerFake.errorToThrowInRemoveItemMethod = nil
+                    }
+
+                    it("returns result with deleted note") {
+                        let deletedNote = noteRepository.delete(note: note).value
+                        expect(deletedNote).to(equal(note))
+                    }
                 }
             }
         }
@@ -110,8 +141,6 @@ class FileManagerFake: FileManager {
     var pathPassedInCreateFileMethod: String?
     var dataPassedInCreateFileMethod: Data?
     var resultToBeReturnedFromCreateFileMethod = false
-    var urlPassedInDeleteItemMethod: URL?
-    var remoteItemMethodThrows = false
 
     override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
         pathPassedInCreateFileMethod = path
@@ -120,15 +149,20 @@ class FileManagerFake: FileManager {
         return resultToBeReturnedFromCreateFileMethod
     }
 
+    var urlPassedInDeleteItemMethod: URL?
+    var errorToThrowInRemoveItemMethod: NSError?
+
     override func removeItem(at URL: URL) throws {
         urlPassedInDeleteItemMethod = URL
-        if remoteItemMethodThrows {
-            throw NSError(domain: "domain", code: 0, userInfo: nil)
+        if let errorToThrowInRemoveItemMethod = errorToThrowInRemoveItemMethod {
+            throw errorToThrowInRemoveItemMethod
         }
     }
 
+    var urlsToReturnFromUrlsMethod: [URL]?
+
     override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
-        return [URL(string: "Documents")!]
+        return urlsToReturnFromUrlsMethod ?? [URL(string: "Documents")!]
     }
 }
 
