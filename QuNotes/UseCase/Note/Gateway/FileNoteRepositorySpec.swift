@@ -57,39 +57,71 @@ class FileNoteRepositorySpec: QuickSpec {
         }
 
         describe("-save") {
+            context("when fileManager is unable to get document directory") {
 
-            let expectedString = """
-            {
-              "createdDate" : 0,
-              "content" : "content",
-              "updatedDate" : 0,
-              "title" : "title",
-              "tags" : [
-                "tag fixture",
-                "another tag fixture"
-              ],
-              "uuid" : "2F1535F5-0B62-4CFC-8B5A-2C399B718E57"
-            }
-            """
+                let thrownError = FileNoteRepositoryError.failedToFindDocumentDirectory
 
-            it("writes correct content to file") {
-                _ = noteRepository.save(note: note)
-                let stringFromPassedData = String(data: fileManagerFake.dataPassedInCreateFileMethod!, encoding: .utf8)
-                expect(stringFromPassedData).to(equal(expectedString))
+                beforeEach {
+                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                }
+
+                it("returns result with throw error wrapped in AnyError") {
+                    let error = noteRepository.delete(note: note).error
+                    let underlyingError = (error!.error) as? FileNoteRepositoryError
+                    expect(underlyingError).to(equal(thrownError))
+                }
             }
 
-            it("writes to correct file path") {
-                _ = noteRepository.save(note: note)
-                expect(fileManagerFake.pathPassedInCreateFileMethod).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+            context("when fileManager successfully gets document directory") {
+
+                let expectedString = """
+                {
+                  "createdDate" : 0,
+                  "content" : "content",
+                  "updatedDate" : 0,
+                  "title" : "title",
+                  "tags" : [
+                    "tag fixture",
+                    "another tag fixture"
+                  ],
+                  "uuid" : "2F1535F5-0B62-4CFC-8B5A-2C399B718E57"
+                }
+                """
+
+                it("writes correct content to file") {
+                    _ = noteRepository.save(note: note)
+                    let stringFromPassedData = String(data: fileManagerFake.dataPassedInCreateFileMethod!, encoding: .utf8)
+                    expect(stringFromPassedData).to(equal(expectedString))
+                }
+
+                it("writes to correct file path") {
+                    _ = noteRepository.save(note: note)
+                    expect(fileManagerFake.pathPassedInCreateFileMethod).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+                }
+
+                context("when fileManager fails to create file") {
+
+                    beforeEach {
+                        fileManagerFake.createFileMethodFails = true
+                    }
+
+                    it("returns result with error") {
+                        let error = noteRepository.save(note: note).error
+                        let underlyingError = (error!.error) as? FileNoteRepositoryError
+                        expect(underlyingError).to(equal(FileNoteRepositoryError.failedToCreateFile))
+                    }
+                }
+
+                context("when fileManager successfully creates file") {
+                    it("returns result with saved note") {
+                        let savedNote = noteRepository.save(note: note).value
+                        expect(savedNote).to(equal(note))
+                    }
+                }
             }
         }
         
         describe("-delete") {
-            it("calls deleteItem of fileManager with correct URL") {
-                _ = noteRepository.delete(note: note)
-                expect(fileManagerFake.urlPassedInDeleteItemMethod?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
-            }
-
             context("when fileManager is unable to get document directory") {
 
                 let thrownError = FileNoteRepositoryError.failedToFindDocumentDirectory
@@ -106,6 +138,11 @@ class FileNoteRepositorySpec: QuickSpec {
             }
 
             context("when fileManager successfully gets document directory") {
+                it("calls deleteItem of fileManager with correct URL") {
+                    _ = noteRepository.delete(note: note)
+                    expect(fileManagerFake.urlPassedInDeleteItemMethod?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+                }
+
                 context("when fileManager throws error while removing file") {
 
                     let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
@@ -140,13 +177,13 @@ class FileNoteRepositorySpec: QuickSpec {
 class FileManagerFake: FileManager {
     var pathPassedInCreateFileMethod: String?
     var dataPassedInCreateFileMethod: Data?
-    var resultToBeReturnedFromCreateFileMethod = false
+    var createFileMethodFails = false
 
     override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
         pathPassedInCreateFileMethod = path
         dataPassedInCreateFileMethod = data
 
-        return resultToBeReturnedFromCreateFileMethod
+        return !createFileMethodFails
     }
 
     var urlPassedInDeleteItemMethod: URL?
