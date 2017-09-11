@@ -10,6 +10,8 @@ import Quick
 import Nimble
 import Result
 
+// MARK: - FileNoteRepositorySpec
+
 class FileNoteRepositorySpec: QuickSpec {
     override func spec() {
 
@@ -170,6 +172,8 @@ class FileNoteRepositorySpec: QuickSpec {
     }
 }
 
+// MARK: - FileManagerFake
+
 class FileManagerFake: FileManager {
     var pathPassedInCreateFileMethod: String?
     var dataPassedInCreateFileMethod: Data?
@@ -199,9 +203,11 @@ class FileManagerFake: FileManager {
     }
 }
 
+// MARK: - FileReaderServiceFake
+
 class FileReaderServiceFake: FileReaderService {
     var fileURLPassedInDataFromFileURLMethod: URL?
-    var resultToBeReturnedFromDataFromFileURLMethod: Data?
+    var dataToBeReturnedFromDataFromFileURLMethod: Data?
     var dataFromFileURLMethodThrowsError = false
 
     func dataFrom(fileURL: URL) throws -> Data {
@@ -209,6 +215,6 @@ class FileReaderServiceFake: FileReaderService {
         if dataFromFileURLMethodThrowsError {
             throw NSError(domain: "", code: 0, userInfo: nil)
         }
-        return resultToBeReturnedFromDataFromFileURLMethod ?? Data()
+        return dataToBeReturnedFromDataFromFileURLMethod ?? Data()
     }
 }
