@@ -27,7 +27,83 @@ class FileNoteRepositorySpec: QuickSpec {
         }
 
         describe("-getAll") {
+            context("when fileManager is unable to get document directory") {
 
+                beforeEach {
+                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                }
+
+                it("returns result with failedToFindDocumentDirectory error") {
+                    let error = noteRepository.getAll().error
+                    let underlyingError = (error!.error) as? FileNoteRepositoryError
+                    expect(underlyingError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                }
+            }
+
+            context("when fileManager successfully gets document directory") {
+                context("when fileManager fails to receive contents of directory") {
+
+                    let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
+
+                    beforeEach {
+                        fileManagerFake.errorToThrowInContentsOfDirectoryMethod = thrownError
+                    }
+
+                    it("returns result with error") {
+                        let error = noteRepository.getAll().error
+                        let underlyingError = (error!.error) as NSError
+                        expect(underlyingError).to(equal(thrownError))
+                    }
+                }
+
+                context("when fileManager successfully receives contents of directory") {
+
+                    let firstNoteURL = URL(string: "documents/firstNote.qvnote")!
+                    let secondNoteURL = URL(string: "documents/secondNote.qvnote")!
+                    let anotherURL = URL(string: "documents/anotherFile.docx")!
+
+                    beforeEach {
+                        fileManagerFake.contentsToBeReturnedFromContentsOfDirectoryMethod = [firstNoteURL, secondNoteURL, anotherURL]
+                    }
+
+                    context("when fileReader fails to read a file") {
+
+                        let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
+
+                        beforeEach {
+                            fileReaderFake.errorToThrowInDataFromMethod = thrownError
+                        }
+
+                        it("returns result with error") {
+                            let error = noteRepository.getAll().error
+                            let underlyingError = (error!.error) as NSError
+                            expect(underlyingError).to(equal(thrownError))
+                        }
+                    }
+
+                    context("when fileReader successfully reads a file") {
+
+                        let encodedNote = Note.noteFixture()
+
+                        beforeEach {
+                            let encoder = JSONEncoder()
+                            let data = try! encoder.encode(encodedNote)
+                            fileReaderFake.dataToBeReturnedFromDataFromFileURLMethod = data
+                        }
+
+                        it("reads data from qvnote urls") {
+                            _ = noteRepository.getAll()
+                            expect(fileReaderFake.fileURLsPassedInDataFromFileURLMethod).to(equal([firstNoteURL, secondNoteURL]))
+                        }
+
+                        it("returns decoded notes") {
+                            let notes = noteRepository.getAll().value
+                            expect(notes?[0]).to(equal(encodedNote))
+                            expect(notes?[1]).to(equal(encodedNote))
+                        }
+                    }
+                }
+            }
         }
 
         describe("-get:noteId") {
@@ -227,16 +303,28 @@ class FileManagerFake: FileManager {
     override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
         return urlsToReturnFromUrlsMethod ?? [URL(string: "Documents")!]
     }
+
+    var contentsToBeReturnedFromContentsOfDirectoryMethod: [URL]?
+    var errorToThrowInContentsOfDirectoryMethod: NSError?
+
+    override func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions = []) throws -> [URL] {
+        if let errorToThrowInContentsOfDirectoryMethod = errorToThrowInContentsOfDirectoryMethod {
+            throw errorToThrowInContentsOfDirectoryMethod
+        }
+        return contentsToBeReturnedFromContentsOfDirectoryMethod ?? []
+    }
 }
 
 // MARK: - FileReaderServiceFake
 
 class FileReaderServiceFake: FileReaderService {
+    var fileURLsPassedInDataFromFileURLMethod = [URL]()
     var fileURLPassedInDataFromFileURLMethod: URL?
     var dataToBeReturnedFromDataFromFileURLMethod: Data?
     var errorToThrowInDataFromMethod: NSError?
 
     func dataFrom(fileURL: URL) throws -> Data {
+        fileURLsPassedInDataFromFileURLMethod.append(fileURL)
         fileURLPassedInDataFromFileURLMethod = fileURL
         if let errorToThrowInDataFromMethod = errorToThrowInDataFromMethod {
             throw errorToThrowInDataFromMethod
