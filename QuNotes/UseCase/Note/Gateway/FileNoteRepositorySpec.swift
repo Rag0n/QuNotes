@@ -31,29 +31,55 @@ class FileNoteRepositorySpec: QuickSpec {
         }
 
         describe("-get:noteId") {
-            it("passed correct url to fileReaderService") {
-                _ = noteRepository.get(noteId: "noteId")
-                expect(fileReaderFake.fileURLPassedInDataFromFileURLMethod?.absoluteString).to(equal("Documents/noteId.qvnote"))
-            }
-
-            context("when fileReaderService throws an error") {
+            context("when fileManager is unable to get document directory") {
 
                 beforeEach {
-                    fileReaderFake.dataFromFileURLMethodThrowsError = true
+                    fileManagerFake.urlsToReturnFromUrlsMethod = []
                 }
 
-                it("returns notFound result") {
-
+                it("returns result with failedToFindDocumentDirectory error") {
+                    let error = noteRepository.delete(note: note).error
+                    let underlyingError = (error!.error) as? FileNoteRepositoryError
+                    expect(underlyingError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
             }
 
-            context("when fileReaderService doesnt throw an error") {
-                context("when fileReaderService returns invalid data") {
-                    
+            context("when fileManager successfully gets document directory") {
+
+                it("passed reads data from correct url") {
+                    _ = noteRepository.get(noteId: "noteId")
+                    expect(fileReaderFake.fileURLPassedInDataFromFileURLMethod?.absoluteString).to(equal("Documents/noteId.qvnote"))
                 }
 
-                context("when fileReaderService returns valid data") {
+                context("when fileReader fails to read a file") {
 
+                    let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
+
+                    beforeEach {
+                        fileReaderFake.errorToThrowInDataFromMethod = thrownError
+                    }
+
+                    it("returns result with error") {
+                        let error = noteRepository.get(noteId: "noteId").error
+                        let underlyingError = (error!.error) as NSError
+                        expect(underlyingError).to(equal(thrownError))
+                    }
+                }
+
+                context("when fileReader successfully reads a file") {
+
+                    let encodedNote = Note.noteFixture()
+
+                    beforeEach {
+                        let encoder = JSONEncoder()
+                        let data = try! encoder.encode(encodedNote)
+                        fileReaderFake.dataToBeReturnedFromDataFromFileURLMethod = data
+                    }
+
+                    it("returns decoded note") {
+                        let note = noteRepository.get(noteId: "noteId").value
+                        expect(note).to(equal(encodedNote))
+                    }
                 }
             }
         }
@@ -208,12 +234,12 @@ class FileManagerFake: FileManager {
 class FileReaderServiceFake: FileReaderService {
     var fileURLPassedInDataFromFileURLMethod: URL?
     var dataToBeReturnedFromDataFromFileURLMethod: Data?
-    var dataFromFileURLMethodThrowsError = false
+    var errorToThrowInDataFromMethod: NSError?
 
     func dataFrom(fileURL: URL) throws -> Data {
         fileURLPassedInDataFromFileURLMethod = fileURL
-        if dataFromFileURLMethodThrowsError {
-            throw NSError(domain: "", code: 0, userInfo: nil)
+        if let errorToThrowInDataFromMethod = errorToThrowInDataFromMethod {
+            throw errorToThrowInDataFromMethod
         }
         return dataToBeReturnedFromDataFromFileURLMethod ?? Data()
     }
