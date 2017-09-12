@@ -65,8 +65,7 @@ class FileNoteRepository: NoteRepository {
 
     private func noteFromFile(withNoteUUID noteUUID: String) throws -> Note  {
         let noteFileURL = try getNoteURLFromNoteId(noteId: noteUUID)
-        let noteData = try self.fileReader.dataFrom(fileURL: noteFileURL)
-        return try decoder.decode(Note.self, from: noteData)
+        return try noteFromFile(fileURL: noteFileURL)
     }
 
     private func getNoteURLFromNoteId(noteId: String) throws -> URL {
