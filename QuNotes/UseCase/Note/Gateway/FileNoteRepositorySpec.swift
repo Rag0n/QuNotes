@@ -114,15 +114,14 @@ class FileNoteRepositorySpec: QuickSpec {
                 }
 
                 it("returns result with failedToFindDocumentDirectory error") {
-                    let error = noteRepository.delete(note: note).error
+                    let error = noteRepository.get(noteId: "noteId").error
                     let underlyingError = (error!.error) as? FileNoteRepositoryError
                     expect(underlyingError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
             }
 
             context("when fileManager successfully gets document directory") {
-
-                it("passed reads data from correct url") {
+                it("reads data from correct url") {
                     _ = noteRepository.get(noteId: "noteId")
                     expect(fileReaderFake.fileURLPassedInDataFromFileURLMethod?.absoluteString).to(equal("Documents/noteId.qvnote"))
                 }
@@ -168,7 +167,7 @@ class FileNoteRepositorySpec: QuickSpec {
                 }
 
                 it("returns result with failedToFindDocumentDirectory error") {
-                    let error = noteRepository.delete(note: note).error
+                    let error = noteRepository.save(note: note).error
                     let underlyingError = (error!.error) as? FileNoteRepositoryError
                     expect(underlyingError).to(equal(FileNoteRepositoryError.failedToFindDocumentDirectory))
                 }
