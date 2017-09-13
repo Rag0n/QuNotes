@@ -98,11 +98,10 @@ class NoteViewController: UIViewController {
         tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
-        tagView.tintColor = .green
-        tagView.textColor = .black
-        tagView.fieldTextColor = .blue
-        tagView.selectedColor = .black
-        tagView.selectedTextColor = .red
+        // TODO: Replace this setup by UIAppearence
+        let theme = DefaultTheme()
+        tagView.selectedColor = theme.ligherDarkColor
+        tagView.selectedTextColor = theme.textColor
         subscribeOnChangeTagEvents()
 
         stackView!.addArrangedSubview(tagView)
