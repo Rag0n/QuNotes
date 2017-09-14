@@ -39,7 +39,7 @@ class NotebookViewController: UIViewController {
     // MARK: - Private
 
     private func setupTableView() {
-        tableView!.register(UITableViewCell.self, forCellReuseIdentifier: Constants.noteCellReuseIdentifier)
+        NoteTableViewCell.registerFor(tableView: tableView!, reuseIdentifier: Constants.noteCellReuseIdentifier)
         tableView!.estimatedRowHeight = 0
     }
 
@@ -75,9 +75,8 @@ extension NotebookViewController: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath)
-        cell.textLabel?.text = viewModel?.notes[indexPath.row]
-
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
+        cell.set(title: viewModel?.notes[indexPath.row] ?? "")
         return cell
     }
 }
