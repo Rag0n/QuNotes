@@ -19,5 +19,15 @@ struct ThemeManager {
         navigationBar.tintColor = theme.mainColor
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: theme.textColor]
         navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: theme.textColor]
+
+        let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [NotebookViewController.self])
+        notebookTableView.backgroundColor = theme.ligherDarkColor
+        notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
+
+        let noteTableViewCellLabel = UILabel.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self])
+        noteTableViewCellLabel.textColor = theme.textColor
+        noteTableViewCellLabel.backgroundColor = theme.ligherDarkColor
+        noteTableViewCellLabel.highlightedTextColor = theme.darkColor
+        UIView.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self]).backgroundColor = theme.ligherDarkColor
     }
 }
