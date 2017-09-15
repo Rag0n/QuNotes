@@ -10,7 +10,7 @@ import UIKit
 
 struct ThemeManager {
     static func applyThemeForWindow(window: UIWindow) {
-        let theme = DefaultTheme()
+        let theme = ThemeManager.defaultTheme()
         window.tintColor = theme.mainColor
 
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: theme.textColor]
@@ -29,5 +29,9 @@ struct ThemeManager {
         noteTableViewCellLabel.backgroundColor = theme.ligherDarkColor
         noteTableViewCellLabel.highlightedTextColor = theme.darkColor
         UIView.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self]).backgroundColor = theme.ligherDarkColor
+    }
+
+    static func defaultTheme() -> DefaultTheme {
+        return DefaultTheme()
     }
 }

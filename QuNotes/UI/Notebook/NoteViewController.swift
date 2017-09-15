@@ -99,7 +99,7 @@ class NoteViewController: UIViewController {
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
         // TODO: Replace this setup by UIAppearence
-        let theme = DefaultTheme()
+        let theme = ThemeManager.defaultTheme()
         tagView.selectedColor = theme.ligherDarkColor
         tagView.selectedTextColor = theme.textColor
         subscribeOnChangeTagEvents()
