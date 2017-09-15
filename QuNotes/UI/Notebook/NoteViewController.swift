@@ -38,7 +38,6 @@ class NoteViewController: UIViewController {
         super.viewDidLoad()
         setupTagView()
         setupEditorTextView()
-        setupTitleTextField()
         setupNavigationBar()
         if let viewModel = self.viewModel {
             render(withViewModel: viewModel)
@@ -79,8 +78,21 @@ class NoteViewController: UIViewController {
     private var viewModel: NoteViewModel?
     private var editor: Notepad?
     private var tagView: WSTagsField?
-    @IBOutlet private var stackView: UIStackView?
-    @IBOutlet private var titleTextField: UITextField?
+    @IBOutlet private var stackView: UIStackView! {
+        didSet {
+            stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        }
+    }
+    @IBOutlet private var titleTextField: UITextField! {
+        didSet {
+            let theme = ThemeManager.defaultTheme()
+            titleTextField.backgroundColor = theme.ligherDarkColor
+            titleTextField.textColor = theme.textColor
+            titleTextField.addTarget(self,
+                                     action: #selector(NoteViewController.onTitleTextFieldChange),
+                                     for: .editingChanged)
+        }
+    }
 
     private var dirty = false
 
@@ -95,6 +107,7 @@ class NoteViewController: UIViewController {
     private func setupTagView() {
         let tagView = WSTagsField()
         tagView.backgroundColor = .white
+        tagView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
         tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
@@ -104,7 +117,7 @@ class NoteViewController: UIViewController {
         tagView.selectedTextColor = theme.textColor
         subscribeOnChangeTagEvents()
 
-        stackView!.addArrangedSubview(tagView)
+        stackView.addArrangedSubview(tagView)
         self.tagView = tagView
     }
 
@@ -131,12 +144,6 @@ class NoteViewController: UIViewController {
         editor = Notepad(frame: view.bounds, themeFile: Constants.themeName)
         editor!.delegate = self;
         stackView!.addArrangedSubview(editor!)
-    }
-
-    private func setupTitleTextField() {
-        titleTextField!.addTarget(self,
-                                  action: #selector(NoteViewController.onTitleTextFieldChange),
-                                  for: .editingChanged)
     }
 
     private func setupNavigationBar() {
