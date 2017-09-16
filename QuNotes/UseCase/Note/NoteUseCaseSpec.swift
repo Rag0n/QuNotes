@@ -13,11 +13,11 @@ class NoteUseCaseSpec: QuickSpec {
     override func spec() {
 
         var useCase: NoteUseCase!
-        var currentDateServiceStub: CurrentDateServiceFake!
+        var currentDateServiceStub: CurrentDateServiceStub!
         var noteRepositoryStub: NoteRepositoryFake!
 
         beforeEach {
-            currentDateServiceStub = CurrentDateServiceFake()
+            currentDateServiceStub = CurrentDateServiceStub()
             noteRepositoryStub = NoteRepositoryFake()
             useCase = NoteUseCase(withNoteReposiroty: noteRepositoryStub, currentDateService: currentDateServiceStub)
         }
@@ -39,7 +39,7 @@ class NoteUseCaseSpec: QuickSpec {
                 var notesFromRepository: [Note]!
 
                 beforeEach() {
-                    notesFromRepository = [Note.noteFixture(), Note.noteFixture()]
+                    notesFromRepository = [Note.noteDummy(), Note.noteDummy()]
                     noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .success(notesFromRepository)
                 }
 
@@ -99,7 +99,7 @@ class NoteUseCaseSpec: QuickSpec {
             var note: Note!
 
             beforeEach {
-                note = Note.noteFixture()
+                note = Note.noteDummy()
                 currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
@@ -139,7 +139,7 @@ class NoteUseCaseSpec: QuickSpec {
             var note: Note!
 
             beforeEach {
-                note = Note.noteFixture()
+                note = Note.noteDummy()
                 currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
@@ -176,7 +176,7 @@ class NoteUseCaseSpec: QuickSpec {
 
         describe("-delete") {
 
-            let note = Note.noteFixture()
+            let note = Note.noteDummy()
 
             it("calls delete method of repository with passed note") {
                 _ = useCase.delete(note)
@@ -214,7 +214,7 @@ class NoteUseCaseSpec: QuickSpec {
             var note: Note!
 
             beforeEach {
-                note = Note.noteFixture()
+                note = Note.noteDummy()
                 currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
@@ -239,7 +239,7 @@ class NoteUseCaseSpec: QuickSpec {
                 context("when note already has some tags") {
 
                     beforeEach {
-                        note = Note.noteFixtureWithTags(["tag fixture"])
+                        note = Note.noteDummyWithTags(["tag fixture"])
                     }
 
                     it("returns updated note with appended tag") {
@@ -268,7 +268,7 @@ class NoteUseCaseSpec: QuickSpec {
             var note: Note!
 
             beforeEach {
-                note = Note.noteFixture()
+                note = Note.noteDummy()
                 currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
@@ -288,7 +288,7 @@ class NoteUseCaseSpec: QuickSpec {
                 context("when note has this tag") {
 
                     beforeEach {
-                        note = Note.noteFixtureWithTags(["tag fixture", "another tag fixture"])
+                        note = Note.noteDummyWithTags(["tag fixture", "another tag fixture"])
                     }
 
                     it("returns note with removed tag and new updatedDate") {
@@ -316,12 +316,8 @@ class NoteUseCaseSpec: QuickSpec {
 
 // MARK: - CurrentDateServiceFake
 
-class CurrentDateServiceFake: CurrentDateService {
-    var currentDateStub: Date
-
-    init() {
-        self.currentDateStub = Date(timeIntervalSince1970: 10)
-    }
+class CurrentDateServiceStub: CurrentDateService {
+    var currentDateStub = Date(timeIntervalSince1970: 10)
 
     func currentDate() -> Date {
         return currentDateStub
