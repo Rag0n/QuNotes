@@ -32,7 +32,9 @@ class AppCoordinator: Coordinator {
 
     private lazy var dependency: AppDependency = {
         let fileReaderService = FileReaderServiceImp()
-        let fileNoteRepository = FileNoteRepository(withFileManager: FileManager.default, fileReader: fileReaderService)
+        let fileNoteRepository = FileNoteRepository()
+        fileNoteRepository.fileManager = FileManager.default
+        fileNoteRepository.fileReader = fileReaderService
         let currentDateService = CurrentDateServiceImp()
         let noteUseCase = NoteUseCase(withNoteReposiroty: fileNoteRepository, currentDateService: currentDateService)
 

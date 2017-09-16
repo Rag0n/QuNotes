@@ -15,18 +15,10 @@ enum FileNoteRepositoryError: Error {
 }
 
 class FileNoteRepository: NoteRepository {
-    private lazy var encoder = JSONEncoder()
-    private lazy var decoder = JSONDecoder()
-    private var fileManager: FileManager
-    private var fileReader: FileReaderService
-
-    init(withFileManager fileManager: FileManager, fileReader: FileReaderService) {
-        self.fileManager = fileManager
-        self.fileReader = fileReader
-        encoder.outputFormatting = .prettyPrinted
-    }
-
     // MARK: - API
+
+    var fileManager: FileManager!
+    var fileReader: FileReaderService!
 
     func getAll() -> Result<[Note], AnyError> {
         return Result(try mapNoteFilesToNotes())
@@ -45,6 +37,13 @@ class FileNoteRepository: NoteRepository {
     }
 
     // MARK: - Private
+
+    private lazy var encoder: JSONEncoder = {
+        let enc = JSONEncoder()
+        enc.outputFormatting = .prettyPrinted
+        return enc
+    }()
+    private lazy var decoder = JSONDecoder()
 
     private func mapNoteFilesToNotes() throws -> [Note] {
         return try noteFiles().map(noteFromFile)
