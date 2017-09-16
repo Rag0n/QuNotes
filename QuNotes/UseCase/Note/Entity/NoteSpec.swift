@@ -33,11 +33,19 @@ class NoteSpec: QuickSpec {
 }
 
 extension Note {
-    static func noteDummy() -> Note {
-        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString, tags: [])
+    static func noteDummy(withUUID uuid: String, tags: [String]) -> Note {
+        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: uuid, tags: tags)
+    }
+
+    static func noteDummy(withUUID uuid: String) -> Note {
+        return Note.noteDummy(withUUID: uuid, tags: [])
     }
 
     static func noteDummyWithTags(_ tags: [String]) -> Note {
-        return Note(createdDate: 0, updatedDate: 0, content: "content", title: "title", uuid: UUID.init().uuidString, tags: tags)
+        return Note.noteDummy(withUUID: UUID.init().uuidString, tags: tags)
+    }
+
+    static func noteDummy() -> Note {
+        return Note.noteDummy(withUUID: UUID.init().uuidString, tags: [])
     }
 }
