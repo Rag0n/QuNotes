@@ -36,7 +36,9 @@ class AppCoordinator: Coordinator {
         fileNoteRepository.fileManager = FileManager.default
         fileNoteRepository.fileReader = fileReaderService
         let currentDateService = CurrentDateServiceImp()
-        let noteUseCase = NoteUseCase(withNoteReposiroty: fileNoteRepository, currentDateService: currentDateService)
+        let noteUseCase = NoteUseCase()
+        noteUseCase.repository = fileNoteRepository
+        noteUseCase.dateService = currentDateService
 
         return AppDependency(noteUseCase: noteUseCase)
     }()

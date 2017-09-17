@@ -19,7 +19,9 @@ class NoteUseCaseSpec: QuickSpec {
         beforeEach {
             currentDateServiceStub = CurrentDateServiceStub()
             noteRepositoryStub = NoteRepositoryFake()
-            useCase = NoteUseCase(withNoteReposiroty: noteRepositoryStub, currentDateService: currentDateServiceStub)
+            useCase = NoteUseCase()
+            useCase.repository = noteRepositoryStub
+            useCase.dateService = currentDateServiceStub
         }
 
         describe("-getAll") {
