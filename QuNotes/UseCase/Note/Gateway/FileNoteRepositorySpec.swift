@@ -27,7 +27,7 @@ class FileNoteRepositorySpec: QuickSpec {
             context("when fileManager is unable to get document directory") {
 
                 beforeEach {
-                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                    noteRepository.fileManager = EmptyURLsFileManagerStub()
                 }
 
                 it("returns result with failedToFindDocumentDirectory error") {
@@ -101,7 +101,7 @@ class FileNoteRepositorySpec: QuickSpec {
             context("when fileManager is unable to get document directory") {
 
                 beforeEach {
-                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                    noteRepository.fileManager = EmptyURLsFileManagerStub()
                 }
 
                 it("returns result with failedToFindDocumentDirectory error") {
@@ -308,6 +308,11 @@ class FileManagerFake: FileManager {
     }
 }
 
+class EmptyURLsFileManagerStub: FileManager {
+    override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+        return []
+    }
+}
 // MARK: - FileReaderSpy
 
 class FileReaderSpy: FileReaderService {
