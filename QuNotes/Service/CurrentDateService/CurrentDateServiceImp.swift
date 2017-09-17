@@ -9,7 +9,7 @@
 import Foundation
 
 struct CurrentDateServiceImp: CurrentDateService {
-    func currentDate() -> Date {
+    func date() -> Date {
         return Date()
     }
 }

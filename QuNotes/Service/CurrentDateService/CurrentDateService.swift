@@ -9,5 +9,5 @@
 import Foundation
 
 protocol CurrentDateService {
-    func currentDate() -> Date
+    func date() -> Date
 }

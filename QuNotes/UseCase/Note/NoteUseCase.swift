@@ -14,7 +14,7 @@ class NoteUseCase {
     // MARK: - API
 
     var repository: NoteRepository!
-    var dateService: CurrentDateService!
+    var currentDateService: CurrentDateService!
 
     func add(withTitle title: String) -> Result<Note, AnyError> {
         return repository.save <| newNoteWithTitle <| title
@@ -49,7 +49,7 @@ class NoteUseCase {
     // MARK - Private
 
     private func newNoteWithTitle(title: String) -> Note {
-        let currentTimestamp = dateService.currentDate().timeIntervalSince1970
+        let currentTimestamp = currentDateService.date().timeIntervalSince1970
         return Note(createdDate: currentTimestamp,
                     updatedDate: currentTimestamp,
                     content: "",
@@ -61,7 +61,7 @@ class NoteUseCase {
     private func updatedNote(withNewTitle newTitle: String? = nil, withNewContent newContent: String? = nil, withNewTags newTags: [String]? = nil) -> (Note) -> Note {
         return { note in
             return Note(createdDate: note.createdDate,
-                        updatedDate: self.dateService.currentDate().timeIntervalSince1970,
+                        updatedDate: self.currentDateService.date().timeIntervalSince1970,
                         content: newContent ?? note.content,
                         title: newTitle ?? note.title,
                         uuid: note.uuid,

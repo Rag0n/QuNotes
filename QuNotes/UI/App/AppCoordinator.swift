@@ -38,7 +38,7 @@ class AppCoordinator: Coordinator {
         let currentDateService = CurrentDateServiceImp()
         let noteUseCase = NoteUseCase()
         noteUseCase.repository = fileNoteRepository
-        noteUseCase.dateService = currentDateService
+        noteUseCase.currentDateService = currentDateService
 
         return AppDependency(noteUseCase: noteUseCase)
     }()
