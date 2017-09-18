@@ -9,29 +9,43 @@
 import UIKit
 
 struct ThemeManager {
-    static func applyThemeForWindow(window: UIWindow) {
-        let theme = ThemeManager.defaultTheme()
-        window.tintColor = theme.mainColor
+    // MARK: - API
 
+    static func applyThemeForWindow(window: UIWindow) {
+        window.tintColor = theme.mainColor
+        applyThemeForNavigationBar()
+        applyThemeForNotebookView()
+        applyThemeForNoteCellView()
+    }
+
+    static func defaultTheme() -> DefaultTheme {
+        return DefaultTheme()
+    }
+
+    // MARK: - Private
+
+    private static let theme = ThemeManager.defaultTheme()
+
+    private static func applyThemeForNavigationBar() {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: theme.textColor]
         let navigationBar = UINavigationBar.appearance()
         navigationBar.barTintColor = theme.darkColor
         navigationBar.tintColor = theme.mainColor
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: theme.textColor]
         navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: theme.textColor]
+    }
 
+    private static func applyThemeForNotebookView() {
         let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [NotebookViewController.self])
         notebookTableView.backgroundColor = theme.ligherDarkColor
         notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
+    }
 
+    private static func applyThemeForNoteCellView() {
         let noteTableViewCellLabel = UILabel.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self])
         noteTableViewCellLabel.textColor = theme.textColor
         noteTableViewCellLabel.backgroundColor = theme.ligherDarkColor
         noteTableViewCellLabel.highlightedTextColor = theme.darkColor
         UIView.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self]).backgroundColor = theme.ligherDarkColor
-    }
-
-    static func defaultTheme() -> DefaultTheme {
-        return DefaultTheme()
     }
 }
