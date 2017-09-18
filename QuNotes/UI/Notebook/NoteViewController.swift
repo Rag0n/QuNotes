@@ -88,6 +88,10 @@ class NoteViewController: UIViewController {
             let theme = ThemeManager.defaultTheme()
             titleTextField.backgroundColor = theme.ligherDarkColor
             titleTextField.textColor = theme.textColor
+            let attributes = [
+                NSAttributedStringKey.foregroundColor: theme.textColor
+            ]
+            titleTextField.attributedPlaceholder = NSAttributedString(string: titleTextField.placeholder!, attributes: attributes)
             titleTextField.addTarget(self,
                                      action: #selector(NoteViewController.onTitleTextFieldChange),
                                      for: .editingChanged)
