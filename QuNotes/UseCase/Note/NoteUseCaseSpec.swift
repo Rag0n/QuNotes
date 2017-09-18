@@ -21,7 +21,7 @@ class NoteUseCaseSpec: QuickSpec {
             noteRepositoryStub = NoteRepositoryFake()
             useCase = NoteUseCase()
             useCase.repository = noteRepositoryStub
-            useCase.dateService = currentDateServiceStub
+            useCase.currentDateService = currentDateServiceStub
         }
 
         describe("-getAll") {
@@ -58,18 +58,14 @@ class NoteUseCaseSpec: QuickSpec {
                     noteRepositoryStub.returnNotePassedInSaveMethod = true
                 }
 
-                context("when currentDateService returns timestamp with value 15") {
-
-                    beforeEach {
-                        currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 15)
-                    }
+                context("when currentDateService returns timestamp with value 20") {
 
                     it("returns note with passed title, empty content, correct created and updated dates") {
                         let note = useCase.add(withTitle: "note title").value
                         expect(note?.title).to(equal("note title"))
                         expect(note?.content).to(beEmpty())
-                        expect(note?.createdDate).to(beCloseTo(15))
-                        expect(note?.updatedDate).to(beCloseTo(15))
+                        expect(note?.createdDate).to(beCloseTo(currentDateServiceStub.stubbedTimestamp))
+                        expect(note?.updatedDate).to(beCloseTo(currentDateServiceStub.stubbedTimestamp))
                     }
 
                     it("returns note with uniq uuid") {
@@ -102,12 +98,11 @@ class NoteUseCaseSpec: QuickSpec {
 
             beforeEach {
                 note = Note.noteDummy()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
             it("calls save method of repository with note with updated date and content") {
                 _ = useCase.update(note, newContent: "new note fixture");
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: 20, withNewContent: "new note fixture"))
+                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewContent: "new note fixture"))
             }
 
             context("when save method succedes") {
@@ -118,7 +113,7 @@ class NoteUseCaseSpec: QuickSpec {
 
                 it("returns result with updated note") {
                     let updatedNote = useCase.update(note, newContent: "new note fixture").value
-                    expect(updatedNote).to(equal(note: note, withNewUpdatedDate: 20, withNewContent: "new note fixture"))
+                    expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewContent: "new note fixture"))
                 }
             }
 
@@ -142,12 +137,11 @@ class NoteUseCaseSpec: QuickSpec {
 
             beforeEach {
                 note = Note.noteDummy()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
             it("calls save method of repository with note with updated date and title") {
                 _ = useCase.update(note, newTitle: "new note title fixture")
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: 20, withNewTitle: "new note title fixture"))
+                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTitle: "new note title fixture"))
             }
 
             context("when save method succedes") {
@@ -158,7 +152,7 @@ class NoteUseCaseSpec: QuickSpec {
 
                 it("returns result with updated note") {
                     let updatedNote = useCase.update(note, newTitle: "new note title fixture").value
-                    expect(updatedNote).to(equal(note: note, withNewUpdatedDate: 20, withNewTitle: "new note title fixture"))
+                    expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTitle: "new note title fixture"))
                 }
             }
 
@@ -217,12 +211,11 @@ class NoteUseCaseSpec: QuickSpec {
 
             beforeEach {
                 note = Note.noteDummy()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
             it("calls save method of repository with note with updated date and tags") {
                 _ = useCase.addTag(tag: "tag fixture", toNote: note)
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: 20, withNewTags: ["tag fixture"]))
+                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTags: ["tag fixture"]))
             }
 
             context("when save method succedes") {
@@ -234,7 +227,7 @@ class NoteUseCaseSpec: QuickSpec {
                 context("when note doesnt have any tags") {
                     it("returns result with note with new tag") {
                         let updatedNote = useCase.addTag(tag: "tag fixture", toNote: note).value
-                        expect(updatedNote).to(equal(note: note, withNewUpdatedDate: 20, withNewTags: ["tag fixture"]))
+                        expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTags: ["tag fixture"]))
                     }
                 }
 
@@ -246,7 +239,7 @@ class NoteUseCaseSpec: QuickSpec {
 
                     it("returns updated note with appended tag") {
                         let updatedNote = useCase.addTag(tag: "another tag fixture", toNote: note).value
-                        expect(updatedNote).to(equal(note: note, withNewUpdatedDate: 20, withNewTags: ["tag fixture", "another tag fixture"]))
+                        expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTags: ["tag fixture", "another tag fixture"]))
                     }
                 }
             }
@@ -271,7 +264,6 @@ class NoteUseCaseSpec: QuickSpec {
 
             beforeEach {
                 note = Note.noteDummy()
-                currentDateServiceStub.currentDateStub = Date(timeIntervalSince1970: 20)
             }
 
             context("when save method succedes") {
@@ -295,7 +287,7 @@ class NoteUseCaseSpec: QuickSpec {
 
                     it("returns note with removed tag and new updatedDate") {
                         let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: note).value
-                        expect(updatedNote).to(equal(note: note, withNewUpdatedDate: 20, withNewTags: ["another tag fixture"]))
+                        expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTags: ["another tag fixture"]))
                     }
                 }
             }
@@ -319,10 +311,10 @@ class NoteUseCaseSpec: QuickSpec {
 // MARK: - CurrentDateServiceFake
 
 class CurrentDateServiceStub: CurrentDateService {
-    var currentDateStub = Date(timeIntervalSince1970: 10)
+    private(set) var stubbedTimestamp: Double = 20
 
-    func currentDate() -> Date {
-        return currentDateStub
+    func date() -> Date {
+        return Date(timeIntervalSince1970: stubbedTimestamp)
     }
 }
 
