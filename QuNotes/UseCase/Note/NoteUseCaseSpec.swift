@@ -81,11 +81,10 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-update:newContent:") {
-            var note: Note!
+            let note = Note.noteDummy()
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
-                note = Note.noteDummy()
                 savingRepositorySpy = SuccessfullySavingNoteRepositorySpy()
                 useCase.repository = savingRepositorySpy
             }
@@ -116,11 +115,10 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-update:newTitle:") {
-            var note: Note!
+            let note = Note.noteDummy()
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
-                note = Note.noteDummy()
                 savingRepositorySpy = SuccessfullySavingNoteRepositorySpy()
                 useCase.repository = savingRepositorySpy
             }
@@ -185,11 +183,10 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-addTag:toNote:") {
-            var note: Note!
+            let note = Note.noteDummy()
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
-                note = Note.noteDummy()
                 savingRepositorySpy = SuccessfullySavingNoteRepositorySpy()
                 useCase.repository = savingRepositorySpy
             }
@@ -208,9 +205,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 context("when note already has some tags") {
-                    beforeEach {
-                        note = Note.noteDummyWithTags(["tag fixture"])
-                    }
+                    let note = Note.noteDummyWithTags(["tag fixture"])
 
                     it("returns updated note with appended tag") {
                         let updatedNote = useCase.addTag(tag: "another tag fixture", toNote: note).value
@@ -233,11 +228,7 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-removeTag:fromNote:") {
-            var note: Note!
-
-            beforeEach {
-                note = Note.noteDummy()
-            }
+            let note = Note.noteDummy()
 
             context("when save method succedes") {
                 beforeEach {
@@ -252,9 +243,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 context("when note has this tag") {
-                    beforeEach {
-                        note = Note.noteDummyWithTags(["tag fixture", "another tag fixture"])
-                    }
+                    let note = Note.noteDummyWithTags(["tag fixture", "another tag fixture"])
 
                     it("returns note with removed tag and new updatedDate") {
                         let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: note).value
