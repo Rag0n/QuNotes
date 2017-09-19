@@ -12,7 +12,6 @@ import Result
 
 class NotebookSpec: QuickSpec {
     override func spec() {
-
         var notebook: Notebook!
 
         beforeEach {
@@ -63,7 +62,6 @@ class NotebookSpec: QuickSpec {
             }
 
             context("when 1 note is added") {
-
                 let addedNote = "note fixture"
 
                 beforeEach {

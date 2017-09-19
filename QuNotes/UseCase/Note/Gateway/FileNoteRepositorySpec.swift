@@ -25,7 +25,6 @@ class FileNoteRepositorySpec: QuickSpec {
 
         describe("-getAll") {
             context("when fileManager is unable to get document directory") {
-
                 beforeEach {
                     noteRepository.fileManager = EmptyURLsFileManagerStub()
                 }
@@ -99,7 +98,6 @@ class FileNoteRepositorySpec: QuickSpec {
 
         describe("-get:noteId") {
             context("when fileManager is unable to get document directory") {
-
                 beforeEach {
                     noteRepository.fileManager = EmptyURLsFileManagerStub()
                 }
@@ -155,7 +153,6 @@ class FileNoteRepositorySpec: QuickSpec {
             let note = Note.noteDummy(withUUID: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57", tags: ["tag fixture", "another tag fixture"])
 
             context("when fileManager is unable to get document directory") {
-
                 beforeEach {
                     fileManagerFake.urlsToReturnFromUrlsMethod = []
                 }
@@ -194,7 +191,6 @@ class FileNoteRepositorySpec: QuickSpec {
                 }
 
                 context("when fileManager fails to create file") {
-
                     beforeEach {
                         fileManagerFake.createFileMethodFails = true
                     }
@@ -219,7 +215,6 @@ class FileNoteRepositorySpec: QuickSpec {
             let note = Note.noteDummy(withUUID: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57")
             
             context("when fileManager is unable to get document directory") {
-
                 beforeEach {
                     fileManagerFake.urlsToReturnFromUrlsMethod = []
                 }

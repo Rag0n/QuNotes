@@ -9,7 +9,6 @@ import Result
 
 class NoteSpec: QuickSpec {
     override func spec() {
-
         var note: Note!
 
         beforeEach {

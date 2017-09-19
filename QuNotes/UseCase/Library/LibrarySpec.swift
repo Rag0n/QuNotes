@@ -9,7 +9,6 @@ import Result
 
 class LibrarySpec: QuickSpec {
     override func spec() {
-
         var library: Library!
 
         beforeEach {
@@ -35,7 +34,6 @@ class LibrarySpec: QuickSpec {
         }
 
         describe("-removeNotebook") {
-
             var notebookToRemove: Notebook!
 
             beforeEach {
@@ -43,7 +41,6 @@ class LibrarySpec: QuickSpec {
             }
 
             context("when requested notebook is not added") {
-
                 beforeEach {
                     library.addNotebook(Notebook())
                 }
@@ -56,7 +53,6 @@ class LibrarySpec: QuickSpec {
             }
 
             context("when requested notebook is added") {
-
                 beforeEach {
                     library.addNotebook(Notebook())
                     library.addNotebook(notebookToRemove)

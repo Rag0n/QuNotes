@@ -11,7 +11,6 @@ import Result
 
 class NoteUseCaseSpec: QuickSpec {
     override func spec() {
-
         var useCase: NoteUseCase!
         var currentDateServiceStub: CurrentDateServiceStub!
 
@@ -23,7 +22,6 @@ class NoteUseCaseSpec: QuickSpec {
 
         describe("-getAll") {
             context("when repository returns error") {
-
                 beforeEach {
                     useCase.repository = FailingToGetNoteRepositoryStub()
                 }
@@ -34,7 +32,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when repository returns array of notes") {
-
                 beforeEach() {
                     useCase.repository = ReturningArrayOfNotesNoteRepositoryStub()
                 }
@@ -47,13 +44,11 @@ class NoteUseCaseSpec: QuickSpec {
 
         describe("-add:") {
             context("when save method succedes") {
-
                 beforeEach {
                     useCase.repository = SuccessfullySavingNoteRepositorySpy()
                 }
 
                 context("when currentDateService returns timestamp with value 20") {
-
                     it("returns note with passed title, empty content, correct created and updated dates") {
                         let note = useCase.add(withTitle: "note title").value
                         expect(note?.title).to(equal("note title"))
@@ -73,7 +68,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when save method fails") {
-
                 beforeEach {
                     useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
@@ -87,7 +81,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-update:newContent:") {
-
             var note: Note!
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
@@ -110,7 +103,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when save method fails") {
-
                 beforeEach {
                     useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
@@ -124,7 +116,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-update:newTitle:") {
-
             var note: Note!
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
@@ -147,7 +138,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when save method fails") {
-
                 beforeEach {
                     useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
@@ -161,7 +151,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-delete") {
-
             let note = Note.noteDummy()
             var deletingRepositorySpy: SuccessfullyDeletingNoteRepositorySpy!
 
@@ -183,7 +172,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when repository failes to delete note") {
-
                 beforeEach() {
                     useCase.repository = FailingToDeleteNoteRepositoryStub()
                 }
@@ -197,7 +185,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-addTag:toNote:") {
-
             var note: Note!
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
@@ -221,7 +208,6 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 context("when note already has some tags") {
-
                     beforeEach {
                         note = Note.noteDummyWithTags(["tag fixture"])
                     }
@@ -234,7 +220,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when save method fails") {
-
                 beforeEach {
                     useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
@@ -248,7 +233,6 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-removeTag:fromNote:") {
-
             var note: Note!
 
             beforeEach {
@@ -256,7 +240,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when save method succedes") {
-
                 beforeEach {
                     useCase.repository = SuccessfullySavingNoteRepositorySpy()
                 }
@@ -269,7 +252,6 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 context("when note has this tag") {
-
                     beforeEach {
                         note = Note.noteDummyWithTags(["tag fixture", "another tag fixture"])
                     }
@@ -282,7 +264,6 @@ class NoteUseCaseSpec: QuickSpec {
             }
 
             context("when save method fails") {
-
                 beforeEach {
                     useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
