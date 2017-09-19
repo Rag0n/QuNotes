@@ -14,13 +14,10 @@ class NoteUseCaseSpec: QuickSpec {
 
         var useCase: NoteUseCase!
         var currentDateServiceStub: CurrentDateServiceStub!
-        var noteRepositoryStub: NoteRepositoryFake!
 
         beforeEach {
             currentDateServiceStub = CurrentDateServiceStub()
-            noteRepositoryStub = NoteRepositoryFake()
             useCase = NoteUseCase()
-            useCase.repository = noteRepositoryStub
             useCase.currentDateService = currentDateServiceStub
         }
 
@@ -310,7 +307,7 @@ class CurrentDateServiceStub: CurrentDateService {
     }
 }
 
-// MARK: - ReturningErrorNoteRepositoryStub
+// MARK: - Note repository stubs & spys
 
 class ReturningErrorNoteRepositoryStub: NoteRepository {
     static let anyError = AnyError(error)
@@ -360,41 +357,6 @@ class ReturningArrayOfNotesNoteRepositoryStub: ReturningErrorNoteRepositoryStub 
 
     override func getAll() -> Result<[Note], AnyError> {
         return .success(ReturningArrayOfNotesNoteRepositoryStub.notes)
-    }
-}
-
-// MARK: - NoteRepositoryFake
-
-class NoteRepositoryFake: NoteRepository {
-    var resultToBeReturnedFromGetAllMethod: Result<[Note], AnyError>?
-    var resultToBeReturnedFromGetMethod: Result<Note, AnyError>?
-    var saveMethodError: AnyError?
-    var returnNotePassedInSaveMethod = false
-    var deleteMethodEror: AnyError?
-    var returnNotePassedInDeleteMethod = false
-    private(set) var notePassedInSaveMethod: Note?
-    private(set) var notePassedInDeleteMethod: Note?
-
-    func getAll() -> Result<[Note], AnyError> {
-        return resultToBeReturnedFromGetAllMethod ?? .failure(defaultError())
-    }
-
-    func get(noteId: String) -> Result<Note, AnyError> {
-        return resultToBeReturnedFromGetMethod ?? .failure(defaultError())
-    }
-
-    func save(note: Note) -> Result<Note, AnyError> {
-        notePassedInSaveMethod = note
-        return returnNotePassedInSaveMethod ? .success(note) : .failure((saveMethodError ?? defaultError()))
-    }
-
-    func delete(note: Note) -> Result<Note, AnyError> {
-        notePassedInDeleteMethod = note
-        return returnNotePassedInDeleteMethod ? .success(note) : .failure((deleteMethodEror ?? defaultError()))
-    }
-
-    private func defaultError() -> AnyError {
-        return AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
     }
 }
 
