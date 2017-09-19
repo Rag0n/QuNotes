@@ -28,7 +28,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when repository returns error") {
 
                 beforeEach {
-                    noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    useCase.repository = FailingToGetNoteRepositoryStub()
                 }
 
                 it("returns empty array") {
@@ -38,15 +38,12 @@ class NoteUseCaseSpec: QuickSpec {
 
             context("when repository returns array of notes") {
 
-                var notesFromRepository: [Note]!
-
                 beforeEach() {
-                    notesFromRepository = [Note.noteDummy(), Note.noteDummy()]
-                    noteRepositoryStub.resultToBeReturnedFromGetAllMethod = .success(notesFromRepository)
+                    useCase.repository = ReturningArrayOfNotesNoteRepositoryStub()
                 }
 
                 it("returns notes from repository") {
-                    expect(useCase.getAll()).to(equal(notesFromRepository))
+                    expect(useCase.getAll()).to(equal(ReturningArrayOfNotesNoteRepositoryStub.notes))
                 }
             }
         }
@@ -55,7 +52,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method succedes") {
 
                 beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
+                    useCase.repository = SuccessfullySavingNoteRepositorySpy()
                 }
 
                 context("when currentDateService returns timestamp with value 20") {
@@ -81,13 +78,13 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
+                    useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
 
                 it("return result with save error") {
                     let error = useCase.add(withTitle: "note title").error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(FailingToSaveNoteRepositoryStub.error))
                 }
             }
         }
@@ -95,22 +92,20 @@ class NoteUseCaseSpec: QuickSpec {
         describe("-update:newContent:") {
 
             var note: Note!
+            var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
                 note = Note.noteDummy()
+                savingRepositorySpy = SuccessfullySavingNoteRepositorySpy()
+                useCase.repository = savingRepositorySpy
             }
 
             it("calls save method of repository with note with updated date and content") {
                 _ = useCase.update(note, newContent: "new note fixture");
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewContent: "new note fixture"))
+                expect(savingRepositorySpy.passedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewContent: "new note fixture"))
             }
 
             context("when save method succedes") {
-
-                beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
-                }
-
                 it("returns result with updated note") {
                     let updatedNote = useCase.update(note, newContent: "new note fixture").value
                     expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewContent: "new note fixture"))
@@ -120,13 +115,13 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
+                    useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
 
                 it("return result with save error") {
                     let error = useCase.add(withTitle: "note title").error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(FailingToSaveNoteRepositoryStub.error))
                 }
             }
         }
@@ -134,22 +129,20 @@ class NoteUseCaseSpec: QuickSpec {
         describe("-update:newTitle:") {
 
             var note: Note!
+            var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
                 note = Note.noteDummy()
+                savingRepositorySpy = SuccessfullySavingNoteRepositorySpy()
+                useCase.repository = savingRepositorySpy
             }
 
             it("calls save method of repository with note with updated date and title") {
                 _ = useCase.update(note, newTitle: "new note title fixture")
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTitle: "new note title fixture"))
+                expect(savingRepositorySpy.passedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTitle: "new note title fixture"))
             }
 
             context("when save method succedes") {
-
-                beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
-                }
-
                 it("returns result with updated note") {
                     let updatedNote = useCase.update(note, newTitle: "new note title fixture").value
                     expect(updatedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTitle: "new note title fixture"))
@@ -159,13 +152,13 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
+                    useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
 
                 it("return result with save error") {
                     let error = useCase.add(withTitle: "note title").error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(FailingToSaveNoteRepositoryStub.error))
                 }
             }
         }
@@ -173,34 +166,35 @@ class NoteUseCaseSpec: QuickSpec {
         describe("-delete") {
 
             let note = Note.noteDummy()
+            var deletingRepositorySpy: SuccessfullyDeletingNoteRepositorySpy!
+
+            beforeEach {
+                deletingRepositorySpy = SuccessfullyDeletingNoteRepositorySpy()
+                useCase.repository = deletingRepositorySpy
+            }
 
             it("calls delete method of repository with passed note") {
                 _ = useCase.delete(note)
-                expect(noteRepositoryStub.notePassedInDeleteMethod).to(equal(note))
+                expect(deletingRepositorySpy.passedNote).to(equal(note))
+            }
+
+            context("when repository successes to delete note") {
+                it("return result with deleted note") {
+                    let result = useCase.delete(note)
+                    expect(result.value).to(equal(note))
+                }
             }
 
             context("when repository failes to delete note") {
 
                 beforeEach() {
-                    noteRepositoryStub.resultToBeReturnedFromGetMethod = .failure(AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory))
+                    useCase.repository = FailingToDeleteNoteRepositoryStub()
                 }
 
                 it("returns result with error from repository") {
                     let error = useCase.delete(note).error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
-                }
-            }
-
-            context("when repository successes to delete note") {
-
-                beforeEach() {
-                    noteRepositoryStub.returnNotePassedInDeleteMethod = true
-                }
-
-                it("return result with deleted note") {
-                    let result = useCase.delete(note)
-                    expect(result.value).to(equal(note))
+                    expect(receivedError).to(equal(FailingToSaveNoteRepositoryStub.error))
                 }
             }
         }
@@ -208,22 +202,20 @@ class NoteUseCaseSpec: QuickSpec {
         describe("-addTag:toNote:") {
 
             var note: Note!
+            var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
                 note = Note.noteDummy()
+                savingRepositorySpy = SuccessfullySavingNoteRepositorySpy()
+                useCase.repository = savingRepositorySpy
             }
 
             it("calls save method of repository with note with updated date and tags") {
                 _ = useCase.addTag(tag: "tag fixture", toNote: note)
-                expect(noteRepositoryStub.notePassedInSaveMethod).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTags: ["tag fixture"]))
+                expect(savingRepositorySpy.passedNote).to(equal(note: note, withNewUpdatedDate: currentDateServiceStub.stubbedTimestamp, withNewTags: ["tag fixture"]))
             }
 
             context("when save method succedes") {
-
-                beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
-                }
-
                 context("when note doesnt have any tags") {
                     it("returns result with note with new tag") {
                         let updatedNote = useCase.addTag(tag: "tag fixture", toNote: note).value
@@ -247,13 +239,13 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
+                    useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
 
                 it("return result with save error") {
                     let error = useCase.add(withTitle: "note title").error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(FailingToSaveNoteRepositoryStub.error))
                 }
             }
         }
@@ -269,7 +261,7 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method succedes") {
 
                 beforeEach {
-                    noteRepositoryStub.returnNotePassedInSaveMethod = true
+                    useCase.repository = SuccessfullySavingNoteRepositorySpy()
                 }
 
                 context("when note doesnt have this tag") {
@@ -295,13 +287,13 @@ class NoteUseCaseSpec: QuickSpec {
             context("when save method fails") {
 
                 beforeEach {
-                    noteRepositoryStub.saveMethodError = AnyError(FileNoteRepositoryError.failedToFindDocumentDirectory)
+                    useCase.repository = FailingToSaveNoteRepositoryStub()
                 }
 
                 it("return result with save error") {
                     let error = useCase.add(withTitle: "note title").error
                     let receivedError = error?.error as? FileNoteRepositoryError
-                    expect(receivedError).to(equal(.failedToFindDocumentDirectory))
+                    expect(receivedError).to(equal(FailingToSaveNoteRepositoryStub.error))
                 }
             }
         }
@@ -315,6 +307,59 @@ class CurrentDateServiceStub: CurrentDateService {
 
     func date() -> Date {
         return Date(timeIntervalSince1970: stubbedTimestamp)
+    }
+}
+
+// MARK: - ReturningErrorNoteRepositoryStub
+
+class ReturningErrorNoteRepositoryStub: NoteRepository {
+    static let anyError = AnyError(error)
+    static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
+
+    func getAll() -> Result<[Note], AnyError> {
+        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+    }
+
+    func get(noteId: String) -> Result<Note, AnyError> {
+        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+    }
+
+    func save(note: Note) -> Result<Note, AnyError> {
+        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+    }
+
+    func delete(note: Note) -> Result<Note, AnyError> {
+        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+    }
+}
+
+class FailingToGetNoteRepositoryStub: ReturningErrorNoteRepositoryStub {}
+class FailingToSaveNoteRepositoryStub: ReturningErrorNoteRepositoryStub {}
+class FailingToDeleteNoteRepositoryStub: ReturningErrorNoteRepositoryStub {}
+
+class SuccessfullySavingNoteRepositorySpy: ReturningErrorNoteRepositoryStub {
+    private(set) var passedNote: Note?
+
+    override func save(note: Note) -> Result<Note, AnyError> {
+        passedNote = note
+        return .success(note)
+    }
+}
+
+class SuccessfullyDeletingNoteRepositorySpy: ReturningErrorNoteRepositoryStub {
+    private(set) var passedNote: Note?
+
+    override func delete(note: Note) -> Result<Note, AnyError> {
+        passedNote = note
+        return .success(note)
+    }
+}
+
+class ReturningArrayOfNotesNoteRepositoryStub: ReturningErrorNoteRepositoryStub {
+    static let notes = [Note.noteDummy(), Note.noteDummy()]
+
+    override func getAll() -> Result<[Note], AnyError> {
+        return .success(ReturningArrayOfNotesNoteRepositoryStub.notes)
     }
 }
 
