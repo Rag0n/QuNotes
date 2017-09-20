@@ -38,26 +38,20 @@ class FileNoteRepositorySpec: QuickSpec {
 
             context("when fileManager successfully gets document directory") {
                 context("when fileManager fails to receive contents of directory") {
-                    let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
-
                     beforeEach {
-                        fileManagerFake.errorToThrowInContentsOfDirectoryMethod = thrownError
+                        noteRepository.fileManager = ReturningURLsAndFailingToReadContentsOfDirectoryManagerStub()
                     }
 
                     it("returns result with error") {
                         let error = noteRepository.getAll().error
-                        let underlyingError = (error!.error) as NSError
-                        expect(underlyingError).to(equal(thrownError))
+                        let underlyingError = (error!.error) as? FileNoteRepositoryError
+                        expect(underlyingError).to(equal(ReturningURLsAndFailingToReadContentsOfDirectoryManagerStub.error))
                     }
                 }
 
                 context("when fileManager successfully receives contents of directory") {
-                    let firstNoteURL = URL(string: "documents/firstNote.qvnote")!
-                    let secondNoteURL = URL(string: "documents/secondNote.qvnote")!
-                    let anotherURL = URL(string: "documents/anotherFile.docx")!
-
                     beforeEach {
-                        fileManagerFake.contentsToBeReturnedFromContentsOfDirectoryMethod = [firstNoteURL, secondNoteURL, anotherURL]
+                        noteRepository.fileManager = ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub()
                     }
 
                     context("when fileReader fails to read a file") {
@@ -83,7 +77,7 @@ class FileNoteRepositorySpec: QuickSpec {
 
                         it("reads data from qvnote urls") {
                             _ = noteRepository.getAll()
-                            expect(fileReaderSpy.dataFromFileURLs).to(equal([firstNoteURL, secondNoteURL]))
+                            expect(fileReaderSpy.dataFromFileURLs).to(equal([ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.firstNoteURL, ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.secondNoteURL]))
                         }
 
                         it("returns decoded notes") {
@@ -113,8 +107,10 @@ class FileNoteRepositorySpec: QuickSpec {
                 let fileReaderSpy = FileReaderSpy()
 
                 beforeEach {
+                    noteRepository.fileManager = ReturningURLsFileManagerStub()
                     noteRepository.fileReader = fileReaderSpy
                 }
+                
                 it("reads data from correct url") {
                     _ = noteRepository.get(noteId: "noteId")
                     expect(fileReaderSpy.dataFromFileURLs.first?.absoluteString).to(equal("Documents/noteId.qvnote"))
@@ -154,7 +150,7 @@ class FileNoteRepositorySpec: QuickSpec {
 
             context("when fileManager is unable to get document directory") {
                 beforeEach {
-                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                    noteRepository.fileManager = EmptyURLsFileManagerStub()
                 }
 
                 it("returns result with failedToFindDocumentDirectory error") {
@@ -179,20 +175,27 @@ class FileNoteRepositorySpec: QuickSpec {
                 }
                 """
 
+                var fileManagerSpy: ReturningURLsAndSuccessfullyCreatingFileFileManagerSpy!
+
+                beforeEach {
+                    fileManagerSpy = ReturningURLsAndSuccessfullyCreatingFileFileManagerSpy()
+                    noteRepository.fileManager = fileManagerSpy
+                }
+
                 it("writes correct content to file") {
                     _ = noteRepository.save(note: note)
-                    let stringFromPassedData = String(data: fileManagerFake.dataPassedInCreateFileMethod!, encoding: .utf8)
+                    let stringFromPassedData = String(data: fileManagerSpy.passedData!, encoding: .utf8)
                     expect(stringFromPassedData).to(equal(expectedString))
                 }
 
                 it("writes to correct file path") {
                     _ = noteRepository.save(note: note)
-                    expect(fileManagerFake.pathPassedInCreateFileMethod).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+                    expect(fileManagerSpy.passedPath).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
                 }
 
                 context("when fileManager fails to create file") {
                     beforeEach {
-                        fileManagerFake.createFileMethodFails = true
+                        noteRepository.fileManager = ReturningURLsAndFailingToCreateFileFileManagerSpy()
                     }
 
                     it("returns result with error") {
@@ -216,7 +219,7 @@ class FileNoteRepositorySpec: QuickSpec {
             
             context("when fileManager is unable to get document directory") {
                 beforeEach {
-                    fileManagerFake.urlsToReturnFromUrlsMethod = []
+                    noteRepository.fileManager = EmptyURLsFileManagerStub()
                 }
 
                 it("returns result with failedToFindDocumentDirectory error") {
@@ -227,29 +230,30 @@ class FileNoteRepositorySpec: QuickSpec {
             }
 
             context("when fileManager successfully gets document directory") {
+
+                var fileManagerSpy: ReturningURLsAndFailingToRemoveItemFileManagerSpy!
+
+                beforeEach {
+                    fileManagerSpy = ReturningURLsAndFailingToRemoveItemFileManagerSpy()
+                    noteRepository.fileManager = fileManagerSpy
+                }
+
                 it("calls deleteItem of fileManager with correct URL") {
                     _ = noteRepository.delete(note: note)
-                    expect(fileManagerFake.urlPassedInDeleteItemMethod?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
+                    expect(fileManagerSpy.passedURL?.path).to(equal("Documents/2F1535F5-0B62-4CFC-8B5A-2C399B718E57.qvnote"))
                 }
 
                 context("when fileManager throws error while removing file") {
-                    let thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
-
-                    beforeEach {
-                        fileManagerFake.errorToThrowInRemoveItemMethod = thrownError
-                    }
-
                     it("returns result with throw error") {
                         let error = noteRepository.delete(note: note).error
-                        let underlyingError = (error!.error) as NSError
-                        expect(underlyingError).to(equal(thrownError))
+                        let underlyingError = (error!.error) as! FileNoteRepositoryError
+                        expect(underlyingError).to(equal(ReturningURLsAndFailingToRemoveItemFileManagerSpy.error))
                     }
                 }
 
                 context("when fileManager successfuly removes file") {
-
                     beforeEach {
-                        fileManagerFake.errorToThrowInRemoveItemMethod = nil
+                        noteRepository.fileManager = ReturningURLsAndSuccessfullyRemovingItemFileManagerSpy()
                     }
 
                     it("returns result with deleted note") {
@@ -303,11 +307,81 @@ class FileManagerFake: FileManager {
     }
 }
 
-class EmptyURLsFileManagerStub: FileManager {
+class FailingFileManagerStub: FileManager {
+    static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
+
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+        return false
+    }
+
+    override func removeItem(at URL: URL) throws {
+        throw FailingFileManagerStub.error
+    }
+
     override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
         return []
     }
+
+    override func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions = []) throws -> [URL] {
+        throw FailingFileManagerStub.error
+    }
 }
+
+class EmptyURLsFileManagerStub: FailingFileManagerStub {}
+class ReturningURLsFileManagerStub: FailingFileManagerStub {
+    let returnedURL = URL(string: "Documents")!
+
+    override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
+        return [returnedURL]
+    }
+}
+
+class ReturningURLsAndCreatingFileFileManagerSpy: ReturningURLsFileManagerStub {
+    private(set) var passedPath: String?
+    private(set) var passedData: Data?
+
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+        passedData = data
+        passedPath = path
+        return false
+    }
+}
+class ReturningURLsAndFailingToCreateFileFileManagerSpy: ReturningURLsAndCreatingFileFileManagerSpy {}
+class ReturningURLsAndSuccessfullyCreatingFileFileManagerSpy: ReturningURLsAndCreatingFileFileManagerSpy {
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+        _ = super.createFile(atPath: path, contents: data, attributes: attr)
+        return true
+    }
+}
+
+class ReturningURLsAndRemovingItemFileManagerSpy: ReturningURLsFileManagerStub {
+    private(set) var passedURL: URL?
+
+    override func removeItem(at URL: URL) throws {
+        passedURL = URL
+    }
+}
+class ReturningURLsAndFailingToRemoveItemFileManagerSpy: ReturningURLsAndRemovingItemFileManagerSpy {
+    override func removeItem(at URL: URL) throws {
+        try super.removeItem(at: URL)
+        throw ReturningURLsAndRemovingItemFileManagerSpy.error
+    }
+}
+class ReturningURLsAndSuccessfullyRemovingItemFileManagerSpy: ReturningURLsAndRemovingItemFileManagerSpy {}
+
+class ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub: ReturningURLsFileManagerStub {
+    static let firstNoteURL = URL(string: "documents/firstNote.qvnote")!
+    static let secondNoteURL = URL(string: "documents/secondNote.qvnote")!
+    static let anotherURL = URL(string: "documents/anotherFile.docx")!
+
+    override func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions = []) throws -> [URL] {
+        return [ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.firstNoteURL,
+                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.secondNoteURL,
+                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.anotherURL]
+    }
+}
+class ReturningURLsAndFailingToReadContentsOfDirectoryManagerStub: ReturningURLsFileManagerStub {}
+
 // MARK: - FileReaderSpy
 
 class FileReaderSpy: FileReaderService {
