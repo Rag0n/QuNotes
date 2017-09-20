@@ -279,32 +279,32 @@ class CurrentDateServiceStub: CurrentDateService {
 
 // MARK: - Note repository stubs & spys
 
-class ReturningErrorNoteRepositoryStub: NoteRepository {
+class FailingNoteRepositoryStub: NoteRepository {
     static let anyError = AnyError(error)
     static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
 
     func getAll() -> Result<[Note], AnyError> {
-        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+        return .failure(FailingNoteRepositoryStub.anyError)
     }
 
     func get(noteId: String) -> Result<Note, AnyError> {
-        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+        return .failure(FailingNoteRepositoryStub.anyError)
     }
 
     func save(note: Note) -> Result<Note, AnyError> {
-        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+        return .failure(FailingNoteRepositoryStub.anyError)
     }
 
     func delete(note: Note) -> Result<Note, AnyError> {
-        return .failure(ReturningErrorNoteRepositoryStub.anyError)
+        return .failure(FailingNoteRepositoryStub.anyError)
     }
 }
 
-class FailingToGetNoteRepositoryStub: ReturningErrorNoteRepositoryStub {}
-class FailingToSaveNoteRepositoryStub: ReturningErrorNoteRepositoryStub {}
-class FailingToDeleteNoteRepositoryStub: ReturningErrorNoteRepositoryStub {}
+class FailingToGetNoteRepositoryStub: FailingNoteRepositoryStub {}
+class FailingToSaveNoteRepositoryStub: FailingNoteRepositoryStub {}
+class FailingToDeleteNoteRepositoryStub: FailingNoteRepositoryStub {}
 
-class SuccessfullySavingNoteRepositorySpy: ReturningErrorNoteRepositoryStub {
+class SuccessfullySavingNoteRepositorySpy: FailingNoteRepositoryStub {
     private(set) var passedNote: Note?
 
     override func save(note: Note) -> Result<Note, AnyError> {
@@ -313,7 +313,7 @@ class SuccessfullySavingNoteRepositorySpy: ReturningErrorNoteRepositoryStub {
     }
 }
 
-class SuccessfullyDeletingNoteRepositorySpy: ReturningErrorNoteRepositoryStub {
+class SuccessfullyDeletingNoteRepositorySpy: FailingNoteRepositoryStub {
     private(set) var passedNote: Note?
 
     override func delete(note: Note) -> Result<Note, AnyError> {
@@ -322,7 +322,7 @@ class SuccessfullyDeletingNoteRepositorySpy: ReturningErrorNoteRepositoryStub {
     }
 }
 
-class ReturningArrayOfNotesNoteRepositoryStub: ReturningErrorNoteRepositoryStub {
+class ReturningArrayOfNotesNoteRepositoryStub: FailingNoteRepositoryStub {
     static let notes = [Note.noteDummy(), Note.noteDummy()]
 
     override func getAll() -> Result<[Note], AnyError> {
