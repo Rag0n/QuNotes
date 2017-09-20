@@ -15,12 +15,9 @@ import Result
 class FileNoteRepositorySpec: QuickSpec {
     override func spec() {
         var noteRepository: FileNoteRepository!
-        var fileManagerFake: FileManagerFake!
 
         beforeEach {
-            fileManagerFake = FileManagerFake()
             noteRepository = FileNoteRepository()
-            noteRepository.fileManager = fileManagerFake
         }
 
         describe("-getAll") {
@@ -266,46 +263,7 @@ class FileNoteRepositorySpec: QuickSpec {
     }
 }
 
-// MARK: - FileManagerFake
-
-class FileManagerFake: FileManager {
-    var pathPassedInCreateFileMethod: String?
-    var dataPassedInCreateFileMethod: Data?
-    var createFileMethodFails = false
-
-    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
-        pathPassedInCreateFileMethod = path
-        dataPassedInCreateFileMethod = data
-
-        return !createFileMethodFails
-    }
-
-    var urlPassedInDeleteItemMethod: URL?
-    var errorToThrowInRemoveItemMethod: NSError?
-
-    override func removeItem(at URL: URL) throws {
-        urlPassedInDeleteItemMethod = URL
-        if let errorToThrowInRemoveItemMethod = errorToThrowInRemoveItemMethod {
-            throw errorToThrowInRemoveItemMethod
-        }
-    }
-
-    var urlsToReturnFromUrlsMethod: [URL]?
-
-    override func urls(for directory: FileManager.SearchPathDirectory, in domainMask: FileManager.SearchPathDomainMask) -> [URL] {
-        return urlsToReturnFromUrlsMethod ?? [URL(string: "Documents")!]
-    }
-
-    var contentsToBeReturnedFromContentsOfDirectoryMethod: [URL]?
-    var errorToThrowInContentsOfDirectoryMethod: NSError?
-
-    override func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions = []) throws -> [URL] {
-        if let errorToThrowInContentsOfDirectoryMethod = errorToThrowInContentsOfDirectoryMethod {
-            throw errorToThrowInContentsOfDirectoryMethod
-        }
-        return contentsToBeReturnedFromContentsOfDirectoryMethod ?? []
-    }
-}
+// MARK: - FileManager repository stubs & spys
 
 class FailingFileManagerStub: FileManager {
     static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
