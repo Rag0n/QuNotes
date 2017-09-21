@@ -10,7 +10,7 @@ class AppCoordinator: Coordinator {
 
     func onStart() {
         configureWindow()
-        showNotebook()
+        showLibrary()
     }
 
     var rootViewController: UIViewController {
@@ -52,6 +52,11 @@ class AppCoordinator: Coordinator {
     private func configureWindow() {
         window.rootViewController = rootViewController
         window.makeKeyAndVisible()
+    }
+
+    private func showLibrary() {
+        let libraryCoordinator = LibraryCoordinator()
+        navigationController.pushCoordinator(coordinator: libraryCoordinator, animated: true)
     }
 
     private func showNotebook() {
