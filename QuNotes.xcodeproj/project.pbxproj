@@ -48,13 +48,12 @@
 		11C41FEE1F7444EC00397DD9 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */; };
 		11C41FEF1F7444EC00397DD9 /* LibraryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */; };
 		11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */; };
-		11C41FF31F744A8900397DD9 /* NotebookUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF21F744A8900397DD9 /* NotebookUseCase.swift */; };
 		11C41FF41F744A8900397DD9 /* NotebookUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF21F744A8900397DD9 /* NotebookUseCase.swift */; };
 		11C41FF71F744A9500397DD9 /* NotebookUseCaseSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF51F744A9500397DD9 /* NotebookUseCaseSpec.swift */; };
 		11C41FFB1F74521A00397DD9 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF91F74521900397DD9 /* Notebook.swift */; };
 		11C41FFC1F74521A00397DD9 /* Notebook.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF91F74521900397DD9 /* Notebook.swift */; };
-		11C41FFD1F74521A00397DD9 /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FFA1F74521900397DD9 /* NotebookSpec.swift */; };
 		11C41FFE1F74521A00397DD9 /* NotebookSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FFA1F74521900397DD9 /* NotebookSpec.swift */; };
+		11C41FFF1F74525D00397DD9 /* NotebookUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF21F744A8900397DD9 /* NotebookUseCase.swift */; };
 		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FA13221F6B0B6500B09A92 /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
@@ -231,9 +230,9 @@
 		112D49921EF539D800C75B6A /* Notebook */ = {
 			isa = PBXGroup;
 			children = (
-				11C41FF81F7451C500397DD9 /* Entity */,
 				11C41FF21F744A8900397DD9 /* NotebookUseCase.swift */,
 				11C41FF51F744A9500397DD9 /* NotebookUseCaseSpec.swift */,
+				11C41FF81F7451C500397DD9 /* Entity */,
 			);
 			path = Notebook;
 			sourceTree = "<group>";
@@ -567,11 +566,10 @@
 				111743751F5216AC006EDA89 /* Coordinator.swift in Sources */,
 				1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */,
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
-				11C41FFD1F74521A00397DD9 /* NotebookSpec.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
+				11C41FFF1F74525D00397DD9 /* NotebookUseCase.swift in Sources */,
 				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
-				11C41FF31F744A8900397DD9 /* NotebookUseCase.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,
