@@ -8,6 +8,10 @@
 
 import Foundation
 
+protocol HasNotebookUseCase {
+    var notebookUseCase: NotebookUseCase { get }
+}
+
 class NotebookUseCase {
 
 }

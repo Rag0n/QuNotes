@@ -40,7 +40,9 @@ class AppCoordinator: Coordinator {
         noteUseCase.repository = fileNoteRepository
         noteUseCase.currentDateService = currentDateService
 
-        return AppDependency(noteUseCase: noteUseCase)
+        let notebookUseCase = NotebookUseCase()
+
+        return AppDependency(noteUseCase: noteUseCase, notebookUseCase: notebookUseCase)
     }()
 
     private lazy var navigationController: NavigationController = {

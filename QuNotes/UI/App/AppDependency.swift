@@ -3,6 +3,7 @@
 // Copyright (c) 2017 Alexander Guschin. All rights reserved.
 //
 
-struct AppDependency: HasNoteUseCase {
+struct AppDependency: HasNoteUseCase, HasNotebookUseCase {
     let noteUseCase: NoteUseCase
+    let notebookUseCase: NotebookUseCase
 }
