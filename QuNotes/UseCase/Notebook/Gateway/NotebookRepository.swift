@@ -10,7 +10,6 @@ import Result
 
 protocol NotebookRepository {
     func getAll() -> Result<[Notebook], AnyError>
-    func save(withName name: String) -> Result<Notebook, AnyError>
+    func save(notebook: Notebook) -> Result<Notebook, AnyError>
     func delete(notebook: Notebook) -> Result<Notebook, AnyError>
 }
-

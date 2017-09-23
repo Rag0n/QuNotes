@@ -16,10 +16,9 @@ class InMemoryNotebookRepository: NotebookRepository {
         return .success(notebooks)
     }
 
-    func save(withName name: String) -> Result<Notebook, AnyError> {
-        let newNotebook = Notebook(uuid: UUID.init().uuidString, name: name)
-        notebooks.append(newNotebook)
-        return .success(newNotebook)
+    func save(notebook: Notebook) -> Result<Notebook, AnyError> {
+        notebooks.append(notebook)
+        return .success(notebook)
     }
 
     func delete(notebook: Notebook) -> Result<Notebook, AnyError> {
