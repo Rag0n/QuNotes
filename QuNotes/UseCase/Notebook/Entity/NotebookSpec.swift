@@ -33,3 +33,17 @@ class NotebookSpec: QuickSpec {
         }
     }
 }
+
+extension Notebook {
+    static func notebookDummy(withUUID uuid: String, name: String) -> Notebook {
+        return Notebook(uuid: uuid, name: name)
+    }
+
+    static func notebookDummy(withUUID uuid: String) -> Notebook {
+        return Notebook.notebookDummy(withUUID: uuid, name: "dummy notebook name")
+    }
+
+    static func notebookDummy() -> Notebook {
+        return Notebook.notebookDummy(withUUID: UUID.init().uuidString, name: "dummy notebook name")
+    }
+}
