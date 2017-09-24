@@ -41,6 +41,8 @@ class AppCoordinator: Coordinator {
         noteUseCase.currentDateService = currentDateService
 
         let notebookUseCase = NotebookUseCase()
+        let inMemoryNotebookRepository = InMemoryNotebookRepository()
+        notebookUseCase.repository = inMemoryNotebookRepository
 
         return AppDependency(noteUseCase: noteUseCase, notebookUseCase: notebookUseCase)
     }()
@@ -57,7 +59,7 @@ class AppCoordinator: Coordinator {
     }
 
     private func showLibrary() {
-        let libraryCoordinator = LibraryCoordinator()
+        let libraryCoordinator = LibraryCoordinator(withNavigationController: navigationController, dependencies: dependency)
         navigationController.pushCoordinator(coordinator: libraryCoordinator, animated: true)
     }
 
