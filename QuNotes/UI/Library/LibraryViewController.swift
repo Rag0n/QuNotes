@@ -8,8 +8,16 @@
 
 import UIKit
 
+protocol LibraryViewControllerHandler: class {
+    func didTapAddNotebook()    
+}
+
 class LibraryViewController: UIViewController {
     // MARK: - API
+
+    func inject(handler: LibraryViewControllerHandler) {
+        self.handler = handler
+    }
 
     func render(withViewModel viewModel: LibraryViewModel) {
         self.viewModel = viewModel
@@ -28,11 +36,16 @@ class LibraryViewController: UIViewController {
 
     // MARK: - Private
 
+    fileprivate weak var handler: LibraryViewControllerHandler?
     fileprivate var viewModel: LibraryViewModel?
     @IBOutlet private weak var tableView: UITableView?
 
     fileprivate enum Constants {
         static let title = "Library"
+    }
+
+    @IBAction private func addNotebookButtonDidTap() {
+        handler?.didTapAddNotebook()
     }
 }
 
