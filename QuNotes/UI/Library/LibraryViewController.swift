@@ -29,9 +29,7 @@ class LibraryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.title = Constants.title
-        if let viewModel = viewModel {
-            render(withViewModel: viewModel)
-        }
+        setupTableView()
     }
 
     // MARK: - Private
@@ -42,10 +40,16 @@ class LibraryViewController: UIViewController {
 
     fileprivate enum Constants {
         static let title = "Library"
+        static let libraryCellReuseIdentifier = "libraryCellReuseIdentifier"
     }
 
     @IBAction private func addNotebookButtonDidTap() {
         handler?.didTapAddNotebook()
+    }
+
+    private func setupTableView() {
+        LibraryTableViewCell.registerFor(tableView: tableView!, reuseIdentifier: Constants.libraryCellReuseIdentifier)
+        tableView!.estimatedRowHeight = 0
     }
 }
 
@@ -57,8 +61,8 @@ extension LibraryViewController: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.textLabel?.text = viewModel?.notebooks[indexPath.row] ?? ""
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
+        cell.set(title: viewModel?.notebooks[indexPath.row] ?? "")
         return cell
     }
 }

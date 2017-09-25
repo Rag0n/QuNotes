@@ -27,6 +27,8 @@
 		11517D081F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11517D071F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift */; };
 		115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
 		115818A71F6B06F4009C9BB2 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 115818A51F6B06F4009C9BB2 /* NoteTableViewCell.xib */; };
+		1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
+		1168798B1F798EC2009461D6 /* LibraryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 116879891F798EC2009461D6 /* LibraryTableViewCell.xib */; };
 		117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
 		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
@@ -123,6 +125,8 @@
 		11517D071F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryNotebookRepositorySpec.swift; sourceTree = "<group>"; };
 		115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		115818A51F6B06F4009C9BB2 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
+		116879881F798EC2009461D6 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
+		116879891F798EC2009461D6 /* LibraryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryTableViewCell.xib; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
 		117E1BE21F54A43A0046DC52 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
@@ -374,6 +378,8 @@
 				11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */,
 				11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */,
 				11CAE2C71F78277300062450 /* LibraryViewModel.swift */,
+				116879881F798EC2009461D6 /* LibraryTableViewCell.swift */,
+				116879891F798EC2009461D6 /* LibraryTableViewCell.xib */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -534,6 +540,7 @@
 			files = (
 				118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */,
 				11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */,
+				1168798B1F798EC2009461D6 /* LibraryTableViewCell.xib in Resources */,
 				11C41FEF1F7444EC00397DD9 /* LibraryViewController.xib in Resources */,
 				11B705861EEB42570039A863 /* Assets.xcassets in Resources */,
 				115818A71F6B06F4009C9BB2 /* NoteTableViewCell.xib in Resources */,
@@ -580,6 +587,7 @@
 				11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */,
 				118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */,
 				1135042A1F16BA01001938FD /* Array+Extensions.swift in Sources */,
+				1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */,
 				112D49831EF5391400C75B6A /* main.swift in Sources */,
 				11C41FFB1F74521A00397DD9 /* Notebook.swift in Sources */,
 				11FA13221F6B0B6500B09A92 /* TableViewCell+Extensions.swift in Sources */,
