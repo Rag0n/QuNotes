@@ -27,6 +27,7 @@ class LibraryCoordinator: Coordinator {
     fileprivate let dependencies: Dependencies
     fileprivate lazy var libraryViewController: LibraryViewController = {
         let vc = LibraryViewController()
+        vc.inject(handler: self)
         return vc
     }()
     fileprivate let navigationController: NavigationController
@@ -43,5 +44,15 @@ class LibraryCoordinator: Coordinator {
         let notebooks = dependencies.notebookUseCase.getAll()
         let libraryVM = LibraryViewModel(notebooks: notebooks.map { $0.name })
         libraryViewController.render(withViewModel: libraryVM)
+    }
+}
+
+// MARK: - LibraryViewControllerHandler
+
+extension LibraryCoordinator: LibraryViewControllerHandler {
+    func didTapAddNotebook() {
+        _ = dependencies.notebookUseCase
+            .add(withName: "Notebook fixture")
+            .map { _ in self.updateLibraryViewController() }
     }
 }
