@@ -24,7 +24,7 @@ class LibraryCoordinator: Coordinator {
     // MARK: - Life cycle
 
     typealias Dependencies = HasNotebookUseCase
-    fileprivate let dependencies: Dependencies
+    fileprivate let notebookUseCase: NotebookUseCase
     fileprivate lazy var libraryViewController: LibraryViewController = {
         let vc = LibraryViewController()
         vc.inject(handler: self)
@@ -35,13 +35,13 @@ class LibraryCoordinator: Coordinator {
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dependencies = dependencies
+        self.notebookUseCase = dependencies.notebookUseCase
     }
 
     // MARK: - Private
 
     fileprivate func updateLibraryViewController() {
-        let notebooks = dependencies.notebookUseCase.getAll()
+        let notebooks = notebookUseCase.getAll()
         let libraryVM = LibraryViewModel(notebooks: notebooks.map { $0.name })
         libraryViewController.render(withViewModel: libraryVM)
     }
@@ -51,8 +51,7 @@ class LibraryCoordinator: Coordinator {
 
 extension LibraryCoordinator: LibraryViewControllerHandler {
     func didTapAddNotebook() {
-        _ = dependencies.notebookUseCase
-            .add(withName: "Notebook fixture")
+        _ = notebookUseCase.add(withName: "Notebook fixture")
             .map { _ in self.updateLibraryViewController() }
     }
 }

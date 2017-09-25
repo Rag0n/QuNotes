@@ -24,7 +24,7 @@ class NotebookCoordinator: Coordinator {
     // MARK: - Life cycle
 
     typealias Dependencies = HasNoteUseCase
-    fileprivate let dependencies: Dependencies
+    fileprivate let noteUseCase: NoteUseCase
     fileprivate lazy var notebookViewController: NotebookViewController = {
         let vc = NotebookViewController()
         vc.inject(handler: self)
@@ -35,13 +35,13 @@ class NotebookCoordinator: Coordinator {
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
-        self.dependencies = dependencies
+        self.noteUseCase = dependencies.noteUseCase
     }
 
     // MARK: - Private
 
     fileprivate func updateNotebookViewModel(withNoteTitleFilter titleFilter: String = "") {
-        var notes = dependencies.noteUseCase.getAll()
+        var notes = noteUseCase.getAll()
         if titleFilter.count > 0 {
             notes = notes.filter { $0.title.lowercased().contains(titleFilter) }
         }
@@ -54,7 +54,7 @@ class NotebookCoordinator: Coordinator {
 
 extension NotebookCoordinator: NotebookViewControllerHandler {
     func didTapAddNote() {
-        let addingResult = dependencies.noteUseCase.add(withTitle: "")
+        let addingResult = noteUseCase.add(withTitle: "")
         switch (addingResult) {
             case let .success(note):
                 activeNote = note
@@ -67,7 +67,7 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     func didTapOnNoteWithIndex(index: Int) {
-        let notes = dependencies.noteUseCase.getAll()
+        let notes = noteUseCase.getAll()
         guard (index < notes.count) else { return }
         activeNote = notes[index]
         showNote()
@@ -83,9 +83,9 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
     }
 
     func didSwapeToDeleteNoteWithIndex(index: Int) -> Bool {
-        let notes = dependencies.noteUseCase.getAll()
+        let notes = noteUseCase.getAll()
         guard (index < notes.count) else { return false }
-        guard dependencies.noteUseCase.delete(notes[index]).error == nil else { return false }
+        guard noteUseCase.delete(notes[index]).error == nil else { return false }
         updateNotebookViewModel()
         return true;
     }
@@ -104,32 +104,32 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
 extension NotebookCoordinator: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
         guard let activeNote = activeNote else { return }
-        self.activeNote = dependencies.noteUseCase.update(activeNote, newContent: newContent)
+        self.activeNote = noteUseCase.update(activeNote, newContent: newContent)
             .recover(activeNote)
     }
 
     func didChangeTitle(newTitle: String) {
         guard let activeNote = activeNote else { return }
-        self.activeNote = dependencies.noteUseCase.update(activeNote, newTitle: newTitle)
+        self.activeNote = noteUseCase.update(activeNote, newTitle: newTitle)
             .recover(activeNote)
     }
 
     func onDeleteButtonClick() {
         guard let activeNote = activeNote else { return }
-        guard dependencies.noteUseCase.delete(activeNote).error == nil else { return }
+        guard noteUseCase.delete(activeNote).error == nil else { return }
         self.activeNote = nil
         navigationController.popViewController(animated: true)
     }
 
     func didAddTag(tag: String) {
         guard let activeNote = activeNote else { return }
-        self.activeNote = dependencies.noteUseCase.addTag(tag: tag, toNote: activeNote)
+        self.activeNote = noteUseCase.addTag(tag: tag, toNote: activeNote)
             .recover(activeNote)
     }
 
     func didRemoveTag(tag: String) {
         guard let activeNote = activeNote else { return }
-        self.activeNote = dependencies.noteUseCase.removeTag(tag: tag, fromNote: activeNote)
+        self.activeNote = noteUseCase.removeTag(tag: tag, fromNote: activeNote)
             .recover(activeNote)
     }
 
