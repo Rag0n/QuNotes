@@ -54,4 +54,20 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
         _ = notebookUseCase.add(withName: "Notebook fixture")
             .map { _ in self.updateLibraryViewController() }
     }
+
+    func didTapOnNotebook(withIndex index: Int) {
+
+    }
+    
+    func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool {
+        guard deleteNotebook(withIndex: index) else { return false }
+        updateLibraryViewController()
+        return true;
+    }
+
+    private func deleteNotebook(withIndex index: Int) -> Bool {
+        let notebooks = notebookUseCase.getAll()
+        guard (index < notebooks.count) else { return false }
+        return notebookUseCase.delete(notebooks[index]).error == nil
+    }
 }

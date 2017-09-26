@@ -9,7 +9,9 @@
 import UIKit
 
 protocol LibraryViewControllerHandler: class {
-    func didTapAddNotebook()    
+    func didTapAddNotebook()
+    func didTapOnNotebook(withIndex index: Int)
+    func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool
 }
 
 class LibraryViewController: UIViewController {
@@ -64,5 +66,26 @@ extension LibraryViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
         cell.set(title: viewModel?.notebooks[indexPath.row] ?? "")
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension LibraryViewController: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        handler?.didTapOnNotebook(withIndex: indexPath.row)
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, success) in
+            let result = self.handler?.didSwapeToDeleteNotebook(withIndex: indexPath.row) ?? false
+            success(result)
+        }
+        deleteAction.backgroundColor = .red
+
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+
+        return configuration
     }
 }
