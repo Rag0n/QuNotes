@@ -36,7 +36,7 @@ class LibraryViewController: UIViewController {
 
     fileprivate weak var handler: LibraryViewControllerHandler?
     fileprivate var viewModel: LibraryViewModel?
-    @IBOutlet private weak var tableView: UITableView?
+    @IBOutlet private weak var tableView: UITableView!
 
     fileprivate enum Constants {
         static let title = "Library"
@@ -48,8 +48,8 @@ class LibraryViewController: UIViewController {
     }
 
     private func setupTableView() {
-        LibraryTableViewCell.registerFor(tableView: tableView!, reuseIdentifier: Constants.libraryCellReuseIdentifier)
-        tableView!.estimatedRowHeight = 0
+        LibraryTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.libraryCellReuseIdentifier)
+        tableView.estimatedRowHeight = 0
     }
 }
 

@@ -39,8 +39,8 @@ class NotebookViewController: UIViewController {
     // MARK: - Private
 
     private func setupTableView() {
-        NoteTableViewCell.registerFor(tableView: tableView!, reuseIdentifier: Constants.noteCellReuseIdentifier)
-        tableView!.estimatedRowHeight = 0
+        NoteTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.noteCellReuseIdentifier)
+        tableView.estimatedRowHeight = 0
     }
 
     private func setupSearchController() {
@@ -58,8 +58,8 @@ class NotebookViewController: UIViewController {
     fileprivate weak var handler: NotebookViewControllerHandler?
     fileprivate var viewModel: NotebookViewModel?
     
-    @IBOutlet private weak var tableView: UITableView?
-    @IBOutlet private weak var addButton: UIButton?
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var addButton: UIButton!
     private let searchController = UISearchController(searchResultsController: nil)
 
     @IBAction private func addNote() {
