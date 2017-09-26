@@ -16,6 +16,8 @@ struct ThemeManager {
         applyThemeForNavigationBar()
         applyThemeForNotebookView()
         applyThemeForNoteCellView()
+        applyThemeForLibraryView()
+        applyThemeForLibraryCellView()
     }
 
     static func defaultTheme() -> DefaultTheme {
@@ -47,5 +49,19 @@ struct ThemeManager {
         noteTableViewCellLabel.backgroundColor = theme.ligherDarkColor
         noteTableViewCellLabel.highlightedTextColor = theme.darkColor
         UIView.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self]).backgroundColor = theme.ligherDarkColor
+    }
+
+    private static func applyThemeForLibraryView() {
+        let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [LibraryViewController.self])
+        notebookTableView.backgroundColor = theme.ligherDarkColor
+        notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
+    }
+
+    private static func applyThemeForLibraryCellView() {
+        let libraryTableViewCellLabel = UILabel.appearance(whenContainedInInstancesOf: [LibraryTableViewCell.self])
+        libraryTableViewCellLabel.textColor = theme.textColor
+        libraryTableViewCellLabel.backgroundColor = theme.ligherDarkColor
+        libraryTableViewCellLabel.highlightedTextColor = theme.darkColor
+        UIView.appearance(whenContainedInInstancesOf: [LibraryTableViewCell.self]).backgroundColor = theme.ligherDarkColor
     }
 }
