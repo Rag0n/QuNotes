@@ -26,6 +26,10 @@ class NotebookUseCase {
         return repository.save <| newNotebookWithName <| name
     }
 
+    func update(_ notebook: Notebook, name: String) -> Result<Notebook, AnyError> {
+        return repository.save <| updatedNotebook(withNewName: name) <| notebook
+    }
+
     func delete(_ notebook: Notebook) -> Result<Notebook, AnyError> {
         return repository.delete(notebook: notebook)
     }
@@ -34,5 +38,11 @@ class NotebookUseCase {
 
     private func newNotebookWithName(name: String) -> Notebook {
         return Notebook(uuid: UUID.init().uuidString, name: name)
+    }
+
+    private func updatedNotebook(withNewName name: String) -> (Notebook) -> Notebook {
+        return { notebook in
+            return Notebook(uuid: notebook.uuid, name: name)
+        }
     }
 }
