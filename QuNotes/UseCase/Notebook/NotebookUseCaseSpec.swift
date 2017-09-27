@@ -74,6 +74,43 @@ class NotebookUseCaseSpec: QuickSpec {
             }
         }
 
+        describe("-update:name") {
+            var oldNotebook: Notebook!
+
+            beforeEach {
+                useCase.repository = SuccessfullySavingNotebookRepositorySpy()
+                oldNotebook = useCase.add(withName: "old name").value
+            }
+
+            context("when save method succedes") {
+                beforeEach {
+                    useCase.repository = SuccessfullySavingNotebookRepositorySpy()
+                }
+
+                it("returns notebook with updated name") {
+                    let updatedNotebook = useCase.update(oldNotebook, name: "new name").value
+                    expect(updatedNotebook?.name).to(equal("new name"))
+                }
+
+                it("returns notebook with same uuid") {
+                    let updatedNotebook = useCase.update(oldNotebook, name: "new name").value
+                    expect(updatedNotebook?.uuid).to(equal(oldNotebook.uuid))
+                }
+            }
+
+            context("when save method fails") {
+                beforeEach {
+                    useCase.repository = FailingToSaveNotebookRepositoryStub()
+                }
+
+                it("return result with save error") {
+                    let error = useCase.update(oldNotebook, name: "new name").error
+                    let receivedError = error?.error as? FileNoteRepositoryError
+                    expect(receivedError).to(equal(FailingToSaveNotebookRepositoryStub.error))
+                }
+            }
+        }
+
         describe("-delete:") {
             let notebook = Notebook.notebookDummy()
             var deletingRepositorySpy: SuccessfullyDeletingNotebookRepositorySpy!
