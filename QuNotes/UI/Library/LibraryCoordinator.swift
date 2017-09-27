@@ -32,6 +32,7 @@ class LibraryCoordinator: Coordinator {
     }()
     fileprivate let navigationController: NavigationController
     fileprivate var activeNote: Note?
+    fileprivate var editableNotebook: Notebook?
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
@@ -52,6 +53,7 @@ class LibraryCoordinator: Coordinator {
 extension LibraryCoordinator: LibraryViewControllerHandler {
     func didTapAddNotebook() {
         _ = notebookUseCase.add(withName: "Notebook fixture")
+            .map(setEditableNotebook)
             .map { _ in self.updateLibraryViewController() }
     }
 
@@ -69,5 +71,10 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
         let notebooks = notebookUseCase.getAll()
         guard (index < notebooks.count) else { return false }
         return notebookUseCase.delete(notebooks[index]).error == nil
+    }
+
+    private func setEditableNotebook(notebook: Notebook) -> Notebook {
+        editableNotebook = notebook
+        return notebook
     }
 }

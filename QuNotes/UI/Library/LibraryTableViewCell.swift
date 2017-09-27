@@ -11,8 +11,8 @@ import UIKit
 class LibraryTableViewCell: UITableViewCell {
     // MARK: - API
 
-    func set(title: String) {
-        titleLabel.text = title
+    func render(viewModel: NotebookCellViewModel) {
+        titleLabel.text = viewModel.title
     }
 
     // MARK: - Private

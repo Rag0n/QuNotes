@@ -6,6 +6,11 @@
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
+struct NotebookCellViewModel {
+    let title: String
+    let isEditable: Bool
+}
+
 struct LibraryViewModel {
-    let notebooks: [String]
+    let notebooks: [NotebookCellViewModel]
 }
