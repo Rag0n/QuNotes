@@ -43,8 +43,13 @@ class LibraryCoordinator: Coordinator {
 
     fileprivate func updateLibraryViewController() {
         let notebooks = notebookUseCase.getAll()
-        let libraryVM = LibraryViewModel(notebooks: notebooks.map { $0.name })
+        let libraryVM = LibraryViewModel(notebooks: notebooks.map(notebookCellViewModel))
         libraryViewController.render(withViewModel: libraryVM)
+    }
+
+    private func notebookCellViewModel(fromNotebook notebook: Notebook) -> NotebookCellViewModel {
+        return NotebookCellViewModel(title: notebook.name,
+                                     isEditable: notebook.uuid == self.editableNotebook?.uuid)
     }
 }
 
