@@ -57,7 +57,7 @@ class LibraryCoordinator: Coordinator {
 
 extension LibraryCoordinator: LibraryViewControllerHandler {
     func didTapAddNotebook() {
-        _ = notebookUseCase.add(withName: "Notebook fixture")
+        _ = notebookUseCase.add(withName: "")
             .map(setEditableNotebook)
             .map { _ in self.updateLibraryViewController() }
     }
