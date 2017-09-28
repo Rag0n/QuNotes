@@ -18,22 +18,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notebook title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U2R-az-nnL">
-                        <rect key="frame" x="8" y="8" width="304" height="20"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Q3v-cI-KDN">
+                        <rect key="frame" x="8" y="8" width="304" height="27.5"/>
+                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="U2R-az-nnL" secondAttribute="trailing" constant="8" id="Njm-Ck-bex"/>
-                    <constraint firstItem="U2R-az-nnL" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="okY-tC-NbW"/>
-                    <constraint firstItem="U2R-az-nnL" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="vj2-Xg-nLT"/>
+                    <constraint firstAttribute="bottom" secondItem="Q3v-cI-KDN" secondAttribute="bottom" constant="8" id="2Qx-FV-1tH"/>
+                    <constraint firstAttribute="trailing" secondItem="Q3v-cI-KDN" secondAttribute="trailing" constant="8" id="YFg-if-ZL8"/>
+                    <constraint firstItem="Q3v-cI-KDN" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="lTV-bK-yTn"/>
+                    <constraint firstItem="Q3v-cI-KDN" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="pvx-QX-GCd"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="titleLabel" destination="U2R-az-nnL" id="Bag-ZC-teT"/>
+                <outlet property="titleTextField" destination="Q3v-cI-KDN" id="D2G-dl-gDK"/>
             </connections>
         </tableViewCell>
     </objects>
