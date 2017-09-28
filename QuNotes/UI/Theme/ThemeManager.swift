@@ -58,10 +58,6 @@ struct ThemeManager {
     }
 
     private static func applyThemeForLibraryCellView() {
-        let libraryTableViewCellLabel = UILabel.appearance(whenContainedInInstancesOf: [LibraryTableViewCell.self])
-        libraryTableViewCellLabel.textColor = theme.textColor
-        libraryTableViewCellLabel.backgroundColor = theme.ligherDarkColor
-        libraryTableViewCellLabel.highlightedTextColor = theme.darkColor
-        UIView.appearance(whenContainedInInstancesOf: [LibraryTableViewCell.self]).backgroundColor = theme.ligherDarkColor
+        UITextField.appearance(whenContainedInInstancesOf: [LibraryTableViewCell.self]).textColor = theme.textColor
     }
 }
