@@ -72,6 +72,15 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
         return true;
     }
 
+    func didChangeNameOfNotebook(withIndex index: Int, title: String) {
+        let notebooks = notebookUseCase.getAll()
+        guard (index < notebooks.count) else { return }
+        let notebook = notebooks[index]
+        _ = notebookUseCase.update(notebook, name: title)
+            .map(resetEditableNotebook)
+            .map { _ in self.updateLibraryViewController() }
+    }
+
     private func deleteNotebook(withIndex index: Int) -> Bool {
         let notebooks = notebookUseCase.getAll()
         guard (index < notebooks.count) else { return false }
@@ -80,6 +89,11 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
 
     private func setEditableNotebook(notebook: Notebook) -> Notebook {
         editableNotebook = notebook
+        return notebook
+    }
+
+    private func resetEditableNotebook(notebook: Notebook) -> Notebook {
+        editableNotebook = nil
         return notebook
     }
 }
