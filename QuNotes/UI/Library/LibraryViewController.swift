@@ -12,6 +12,7 @@ protocol LibraryViewControllerHandler: class {
     func didTapAddNotebook()
     func didTapOnNotebook(withIndex index: Int)
     func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool
+    func didChangeNameOfNotebook(withIndex index: Int, title: String)
 }
 
 class LibraryViewController: UIViewController {
@@ -64,7 +65,9 @@ extension LibraryViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
-        cell.render(viewModel: viewModel!.notebooks[indexPath.row])
+        cell.render(viewModel: viewModel!.notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
+            self.handler?.didChangeNameOfNotebook(withIndex: indexPath.row, title: title)
+        })
         return cell
     }
 }
