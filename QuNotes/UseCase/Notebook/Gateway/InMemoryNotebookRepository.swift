@@ -17,6 +17,7 @@ class InMemoryNotebookRepository: NotebookRepository {
     }
 
     func save(notebook: Notebook) -> Result<Notebook, AnyError> {
+        notebooks.remove(object: notebook)
         notebooks.append(notebook)
         return .success(notebook)
     }

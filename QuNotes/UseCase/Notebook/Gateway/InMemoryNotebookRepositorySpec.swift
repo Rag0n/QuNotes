@@ -56,6 +56,15 @@ class InMemoryNotebookRepositorySpec: QuickSpec {
                 let result = repository.save(notebook: savedNotebook)
                 expect(result.value).to(equal(savedNotebook))
             }
+
+            context("when saving notebook twice") {
+                it("saves only one recent copy of notebook") {
+                    _ = repository.save(notebook: savedNotebook)
+                    _ = repository.save(notebook: savedNotebook)
+                    let notebooks = repository.getAll().value
+                    expect(notebooks?.count).to(equal(1))
+                }
+            }
         }
 
         describe("-delete:") {
