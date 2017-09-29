@@ -8,10 +8,13 @@
 
 import UIKit
 
+typealias DidChangeTitleBlock = (_ title: String) -> Void
+
 class LibraryTableViewCell: UITableViewCell {
     // MARK: - API
 
-    func render(viewModel: NotebookCellViewModel) {
+    func render(viewModel: NotebookCellViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
+        self.onDidChangeTitle = onDidChangeTitle
         titleTextField.text = viewModel.title
         titleTextField.isEnabled = viewModel.isEditable
         if (viewModel.isEditable) {
@@ -32,4 +35,13 @@ class LibraryTableViewCell: UITableViewCell {
     // MARK: - Private
 
     @IBOutlet private weak var titleTextField: UITextField!
+    private var onDidChangeTitle: DidChangeTitleBlock?
+}
+
+// MARK: - UITextFieldDelegate
+
+extension LibraryTableViewCell: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        onDidChangeTitle?(textField.text ?? "")
+    }
 }
