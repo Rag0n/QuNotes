@@ -65,31 +65,28 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
     }
 
     func didTapOnNotebook(withIndex index: Int) {
-        let notebooks = notebookUseCase.getAll()
-        guard (index < notebooks.count) else { return }
-        let notebook = notebooks[index]
+        guard let notebook = notebook(forIndex: index) else { return }
         showNotes(forNotebook: notebook)
     }
     
     func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool {
-        guard deleteNotebook(withIndex: index) else { return false }
+        guard let notebook = notebook(forIndex: index) else { return false }
+        guard notebookUseCase.delete(notebook).error != nil else { return false }
         updateLibraryViewController()
         return true;
     }
 
     func didChangeNameOfNotebook(withIndex index: Int, title: String) {
-        let notebooks = notebookUseCase.getAll()
-        guard (index < notebooks.count) else { return }
-        let notebook = notebooks[index]
+        guard let notebook = notebook(forIndex: index) else { return }
         _ = notebookUseCase.update(notebook, name: title)
             .map(resetEditableNotebook)
             .map { _ in self.updateLibraryViewController() }
     }
 
-    private func deleteNotebook(withIndex index: Int) -> Bool {
+    private func notebook(forIndex index: Int) -> Notebook? {
         let notebooks = notebookUseCase.getAll()
-        guard (index < notebooks.count) else { return false }
-        return notebookUseCase.delete(notebooks[index]).error == nil
+        guard (index < notebooks.count) else { return nil }
+        return notebooks[index]
     }
 
     private func setEditableNotebook(notebook: Notebook) -> Notebook {
