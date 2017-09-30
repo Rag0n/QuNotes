@@ -86,6 +86,7 @@ extension NotebookViewController: UITableViewDataSource {
 extension NotebookViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         handler?.didTapOnNoteWithIndex(index: indexPath.row)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
