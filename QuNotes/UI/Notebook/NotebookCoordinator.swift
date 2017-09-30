@@ -25,6 +25,7 @@ class NotebookCoordinator: Coordinator {
 
     typealias Dependencies = HasNoteUseCase
     fileprivate let noteUseCase: NoteUseCase
+    fileprivate let notebook: Notebook
     fileprivate lazy var notebookViewController: NotebookViewController = {
         let vc = NotebookViewController()
         vc.inject(handler: self)
@@ -33,9 +34,10 @@ class NotebookCoordinator: Coordinator {
     fileprivate let navigationController: NavigationController
     fileprivate var activeNote: Note?
 
-    init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
+    init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook) {
         self.navigationController = navigationController
         self.noteUseCase = dependencies.noteUseCase
+        self.notebook = notebook
     }
 
     // MARK: - Private
