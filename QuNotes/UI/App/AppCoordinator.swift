@@ -62,9 +62,4 @@ class AppCoordinator: Coordinator {
         let libraryCoordinator = LibraryCoordinator(withNavigationController: navigationController, dependencies: dependency)
         navigationController.pushCoordinator(coordinator: libraryCoordinator, animated: true)
     }
-
-    private func showNotebook() {
-        let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController, dependencies: dependency)
-        navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true)
-    }
 }
