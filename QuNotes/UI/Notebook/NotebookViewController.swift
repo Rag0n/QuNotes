@@ -53,6 +53,7 @@ class NotebookViewController: UIViewController {
     fileprivate enum Constants {
         static let title = "Notes"
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
+        static let deleteActionTitle = "Delete"
     }
 
     fileprivate weak var handler: NotebookViewControllerHandler?
@@ -90,7 +91,7 @@ extension NotebookViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, success) in
+        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { (action, view, success) in
             let result = self.handler?.didSwapeToDeleteNoteWithIndex(index: indexPath.row) ?? false
             success(result)
         }

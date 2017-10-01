@@ -44,6 +44,7 @@ class LibraryViewController: UIViewController {
     fileprivate enum Constants {
         static let title = "Library"
         static let libraryCellReuseIdentifier = "libraryCellReuseIdentifier"
+        static let deleteActionTitle = "Delete"
     }
 
     @IBAction private func addNotebookButtonDidTap() {
@@ -81,7 +82,7 @@ extension LibraryViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (action, view, success) in
+        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { (action, view, success) in
             let result = self.handler?.didSwapeToDeleteNotebook(withIndex: indexPath.row) ?? false
             success(result)
         }
