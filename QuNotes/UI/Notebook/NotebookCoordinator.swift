@@ -28,6 +28,8 @@ class NotebookCoordinator: Coordinator {
     fileprivate let notebook: Notebook
     fileprivate lazy var notebookViewController: NotebookViewController = {
         let vc = NotebookViewController()
+        vc.navigationItem.largeTitleDisplayMode = .never
+        vc.navigationItem.title = notebook.name
         vc.inject(handler: self)
         return vc
     }()

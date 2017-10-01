@@ -31,7 +31,6 @@ class NotebookViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = Constants.title
         setupTableView()
         setupSearchController()
     }
