@@ -39,7 +39,6 @@ struct ThemeManager {
 
     private static func applyThemeForNotebookView() {
         let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [NotebookViewController.self])
-        notebookTableView.backgroundColor = theme.ligherDarkColor
         notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
     }
 
@@ -53,7 +52,6 @@ struct ThemeManager {
 
     private static func applyThemeForLibraryView() {
         let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [LibraryViewController.self])
-        notebookTableView.backgroundColor = theme.ligherDarkColor
         notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
     }
 

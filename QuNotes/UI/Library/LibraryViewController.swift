@@ -54,6 +54,7 @@ class LibraryViewController: UIViewController {
     private func setupTableView() {
         LibraryTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.libraryCellReuseIdentifier)
         tableView.estimatedRowHeight = 0
+        tableView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
     }
 }
 

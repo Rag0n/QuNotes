@@ -40,6 +40,7 @@ class NotebookViewController: UIViewController {
     private func setupTableView() {
         NoteTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.noteCellReuseIdentifier)
         tableView.estimatedRowHeight = 0
+        tableView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
     }
 
     private func setupSearchController() {
