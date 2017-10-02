@@ -330,12 +330,14 @@ class ReturningURLsAndSuccessfullyRemovingItemFileManagerSpy: ReturningURLsAndRe
 class ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub: ReturningURLsFileManagerStub {
     static let firstNoteURL = URL(string: "documents/firstNote.qvnote")!
     static let secondNoteURL = URL(string: "documents/secondNote.qvnote")!
-    static let anotherURL = URL(string: "documents/anotherFile.docx")!
+    static let firstNotebookURL = URL(string: "documents/firstNotebook.qvnotebook")!
+    static let secondNotebookURL = URL(string: "documents/secondNotebook.qvnotebook")!
 
     override func contentsOfDirectory(at url: URL, includingPropertiesForKeys keys: [URLResourceKey]?, options mask: FileManager.DirectoryEnumerationOptions = []) throws -> [URL] {
         return [ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.firstNoteURL,
                 ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.secondNoteURL,
-                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.anotherURL]
+                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.firstNotebookURL,
+                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.secondNotebookURL]
     }
 }
 class ReturningURLsAndFailingToReadContentsOfDirectoryManagerStub: ReturningURLsFileManagerStub {}
@@ -350,7 +352,7 @@ class FileReaderSpy: FileReaderService {
         return data()
     }
 
-    fileprivate func data() -> Data {
+    func data() -> Data {
         return Data()
     }
 }
