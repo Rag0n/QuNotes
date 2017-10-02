@@ -85,50 +85,68 @@ class FileNotebookRepositorySpec: QuickSpec {
                     }
                 }
             }
-//            context("when notebook is added") {
-//                let addedNotebook = Notebook.notebookDummy()
-//
-//                beforeEach {
-//                    _ = repository.save(notebook: addedNotebook)
-//                }
-//
-//                it("returns array with added notebook") {
-//                    let notebooks = repository.getAll().value
-//                    let notebook = notebooks?.first
-//                    expect(notebook).to(equal(addedNotebook))
-//                }
-//            }
-//
-//            context("when nothing is added") {
-//                it("returns empty array") {
-//                    let notebooks = repository.getAll().value
-//                    expect(notebooks).to(beEmpty())
-//                }
-//            }
         }
 
         describe("-save:") {
-//            let savedNotebook = Notebook.notebookDummy()
-//
-//            it("adds notebook to storage") {
-//                _ = repository.save(notebook: savedNotebook)
-//                let notebooks = repository.getAll().value
-//                expect(notebooks).to(equal([savedNotebook]))
-//            }
-//
-//            it("returns passed notebook") {
-//                let result = repository.save(notebook: savedNotebook)
-//                expect(result.value).to(equal(savedNotebook))
-//            }
-//
-//            context("when saving notebook twice") {
-//                it("saves only one recent copy of notebook") {
-//                    _ = repository.save(notebook: savedNotebook)
-//                    _ = repository.save(notebook: savedNotebook)
-//                    let notebooks = repository.getAll().value
-//                    expect(notebooks?.count).to(equal(1))
-//                }
-//            }
+            let notebook = Notebook.notebookDummy(withUUID: "notebookUuid", name: "notebook name")
+
+            context("when fileManager is unable to get document directory") {
+                beforeEach {
+                    notebookRepository.fileManager = EmptyURLsFileManagerStub()
+                }
+
+                it("returns result with failedToFindDocumentDirectory error") {
+                    let error = notebookRepository.save(notebook: notebook).error
+                    let underlyingError = (error!.error) as? FileNotebookRepositoryError
+                    expect(underlyingError).to(equal(FileNotebookRepositoryError.failedToFindDocumentDirectory))
+                }
+            }
+
+            context("when fileManager successfully gets document directory") {
+                let expectedString = """
+                {
+                  "name" : "notebook name",
+                  "uuid" : "notebookUuid"
+                }
+                """
+
+                var fileManagerSpy: ReturningURLsAndSuccessfullyCreatingFileFileManagerSpy!
+
+                beforeEach {
+                    fileManagerSpy = ReturningURLsAndSuccessfullyCreatingFileFileManagerSpy()
+                    notebookRepository.fileManager = fileManagerSpy
+                }
+
+                it("writes correct content to file") {
+                    _ = notebookRepository.save(notebook: notebook)
+                    let stringFromPassedData = String(data: fileManagerSpy.passedData!, encoding: .utf8)
+                    expect(stringFromPassedData).to(equal(expectedString))
+                }
+
+                it("writes to correct file path") {
+                    _ = notebookRepository.save(notebook: notebook)
+                    expect(fileManagerSpy.passedPath).to(equal("Documents/notebookUuid.qvnotebook"))
+                }
+
+                context("when fileManager fails to create file") {
+                    beforeEach {
+                        notebookRepository.fileManager = ReturningURLsAndFailingToCreateFileFileManagerSpy()
+                    }
+
+                    it("returns result with error") {
+                        let error = notebookRepository.save(notebook: notebook).error
+                        let underlyingError = (error!.error) as? FileNotebookRepositoryError
+                        expect(underlyingError).to(equal(FileNotebookRepositoryError.failedToCreateFile))
+                    }
+                }
+
+                context("when fileManager successfully creates file") {
+                    it("returns result with saved note") {
+                        let savedNotebook = notebookRepository.save(notebook: notebook).value
+                        expect(savedNotebook).to(equal(notebook))
+                    }
+                }
+            }
         }
 
         describe("-delete:") {
