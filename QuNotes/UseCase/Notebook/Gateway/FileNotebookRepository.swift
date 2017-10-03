@@ -25,7 +25,7 @@ class FileNotebookRepository: NotebookRepository {
     }
 
     func save(notebook: Notebook) -> Result<Notebook, AnyError> {
-        return .success(notebook)
+        return Result(try saveNotebookToFile(notebook))
     }
 
     func delete(notebook: Notebook) -> Result<Notebook, AnyError> {
@@ -33,6 +33,12 @@ class FileNotebookRepository: NotebookRepository {
     }
 
     // MARK: - Private
+
+    fileprivate enum Constants {
+        static let notebookFileExtension = "qvnotebook"
+        static let notebookMetaFileName = "meta"
+        static let notebookMetaFileExtension = "json"
+    }
 
     private lazy var encoder: JSONEncoder = {
         let enc = JSONEncoder()
@@ -50,11 +56,31 @@ class FileNotebookRepository: NotebookRepository {
             throw FileNotebookRepositoryError.failedToFindDocumentDirectory
         }
         let documentDirectoryContent = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [])
-        return documentDirectoryContent.filter { $0.pathExtension == "qvnotebook" }
+        return documentDirectoryContent.filter { $0.pathExtension == Constants.notebookFileExtension }
     }
 
     private func notebookFromFile(fileURL: URL) throws -> Notebook {
         let data = try fileReader.dataFrom(fileURL: fileURL)
         return try decoder.decode(Notebook.self, from: data)
+    }
+
+    private func saveNotebookToFile(_ notebook: Notebook) throws -> Notebook {
+        let notebookDirectory = try notebookDirectoryURL(fromNotebookId: notebook.uuid)
+        try fileManager.createDirectory(atPath: notebookDirectory.path, withIntermediateDirectories: false, attributes: nil)
+        let notebookMetaFileURL = try notebookMetaFile(notebookURL: notebookDirectory)
+        let jsonData = try encoder.encode(notebook)
+        guard fileManager.createFile(atPath: notebookMetaFileURL.path, contents: jsonData, attributes: nil) else {
+            throw FileNotebookRepositoryError.failedToCreateFile
+        }
+        return notebook
+    }
+
+    private func notebookDirectoryURL(fromNotebookId notebookId: String) throws -> URL {
+        guard let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
+            throw FileNotebookRepositoryError.failedToFindDocumentDirectory
+        }
+        return documentsURL
+            .appendingPathComponent("\(notebookId)", isDirectory: true)
+            .appendingPathExtension(Constants.notebookFileExtension)
     }
 }
