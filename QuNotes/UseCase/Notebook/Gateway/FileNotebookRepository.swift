@@ -48,7 +48,7 @@ class FileNotebookRepository: NotebookRepository {
     private lazy var decoder = JSONDecoder()
 
     private func notebooksFromNotebookFiles() throws -> [Notebook] {
-        return try notebookFiles().map(notebookFromFile)
+        return try notebookFiles().map(notebookMetaFile).map(notebookFromMetaFile)
     }
 
     private func notebookFiles() throws -> [URL] {
@@ -59,8 +59,14 @@ class FileNotebookRepository: NotebookRepository {
         return documentDirectoryContent.filter { $0.pathExtension == Constants.notebookFileExtension }
     }
 
-    private func notebookFromFile(fileURL: URL) throws -> Notebook {
-        let data = try fileReader.dataFrom(fileURL: fileURL)
+    private func notebookMetaFile(notebookURL: URL) throws -> URL {
+        return notebookURL
+            .appendingPathComponent(Constants.notebookMetaFileName, isDirectory: false)
+            .appendingPathExtension(Constants.notebookMetaFileExtension)
+    }
+
+    private func notebookFromMetaFile(metaURL: URL) throws -> Notebook {
+        let data = try fileReader.dataFrom(fileURL: metaURL)
         return try decoder.decode(Notebook.self, from: data)
     }
 
