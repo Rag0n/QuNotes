@@ -74,7 +74,10 @@ class FileNotebookRepositorySpec: QuickSpec {
 
                         it("reads data from qvnotebook urls") {
                             _ = notebookRepository.getAll()
-                            expect(fileReaderSpy.dataFromFileURLs).to(equal([ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.firstNotebookURL, ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.secondNotebookURL]))
+                            expect(fileReaderSpy.dataFromFileURLs).to(equal([
+                                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.firstNotebookURL.appendingPathComponent("meta").appendingPathExtension("json"),
+                                ReturningURLsAndSuccessfullyReadingContentsOfDirectoryManagerStub.secondNotebookURL.appendingPathComponent("meta").appendingPathExtension("json")
+                            ]))
                         }
 
                         it("returns decoded notes") {
