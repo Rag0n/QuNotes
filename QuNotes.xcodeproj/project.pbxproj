@@ -22,9 +22,6 @@
 		1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
 		11517D021F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11517D011F76DBDF00DDDDD3 /* NotebookRepository.swift */; };
 		11517D031F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11517D011F76DBDF00DDDDD3 /* NotebookRepository.swift */; };
-		11517D051F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11517D041F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift */; };
-		11517D061F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11517D041F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift */; };
-		11517D081F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11517D071F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift */; };
 		115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
 		115818A71F6B06F4009C9BB2 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 115818A51F6B06F4009C9BB2 /* NoteTableViewCell.xib */; };
 		1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
@@ -124,8 +121,6 @@
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		11517D011F76DBDF00DDDDD3 /* NotebookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookRepository.swift; sourceTree = "<group>"; };
-		11517D041F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryNotebookRepository.swift; sourceTree = "<group>"; };
-		11517D071F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InMemoryNotebookRepositorySpec.swift; sourceTree = "<group>"; };
 		115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		115818A51F6B06F4009C9BB2 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
 		116879881F798EC2009461D6 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
@@ -280,8 +275,6 @@
 			isa = PBXGroup;
 			children = (
 				11517D011F76DBDF00DDDDD3 /* NotebookRepository.swift */,
-				11517D041F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift */,
-				11517D071F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift */,
 				11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */,
 				11DFCEEA1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift */,
 			);
@@ -617,7 +610,6 @@
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
 				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
 				118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */,
-				11517D051F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift in Sources */,
 				11517D021F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */,
@@ -638,7 +630,6 @@
 				11DFCEEB1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift in Sources */,
 				111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				11C41FFE1F74521A00397DD9 /* NotebookSpec.swift in Sources */,
-				11517D061F76DC4500DDDDD3 /* InMemoryNotebookRepository.swift in Sources */,
 				11C41FFC1F74521A00397DD9 /* Notebook.swift in Sources */,
 				111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */,
 				118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
@@ -647,7 +638,6 @@
 				112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */,
 				B2125ECBCFABF4186AB515E5 /* NoteUseCase.swift in Sources */,
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
-				11517D081F76DC5500DDDDD3 /* InMemoryNotebookRepositorySpec.swift in Sources */,
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
 				1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */,
 				11517D031F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */,

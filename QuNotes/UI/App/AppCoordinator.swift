@@ -41,8 +41,10 @@ class AppCoordinator: Coordinator {
         noteUseCase.currentDateService = currentDateService
 
         let notebookUseCase = NotebookUseCase()
-        let inMemoryNotebookRepository = InMemoryNotebookRepository()
-        notebookUseCase.repository = inMemoryNotebookRepository
+        let fileNotebookRepository = FileNotebookRepository()
+        fileNotebookRepository.fileManager = FileManager.default
+        fileNotebookRepository.fileReader = fileReaderService
+        notebookUseCase.repository = fileNotebookRepository
 
         return AppDependency(noteUseCase: noteUseCase, notebookUseCase: notebookUseCase)
     }()
