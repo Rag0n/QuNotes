@@ -72,7 +72,7 @@ class FileNotebookRepository: NotebookRepository {
 
     private func saveNotebookToFile(_ notebook: Notebook) throws -> Notebook {
         let notebookDirectory = try notebookDirectoryURL(fromNotebookId: notebook.uuid)
-        try fileManager.createDirectory(atPath: notebookDirectory.path, withIntermediateDirectories: false, attributes: nil)
+        try fileManager.createDirectory(atPath: notebookDirectory.path, withIntermediateDirectories: true, attributes: nil)
         let notebookMetaFileURL = try notebookMetaFile(notebookURL: notebookDirectory)
         let jsonData = try encoder.encode(notebook)
         guard fileManager.createFile(atPath: notebookMetaFileURL.path, contents: jsonData, attributes: nil) else {
