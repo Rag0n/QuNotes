@@ -29,7 +29,7 @@ class FileNotebookRepository: NotebookRepository {
     }
 
     func delete(notebook: Notebook) -> Result<Notebook, AnyError> {
-        return .success(notebook)
+        return Result(try deleteNotebook(notebook))
     }
 
     // MARK: - Private
@@ -88,5 +88,15 @@ class FileNotebookRepository: NotebookRepository {
         return documentsURL
             .appendingPathComponent("\(notebookId)", isDirectory: true)
             .appendingPathExtension(Constants.notebookFileExtension)
+    }
+
+    private func deleteNotebook(_ notebook: Notebook) throws -> Notebook {
+        try deleteNotebookDirectory(withUUID: notebook.uuid)
+        return notebook
+    }
+
+    private func deleteNotebookDirectory(withUUID uuid: String) throws {
+        let directoryURL = try notebookDirectoryURL(fromNotebookId: uuid)
+        try fileManager.removeItem(at: directoryURL)
     }
 }
