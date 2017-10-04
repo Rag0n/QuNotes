@@ -181,22 +181,53 @@ class FileNotebookRepositorySpec: QuickSpec {
         }
 
         describe("-delete:") {
-//            let deletedNotebook = Notebook.notebookDummy()
-//
-//            beforeEach {
-//                _ = repository.save(notebook: deletedNotebook)
-//            }
-//
-//            it("removes notebook from storage") {
-//                _ = repository.delete(notebook: deletedNotebook)
-//                let notebooks = repository.getAll().value
-//                expect(notebooks).to(beEmpty())
-//            }
-//
-//            it("returns passed notebook") {
-//                let result = repository.delete(notebook: deletedNotebook)
-//                expect(result.value).to(equal(deletedNotebook))
-//            }
+            let notebook = Notebook.notebookDummy(withUUID: "notebookUuid")
+
+            context("when fileManager is unable to get document directory") {
+                beforeEach {
+                    notebookRepository.fileManager = EmptyURLsFileManagerStub()
+                }
+
+                it("returns result with failedToFindDocumentDirectory error") {
+                    let error = notebookRepository.delete(notebook: notebook).error
+                    let underlyingError = (error!.error) as? FileNotebookRepositoryError
+                    expect(underlyingError).to(equal(FileNotebookRepositoryError.failedToFindDocumentDirectory))
+                }
+            }
+
+            context("when fileManager successfully gets document directory") {
+
+                var fileManagerSpy: ReturningURLsAndFailingToRemoveItemFileManagerSpy!
+
+                beforeEach {
+                    fileManagerSpy = ReturningURLsAndFailingToRemoveItemFileManagerSpy()
+                    notebookRepository.fileManager = fileManagerSpy
+                }
+
+                it("calls removeItem of fileManager with correct URL") {
+                    _ = notebookRepository.delete(notebook: notebook)
+                    expect(fileManagerSpy.passedURL?.path).to(equal("Documents/notebookUuid.qvnotebook"))
+                }
+
+                context("when fileManager throws error while removing file") {
+                    it("returns result with throw error") {
+                        let error = notebookRepository.delete(notebook: notebook).error
+                        let underlyingError = (error!.error) as! FileNoteRepositoryError
+                        expect(underlyingError).to(equal(ReturningURLsAndFailingToRemoveItemFileManagerSpy.error))
+                    }
+                }
+
+                context("when fileManager successfuly removes file") {
+                    beforeEach {
+                        notebookRepository.fileManager = ReturningURLsAndSuccessfullyRemovingItemFileManagerSpy()
+                    }
+
+                    it("returns result with deleted note") {
+                        let deletedNotebook = notebookRepository.delete(notebook: notebook).value
+                        expect(deletedNotebook).to(equal(notebook))
+                    }
+                }
+            }
         }
     }
 }
@@ -211,6 +242,8 @@ class NotebookDummyFileReaderSpy: FileReaderSpy {
         return try! encoder.encode(notebookDummy)
     }
 }
+
+// MARK: - FileManager repository stubs & spys
 
 class ReturningURLsAndCreatingDirectoryFileManagerSpy: ReturningURLsFileManagerStub {
     private(set) var passedPath: String?
