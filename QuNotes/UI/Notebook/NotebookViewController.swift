@@ -13,6 +13,8 @@ protocol NotebookViewControllerHandler: class {
     func didTapOnNoteWithIndex(index: Int)
     func didSwapeToDeleteNoteWithIndex(index: Int) -> Bool
     func didUpdateSearchResults(withText text: String?)
+    func didStartEditingTitle()
+    func didFinishEditingTitle(newTitle title: String?)
 }
 
 class NotebookViewController: UIViewController {
@@ -125,5 +127,17 @@ extension NotebookViewController: UITableViewDelegate {
 extension NotebookViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         handler?.didUpdateSearchResults(withText: searchController.searchBar.text)
+    }
+}
+
+// MARK: - UITextField
+
+extension NotebookViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        handler?.didStartEditingTitle()
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        handler?.didFinishEditingTitle(newTitle: textField.text)
     }
 }

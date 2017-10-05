@@ -23,9 +23,10 @@ class NotebookCoordinator: Coordinator {
 
     // MARK: - Life cycle
 
-    typealias Dependencies = HasNoteUseCase
+    typealias Dependencies = HasNoteUseCase & HasNotebookUseCase
     fileprivate let noteUseCase: NoteUseCase
-    fileprivate let notebook: Notebook
+    fileprivate let notebookUseCase: NotebookUseCase
+    fileprivate private(set) var notebook: Notebook
     fileprivate lazy var notebookViewController: NotebookViewController = {
         let vc = NotebookViewController()
         vc.navigationItem.largeTitleDisplayMode = .never
@@ -40,6 +41,7 @@ class NotebookCoordinator: Coordinator {
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook) {
         self.navigationController = navigationController
         self.noteUseCase = dependencies.noteUseCase
+        self.notebookUseCase = dependencies.notebookUseCase
         self.notebook = notebook
     }
 
@@ -103,6 +105,18 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
         } else {
             updateNotebookViewModel()
         }
+    }
+
+    func didStartEditingTitle() {
+        hidesBackButton = true
+        updateNotebookViewModel()
+    }
+
+    func didFinishEditingTitle(newTitle title: String?) {
+        hidesBackButton = false
+        notebook = notebookUseCase.update(notebook, name: title ?? "")
+            .recover(notebook)
+        updateNotebookViewModel()
     }
 }
 
