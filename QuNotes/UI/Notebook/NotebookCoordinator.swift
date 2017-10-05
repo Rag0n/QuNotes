@@ -35,6 +35,7 @@ class NotebookCoordinator: Coordinator {
     }()
     fileprivate let navigationController: NavigationController
     fileprivate var activeNote: Note?
+    fileprivate var hidesBackButton = false
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook) {
         self.navigationController = navigationController
@@ -49,7 +50,9 @@ class NotebookCoordinator: Coordinator {
         if titleFilter.count > 0 {
             notes = notes.filter { $0.title.lowercased().contains(titleFilter) }
         }
-        let notebookViewModel = NotebookViewModel(notes: notes.map { $0.title })
+        let notebookViewModel = NotebookViewModel(title: notebook.name,
+                                                  hidesBackButton: hidesBackButton,
+                                                  notes: notes.map { $0.title })
         notebookViewController.render(withViewModel: notebookViewModel)
     }
 }

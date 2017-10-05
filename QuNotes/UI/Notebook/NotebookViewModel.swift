@@ -4,5 +4,7 @@
 //
 
 struct NotebookViewModel {
+    let title: String
+    let hidesBackButton: Bool
     let notes: [String]
 }

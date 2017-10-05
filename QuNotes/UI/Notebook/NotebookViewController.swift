@@ -24,6 +24,7 @@ class NotebookViewController: UIViewController {
 
     func render(withViewModel viewModel: NotebookViewModel) {
         self.viewModel = viewModel
+        reloadNavigationBar()
         tableView?.reloadData()
     }
 
@@ -31,11 +32,25 @@ class NotebookViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
         setupTableView()
         setupSearchController()
     }
 
     // MARK: - Private
+
+    private func reloadNavigationBar() {
+        guard let viewModel = viewModel else { return }
+        titleTextField?.text = viewModel.title
+        navigationItem.setHidesBackButton(viewModel.hidesBackButton, animated: true)
+    }
+
+    private func setupNavigationBar() {
+        titleTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
+        titleTextField.delegate = self
+        navigationItem.titleView = titleTextField
+        reloadNavigationBar()
+    }
 
     private func setupTableView() {
         NoteTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.noteCellReuseIdentifier)
@@ -61,6 +76,7 @@ class NotebookViewController: UIViewController {
     
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var addButton: UIButton!
+    private var titleTextField: UITextField!
     private let searchController = UISearchController(searchResultsController: nil)
 
     @IBAction private func addNote() {
