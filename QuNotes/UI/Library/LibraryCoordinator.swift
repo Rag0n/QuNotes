@@ -71,7 +71,7 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
     
     func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool {
         guard let notebook = notebook(forIndex: index) else { return false }
-        guard notebookUseCase.delete(notebook).error != nil else { return false }
+        guard notebookUseCase.delete(notebook).error == nil else { return false }
         updateLibraryViewController()
         return true;
     }
