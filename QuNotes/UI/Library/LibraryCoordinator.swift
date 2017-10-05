@@ -34,6 +34,7 @@ class LibraryCoordinator: Coordinator {
     fileprivate let navigationController: NavigationController
     fileprivate var activeNote: Note?
     fileprivate var editableNotebook: Notebook?
+    fileprivate var notebooks = [Notebook]()
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
@@ -44,7 +45,7 @@ class LibraryCoordinator: Coordinator {
     // MARK: - Private
 
     fileprivate func updateLibraryViewController() {
-        let notebooks = notebookUseCase.getAll()
+        notebooks = notebookUseCase.getAll().sorted(by: { $0.name < $1.name })
         let libraryVM = LibraryViewModel(notebooks: notebooks.map(notebookCellViewModel))
         libraryViewController.render(withViewModel: libraryVM)
     }
@@ -84,7 +85,6 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
     }
 
     private func notebook(forIndex index: Int) -> Notebook? {
-        let notebooks = notebookUseCase.getAll()
         guard (index < notebooks.count) else { return nil }
         return notebooks[index]
     }
