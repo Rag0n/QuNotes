@@ -118,6 +118,11 @@ extension NotebookCoordinator: NotebookViewControllerHandler {
             .recover(notebook)
         updateNotebookViewModel()
     }
+
+    func didTapOnDeleteButton() {
+        guard notebookUseCase.delete(notebook).error == nil else { return }
+        navigationController.popViewController(animated: true)
+    }
 }
 
 // MARK: - NoteViewControllerHandler

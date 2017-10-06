@@ -15,6 +15,7 @@ protocol NotebookViewControllerHandler: class {
     func didUpdateSearchResults(withText text: String?)
     func didStartEditingTitle()
     func didFinishEditingTitle(newTitle title: String?)
+    func didTapOnDeleteButton()
 }
 
 class NotebookViewController: UIViewController {
@@ -51,6 +52,10 @@ class NotebookViewController: UIViewController {
         titleTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
         titleTextField.delegate = self
         navigationItem.titleView = titleTextField
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
+                                           target: self,
+                                           action: #selector(NotebookViewController.onDeleteButtonClick))
+        self.navigationItem.rightBarButtonItem = deleteButton
         reloadNavigationBar()
     }
 
@@ -83,6 +88,10 @@ class NotebookViewController: UIViewController {
 
     @IBAction private func addNote() {
         handler?.didTapAddNote()
+    }
+
+    @objc private func onDeleteButtonClick() {
+        handler?.didTapOnDeleteButton()
     }
 }
 
