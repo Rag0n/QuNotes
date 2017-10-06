@@ -101,6 +101,6 @@ extension LibraryCoordinator: LibraryViewControllerHandler {
 
     private func showNotes(forNotebook notebook: Notebook) {
         let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController, dependencies: dependencies, notebook: notebook)
-        navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true)
+        navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true, onDispose: updateLibraryViewController)
     }
 }
