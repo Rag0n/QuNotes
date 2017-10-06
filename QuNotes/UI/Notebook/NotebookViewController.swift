@@ -149,4 +149,9 @@ extension NotebookViewController: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
         handler?.didFinishEditingTitle(newTitle: textField.text)
     }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
