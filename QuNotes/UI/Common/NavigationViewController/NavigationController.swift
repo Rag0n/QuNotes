@@ -8,11 +8,14 @@
 
 import UIKit
 
+typealias CoordinatorDisposeBlock = () -> ()
+
 final class NavigationController: UIViewController {
     // MARK: - API
 
-    func pushCoordinator(coordinator: Coordinator, animated: Bool) {
+    func pushCoordinator(coordinator: Coordinator, animated: Bool, onDispose: CoordinatorDisposeBlock? = nil) {
         viewControllerToCoordinatorMap[coordinator.rootViewController] = coordinator
+        viewControllerToDisposeBlockMap[coordinator.rootViewController] = onDispose
         coordinator.onStart()
         pushViewController(viewController: coordinator.rootViewController, animated: animated)
     }
@@ -38,6 +41,8 @@ final class NavigationController: UIViewController {
     }()
 
     fileprivate var viewControllerToCoordinatorMap: [UIViewController: Coordinator] = [:]
+    // TODO: Probably should map Coordinator -> Block, not ViewController -> Block
+    fileprivate var viewControllerToDisposeBlockMap: [UIViewController: CoordinatorDisposeBlock] = [:]
 
     // MARK: - Life cycle & overrides
 
@@ -86,15 +91,22 @@ final class NavigationController: UIViewController {
 // MARK: - UINavigationControllerDelegate
 
 extension NavigationController: UINavigationControllerDelegate {
-    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+    func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         cleanUpChildCoordinators()
     }
 
     private func cleanUpChildCoordinators() {
         for vc in viewControllerToCoordinatorMap.keys {
             if !managedNavigationController.viewControllers.contains(vc) {
-                viewControllerToCoordinatorMap[vc] = nil
+                let onDisposeBlock = viewControllerToDisposeBlockMap[vc]
+                cleanUpMapping(forViewController: vc)
+                onDisposeBlock?()
             }
         }
+    }
+
+    private func cleanUpMapping(forViewController viewController: UIViewController) {
+        viewControllerToCoordinatorMap[viewController] = nil
+        viewControllerToDisposeBlockMap[viewController] = nil
     }
 }
