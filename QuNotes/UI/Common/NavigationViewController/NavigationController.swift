@@ -92,21 +92,25 @@ final class NavigationController: UIViewController {
 
 extension NavigationController: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        cleanUpChildCoordinators()
+        cleanUpChildCoordinatorsIfNeeded()
     }
 
-    private func cleanUpChildCoordinators() {
+    private func cleanUpChildCoordinatorsIfNeeded() {
         for vc in viewControllerToCoordinatorMap.keys {
-            if !managedNavigationController.viewControllers.contains(vc) {
-                let onDisposeBlock = viewControllerToDisposeBlockMap[vc]
-                cleanUpMapping(forViewController: vc)
-                onDisposeBlock?()
+            if shouldCleanUpCoordinator(forViewController: vc) {
+                cleanUpCoordinator(forViewController: vc)
             }
         }
     }
 
-    private func cleanUpMapping(forViewController viewController: UIViewController) {
+    private func shouldCleanUpCoordinator(forViewController vc: UIViewController) -> Bool {
+        return !managedNavigationController.viewControllers.contains(vc)
+    }
+
+    private func cleanUpCoordinator(forViewController viewController: UIViewController) {
+        let onDisposeBlock = viewControllerToDisposeBlockMap[viewController]
         viewControllerToCoordinatorMap[viewController] = nil
         viewControllerToDisposeBlockMap[viewController] = nil
+        onDisposeBlock?()
     }
 }
