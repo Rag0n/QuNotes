@@ -146,7 +146,9 @@ class NoteViewController: UIViewController {
 
     private func setupEditorTextView() {
         editor = Notepad(frame: view.bounds, themeFile: Constants.themeName)
-        editor!.delegate = self;
+        editor!.delegate = self
+        editor!.keyboardAppearance = .dark
+        editor!.returnKeyType = .done
         stackView!.addArrangedSubview(editor!)
     }
 

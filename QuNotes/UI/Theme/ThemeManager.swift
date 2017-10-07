@@ -13,6 +13,7 @@ struct ThemeManager {
 
     static func applyThemeForWindow(window: UIWindow) {
         window.tintColor = theme.mainColor
+        applyThemeForTextFields()
         applyThemeForNavigationBar()
         applyThemeForNotebookView()
         applyThemeForNoteCellView()
@@ -27,6 +28,11 @@ struct ThemeManager {
     // MARK: - Private
 
     private static let theme = ThemeManager.defaultTheme()
+
+    private static func applyThemeForTextFields() {
+        let textField = UITextField.appearance()
+        textField.keyboardAppearance = .dark
+    }
 
     private static func applyThemeForNavigationBar() {
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: theme.textColor]

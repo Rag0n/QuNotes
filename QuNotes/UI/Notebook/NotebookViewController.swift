@@ -52,6 +52,9 @@ class NotebookViewController: UIViewController {
         titleTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
         titleTextField.delegate = self
         titleTextField.textAlignment = .center
+        titleTextField.keyboardAppearance = .dark
+        titleTextField.returnKeyType = .done
+        titleTextField.keyboardType = .asciiCapable
         navigationItem.titleView = titleTextField
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
