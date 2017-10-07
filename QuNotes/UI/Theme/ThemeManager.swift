@@ -35,6 +35,8 @@ struct ThemeManager {
         navigationBar.tintColor = theme.mainColor
         navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: theme.textColor]
         navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: theme.textColor]
+        let textField = UITextField.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
+        textField.textColor = theme.textColor
     }
 
     private static func applyThemeForNotebookView() {

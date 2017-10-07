@@ -51,6 +51,7 @@ class NotebookViewController: UIViewController {
     private func setupNavigationBar() {
         titleTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
         titleTextField.delegate = self
+        titleTextField.textAlignment = .center
         navigationItem.titleView = titleTextField
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
