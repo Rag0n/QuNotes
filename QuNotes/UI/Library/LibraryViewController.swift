@@ -51,6 +51,10 @@ class LibraryViewController: UIViewController {
         handler?.didTapAddNotebook()
     }
 
+    @IBAction private func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+
     private func setupTableView() {
         LibraryTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.libraryCellReuseIdentifier)
         tableView.estimatedRowHeight = 0

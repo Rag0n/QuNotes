@@ -46,6 +46,14 @@
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="7k3-J0-t0a" secondAttribute="trailing" id="dmh-36-SdO"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <connections>
+                <outletCollection property="gestureRecognizers" destination="JgA-L0-ne8" appends="YES" id="rbp-mv-o0U"/>
+            </connections>
         </view>
+        <tapGestureRecognizer cancelsTouchesInView="NO" delaysTouchesEnded="NO" id="JgA-L0-ne8">
+            <connections>
+                <action selector="dismissKeyboard" destination="-1" id="opj-jf-Tjl"/>
+            </connections>
+        </tapGestureRecognizer>
     </objects>
 </document>
