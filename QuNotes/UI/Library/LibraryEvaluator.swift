@@ -16,26 +16,36 @@ struct LibraryEvaluatorResult {
 func evaluate(event: LibraryViewControllerEvent, model: LibraryCoordinatorModel) -> LibraryEvaluatorResult {
     switch event {
     case .addNotebook:
-        return LibraryEvaluatorResult(updates: [], actions: [], model: LibraryCoordinatorModel(notebooks: []))
+        let actions = [LibraryCoordinatorAction.addNotebook]
+        return LibraryEvaluatorResult(updates: [], actions: actions, model: model)
     case .deleteNotebook:
-        return LibraryEvaluatorResult(updates: [], actions: [], model: LibraryCoordinatorModel(notebooks: []))
+        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
     case .selectNotebook:
-        return LibraryEvaluatorResult(updates: [], actions: [], model: LibraryCoordinatorModel(notebooks: []))
+        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
     }
 }
 
 func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel) -> LibraryEvaluatorResult {
     switch event {
     case .updateNotebooks(let notebooks):
-        let notebookViewModels = notebooks.map {
-            return NotebookCellViewModel(title: $0.name, isEditable: false)
+        let sortedNotebooks = notebooks.sorted(by: { $0.name < $1.name })
+        let notebookViewModels = sortedNotebooks.map {
+            return NotebookCellViewModel(title: $0.name, isEditable: $0 == model.editingNotebook)
         }
         let updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
-        let model = LibraryCoordinatorModel(notebooks: notebooks)
+        let model = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: nil)
         return LibraryEvaluatorResult(updates: updates, actions: [], model: model)
-    case .addNotebook:
-        return LibraryEvaluatorResult(updates: [], actions: [], model: LibraryCoordinatorModel(notebooks: []))
+    case .addNotebook(let notebook):
+        let updatedNotebooks = model.notebooks + [notebook]
+        let sortedNotebooks = updatedNotebooks.sorted(by: { $0.name < $1.name })
+        let notebookViewModels = sortedNotebooks.map {
+            return NotebookCellViewModel(title: $0.name, isEditable: $0 == notebook)
+        }
+        let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
+        let updates = [LibraryViewControllerUpdate.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
+        let newModel = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: notebook)
+        return LibraryEvaluatorResult(updates: updates, actions: [], model: newModel)
     case .failedToAddNotebook(let error):
-        return LibraryEvaluatorResult(updates: [], actions: [], model: LibraryCoordinatorModel(notebooks: []))
+        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
     }
 }

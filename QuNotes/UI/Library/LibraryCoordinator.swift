@@ -24,6 +24,7 @@ enum NotebookUseCaseEvent {
 
 struct LibraryCoordinatorModel {
     let notebooks: [Notebook]
+    let editingNotebook: Notebook?
 }
 
 class LibraryCoordinator: Coordinator {
@@ -62,7 +63,7 @@ class LibraryCoordinator: Coordinator {
         self.notebookUseCase = dependencies.notebookUseCase
         self.dependencies = dependencies
 
-        self.model = LibraryCoordinatorModel(notebooks: [])
+        self.model = LibraryCoordinatorModel(notebooks: [], editingNotebook: nil)
     }
 
     // MARK: - Private

@@ -16,7 +16,8 @@ enum LibraryViewControllerEvent {
 
 enum LibraryViewControllerUpdate {
     case updateAllNotebooks(notebooks: [NotebookCellViewModel])
-    case updateNotebook(index: Int, notebook: NotebookCellViewModel)
+    case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
+    case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
     case deleteNotebook(index: Int)
 }
 
@@ -50,10 +51,14 @@ class LibraryViewController: UIViewController {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
             tableView?.reloadData()
-        case .updateNotebook(let index, let notebook):
-            // TODO: update notebook vm
+        case .updateNotebook(let index, let notebooks):
+            self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.reloadRows(at: [indexPath], with: .automatic)
+        case .addNotebook(let index, let notebooks):
+            self.notebooks = notebooks
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView?.insertRows(at: [indexPath], with: .automatic)
         case .deleteNotebook(let index):
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.deleteRows(at: [indexPath], with: .automatic)
@@ -85,7 +90,7 @@ class LibraryViewController: UIViewController {
     }
 
     @IBAction private func addNotebookButtonDidTap() {
-        handler?.didTapAddNotebook()
+        dispatch?(.addNotebook)
     }
 
     @IBAction private func dismissKeyboard() {
