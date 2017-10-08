@@ -10,15 +10,15 @@ import UIKit
 
 enum LibraryViewControllerEvent {
     case addNotebook
-    case deleteNotebook
     case selectNotebook(index: Int)
+    case deleteNotebook(index: Int)
 }
 
 enum LibraryViewControllerUpdate {
     case updateAllNotebooks(notebooks: [NotebookCellViewModel])
     case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
     case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
-    case deleteNotebook(index: Int)
+    case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
 }
 
 protocol LibraryViewControllerHandler: class {
@@ -59,7 +59,8 @@ class LibraryViewController: UIViewController {
             self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.insertRows(at: [indexPath], with: .automatic)
-        case .deleteNotebook(let index):
+        case .deleteNotebook(let index, let notebooks):
+            self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.deleteRows(at: [indexPath], with: .automatic)
         }
@@ -130,9 +131,9 @@ extension LibraryViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { (action, view, success) in
-            let result = self.handler?.didSwapeToDeleteNotebook(withIndex: indexPath.row) ?? false
-            success(result)
+        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
+            self.dispatch?(.deleteNotebook(index: indexPath.row))
+            success(true)
         }
         deleteAction.backgroundColor = .red
 

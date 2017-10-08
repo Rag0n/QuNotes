@@ -18,8 +18,10 @@ func evaluate(event: LibraryViewControllerEvent, model: LibraryCoordinatorModel)
     case .addNotebook:
         let actions = [LibraryCoordinatorAction.addNotebook]
         return LibraryEvaluatorResult(updates: [], actions: actions, model: model)
-    case .deleteNotebook:
-        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
+    case .deleteNotebook(let index):
+        let notebook = model.notebooks[index]
+        let actions = [LibraryCoordinatorAction.deleteNotebook(notebook: notebook)]
+        return LibraryEvaluatorResult(updates: [], actions: actions, model: model)
     case .selectNotebook(let index):
         let notebook = model.notebooks[index]
         let actions = [LibraryCoordinatorAction.showNotes(forNotebook: notebook)]
@@ -49,5 +51,15 @@ func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel
         return LibraryEvaluatorResult(updates: updates, actions: [], model: newModel)
     case .failedToAddNotebook(let error):
         return LibraryEvaluatorResult(updates: [], actions: [], model: model)
+    case .didDelete(let notebook):
+        let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
+        var updatedNotebooks = model.notebooks
+        updatedNotebooks.remove(at: indexOfDeletedNotebook)
+        let notebookViewModels = updatedNotebooks.map {
+            return NotebookCellViewModel(title: $0.name, isEditable: $0 == notebook)
+        }
+        let updates = [LibraryViewControllerUpdate.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
+        let newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: model.editingNotebook)
+        return LibraryEvaluatorResult(updates: updates, actions: [], model: newModel)
     }
 }
