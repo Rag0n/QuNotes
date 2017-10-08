@@ -7,12 +7,31 @@
 //
 
 import UIKit
+import Result
+
+enum LibraryCoordinatorAction {
+    case addNotebook
+    case deleteNotebook(notebook: Notebook)
+    case updateNotebook(notebook: Notebook, title: String)
+    case showNotesForNotebook(notebook: Notebook)
+}
+
+enum NotebookUseCaseEvent {
+    case updateNotebooks(notebooks: [Notebook])
+    case addNotebook(notebook: Notebook)
+    case failedToAddNotebook(error: String)
+}
+
+struct LibraryCoordinatorModel {
+    let notebooks: [Notebook]
+}
 
 class LibraryCoordinator: Coordinator {
     // MARK: - Coordinator
 
     func onStart() {
-        updateLibraryViewController()
+        let notebooks = notebookUseCase.getAll()
+        dispatch(event: NotebookUseCaseEvent.updateNotebooks(notebooks: notebooks))
     }
 
     var rootViewController: UIViewController {
@@ -28,7 +47,7 @@ class LibraryCoordinator: Coordinator {
     fileprivate let dependencies: Dependencies
     fileprivate lazy var libraryViewController: LibraryViewController = {
         let vc = LibraryViewController()
-        vc.inject(handler: self)
+        vc.inject(dispatch: dispatch)
         return vc
     }()
     fileprivate let navigationController: NavigationController
@@ -36,13 +55,50 @@ class LibraryCoordinator: Coordinator {
     fileprivate var editableNotebook: Notebook?
     fileprivate var notebooks = [Notebook]()
 
+    fileprivate var model: LibraryCoordinatorModel
+
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
         self.notebookUseCase = dependencies.notebookUseCase
         self.dependencies = dependencies
+
+        self.model = LibraryCoordinatorModel(notebooks: [])
     }
 
     // MARK: - Private
+
+    fileprivate func dispatch(event: LibraryViewControllerEvent) {
+        let result = evaluate(event: event, model: model)
+        model = result.model
+        result.actions.forEach{ perform(action: $0) }
+        result.updates.forEach { libraryViewController.apply(update: $0) }
+    }
+
+    fileprivate func dispatch(event: NotebookUseCaseEvent) {
+        let result = evaluateUseCase(event: event, model: model)
+        model = result.model
+        result.actions.forEach{ perform(action: $0) }
+        result.updates.forEach { libraryViewController.apply(update: $0) }
+    }
+
+    fileprivate func perform(action: LibraryCoordinatorAction) {
+        switch action {
+        case .addNotebook:
+            switch notebookUseCase.add(withName: "") {
+            case let .success(notebook):
+                dispatch(event: NotebookUseCaseEvent.addNotebook(notebook: notebook))
+            case let .failure(error):
+                dispatch(event: NotebookUseCaseEvent.failedToAddNotebook(error: String(describing: error)))
+            }
+            return
+        case .deleteNotebook(let notebook):
+            return
+        case .showNotesForNotebook(let notebook):
+            return
+        case .updateNotebook(let notebook, let title):
+            return
+        }
+    }
 
     fileprivate func updateLibraryViewController() {
         notebooks = notebookUseCase.getAll().sorted(by: { $0.name < $1.name })

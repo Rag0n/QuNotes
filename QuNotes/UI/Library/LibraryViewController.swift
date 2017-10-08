@@ -8,12 +8,26 @@
 
 import UIKit
 
+enum LibraryViewControllerEvent {
+    case addNotebook
+    case selectNotebook
+    case deleteNotebook
+}
+
+enum LibraryViewControllerUpdate {
+    case updateAllNotebooks(notebooks: [NotebookCellViewModel])
+    case updateNotebook(index: Int, notebook: NotebookCellViewModel)
+    case deleteNotebook(index: Int)
+}
+
 protocol LibraryViewControllerHandler: class {
     func didTapAddNotebook()
     func didTapOnNotebook(withIndex index: Int)
     func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool
     func didChangeNameOfNotebook(withIndex index: Int, title: String)
 }
+
+typealias LibraryViewControllerDispacher = (_ event: LibraryViewControllerEvent) -> ()
 
 class LibraryViewController: UIViewController {
     // MARK: - API
@@ -25,6 +39,25 @@ class LibraryViewController: UIViewController {
     func render(withViewModel viewModel: LibraryViewModel) {
         self.viewModel = viewModel
         tableView?.reloadData()
+    }
+
+    func inject(dispatch: @escaping LibraryViewControllerDispacher) {
+        self.dispatch = dispatch
+    }
+
+    func apply(update: LibraryViewControllerUpdate) {
+        switch update {
+        case .updateAllNotebooks(let notebooks):
+            self.notebooks = notebooks
+            tableView?.reloadData()
+        case .updateNotebook(let index, let notebook):
+            // TODO: update notebook vm
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView?.reloadRows(at: [indexPath], with: .automatic)
+        case .deleteNotebook(let index):
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView?.deleteRows(at: [indexPath], with: .automatic)
+        }
     }
 
     // MARK: - Life cycle
@@ -40,6 +73,10 @@ class LibraryViewController: UIViewController {
     fileprivate weak var handler: LibraryViewControllerHandler?
     fileprivate var viewModel: LibraryViewModel?
     @IBOutlet private weak var tableView: UITableView!
+
+    fileprivate var notebooks: [NotebookCellViewModel]!
+
+    fileprivate var dispatch: LibraryViewControllerDispacher?
 
     fileprivate enum Constants {
         static let title = "Library"
@@ -66,12 +103,13 @@ class LibraryViewController: UIViewController {
 
 extension LibraryViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.notebooks.count ?? 0
+//        return viewModel?.notebooks.count ?? 0
+        return notebooks?.count ?? 0
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
-        cell.render(viewModel: viewModel!.notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
+        cell.render(viewModel: notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
             self.handler?.didChangeNameOfNotebook(withIndex: indexPath.row, title: title)
         })
         return cell

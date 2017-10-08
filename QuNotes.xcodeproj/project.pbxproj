@@ -62,6 +62,7 @@
 		11DFCEE81F82CCCE00E9389F /* FileNotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */; };
 		11DFCEE91F82CCD300E9389F /* FileNotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */; };
 		11DFCEEB1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFCEEA1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift */; };
+		11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
 		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FA13221F6B0B6500B09A92 /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
@@ -152,6 +153,7 @@
 		11CAE2C71F78277300062450 /* LibraryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewModel.swift; sourceTree = "<group>"; };
 		11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNotebookRepository.swift; sourceTree = "<group>"; };
 		11DFCEEA1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNotebookRepositorySpec.swift; sourceTree = "<group>"; };
+		11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluator.swift; sourceTree = "<group>"; };
 		11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		11FBDBC41EED987400135646 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		11FBDBC51EED987400135646 /* QuNotesTestsInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = QuNotesTestsInfo.plist; path = Resources/QuNotesTestsInfo.plist; sourceTree = "<group>"; };
@@ -375,6 +377,7 @@
 			isa = PBXGroup;
 			children = (
 				11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */,
+				11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */,
 				11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */,
 				11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */,
 				11CAE2C71F78277300062450 /* LibraryViewModel.swift */,
@@ -598,6 +601,7 @@
 				1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */,
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
+				11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */,
 				11C41FFF1F74525D00397DD9 /* NotebookUseCase.swift in Sources */,
 				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
