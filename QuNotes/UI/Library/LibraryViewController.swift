@@ -12,6 +12,7 @@ enum LibraryViewControllerEvent {
     case addNotebook
     case selectNotebook(index: Int)
     case deleteNotebook(index: Int)
+    case updateNotebook(index: Int, title: String)
 }
 
 enum LibraryViewControllerUpdate {
@@ -116,7 +117,7 @@ extension LibraryViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
         cell.render(viewModel: notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
-            self.handler?.didChangeNameOfNotebook(withIndex: indexPath.row, title: title)
+            self.dispatch?(.updateNotebook(index: indexPath.row, title: title))
         })
         return cell
     }

@@ -21,6 +21,7 @@ enum NotebookUseCaseEvent {
     case addNotebook(notebook: Notebook)
     case failedToAddNotebook(error: String)
     case didDelete(notebook: Notebook)
+    case didUpdate(notebook: Notebook)
 }
 
 struct LibraryCoordinatorModel {
@@ -97,7 +98,7 @@ class LibraryCoordinator: Coordinator {
             switch notebookUseCase.delete(notebook) {
             case let .success(notebook):
                 dispatch(event: NotebookUseCaseEvent.didDelete(notebook: notebook))
-            case let .failure(error):
+            case let .failure(_):
                 // TODO: Implement error handling
                 return
             }
@@ -110,6 +111,13 @@ class LibraryCoordinator: Coordinator {
             navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true)
             return
         case .updateNotebook(let notebook, let title):
+            switch notebookUseCase.update(notebook, name: title) {
+            case let .success(notebook):
+                dispatch(event: NotebookUseCaseEvent.didUpdate(notebook: notebook))
+            case let .failure(_):
+                // TODO: Implement error handling
+                return
+            }
             return
         }
     }
