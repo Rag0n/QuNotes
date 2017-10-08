@@ -20,8 +20,10 @@ func evaluate(event: LibraryViewControllerEvent, model: LibraryCoordinatorModel)
         return LibraryEvaluatorResult(updates: [], actions: actions, model: model)
     case .deleteNotebook:
         return LibraryEvaluatorResult(updates: [], actions: [], model: model)
-    case .selectNotebook:
-        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
+    case .selectNotebook(let index):
+        let notebook = model.notebooks[index]
+        let actions = [LibraryCoordinatorAction.showNotes(forNotebook: notebook)]
+        return LibraryEvaluatorResult(updates: [], actions: actions, model: model)
     }
 }
 

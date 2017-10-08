@@ -10,8 +10,8 @@ import UIKit
 
 enum LibraryViewControllerEvent {
     case addNotebook
-    case selectNotebook
     case deleteNotebook
+    case selectNotebook(index: Int)
 }
 
 enum LibraryViewControllerUpdate {
@@ -125,7 +125,7 @@ extension LibraryViewController: UITableViewDataSource {
 
 extension LibraryViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        handler?.didTapOnNotebook(withIndex: indexPath.row)
+        dispatch?(.selectNotebook(index: indexPath.row))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 

@@ -13,7 +13,7 @@ enum LibraryCoordinatorAction {
     case addNotebook
     case deleteNotebook(notebook: Notebook)
     case updateNotebook(notebook: Notebook, title: String)
-    case showNotesForNotebook(notebook: Notebook)
+    case showNotes(forNotebook: Notebook)
 }
 
 enum NotebookUseCaseEvent {
@@ -94,7 +94,12 @@ class LibraryCoordinator: Coordinator {
             return
         case .deleteNotebook(let notebook):
             return
-        case .showNotesForNotebook(let notebook):
+        case .showNotes(let notebook):
+            let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController,
+                                                          dependencies: dependencies,
+                                                          notebook: notebook)
+            // TODO: add onDispose
+            navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true)
             return
         case .updateNotebook(let notebook, let title):
             return
