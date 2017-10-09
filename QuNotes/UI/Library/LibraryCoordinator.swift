@@ -63,17 +63,17 @@ class LibraryCoordinator: Coordinator {
         self.navigationController = navigationController
         self.notebookUseCase = dependencies.notebookUseCase
         self.dependencies = dependencies
-        self.model = initialModel()
+        self.model = LibraryEvaluator.initialModel()
     }
 
     // MARK: - Private
 
     fileprivate func dispatch(event: LibraryViewControllerEvent) {
-        handleEvaluation <| evaluate(event: event, model: model)
+        handleEvaluation <| LibraryEvaluator.evaluateController(event: event, model: model)
     }
 
     fileprivate func dispatch(event: NotebookUseCaseEvent) {
-        handleEvaluation <| evaluateUseCase(event: event, model: model)
+        handleEvaluation <| LibraryEvaluator.evaluateUseCase(event: event, model: model)
     }
 
     fileprivate func handleEvaluation(result: LibraryEvaluatorResult) {
