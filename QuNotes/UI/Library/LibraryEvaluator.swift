@@ -76,5 +76,13 @@ func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel
         let updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
         let newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: nil)
         return LibraryEvaluatorResult(updates: updates, actions: [], model: newModel)
+    case .failedToDeleteNotebook(let error):
+        let errorString = String(describing: error)
+        // TODO: Add error update
+        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
+    case .failedToUpdateNotebook(let error):
+        let errorString = String(describing: error)
+        // TODO: Add error update
+        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
     }
 }
