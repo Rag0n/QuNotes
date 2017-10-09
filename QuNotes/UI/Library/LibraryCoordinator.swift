@@ -54,10 +54,6 @@ class LibraryCoordinator: Coordinator {
         return vc
     }()
     fileprivate let navigationController: NavigationController
-    fileprivate var activeNote: Note?
-    fileprivate var editableNotebook: Notebook?
-    fileprivate var notebooks = [Notebook]()
-
     fileprivate var model: LibraryCoordinatorModel
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
@@ -120,65 +116,5 @@ class LibraryCoordinator: Coordinator {
             }
             return
         }
-    }
-
-    fileprivate func updateLibraryViewController() {
-        notebooks = notebookUseCase.getAll().sorted(by: { $0.name < $1.name })
-        let libraryVM = LibraryViewModel(notebooks: notebooks.map(notebookCellViewModel))
-        libraryViewController.render(withViewModel: libraryVM)
-    }
-
-    private func notebookCellViewModel(fromNotebook notebook: Notebook) -> NotebookCellViewModel {
-        return NotebookCellViewModel(title: notebook.name,
-                                     isEditable: notebook.uuid == self.editableNotebook?.uuid)
-    }
-}
-
-// MARK: - LibraryViewControllerHandler
-
-extension LibraryCoordinator: LibraryViewControllerHandler {
-    func didTapAddNotebook() {
-        _ = notebookUseCase.add(withName: "")
-            .map(setEditableNotebook)
-            .map { _ in self.updateLibraryViewController() }
-    }
-
-    func didTapOnNotebook(withIndex index: Int) {
-        guard let notebook = notebook(forIndex: index) else { return }
-        showNotes(forNotebook: notebook)
-    }
-    
-    func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool {
-        guard let notebook = notebook(forIndex: index) else { return false }
-        guard notebookUseCase.delete(notebook).error == nil else { return false }
-        updateLibraryViewController()
-        return true;
-    }
-
-    func didChangeNameOfNotebook(withIndex index: Int, title: String) {
-        guard let notebook = notebook(forIndex: index) else { return }
-        _ = notebookUseCase.update(notebook, name: title)
-            .map(resetEditableNotebook)
-            .map { _ in self.updateLibraryViewController() }
-    }
-
-    private func notebook(forIndex index: Int) -> Notebook? {
-        guard (index < notebooks.count) else { return nil }
-        return notebooks[index]
-    }
-
-    private func setEditableNotebook(notebook: Notebook) -> Notebook {
-        editableNotebook = notebook
-        return notebook
-    }
-
-    private func resetEditableNotebook(notebook: Notebook) -> Notebook {
-        editableNotebook = nil
-        return notebook
-    }
-
-    private func showNotes(forNotebook notebook: Notebook) {
-        let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController, dependencies: dependencies, notebook: notebook)
-        navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true, onDispose: updateLibraryViewController)
     }
 }
