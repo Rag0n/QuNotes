@@ -17,11 +17,11 @@ enum LibraryCoordinatorAction {
 }
 
 enum NotebookUseCaseEvent {
-    case updateNotebooks(notebooks: [Notebook])
-    case addNotebook(notebook: Notebook)
-    case failedToAddNotebook(error: String)
+    case didUpdateNotebooks(notebooks: [Notebook])
+    case didAddNotebook(notebook: Notebook)
     case didDelete(notebook: Notebook)
     case didUpdate(notebook: Notebook)
+    case failedToAddNotebook(error: AnyError)
     case failedToDeleteNotebook(error: AnyError)
     case failedToUpdateNotebook(error: AnyError)
 }
@@ -36,7 +36,7 @@ class LibraryCoordinator: Coordinator {
 
     func onStart() {
         let notebooks = notebookUseCase.getAll()
-        dispatch(event: NotebookUseCaseEvent.updateNotebooks(notebooks: notebooks))
+        dispatch(event: .didUpdateNotebooks(notebooks: notebooks))
     }
 
     var rootViewController: UIViewController {
@@ -50,36 +50,36 @@ class LibraryCoordinator: Coordinator {
     typealias Dependencies = HasNotebookUseCase & NotebookCoordinator.Dependencies
     fileprivate let notebookUseCase: NotebookUseCase
     fileprivate let dependencies: Dependencies
+    fileprivate let navigationController: NavigationController
+    fileprivate var model: LibraryCoordinatorModel
+
     fileprivate lazy var libraryViewController: LibraryViewController = {
         let vc = LibraryViewController()
         vc.inject(dispatch: dispatch)
         return vc
     }()
-    fileprivate let navigationController: NavigationController
-    fileprivate var model: LibraryCoordinatorModel
 
     init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
         self.navigationController = navigationController
         self.notebookUseCase = dependencies.notebookUseCase
         self.dependencies = dependencies
-
-        self.model = LibraryCoordinatorModel(notebooks: [], editingNotebook: nil)
+        self.model = initialModel()
     }
 
     // MARK: - Private
 
     fileprivate func dispatch(event: LibraryViewControllerEvent) {
-        let result = evaluate(event: event, model: model)
-        model = result.model
-        result.actions.forEach{ perform(action: $0) }
-        result.updates.forEach { libraryViewController.apply(update: $0) }
+        handleEvaluation <| evaluate(event: event, model: model)
     }
 
     fileprivate func dispatch(event: NotebookUseCaseEvent) {
-        let result = evaluateUseCase(event: event, model: model)
+        handleEvaluation <| evaluateUseCase(event: event, model: model)
+    }
+
+    fileprivate func handleEvaluation(result: LibraryEvaluatorResult) {
         model = result.model
-        result.actions.forEach{ perform(action: $0) }
-        result.updates.forEach { libraryViewController.apply(update: $0) }
+        result.actions.forEach(perform)
+        result.updates.forEach(libraryViewController.apply)
     }
 
     fileprivate func perform(action: LibraryCoordinatorAction) {
@@ -87,20 +87,18 @@ class LibraryCoordinator: Coordinator {
         case .addNotebook:
             switch notebookUseCase.add(withName: "") {
             case let .success(notebook):
-                dispatch(event: NotebookUseCaseEvent.addNotebook(notebook: notebook))
+                dispatch(event: .didAddNotebook(notebook: notebook))
             case let .failure(error):
-                dispatch(event: NotebookUseCaseEvent.failedToAddNotebook(error: String(describing: error)))
+                dispatch(event: .failedToAddNotebook(error: error))
             }
-            return
         case .deleteNotebook(let notebook):
             switch notebookUseCase.delete(notebook) {
             case let .success(notebook):
-                dispatch(event: NotebookUseCaseEvent.didDelete(notebook: notebook))
+                dispatch(event: .didDelete(notebook: notebook))
             case let .failure(error):
                 dispatch(event: .failedToDeleteNotebook(error: error))
                 return
             }
-            return
         case .showNotes(let notebook):
             let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController,
                                                           dependencies: dependencies,
@@ -111,12 +109,11 @@ class LibraryCoordinator: Coordinator {
         case .updateNotebook(let notebook, let title):
             switch notebookUseCase.update(notebook, name: title) {
             case let .success(notebook):
-                dispatch(event: NotebookUseCaseEvent.didUpdate(notebook: notebook))
+                dispatch(event: .didUpdate(notebook: notebook))
             case let .failure(error):
                 dispatch(event: .failedToUpdateNotebook(error: error))
                 return
             }
-            return
         }
     }
 }

@@ -7,12 +7,18 @@
 //
 
 import Foundation
+import Result
 
 struct LibraryEvaluatorResult {
     let updates: [LibraryViewControllerUpdate]
     let actions: [LibraryCoordinatorAction]
     let model: LibraryCoordinatorModel
 }
+
+func initialModel() -> LibraryCoordinatorModel {
+    return LibraryCoordinatorModel(notebooks: [], editingNotebook: nil)
+}
+
 func evaluate(event: LibraryViewControllerEvent, model: LibraryCoordinatorModel) -> LibraryEvaluatorResult {
     switch event {
     case .addNotebook:
@@ -35,7 +41,7 @@ func evaluate(event: LibraryViewControllerEvent, model: LibraryCoordinatorModel)
 
 func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel) -> LibraryEvaluatorResult {
     switch event {
-    case .updateNotebooks(let notebooks):
+    case .didUpdateNotebooks(let notebooks):
         let sortedNotebooks = notebooks.sorted(by: { $0.name < $1.name })
         let notebookViewModels = sortedNotebooks.map {
             return NotebookCellViewModel(title: $0.name, isEditable: $0 == model.editingNotebook)
@@ -43,7 +49,7 @@ func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel
         let updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
         let model = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: nil)
         return LibraryEvaluatorResult(updates: updates, actions: [], model: model)
-    case .addNotebook(let notebook):
+    case .didAddNotebook(let notebook):
         let updatedNotebooks = model.notebooks + [notebook]
         let sortedNotebooks = updatedNotebooks.sorted(by: { $0.name < $1.name })
         let notebookViewModels = sortedNotebooks.map {
@@ -53,8 +59,6 @@ func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel
         let updates = [LibraryViewControllerUpdate.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
         let newModel = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: notebook)
         return LibraryEvaluatorResult(updates: updates, actions: [], model: newModel)
-    case .failedToAddNotebook(let _):
-        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
     case .didDelete(let notebook):
         let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
         var updatedNotebooks = model.notebooks
@@ -76,6 +80,10 @@ func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel
         let updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
         let newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: nil)
         return LibraryEvaluatorResult(updates: updates, actions: [], model: newModel)
+    case .failedToAddNotebook(let error):
+        let errorString = String(describing: error)
+        // TODO: Add error update
+        return LibraryEvaluatorResult(updates: [], actions: [], model: model)
     case .failedToDeleteNotebook(let error):
         let errorString = String(describing: error)
         // TODO: Add error update

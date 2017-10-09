@@ -22,26 +22,10 @@ enum LibraryViewControllerUpdate {
     case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
 }
 
-protocol LibraryViewControllerHandler: class {
-    func didTapAddNotebook()
-    func didTapOnNotebook(withIndex index: Int)
-    func didSwapeToDeleteNotebook(withIndex index: Int) -> Bool
-    func didChangeNameOfNotebook(withIndex index: Int, title: String)
-}
-
 typealias LibraryViewControllerDispacher = (_ event: LibraryViewControllerEvent) -> ()
 
 class LibraryViewController: UIViewController {
     // MARK: - API
-
-    func inject(handler: LibraryViewControllerHandler) {
-        self.handler = handler
-    }
-
-    func render(withViewModel viewModel: LibraryViewModel) {
-        self.viewModel = viewModel
-        tableView?.reloadData()
-    }
 
     func inject(dispatch: @escaping LibraryViewControllerDispacher) {
         self.dispatch = dispatch
@@ -76,14 +60,9 @@ class LibraryViewController: UIViewController {
     }
 
     // MARK: - Private
-
-    fileprivate weak var handler: LibraryViewControllerHandler?
-    fileprivate var viewModel: LibraryViewModel?
     @IBOutlet private weak var tableView: UITableView!
-
     fileprivate var notebooks: [NotebookCellViewModel]!
-
-    fileprivate var dispatch: LibraryViewControllerDispacher?
+    fileprivate var dispatch: LibraryViewControllerDispacher!
 
     fileprivate enum Constants {
         static let title = "Library"
@@ -92,11 +71,11 @@ class LibraryViewController: UIViewController {
     }
 
     @IBAction private func addNotebookButtonDidTap() {
-        dispatch?(.addNotebook)
+        dispatch(.addNotebook)
     }
 
     @IBAction private func dismissKeyboard() {
-        self.view.endEditing(true)
+        view.endEditing(true)
     }
 
     private func setupTableView() {
@@ -110,14 +89,13 @@ class LibraryViewController: UIViewController {
 
 extension LibraryViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return viewModel?.notebooks.count ?? 0
         return notebooks?.count ?? 0
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
         cell.render(viewModel: notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
-            self.dispatch?(.updateNotebook(index: indexPath.row, title: title))
+            self.dispatch(.updateNotebook(index: indexPath.row, title: title))
         })
         return cell
     }
@@ -127,13 +105,13 @@ extension LibraryViewController: UITableViewDataSource {
 
 extension LibraryViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dispatch?(.selectNotebook(index: indexPath.row))
+        dispatch(.selectNotebook(index: indexPath.row))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
-            self.dispatch?(.deleteNotebook(index: indexPath.row))
+            self.dispatch(.deleteNotebook(index: indexPath.row))
             success(true)
         }
         deleteAction.backgroundColor = .red
