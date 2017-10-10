@@ -20,6 +20,7 @@ enum LibraryViewControllerUpdate {
     case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
     case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
     case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
+    case showError(error: String, message: String)
 }
 
 typealias LibraryViewControllerDispacher = (_ event: LibraryViewControllerEvent) -> ()
@@ -48,6 +49,11 @@ class LibraryViewController: UIViewController {
             self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.deleteRows(at: [indexPath], with: .automatic)
+        case .showError(let error, let message):
+            let alertController = UIAlertController(title: error, message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true, completion: nil)
         }
     }
 

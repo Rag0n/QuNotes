@@ -80,14 +80,27 @@ extension LibraryEvaluator {
             updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
             newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: nil)
         case .failedToAddNotebook(let error):
-            let _ = String(describing: error)
-            // TODO: Add error update
+            let errorMessage = error.error.localizedDescription
+            let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
+            updates = [
+                .updateAllNotebooks(notebooks: notebookViewModels),
+                .showError(error: "Failed to add notebook", message: errorMessage)
+            ]
+            newModel = LibraryCoordinatorModel(notebooks: model.notebooks, editingNotebook: nil)
         case .failedToDeleteNotebook(let error):
-            let _ = String(describing: error)
-            // TODO: Add error update
+            let errorMessage = error.error.localizedDescription
+            let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
+            updates = [
+                .updateAllNotebooks(notebooks: notebookViewModels),
+                .showError(error: "Failed to delete notebook", message: errorMessage)
+            ]
         case .failedToUpdateNotebook(let error):
-            let _ = String(describing: error)
-            // TODO: Add error update
+            let errorMessage = error.error.localizedDescription
+            let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
+            updates = [
+                .updateAllNotebooks(notebooks: notebookViewModels),
+                .showError(error: "Failed to update notebook", message: errorMessage)
+            ]
         }
 
         return LibraryEvaluatorResult(updates: updates, actions: actions, model: newModel)
