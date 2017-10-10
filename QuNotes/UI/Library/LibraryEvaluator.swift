@@ -30,16 +30,16 @@ extension LibraryEvaluator {
 
         switch event {
         case .addNotebook:
-            actions = [LibraryCoordinatorAction.addNotebook]
+            actions = [.addNotebook]
         case .deleteNotebook(let index):
             let notebook = model.notebooks[index]
-            actions = [LibraryCoordinatorAction.deleteNotebook(notebook: notebook)]
+            actions = [.deleteNotebook(notebook: notebook)]
         case .selectNotebook(let index):
             let notebook = model.notebooks[index]
-            actions = [LibraryCoordinatorAction.showNotes(forNotebook: notebook)]
+            actions = [.showNotes(forNotebook: notebook)]
         case .updateNotebook(let index, let title):
             let notebook = model.notebooks[index]
-            actions = [LibraryCoordinatorAction.updateNotebook(notebook: notebook, title: title)]
+            actions = [.updateNotebook(notebook: notebook, title: title)]
         }
 
         return LibraryEvaluatorResult(updates: updates, actions: actions, model: model)
@@ -56,20 +56,20 @@ extension LibraryEvaluator {
         case .didUpdateNotebooks(let notebooks):
             let sortedNotebooks = notebooks.sorted(by: defaultNotebookSorting)
             let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: model.editingNotebook)
-            updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
+            updates = [.updateAllNotebooks(notebooks: notebookViewModels)]
             newModel = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: nil)
         case .didAddNotebook(let notebook):
             let updatedNotebooks = model.notebooks + [notebook]
             let sortedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
-            let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks, editingNotebook: notebook)
+            let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: notebook)
             let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
-            updates = [LibraryViewControllerUpdate.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
+            updates = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
             newModel = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: notebook)
         case .didDelete(let notebook):
             let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
             let updatedNotebooks = model.notebooks.removeWithoutMutation(at: indexOfDeletedNotebook)
             let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
-            updates = [LibraryViewControllerUpdate.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
+            updates = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
             newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: model.editingNotebook)
         case .didUpdate(let notebook):
             let indexOfUpdatedNotebook = model.notebooks.index(of: notebook)!
@@ -77,7 +77,7 @@ extension LibraryEvaluator {
             updatedNotebooks[indexOfUpdatedNotebook] = notebook
             updatedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
             let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
-            updates = [LibraryViewControllerUpdate.updateAllNotebooks(notebooks: notebookViewModels)]
+            updates = [.updateAllNotebooks(notebooks: notebookViewModels)]
             newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: nil)
         case .failedToAddNotebook(let error):
             let errorMessage = error.error.localizedDescription
