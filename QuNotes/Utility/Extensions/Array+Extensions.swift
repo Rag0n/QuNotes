@@ -12,4 +12,10 @@ extension Array where Element: Equatable {
             remove(at: index)
         }
     }
+
+    func removeWithoutMutation(at position: Int) -> [Element] {
+        var updatedArray = self
+        updatedArray.remove(at: position)
+        return updatedArray
+    }
 }
