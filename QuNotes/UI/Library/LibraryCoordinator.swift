@@ -50,7 +50,7 @@ extension Library {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasNotebookUseCase & NotebookCoordinator.Dependencies
+        typealias Dependencies = HasNotebookUseCase & NotebookNamespace.CoordinatorImp.Dependencies
         fileprivate let notebookUseCase: NotebookUseCase
         fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
@@ -103,9 +103,9 @@ extension Library {
                     return
                 }
             case .showNotes(let notebook):
-                let notebookCoordinator = NotebookCoordinator(withNavigationController: navigationController,
-                                                              dependencies: dependencies,
-                                                              notebook: notebook)
+                let notebookCoordinator = NotebookNamespace.CoordinatorImp(withNavigationController: navigationController,
+                                                                           dependencies: dependencies,
+                                                                           notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
                     self.onStart()
                 }

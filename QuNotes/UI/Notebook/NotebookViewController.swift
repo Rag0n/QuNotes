@@ -8,16 +8,8 @@
 
 import UIKit
 
-protocol NotebookViewControllerHandler: class {
-    func didTapAddNote()
-    func didTapOnNoteWithIndex(index: Int)
-    func didSwapeToDeleteNoteWithIndex(index: Int) -> Bool
-    func didUpdateSearchResults(withText text: String?)
-    func didStartEditingTitle()
-    func didFinishEditingTitle(newTitle title: String?)
-    func didTapOnDeleteButton()
 extension NotebookNamespace {
-    enum ControllerEvent {
+    enum ViewControllerEvent {
         case addNote
         case selectNote(index: Int)
         case deleteNote(index: Int)
@@ -27,19 +19,22 @@ extension NotebookNamespace {
         case didFinishToEditTitle(newTitle: String?)
     }
 }
+
+extension NotebookNamespace {
+    enum ViewControllerUpdate {
+    }
 }
+
+typealias NotebookViewControllerDispacher = (_ event: NotebookNamespace.ViewControllerEvent) -> ()
 
 class NotebookViewController: UIViewController {
     // MARK: - API
 
-    func inject(handler: NotebookViewControllerHandler) {
-        self.handler = handler
+    func inject(dispatch: @escaping NotebookViewControllerDispacher) {
+        self.dispatch = dispatch
     }
 
-    func render(withViewModel viewModel: NotebookViewModel) {
-        self.viewModel = viewModel
-        reloadNavigationBar()
-        tableView?.reloadData()
+    func apply(update: NotebookNamespace.ViewControllerUpdate) {
     }
 
     // MARK: - Life cycle
@@ -53,10 +48,18 @@ class NotebookViewController: UIViewController {
 
     // MARK: - Private
 
-    private func reloadNavigationBar() {
-        guard let viewModel = viewModel else { return }
-        titleTextField?.text = viewModel.title
-        navigationItem.setHidesBackButton(viewModel.hidesBackButton, animated: true)
+    fileprivate var notes: [String]!
+    fileprivate var dispatch: NotebookViewControllerDispacher!
+
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var addButton: UIButton!
+    private var titleTextField: UITextField!
+    private let searchController = UISearchController(searchResultsController: nil)
+
+    fileprivate enum Constants {
+        static let title = "Notes"
+        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
+        static let deleteActionTitle = "Delete"
     }
 
     private func setupNavigationBar() {
@@ -71,7 +74,6 @@ class NotebookViewController: UIViewController {
                                            target: self,
                                            action: #selector(NotebookViewController.onDeleteButtonClick))
         self.navigationItem.rightBarButtonItem = deleteButton
-        reloadNavigationBar()
     }
 
     private func setupTableView() {
@@ -87,26 +89,12 @@ class NotebookViewController: UIViewController {
         navigationItem.searchController = searchController
     }
 
-    fileprivate enum Constants {
-        static let title = "Notes"
-        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
-        static let deleteActionTitle = "Delete"
-    }
-
-    fileprivate weak var handler: NotebookViewControllerHandler?
-    fileprivate var viewModel: NotebookViewModel?
-    
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var addButton: UIButton!
-    private var titleTextField: UITextField!
-    private let searchController = UISearchController(searchResultsController: nil)
-
     @IBAction private func addNote() {
-        handler?.didTapAddNote()
+        dispatch(.addNote)
     }
 
     @objc private func onDeleteButtonClick() {
-        handler?.didTapOnDeleteButton()
+        dispatch(.deleteNotebook)
     }
 }
 
@@ -114,12 +102,12 @@ class NotebookViewController: UIViewController {
 
 extension NotebookViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel?.notes.count ?? 0
+        return notes?.count ?? 0
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
-        cell.set(title: viewModel?.notes[indexPath.row] ?? "")
+        cell.set(title: notes[indexPath.row])
         return cell
     }
 }
@@ -128,14 +116,14 @@ extension NotebookViewController: UITableViewDataSource {
 
 extension NotebookViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        handler?.didTapOnNoteWithIndex(index: indexPath.row)
+        dispatch(.selectNote(index: indexPath.row))
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { (action, view, success) in
-            let result = self.handler?.didSwapeToDeleteNoteWithIndex(index: indexPath.row) ?? false
-            success(result)
+        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
+            self.dispatch(.deleteNote(index: indexPath.row))
+            success(true)
         }
         deleteAction.backgroundColor = .red
 
@@ -150,7 +138,7 @@ extension NotebookViewController: UITableViewDelegate {
 
 extension NotebookViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        handler?.didUpdateSearchResults(withText: searchController.searchBar.text)
+        dispatch(.filterNotes(filter: searchController.searchBar.text))
     }
 }
 
@@ -158,11 +146,11 @@ extension NotebookViewController: UISearchResultsUpdating {
 
 extension NotebookViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        handler?.didStartEditingTitle()
+        dispatch(.didStartToEditTitle)
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        handler?.didFinishEditingTitle(newTitle: textField.text)
+        dispatch(.didFinishToEditTitle(newTitle: textField.text))
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -170,3 +158,4 @@ extension NotebookViewController: UITextFieldDelegate {
         return true
     }
 }
+
