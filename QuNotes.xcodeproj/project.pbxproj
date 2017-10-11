@@ -37,6 +37,7 @@
 		118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */; };
 		118569181F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */; };
 		1186B5D61F1D4A9700C72928 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
+		118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		118ACCFA1F058321002DF609 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118ACCF81F058321002DF609 /* NoteViewController.swift */; };
 		118ACCFB1F058321002DF609 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 118ACCF91F058321002DF609 /* NoteViewController.xib */; };
 		118D89B21F607AA40038EB6A /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
@@ -132,6 +133,7 @@
 		117E1BE41F54A4990046DC52 /* DefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
 		118569131F1A1C1E00D3CF1B /* FileReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderService.swift; sourceTree = "<group>"; };
 		118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderServiceImp.swift; sourceTree = "<group>"; };
+		118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluator.swift; sourceTree = "<group>"; };
 		118ACCF81F058321002DF609 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		118ACCF91F058321002DF609 /* NoteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		119955FC1F07C0FD007AB79A /* Notepad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Notepad.framework; path = Carthage/Build/iOS/Notepad.framework; sourceTree = "<group>"; };
@@ -410,6 +412,7 @@
 			isa = PBXGroup;
 			children = (
 				B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */,
+				118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */,
 				B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */,
 				B212595097B91381FC124A0F /* NotebookViewController.xib */,
 				B212582E0B9C2B7AC822B721 /* NotebookViewModel.swift */,
@@ -617,6 +620,7 @@
 				11517D021F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */,
+				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */,
 				1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
