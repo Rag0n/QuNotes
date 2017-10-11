@@ -9,24 +9,20 @@
 import Foundation
 import Result
 
-struct LibraryEvaluatorResult {
-    let updates: [LibraryViewControllerUpdate]
-    let actions: [LibraryCoordinatorAction]
-    let model: LibraryCoordinatorModel
-}
-
-enum LibraryEvaluator {}
-
-extension LibraryEvaluator {
-    static func initialModel() -> LibraryCoordinatorModel {
-        return LibraryCoordinatorModel(notebooks: [], editingNotebook: nil)
+extension Library {
+    struct EvaluatorResult {
+        let updates: [ViewControllerUpdate]
+        let actions: [Library.Action]
+        let model: Library.Model
     }
-}
 
-extension LibraryEvaluator {
-    static func evaluateController(event: LibraryViewControllerEvent, model: LibraryCoordinatorModel) -> LibraryEvaluatorResult {
-        var actions: [LibraryCoordinatorAction] = []
-        let updates: [LibraryViewControllerUpdate] = []
+    static func initialModel() -> Model {
+        return Model(notebooks: [], editingNotebook: nil)
+    }
+
+    static func evaluateController(event: ViewControllerEvent, model: Model) -> EvaluatorResult {
+        var actions: [Action] = []
+        let updates: [ViewControllerUpdate] = []
 
         switch event {
         case .addNotebook:
@@ -42,14 +38,12 @@ extension LibraryEvaluator {
             actions = [.updateNotebook(notebook: notebook, title: title)]
         }
 
-        return LibraryEvaluatorResult(updates: updates, actions: actions, model: model)
+        return EvaluatorResult(updates: updates, actions: actions, model: model)
     }
-}
 
-extension LibraryEvaluator {
-    static func evaluateUseCase(event: NotebookUseCaseEvent, model: LibraryCoordinatorModel) -> LibraryEvaluatorResult {
-        let actions: [LibraryCoordinatorAction] = []
-        var updates: [LibraryViewControllerUpdate] = []
+    static func evaluateUseCase(event: NotebookUseCaseEvent, model: Model) -> EvaluatorResult {
+        let actions: [Action] = []
+        var updates: [ViewControllerUpdate] = []
         var newModel = model
 
         switch event {
@@ -57,20 +51,20 @@ extension LibraryEvaluator {
             let sortedNotebooks = notebooks.sorted(by: defaultNotebookSorting)
             let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: model.editingNotebook)
             updates = [.updateAllNotebooks(notebooks: notebookViewModels)]
-            newModel = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: nil)
+            newModel = Model(notebooks: sortedNotebooks, editingNotebook: nil)
         case .didAddNotebook(let notebook):
             let updatedNotebooks = model.notebooks + [notebook]
             let sortedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
             let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: notebook)
             let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
             updates = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
-            newModel = LibraryCoordinatorModel(notebooks: sortedNotebooks, editingNotebook: notebook)
+            newModel = Model(notebooks: sortedNotebooks, editingNotebook: notebook)
         case .didDelete(let notebook):
             let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
             let updatedNotebooks = model.notebooks.removeWithoutMutation(at: indexOfDeletedNotebook)
             let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
             updates = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
-            newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: model.editingNotebook)
+            newModel = Model(notebooks: updatedNotebooks, editingNotebook: model.editingNotebook)
         case .didUpdate(let notebook):
             let indexOfUpdatedNotebook = model.notebooks.index(of: notebook)!
             var updatedNotebooks = model.notebooks
@@ -78,7 +72,7 @@ extension LibraryEvaluator {
             updatedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
             let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
             updates = [.updateAllNotebooks(notebooks: notebookViewModels)]
-            newModel = LibraryCoordinatorModel(notebooks: updatedNotebooks, editingNotebook: nil)
+            newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
         case .failedToAddNotebook(let error):
             let errorMessage = error.error.localizedDescription
             let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
@@ -86,7 +80,7 @@ extension LibraryEvaluator {
                 .updateAllNotebooks(notebooks: notebookViewModels),
                 .showError(error: "Failed to add notebook", message: errorMessage)
             ]
-            newModel = LibraryCoordinatorModel(notebooks: model.notebooks, editingNotebook: nil)
+            newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
         case .failedToDeleteNotebook(let error):
             let errorMessage = error.error.localizedDescription
             let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
@@ -103,16 +97,18 @@ extension LibraryEvaluator {
             ]
         }
 
-        return LibraryEvaluatorResult(updates: updates, actions: actions, model: newModel)
+        return EvaluatorResult(updates: updates, actions: actions, model: newModel)
     }
+}
 
-    private static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookCellViewModel] {
+private extension Library {
+    static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookCellViewModel] {
         return fromNotebooks.map {
             NotebookCellViewModel(title: $0.name, isEditable: $0 == editingNotebook)
         }
     }
 
-    private static func defaultNotebookSorting(leftNotebook: Notebook, rightNotebook: Notebook) -> Bool {
+    static func defaultNotebookSorting(leftNotebook: Notebook, rightNotebook: Notebook) -> Bool {
         return leftNotebook.name < rightNotebook.name
     }
 }

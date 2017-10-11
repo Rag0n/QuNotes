@@ -8,31 +8,33 @@
 
 import UIKit
 
-enum LibraryViewControllerEvent {
-    case addNotebook
-    case selectNotebook(index: Int)
-    case deleteNotebook(index: Int)
-    case updateNotebook(index: Int, title: String)
-}
+extension Library {
+    enum ViewControllerEvent {
+        case addNotebook
+        case selectNotebook(index: Int)
+        case deleteNotebook(index: Int)
+        case updateNotebook(index: Int, title: String)
+    }
 
-enum LibraryViewControllerUpdate {
-    case updateAllNotebooks(notebooks: [NotebookCellViewModel])
-    case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
-    case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
-    case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
-    case showError(error: String, message: String)
-}
+    enum ViewControllerUpdate {
+        case updateAllNotebooks(notebooks: [NotebookCellViewModel])
+        case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
+        case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
+        case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
+        case showError(error: String, message: String)
+    }
 
-typealias LibraryViewControllerDispacher = (_ event: LibraryViewControllerEvent) -> ()
+    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
+}
 
 class LibraryViewController: UIViewController {
     // MARK: - API
 
-    func inject(dispatch: @escaping LibraryViewControllerDispacher) {
+    func inject(dispatch: @escaping Library.ViewControllerDispacher) {
         self.dispatch = dispatch
     }
 
-    func apply(update: LibraryViewControllerUpdate) {
+    func apply(update: Library.ViewControllerUpdate) {
         switch update {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
@@ -66,9 +68,10 @@ class LibraryViewController: UIViewController {
     }
 
     // MARK: - Private
+
     @IBOutlet private weak var tableView: UITableView!
     fileprivate var notebooks: [NotebookCellViewModel]!
-    fileprivate var dispatch: LibraryViewControllerDispacher!
+    fileprivate var dispatch: Library.ViewControllerDispacher!
 
     fileprivate enum Constants {
         static let title = "Library"

@@ -61,7 +61,7 @@ class AppCoordinator: Coordinator {
     }
 
     private func showLibrary() {
-        let libraryCoordinator = LibraryCoordinator(withNavigationController: navigationController, dependencies: dependency)
+        let libraryCoordinator = Library.CoordinatorImp(withNavigationController: navigationController, dependencies: dependency)
         navigationController.pushCoordinator(coordinator: libraryCoordinator, animated: true)
     }
 }
