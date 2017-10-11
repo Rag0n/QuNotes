@@ -16,6 +16,17 @@ protocol NotebookViewControllerHandler: class {
     func didStartEditingTitle()
     func didFinishEditingTitle(newTitle title: String?)
     func didTapOnDeleteButton()
+extension NotebookNamespace {
+    enum ControllerEvent {
+        case addNote
+        case selectNote(index: Int)
+        case deleteNote(index: Int)
+        case deleteNotebook
+        case filterNotes(filter: String?)
+        case didStartToEditTitle
+        case didFinishToEditTitle(newTitle: String?)
+    }
+}
 }
 
 class NotebookViewController: UIViewController {

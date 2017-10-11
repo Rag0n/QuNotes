@@ -7,6 +7,7 @@
 //
 
 import UIKit
+enum NotebookNamespace {}
 
 class NotebookCoordinator: Coordinator {
     // MARK: - Coordinator
