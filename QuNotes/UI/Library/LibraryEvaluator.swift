@@ -12,8 +12,8 @@ import Result
 extension Library {
     struct EvaluatorResult {
         let updates: [ViewControllerUpdate]
-        let actions: [Library.Action]
-        let model: Library.Model
+        let actions: [Action]
+        let model: Model
     }
 
     static func initialModel() -> Model {

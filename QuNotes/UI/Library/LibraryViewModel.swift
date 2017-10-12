@@ -10,7 +10,3 @@ struct NotebookCellViewModel {
     let title: String
     let isEditable: Bool
 }
-
-struct LibraryViewModel {
-    let notebooks: [NotebookCellViewModel]
-}
