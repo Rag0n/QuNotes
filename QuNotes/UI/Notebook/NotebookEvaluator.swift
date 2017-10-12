@@ -51,4 +51,11 @@ extension NotebookNamespace {
 
         return EvaluatorResult(updates: updates, actions: actions, model: model)
     }
+
+    static func evaluateNoteUseCase(event: NoteUseCaseEvent, model: Model) -> EvaluatorResult {
+        var actions: [Action] = []
+        var updates: [ViewControllerUpdate] = []
+
+        return EvaluatorResult(updates: updates, actions: actions, model: model)
+    }
 }

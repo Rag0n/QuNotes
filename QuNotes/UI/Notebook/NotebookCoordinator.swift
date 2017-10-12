@@ -21,6 +21,14 @@ extension NotebookNamespace {
     }
 
     enum NoteUseCaseEvent {
+        case didAddNote(note: Note)
+        case didFailToAddNote(error: AnyError)
+        case didDeleteNote(note: Note)
+        case didFailToDeleteNote(error: AnyError)
+        case didUpdateNotebook(notebook: Notebook)
+        case didFailToUpdateNotebook(error: AnyError)
+        case didDeleteNotebook(notebook: Notebook)
+        case didFailToDeleteNotebook(error: AnyError)
     }
 
     struct Model {
@@ -73,6 +81,10 @@ extension NotebookNamespace {
             handleEvaluation <| evaluateController(event: event, model: model)
         }
 
+        fileprivate func dispatch(event: NoteUseCaseEvent) {
+            handleEvaluation <| evaluateNoteUseCase(event: event, model: model)
+        }
+
         fileprivate func handleEvaluation(result: EvaluatorResult) {
             model = result.model
             result.actions.forEach(perform)
@@ -80,6 +92,45 @@ extension NotebookNamespace {
         }
 
         fileprivate func perform(action: Action) {
+            switch action {
+            case .addNote:
+                switch noteUseCase.add(withTitle: "") {
+                case let .success(note):
+                    dispatch(event: .didAddNote(note: note))
+                case let .failure(error):
+                    dispatch(event: .didFailToAddNote(error: error))
+                }
+            case .showNote(let note):
+                let noteVC = NoteViewController()
+                noteVC.navigationItem.largeTitleDisplayMode = .never
+                noteVC.inject(handler: self)
+                noteVC.render(withViewModel: NoteViewModel(title: note.title, content: note.content, isTitleActive: true, tags: note.tags))
+                navigationController.pushViewController(viewController: noteVC, animated: true)
+            case .deleteNote(let note):
+                switch noteUseCase.delete(note) {
+                case let .success(note):
+                    dispatch(event: .didDeleteNote(note: note))
+                case let .failure(error):
+                    dispatch(event: .didFailToDeleteNote(error: error))
+                }
+                return
+            case .updateNotebook(let notebook, let title):
+                switch notebookUseCase.update(notebook, name: title) {
+                case let .success(notebook):
+                    dispatch(event: .didUpdateNotebook(notebook: notebook))
+                case let .failure(error):
+                    dispatch(event: .didFailToUpdateNotebook(error: error))
+                    return
+                }
+            case .deleteNotebook(let notebook):
+                switch notebookUseCase.delete(notebook) {
+                case let .success(notebook):
+                    dispatch(event: .didDeleteNotebook(notebook: notebook))
+                case let .failure(error):
+                    dispatch(event: .didFailToDeleteNotebook(error: error))
+                    return
+                }
+            }
         }
     }
 }
