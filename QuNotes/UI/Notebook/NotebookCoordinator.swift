@@ -13,12 +13,19 @@ enum NotebookNamespace {}
 
 extension NotebookNamespace {
     enum Action {
+        case addNote
+        case showNote(note: Note)
+        case deleteNote(note: Note)
+        case deleteNotebook(notebook: Notebook)
+        case updateNotebook(notebook: Notebook, title: String)
     }
 
     enum NoteUseCaseEvent {
     }
 
     struct Model {
+        let notebook: Notebook
+        let notes: [Note]
     }
 
     class CoordinatorImp: Coordinator {
@@ -57,9 +64,7 @@ extension NotebookNamespace {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
             self.notebookUseCase = dependencies.notebookUseCase
-            self.notebook = notebook
-            // TODO: fixme
-            model = Model()
+            model = initialModel(withNotebook: notebook)
         }
 
         // MARK: - Private

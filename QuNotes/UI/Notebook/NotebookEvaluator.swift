@@ -16,32 +16,39 @@ extension NotebookNamespace {
         let model: Model
     }
 
-    static func initialModel() -> Model {
-        return Model()
+    static func initialModel(withNotebook: Notebook) -> Model {
+        return Model(notebook: withNotebook, notes: [])
     }
 
     static func evaluateController(event: ViewControllerEvent, model: Model) -> EvaluatorResult {
         var actions: [Action] = []
-        let updates: [ViewControllerUpdate] = []
-        let result = EvaluatorResult(updates: updates, actions: actions, model: model)
+        var updates: [ViewControllerUpdate] = []
 
         switch event {
         case .addNote:
-            return result
+            actions = [.addNote]
         case .selectNote(let index):
-            return result
+            let note = model.notes[index]
+            actions = [.showNote(note: note)]
         case .deleteNote(let index):
-            return result
+            let note = model.notes[index]
+            actions = [.deleteNote(note: note)]
         case .deleteNotebook:
-            return result
+            actions = [.deleteNotebook(notebook: model.notebook)]
         case .filterNotes(let filter):
-            return result
+            var filteredNotes = model.notes
+            if let filter = filter {
+                filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
+            }
+            let noteTitles = filteredNotes.map { $0.title }
+            updates = [.updateAllNotes(notes: noteTitles)]
         case .didStartToEditTitle:
-            return result
+            updates = [.hideBackButton]
         case .didFinishToEditTitle(let newTitle):
-            return result
+            updates = [.showBackButton]
+            actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
         }
 
-        return result
+        return EvaluatorResult(updates: updates, actions: actions, model: model)
     }
 }

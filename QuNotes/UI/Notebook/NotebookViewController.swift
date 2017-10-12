@@ -22,6 +22,9 @@ extension NotebookNamespace {
 
 extension NotebookNamespace {
     enum ViewControllerUpdate {
+        case updateAllNotes(notes: [String])
+        case hideBackButton
+        case showBackButton
     }
 }
 
