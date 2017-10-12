@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension NotebookNamespace {
+extension UI.Notebook {
     enum ViewControllerEvent {
         case addNote
         case selectNote(index: Int)
@@ -20,7 +20,7 @@ extension NotebookNamespace {
     }
 }
 
-extension NotebookNamespace {
+extension UI.Notebook {
     enum ViewControllerUpdate {
         case updateAllNotes(notes: [String])
         case hideBackButton
@@ -28,7 +28,7 @@ extension NotebookNamespace {
     }
 }
 
-typealias NotebookViewControllerDispacher = (_ event: NotebookNamespace.ViewControllerEvent) -> ()
+typealias NotebookViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
 
 class NotebookViewController: UIViewController {
     // MARK: - API
@@ -37,7 +37,7 @@ class NotebookViewController: UIViewController {
         self.dispatch = dispatch
     }
 
-    func apply(update: NotebookNamespace.ViewControllerUpdate) {
+    func apply(update: UI.Notebook.ViewControllerUpdate) {
     }
 
     // MARK: - Life cycle

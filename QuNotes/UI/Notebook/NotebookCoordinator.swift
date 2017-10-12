@@ -9,9 +9,12 @@
 import UIKit
 import Result
 
-enum NotebookNamespace {}
+enum UI {}
+extension UI {
+    enum Notebook {}
+}
 
-extension NotebookNamespace {
+extension UI.Notebook {
     enum Action {
         case addNote
         case showNote(note: Note)
@@ -137,7 +140,7 @@ extension NotebookNamespace {
 
 // MARK: - NoteViewControllerHandler
 
-extension NotebookNamespace.CoordinatorImp: NoteViewControllerHandler {
+extension UI.Notebook.CoordinatorImp: NoteViewControllerHandler {
     func didChangeContent(newContent: String) {
         guard let activeNote = activeNote else { return }
         self.activeNote = noteUseCase.update(activeNote, newContent: newContent)

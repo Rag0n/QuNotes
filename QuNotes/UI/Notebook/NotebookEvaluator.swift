@@ -9,7 +9,7 @@
 import Foundation
 import Result
 
-extension NotebookNamespace {
+extension UI.Notebook {
     struct EvaluatorResult {
         let updates: [ViewControllerUpdate]
         let actions: [Action]
