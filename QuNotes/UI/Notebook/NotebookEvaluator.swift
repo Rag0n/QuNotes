@@ -55,7 +55,58 @@ extension UI.Notebook {
     static func evaluateNoteUseCase(event: NoteUseCaseEvent, model: Model) -> EvaluatorResult {
         var actions: [Action] = []
         var updates: [ViewControllerUpdate] = []
+        var newModel = model
 
-        return EvaluatorResult(updates: updates, actions: actions, model: model)
+        switch event {
+        case let .didUpdateNotes(notes):
+            let sortedNotes = notes.sorted(by: defaultNoteSorting)
+            let noteTitles = sortedNotes.map { $0.title }
+            updates = [.updateAllNotes(notes: noteTitles)]
+            newModel = Model(notebook: model.notebook, notes: sortedNotes)
+        case let .didAddNote(note):
+            let newNotes = model.notes + [note]
+            let sortedNotes = newNotes.sorted(by: defaultNoteSorting)
+            newModel = Model(notebook: model.notebook, notes: sortedNotes)
+            actions = [.showNote(note: note)]
+        case let .didDeleteNote(note):
+            let indexOfDeletedNote = model.notes.index(of: note)!
+            let updatedNotes = model.notes.removeWithoutMutation(at: indexOfDeletedNote)
+            let noteTitles = updatedNotes.map { $0.title }
+            updates = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
+            newModel = Model(notebook: model.notebook, notes: updatedNotes)
+        case let .didUpdateNotebook(notebook):
+            updates = [.updateTitle(title: notebook.name)]
+            newModel = Model(notebook: notebook, notes: model.notes)
+        case let .didDeleteNotebook(notebook):
+            actions = [.finish]
+        case let .didFailToAddNote(error):
+            let errorMessage = error.error.localizedDescription
+            updates = [.showError(error: "Failed to add note", message: errorMessage)]
+        case let .didFailToDeleteNote(error):
+            let errorMessage = error.error.localizedDescription
+            let noteTitles = model.notes.map { $0.title }
+            updates = [
+                .updateAllNotes(notes: noteTitles),
+                .showError(error: "Failed to delete notebook", message: errorMessage)
+            ]
+        case let .didFailToUpdateNotebook(error):
+            let errorMessage = error.error.localizedDescription
+            updates = [
+                .updateTitle(title: model.notebook.name),
+                .showError(error: "Failed to update notebook's title", message: errorMessage)
+            ]
+        case let .didFailToDeleteNotebook(error):
+            let errorMessage = error.error.localizedDescription
+            updates = [.showError(error: "Failed to delete notebook", message: errorMessage)]
+        }
+
+        return EvaluatorResult(updates: updates, actions: actions, model: newModel)
+    }
+}
+
+private extension UI.Notebook {
+
+    static func defaultNoteSorting(leftNote: Note, rightNote: Note) -> Bool {
+        return leftNote.title < rightNote.title
     }
 }

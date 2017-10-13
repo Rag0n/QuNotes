@@ -21,9 +21,11 @@ extension UI.Notebook {
         case deleteNote(note: Note)
         case deleteNotebook(notebook: Notebook)
         case updateNotebook(notebook: Notebook, title: String)
+        case finish
     }
 
     enum NoteUseCaseEvent {
+        case didUpdateNotes(notes: [Note])
         case didAddNote(note: Note)
         case didFailToAddNote(error: AnyError)
         case didDeleteNote(note: Note)
@@ -44,6 +46,9 @@ extension UI.Notebook {
 
         func onStart() {
             
+            let notes = noteUseCase.getAll()
+            dispatch(event: .didUpdateNotes(notes: notes))
+            dispatch(event: .didUpdateNotebook(notebook: model.notebook))
         }
 
         var rootViewController: UIViewController {
@@ -133,6 +138,8 @@ extension UI.Notebook {
                     dispatch(event: .didFailToDeleteNotebook(error: error))
                     return
                 }
+            case .finish:
+                navigationController.popViewController(animated: true)
             }
         }
     }
