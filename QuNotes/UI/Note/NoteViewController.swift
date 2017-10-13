@@ -19,17 +19,37 @@ protocol NoteViewControllerHandler: class {
     func willDisappear()
 }
 
-class NoteViewController: UIViewController {
-    // MARK: - API
+extension UI.Note {
+    enum ViewControllerEvent {
+        case changeContent(newContent: String)
+        case changeTitle(newTitle: String)
+        case delete
+        case addTag(tag: String)
+        case removeTag(tag: String)
+    }
+}
 
     func inject(handler: NoteViewControllerHandler) {
         self.handler = handler
+extension UI.Note {
+    enum ViewControllerUpdate {
     }
+}
 
     func render(withViewModel viewModel: NoteViewModel) {
         self.viewModel = viewModel
         dirty = true
         view?.setNeedsLayout()
+typealias NoteViewControllerDispacher = (_ event: UI.Note.ViewControllerEvent) -> ()
+
+class NoteViewController: UIViewController {
+    // MARK: - API
+
+    func inject(dispatch: @escaping NotebookViewControllerDispacher) {
+        self.dispatch = dispatch
+    }
+
+    func apply(update: UI.Notebook.ViewControllerUpdate) {
     }
 
     // MARK: - Life cycle
