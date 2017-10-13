@@ -100,7 +100,6 @@ extension Library {
                     dispatch(event: .didDelete(notebook: notebook))
                 case let .failure(error):
                     dispatch(event: .failedToDeleteNotebook(error: error))
-                    return
                 }
             case .showNotes(let notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
@@ -115,7 +114,6 @@ extension Library {
                     dispatch(event: .didUpdate(notebook: notebook))
                 case let .failure(error):
                     dispatch(event: .failedToUpdateNotebook(error: error))
-                    return
                 }
             }
         }

@@ -27,12 +27,12 @@ extension UI.Notebook {
     enum NoteUseCaseEvent {
         case didUpdateNotes(notes: [Note])
         case didAddNote(note: Note)
-        case didFailToAddNote(error: AnyError)
         case didDeleteNote(note: Note)
-        case didFailToDeleteNote(error: AnyError)
         case didUpdateNotebook(notebook: Notebook)
-        case didFailToUpdateNotebook(error: AnyError)
         case didDeleteNotebook(notebook: Notebook)
+        case didFailToAddNote(error: AnyError)
+        case didFailToDeleteNote(error: AnyError)
+        case didFailToUpdateNotebook(error: AnyError)
         case didFailToDeleteNotebook(error: AnyError)
     }
 
@@ -45,7 +45,6 @@ extension UI.Notebook {
         // MARK: - Coordinator
 
         func onStart() {
-            
             let notes = noteUseCase.getAll()
             dispatch(event: .didUpdateNotes(notes: notes))
             dispatch(event: .didUpdateNotebook(notebook: model.notebook))
@@ -62,19 +61,16 @@ extension UI.Notebook {
         typealias Dependencies = HasNoteUseCase & HasNotebookUseCase
         fileprivate let noteUseCase: NoteUseCase
         fileprivate let notebookUseCase: NotebookUseCase
-        fileprivate private(set) var notebook: Notebook
+        fileprivate let navigationController: NavigationController
         fileprivate var model: Model
 
         fileprivate lazy var notebookViewController: NotebookViewController = {
             let vc = NotebookViewController()
             vc.navigationItem.largeTitleDisplayMode = .never
-            vc.navigationItem.title = notebook.name
             vc.inject(dispatch: dispatch)
             return vc
         }()
-        fileprivate let navigationController: NavigationController
         fileprivate var activeNote: Note?
-        fileprivate var hidesBackButton = false
 
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook) {
             self.navigationController = navigationController
@@ -128,7 +124,6 @@ extension UI.Notebook {
                     dispatch(event: .didUpdateNotebook(notebook: notebook))
                 case let .failure(error):
                     dispatch(event: .didFailToUpdateNotebook(error: error))
-                    return
                 }
             case .deleteNotebook(let notebook):
                 switch notebookUseCase.delete(notebook) {
@@ -136,7 +131,6 @@ extension UI.Notebook {
                     dispatch(event: .didDeleteNotebook(notebook: notebook))
                 case let .failure(error):
                     dispatch(event: .didFailToDeleteNotebook(error: error))
-                    return
                 }
             case .finish:
                 navigationController.popViewController(animated: true)
