@@ -25,6 +25,9 @@ extension UI.Notebook {
         case updateAllNotes(notes: [String])
         case hideBackButton
         case showBackButton
+        case updateTitle(title: String)
+        case deleteNote(index: Int, notes: [String])
+        case showError(error: String, message: String)
     }
 }
 
@@ -38,6 +41,27 @@ class NotebookViewController: UIViewController {
     }
 
     func apply(update: UI.Notebook.ViewControllerUpdate) {
+        switch update {
+        case let .updateAllNotes(notes):
+            self.notes = notes
+            tableView?.reloadData()
+        case .hideBackButton:
+            navigationItem.setHidesBackButton(true, animated: true)
+        case .showBackButton:
+            navigationItem.setHidesBackButton(false, animated: true)
+        case let .updateTitle(title):
+            notebookTitle = title
+            titleTextField?.text = title
+        case let .deleteNote(index, notes):
+            self.notes = notes
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView?.deleteRows(at: [indexPath], with: .automatic)
+        case let .showError(error, message):
+            let alertController = UIAlertController(title: error, message: message, preferredStyle: .alert)
+            let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true, completion: nil)
+        }
     }
 
     // MARK: - Life cycle
@@ -51,8 +75,9 @@ class NotebookViewController: UIViewController {
 
     // MARK: - Private
 
-    fileprivate var notes: [String]!
     fileprivate var dispatch: NotebookViewControllerDispacher!
+    fileprivate var notes: [String]!
+    fileprivate var notebookTitle: String?
 
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var addButton: UIButton!
@@ -72,6 +97,7 @@ class NotebookViewController: UIViewController {
         titleTextField.keyboardAppearance = .dark
         titleTextField.returnKeyType = .done
         titleTextField.keyboardType = .asciiCapable
+        titleTextField.text = notebookTitle
         navigationItem.titleView = titleTextField
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
