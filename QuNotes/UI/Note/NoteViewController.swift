@@ -109,28 +109,25 @@ class NoteViewController: UIViewController {
     }
 
     private func setupTagView() {
-        let tagView = WSTagsField()
-        tagView.backgroundColor = .white
-        tagView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        tagView = WSTagsField()
         tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
-        // TODO: Replace this setup by UIAppearence
         let theme = ThemeManager.defaultTheme()
         tagView.selectedColor = theme.ligherDarkColor
         tagView.selectedTextColor = theme.textColor
+        tagView.backgroundColor = theme.ligherDarkColor
 
         stackView.addArrangedSubview(tagView)
-        self.tagView = tagView
         subscribeOnChangeTagEvents()
     }
 
     private func subscribeOnChangeTagEvents() {
-        tagView.onDidAddTag = { [weak self] _, tag in
-            self?.dispatch(.addTag(tag: tag.text))
+        tagView.onDidAddTag = { [unowned self] _, tag in
+            self.dispatch(.addTag(tag: tag.text))
         }
-        tagView.onDidRemoveTag = { [weak self] _, tag in
-            self?.dispatch(.removeTag(tag: tag.text))
+        tagView.onDidRemoveTag = { [unowned self] _, tag in
+            self.dispatch(.removeTag(tag: tag.text))
         }
     }
 
@@ -146,7 +143,7 @@ class NoteViewController: UIViewController {
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
                                            action: #selector(NoteViewController.onDeleteButtonClick))
-        self.navigationItem.rightBarButtonItem = deleteButton
+        navigationItem.rightBarButtonItem = deleteButton
     }
 }
 
