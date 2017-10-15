@@ -25,7 +25,7 @@ extension UI.Note {
         case didUpdateContent(note: Note)
         case didAddTag(note: Note, tag: String)
         case didRemoveTag(note: Note, tag: String)
-        case didDeleteNote(note: Note)
+        case didDeleteNote
         case didFailToUpdateTitle(error: AnyError)
         case didFailToUpdateContent(error: AnyError)
         case didFailToAddTag(error: AnyError)
@@ -76,7 +76,7 @@ extension UI.Note {
         }
 
         fileprivate func dispatch(event: CoordinatorEvent) {
-            handleEvaluation <| evaluateNoteUseCase(event: event, model: model)
+            handleEvaluation <| evaluateCoordinator(event: event, model: model)
         }
 
         fileprivate func handleEvaluation(result: EvaluatorResult) {
@@ -117,8 +117,8 @@ extension UI.Note {
                 }
             case .delete:
                 switch noteUseCase.delete(model.note) {
-                case let .success(note):
-                    dispatch(event: .didDeleteNote(note: note))
+                case .success:
+                    dispatch(event: .didDeleteNote)
                 case let .failure(error):
                     dispatch(event: .didFailToDeleteNote(error: error))
                 }

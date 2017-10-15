@@ -43,7 +43,7 @@ extension UI.Note {
         return EvaluatorResult(updates: updates, actions: actions, model: model)
     }
 
-    static func evaluateNoteUseCase(event: CoordinatorEvent, model: Model) -> EvaluatorResult {
+    static func evaluateCoordinator(event: CoordinatorEvent, model: Model) -> EvaluatorResult {
         var actions: [Action] = []
         var updates: [ViewControllerUpdate] = []
         var newModel = model
@@ -61,7 +61,7 @@ extension UI.Note {
         case let .didRemoveTag(note, tag):
             updates = [.removeTag(tag: tag)]
             newModel = Model(note: note)
-        case let .didDeleteNote(note):
+        case .didDeleteNote:
             actions = [.finish]
         case let .didFailToUpdateTitle(error):
             let errorMessage = error.error.localizedDescription

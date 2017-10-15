@@ -23,12 +23,12 @@ extension UI.Notebook {
         case finish
     }
 
-    enum NoteUseCaseEvent {
+    enum CoordinatorEvent {
         case didUpdateNotes(notes: [Note])
         case didAddNote(note: Note)
         case didDeleteNote(note: Note)
         case didUpdateNotebook(notebook: Notebook)
-        case didDeleteNotebook(notebook: Notebook)
+        case didDeleteNotebook
         case didFailToAddNote(error: AnyError)
         case didFailToDeleteNote(error: AnyError)
         case didFailToUpdateNotebook(error: AnyError)
@@ -84,8 +84,8 @@ extension UI.Notebook {
             handleEvaluation <| evaluateController(event: event, model: model)
         }
 
-        fileprivate func dispatch(event: NoteUseCaseEvent) {
-            handleEvaluation <| evaluateNoteUseCase(event: event, model: model)
+        fileprivate func dispatch(event: CoordinatorEvent) {
+            handleEvaluation <| evaluateCoordinator(event: event, model: model)
         }
 
         fileprivate func handleEvaluation(result: EvaluatorResult) {
@@ -126,8 +126,8 @@ extension UI.Notebook {
                 }
             case .deleteNotebook(let notebook):
                 switch notebookUseCase.delete(notebook) {
-                case let .success(notebook):
-                    dispatch(event: .didDeleteNotebook(notebook: notebook))
+                case .success:
+                    dispatch(event: .didDeleteNotebook)
                 case let .failure(error):
                     dispatch(event: .didFailToDeleteNotebook(error: error))
                 }

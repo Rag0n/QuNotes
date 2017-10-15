@@ -21,7 +21,7 @@ extension UI.Library {
         case showNotes(forNotebook: Notebook)
     }
 
-    enum NotebookUseCaseEvent {
+    enum CoordinatorEvent {
         case didUpdateNotebooks(notebooks: [Notebook])
         case didAddNotebook(notebook: Notebook)
         case didDelete(notebook: Notebook)
@@ -77,8 +77,8 @@ extension UI.Library {
             handleEvaluation <| evaluateController(event: event, model: model)
         }
 
-        fileprivate func dispatch(event: NotebookUseCaseEvent) {
-            handleEvaluation <| evaluateUseCase(event: event, model: model)
+        fileprivate func dispatch(event: CoordinatorEvent) {
+            handleEvaluation <| evaluateCoordinator(event: event, model: model)
         }
 
         fileprivate func handleEvaluation(result: EvaluatorResult) {

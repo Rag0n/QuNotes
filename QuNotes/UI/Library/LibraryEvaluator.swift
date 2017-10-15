@@ -41,7 +41,7 @@ extension UI.Library {
         return EvaluatorResult(updates: updates, actions: actions, model: model)
     }
 
-    static func evaluateUseCase(event: NotebookUseCaseEvent, model: Model) -> EvaluatorResult {
+    static func evaluateCoordinator(event: CoordinatorEvent, model: Model) -> EvaluatorResult {
         let actions: [Action] = []
         var updates: [ViewControllerUpdate] = []
         var newModel = model

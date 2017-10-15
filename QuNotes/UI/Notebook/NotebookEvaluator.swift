@@ -52,7 +52,7 @@ extension UI.Notebook {
         return EvaluatorResult(updates: updates, actions: actions, model: model)
     }
 
-    static func evaluateNoteUseCase(event: NoteUseCaseEvent, model: Model) -> EvaluatorResult {
+    static func evaluateCoordinator(event: CoordinatorEvent, model: Model) -> EvaluatorResult {
         var actions: [Action] = []
         var updates: [ViewControllerUpdate] = []
         var newModel = model
@@ -77,7 +77,7 @@ extension UI.Notebook {
         case let .didUpdateNotebook(notebook):
             updates = [.updateTitle(title: notebook.name)]
             newModel = Model(notebook: notebook, notes: model.notes)
-        case let .didDeleteNotebook(notebook):
+        case .didDeleteNotebook:
             actions = [.finish]
         case let .didFailToAddNote(error):
             let errorMessage = error.error.localizedDescription
@@ -105,7 +105,6 @@ extension UI.Notebook {
 }
 
 private extension UI.Notebook {
-
     static func defaultNoteSorting(leftNote: Note, rightNote: Note) -> Bool {
         return leftNote.title < rightNote.title
     }
