@@ -32,6 +32,7 @@
 		1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
+		1180E54E1F92A76C00B835BF /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1180E54D1F92A76C00B835BF /* UI.swift */; };
 		118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
 		118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
 		118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */; };
@@ -134,6 +135,7 @@
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
 		117E1BE21F54A43A0046DC52 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		117E1BE41F54A4990046DC52 /* DefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
+		1180E54D1F92A76C00B835BF /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
 		118569131F1A1C1E00D3CF1B /* FileReaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderService.swift; sourceTree = "<group>"; };
 		118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderServiceImp.swift; sourceTree = "<group>"; };
 		118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluator.swift; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 			children = (
 				111743731F521689006EDA89 /* Protocols */,
 				1117436F1F520C10006EDA89 /* NavigationViewController */,
+				1180E54D1F92A76C00B835BF /* UI.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -620,6 +623,7 @@
 				11C41FFF1F74525D00397DD9 /* NotebookUseCase.swift in Sources */,
 				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
+				1180E54E1F92A76C00B835BF /* UI.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,

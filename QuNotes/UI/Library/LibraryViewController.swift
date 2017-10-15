@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension Library {
+extension UI.Library {
     enum ViewControllerEvent {
         case addNotebook
         case selectNotebook(index: Int)
@@ -30,11 +30,11 @@ extension Library {
 class LibraryViewController: UIViewController {
     // MARK: - API
 
-    func inject(dispatch: @escaping Library.ViewControllerDispacher) {
+    func inject(dispatch: @escaping UI.Library.ViewControllerDispacher) {
         self.dispatch = dispatch
     }
 
-    func apply(update: Library.ViewControllerUpdate) {
+    func apply(update: UI.Library.ViewControllerUpdate) {
         switch update {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
@@ -71,7 +71,7 @@ class LibraryViewController: UIViewController {
 
     @IBOutlet private weak var tableView: UITableView!
     fileprivate var notebooks: [NotebookCellViewModel]!
-    fileprivate var dispatch: Library.ViewControllerDispacher!
+    fileprivate var dispatch: UI.Library.ViewControllerDispacher!
 
     fileprivate enum Constants {
         static let title = "Library"

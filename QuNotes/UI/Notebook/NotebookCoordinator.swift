@@ -9,7 +9,6 @@
 import UIKit
 import Result
 
-enum UI {}
 extension UI {
     enum Notebook {}
 }

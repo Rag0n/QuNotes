@@ -9,7 +9,7 @@
 import Foundation
 import Result
 
-extension Library {
+extension UI.Library {
     struct EvaluatorResult {
         let updates: [ViewControllerUpdate]
         let actions: [Action]
@@ -101,7 +101,7 @@ extension Library {
     }
 }
 
-private extension Library {
+private extension UI.Library {
     static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookCellViewModel] {
         return fromNotebooks.map {
             NotebookCellViewModel(title: $0.name, isEditable: $0 == editingNotebook)

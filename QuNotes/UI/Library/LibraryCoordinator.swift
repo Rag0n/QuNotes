@@ -9,9 +9,11 @@
 import UIKit
 import Result
 
-enum Library {}
+extension UI {
+    enum Library {}
+}
 
-extension Library {
+extension UI.Library {
     enum Action {
         case addNotebook
         case deleteNotebook(notebook: Notebook)
