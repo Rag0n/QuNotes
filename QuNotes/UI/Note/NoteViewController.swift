@@ -19,9 +19,7 @@ extension UI.Note {
         case addTag(tag: String)
         case removeTag(tag: String)
     }
-}
 
-extension UI.Note {
     enum ViewControllerUpdate {
         case updateTitle(title: String)
         case updateContent(content: String)
@@ -30,14 +28,14 @@ extension UI.Note {
         case removeTag(tag: String)
         case showError(error: String, message: String)
     }
-}
 
-typealias NoteViewControllerDispacher = (_ event: UI.Note.ViewControllerEvent) -> ()
+    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
+}
 
 class NoteViewController: UIViewController {
     // MARK: - API
 
-    func inject(dispatch: @escaping NoteViewControllerDispacher) {
+    func inject(dispatch: @escaping UI.Note.ViewControllerDispacher) {
         self.dispatch = dispatch
     }
 
@@ -73,12 +71,13 @@ class NoteViewController: UIViewController {
 
     // MARK: - Private
 
+    fileprivate var dispatch: UI.Note.ViewControllerDispacher!
+
     private enum Constants {
         static let themeName = "one-dark"
         static let backButtonIconName = "backIcon"
     }
 
-    fileprivate var dispatch: NoteViewControllerDispacher!
     private var editor: Notepad!
     private var tagView: WSTagsField!
     @IBOutlet private var stackView: UIStackView! {

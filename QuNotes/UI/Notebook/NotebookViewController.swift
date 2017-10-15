@@ -18,9 +18,7 @@ extension UI.Notebook {
         case didStartToEditTitle
         case didFinishToEditTitle(newTitle: String?)
     }
-}
 
-extension UI.Notebook {
     enum ViewControllerUpdate {
         case updateAllNotes(notes: [String])
         case hideBackButton
@@ -29,14 +27,14 @@ extension UI.Notebook {
         case deleteNote(index: Int, notes: [String])
         case showError(error: String, message: String)
     }
-}
 
-typealias NotebookViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
+    typealias ViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
+}
 
 class NotebookViewController: UIViewController {
     // MARK: - API
 
-    func inject(dispatch: @escaping NotebookViewControllerDispacher) {
+    func inject(dispatch: @escaping UI.Notebook.ViewControllerDispacher) {
         self.dispatch = dispatch
     }
 
@@ -75,7 +73,7 @@ class NotebookViewController: UIViewController {
 
     // MARK: - Private
 
-    fileprivate var dispatch: NotebookViewControllerDispacher!
+    fileprivate var dispatch: UI.Notebook.ViewControllerDispacher!
     fileprivate var notes: [String]!
     fileprivate var notebookTitle: String?
 
