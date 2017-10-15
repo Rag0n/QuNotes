@@ -60,6 +60,7 @@ extension UI.Notebook {
         typealias Dependencies = HasNoteUseCase & HasNotebookUseCase
         fileprivate let noteUseCase: NoteUseCase
         fileprivate let notebookUseCase: NotebookUseCase
+        fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
         fileprivate var model: Model
 
@@ -75,6 +76,7 @@ extension UI.Notebook {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
             self.notebookUseCase = dependencies.notebookUseCase
+            self.dependencies = dependencies
             model = initialModel(withNotebook: notebook)
         }
 
@@ -104,11 +106,12 @@ extension UI.Notebook {
                     dispatch(event: .didFailToAddNote(error: error))
                 }
             case .showNote(let note):
-                let noteVC = NoteViewController()
-                noteVC.navigationItem.largeTitleDisplayMode = .never
-                noteVC.inject(handler: self)
-                noteVC.render(withViewModel: NoteViewModel(title: note.title, content: note.content, isTitleActive: true, tags: note.tags))
-                navigationController.pushViewController(viewController: noteVC, animated: true)
+                let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
+                                                             dependencies: dependencies,
+                                                             note: note)
+                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [unowned self] in
+                    self.onStart()
+                }
             case .deleteNote(let note):
                 switch noteUseCase.delete(note) {
                 case let .success(note):
@@ -135,43 +138,5 @@ extension UI.Notebook {
                 navigationController.popViewController(animated: true)
             }
         }
-    }
-}
-
-// MARK: - NoteViewControllerHandler
-
-extension UI.Notebook.CoordinatorImp: NoteViewControllerHandler {
-    func didChangeContent(newContent: String) {
-        guard let activeNote = activeNote else { return }
-        self.activeNote = noteUseCase.update(activeNote, newContent: newContent)
-            .recover(activeNote)
-    }
-
-    func didChangeTitle(newTitle: String) {
-        guard let activeNote = activeNote else { return }
-        self.activeNote = noteUseCase.update(activeNote, newTitle: newTitle)
-            .recover(activeNote)
-    }
-
-    func onDeleteButtonClick() {
-        guard let activeNote = activeNote else { return }
-        guard noteUseCase.delete(activeNote).error == nil else { return }
-        self.activeNote = nil
-        navigationController.popViewController(animated: true)
-    }
-
-    func didAddTag(tag: String) {
-        guard let activeNote = activeNote else { return }
-        self.activeNote = noteUseCase.addTag(tag: tag, toNote: activeNote)
-            .recover(activeNote)
-    }
-
-    func didRemoveTag(tag: String) {
-        guard let activeNote = activeNote else { return }
-        self.activeNote = noteUseCase.removeTag(tag: tag, fromNote: activeNote)
-            .recover(activeNote)
-    }
-
-    func willDisappear() {
     }
 }
