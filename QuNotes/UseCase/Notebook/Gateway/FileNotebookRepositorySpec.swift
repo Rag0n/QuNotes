@@ -249,18 +249,18 @@ class ReturningURLsAndCreatingDirectoryFileManagerSpy: ReturningURLsFileManagerS
     private(set) var passedPath: String?
     private(set) var thrownError = NSError(domain: "domain", code: 0, userInfo: nil)
 
-    override func createDirectory(atPath path: String, withIntermediateDirectories createIntermediates: Bool, attributes: [String : Any]? = nil) throws {
+    override func createDirectory(atPath path: String, withIntermediateDirectories createIntermediates: Bool, attributes: [FileAttributeKey : Any]? = nil) throws {
         passedPath = path
         throw thrownError
     }
 }
 class ReturningURLsAndFailingToCreateDirectoryFileManagerSpy: ReturningURLsAndCreatingDirectoryFileManagerSpy {}
 class ReturningURLsCreatingDirectoryAndFailingToCreateFileFileManagerSpy: ReturningURLsAndCreatingFileFileManagerSpy {
-    override func createDirectory(atPath path: String, withIntermediateDirectories createIntermediates: Bool, attributes: [String : Any]? = nil) throws {
+    override func createDirectory(atPath path: String, withIntermediateDirectories createIntermediates: Bool, attributes: [FileAttributeKey : Any]? = nil) throws {
     }
 }
 class ReturningURLsCreatingDirectoryAndSuccessfullyCreatingFileFileManagerSpy: ReturningURLsCreatingDirectoryAndFailingToCreateFileFileManagerSpy {
-    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey : Any]?) -> Bool {
         _ = super.createFile(atPath: path, contents: data, attributes: attr)
         return true
     }

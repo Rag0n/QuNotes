@@ -268,7 +268,7 @@ class FileNoteRepositorySpec: QuickSpec {
 class FailingFileManagerStub: FileManager {
     static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
 
-    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey : Any]? = nil) -> Bool {
         return false
     }
 
@@ -298,7 +298,7 @@ class ReturningURLsAndCreatingFileFileManagerSpy: ReturningURLsFileManagerStub {
     private(set) var passedPath: String?
     private(set) var passedData: Data?
 
-    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey : Any]?) -> Bool {
         passedData = data
         passedPath = path
         return false
@@ -306,7 +306,7 @@ class ReturningURLsAndCreatingFileFileManagerSpy: ReturningURLsFileManagerStub {
 }
 class ReturningURLsAndFailingToCreateFileFileManagerSpy: ReturningURLsAndCreatingFileFileManagerSpy {}
 class ReturningURLsAndSuccessfullyCreatingFileFileManagerSpy: ReturningURLsAndCreatingFileFileManagerSpy {
-    override func createFile(atPath path: String, contents data: Data?, attributes attr: [String : Any]? = nil) -> Bool {
+    override func createFile(atPath path: String, contents data: Data?, attributes attr: [FileAttributeKey : Any]?) -> Bool {
         _ = super.createFile(atPath: path, contents: data, attributes: attr)
         return true
     }
