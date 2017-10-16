@@ -67,7 +67,6 @@
 		11FA13221F6B0B6500B09A92 /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		B21250A54850409C7A1D36C6 /* NoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21252B4F7F54D7AD15D766A /* NoteViewModel.swift */; };
 		B212512985214F3072C67564 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21250706D8B0448700BF168 /* Note.swift */; };
 		B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */; };
 		B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */; };
@@ -167,7 +166,6 @@
 		B2125126D56FD2264621CE3E /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		B2125128CF1F8E978F890901 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B21251BE0B642526ED62C276 /* NoteCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCoordinator.swift; sourceTree = "<group>"; };
-		B21252B4F7F54D7AD15D766A /* NoteViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewModel.swift; sourceTree = "<group>"; };
 		B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookCoordinator.swift; sourceTree = "<group>"; };
 		B212555A3D01AC64A189B5AC /* NoteUseCaseSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteUseCaseSpec.swift; sourceTree = "<group>"; };
 		B21257910994F34B22D87954 /* AppDependency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDependency.swift; sourceTree = "<group>"; };
@@ -435,7 +433,6 @@
 				B212579A3ECACA82786D76AC /* NoteEvaluator.swift */,
 				B212509F1CE5CE5D33073575 /* NoteViewController.swift */,
 				B212582D32BF29A7535DA4AD /* NoteViewController.xib */,
-				B21252B4F7F54D7AD15D766A /* NoteViewModel.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -642,7 +639,6 @@
 				11CAE2C81F78277300062450 /* LibraryViewModel.swift in Sources */,
 				B212560DBEB110ABCFB85CAB /* NoteCoordinator.swift in Sources */,
 				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
-				B21250A54850409C7A1D36C6 /* NoteViewModel.swift in Sources */,
 				B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
