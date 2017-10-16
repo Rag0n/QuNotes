@@ -119,15 +119,17 @@ extension LibraryViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
+        let deleteAction = deleteContextualAction(forIndexPath: indexPath)
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
+    }
+
+    private func deleteContextualAction(forIndexPath indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
             self.dispatch(.deleteNotebook(index: indexPath.row))
             success(true)
         }
-        deleteAction.backgroundColor = .red
-
-        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
-        configuration.performsFirstActionWithFullSwipe = true
-
-        return configuration
+        action.backgroundColor = .red
+        return action
     }
 }
