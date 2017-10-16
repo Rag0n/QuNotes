@@ -54,7 +54,7 @@ extension UI.Note {
         typealias Dependencies = HasNoteUseCase
         fileprivate let noteUseCase: NoteUseCase
         fileprivate let navigationController: NavigationController
-        fileprivate var model: Model
+        fileprivate var evaluator: Evaluator
 
         fileprivate lazy var noteViewController: NoteViewController = {
             let vc = NoteViewController()
@@ -66,57 +66,57 @@ extension UI.Note {
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, note: Note) {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
-            model = initialModel(withNote: note)
+            evaluator = Evaluator(withNote: note)
         }
 
         // MARK: - Private
 
         fileprivate func dispatch(event: ViewControllerEvent) {
-            handleEvaluation <| evaluateController(event: event, model: model)
+            updateEvaluator <| evaluator.evaluate(event: event)
         }
 
         fileprivate func dispatch(event: CoordinatorEvent) {
-            handleEvaluation <| evaluateCoordinator(event: event, model: model)
+            updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func handleEvaluation(result: EvaluatorResult) {
-            model = result.model
-            result.actions.forEach(perform)
-            result.updates.forEach(noteViewController.apply)
+        fileprivate func updateEvaluator(evaluator: Evaluator) {
+            self.evaluator = evaluator
+            evaluator.actions.forEach(perform)
+            evaluator.updates.forEach(noteViewController.apply)
         }
 
         fileprivate func perform(action: Action) {
             switch action {
             case let .updateTitle(title):
-                switch noteUseCase.update(model.note, newTitle: title) {
+                switch noteUseCase.update(evaluator.model.note, newTitle: title) {
                 case let .success(note):
                     dispatch(event: .didUpdateTitle(note: note))
                 case let .failure(error):
                     dispatch(event: .didFailToUpdateTitle(error: error))
                 }
             case let .updateContent(content):
-                switch noteUseCase.update(model.note, newContent: content) {
+                switch noteUseCase.update(evaluator.model.note, newContent: content) {
                 case let .success(note):
                     dispatch(event: .didUpdateContent(note: note))
                 case let .failure(error):
                     dispatch(event: .didFailToUpdateContent(error: error))
                 }
             case let .addTag(tag):
-                switch noteUseCase.addTag(tag: tag, toNote: model.note) {
+                switch noteUseCase.addTag(tag: tag, toNote: evaluator.model.note) {
                 case let .success(note):
                     dispatch(event: .didAddTag(note: note, tag: tag))
                 case let .failure(error):
                     dispatch(event: .didFailToAddTag(error: error))
                 }
             case let .removeTag(tag):
-                switch noteUseCase.removeTag(tag: tag, fromNote: model.note) {
+                switch noteUseCase.removeTag(tag: tag, fromNote: evaluator.model.note) {
                 case let .success(note):
                     dispatch(event: .didRemoveTag(note: note, tag: tag))
                 case let .failure(error):
                     dispatch(event: .didFailToRemoveTag(error: error))
                 }
             case .delete:
-                switch noteUseCase.delete(model.note) {
+                switch noteUseCase.delete(evaluator.model.note) {
                 case .success:
                     dispatch(event: .didDeleteNote)
                 case let .failure(error):
