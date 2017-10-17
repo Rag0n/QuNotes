@@ -8,25 +8,6 @@
 
 import UIKit
 
-extension UI.Library {
-    enum ViewControllerEvent {
-        case addNotebook
-        case selectNotebook(index: Int)
-        case deleteNotebook(index: Int)
-        case updateNotebook(index: Int, title: String)
-    }
-
-    enum ViewControllerUpdate {
-        case updateAllNotebooks(notebooks: [NotebookCellViewModel])
-        case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
-        case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
-        case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
-        case showError(error: String, message: String)
-    }
-
-    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
-}
-
 class LibraryViewController: UIViewController {
     // MARK: - API
 

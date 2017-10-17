@@ -10,28 +10,6 @@ import UIKit
 import Notepad
 import WSTagsField
 
-extension UI.Note {
-    enum ViewControllerEvent {
-        case didLoad
-        case changeContent(newContent: String)
-        case changeTitle(newTitle: String)
-        case delete
-        case addTag(tag: String)
-        case removeTag(tag: String)
-    }
-
-    enum ViewControllerUpdate {
-        case updateTitle(title: String)
-        case updateContent(content: String)
-        case showTags(tags: [String])
-        case addTag(tag: String)
-        case removeTag(tag: String)
-        case showError(error: String, message: String)
-    }
-
-    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
-}
-
 class NoteViewController: UIViewController {
     // MARK: - API
 

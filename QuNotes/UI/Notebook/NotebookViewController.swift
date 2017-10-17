@@ -8,29 +8,6 @@
 
 import UIKit
 
-extension UI.Notebook {
-    enum ViewControllerEvent {
-        case addNote
-        case selectNote(index: Int)
-        case deleteNote(index: Int)
-        case deleteNotebook
-        case filterNotes(filter: String?)
-        case didStartToEditTitle
-        case didFinishToEditTitle(newTitle: String?)
-    }
-
-    enum ViewControllerUpdate {
-        case updateAllNotes(notes: [String])
-        case hideBackButton
-        case showBackButton
-        case updateTitle(title: String)
-        case deleteNote(index: Int, notes: [String])
-        case showError(error: String, message: String)
-    }
-
-    typealias ViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
-}
-
 class NotebookViewController: UIViewController {
     // MARK: - API
 

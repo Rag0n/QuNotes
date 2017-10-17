@@ -6,6 +6,4 @@
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
-import UIKit
-
 enum UI {}
