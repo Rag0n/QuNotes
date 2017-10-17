@@ -145,6 +145,7 @@
 		11517D011F76DBDF00DDDDD3 /* NotebookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookRepository.swift; sourceTree = "<group>"; };
 		115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		115818A51F6B06F4009C9BB2 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
+		1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEvaluatorSpec.swift; sourceTree = "<group>"; };
 		116879881F798EC2009461D6 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
 		116879891F798EC2009461D6 /* LibraryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryTableViewCell.xib; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
@@ -448,6 +449,7 @@
 			children = (
 				B21251BE0B642526ED62C276 /* NoteCoordinator.swift */,
 				B212579A3ECACA82786D76AC /* NoteEvaluator.swift */,
+				1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */,
 				B212509F1CE5CE5D33073575 /* NoteViewController.swift */,
 				B212582D32BF29A7535DA4AD /* NoteViewController.xib */,
 			);

@@ -40,7 +40,7 @@ extension UI.Note {
             case let .changeTitle(newTitle):
                 actions = [.updateTitle(title: newTitle)]
             case .delete:
-                actions = [.delete]
+                actions = [.deleteNote]
             case let .addTag(tag):
                 actions = [.addTag(tag: tag)]
             case let .removeTag(tag):
