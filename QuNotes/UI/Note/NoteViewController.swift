@@ -17,7 +17,7 @@ class NoteViewController: UIViewController {
         self.dispatch = dispatch
     }
 
-    func apply(update: UI.Note.ViewControllerUpdate) {
+    func apply(update: UI.Note.ViewControllerEffect) {
         switch update {
         case let .updateTitle(title):
             titleTextField?.text = title
