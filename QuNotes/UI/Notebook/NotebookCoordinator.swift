@@ -15,14 +15,14 @@ extension UI {
 
 extension UI.Notebook {
     typealias ViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
-
+    
     class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
 
         func onStart() {
             let notes = noteUseCase.getAll()
             dispatch(event: .didUpdateNotes(notes: notes))
-            dispatch(event: .didUpdateNotebook(notebook: model.notebook))
+            dispatch(event: .didUpdateNotebook(notebook: evaluator.model.notebook))
         }
 
         var rootViewController: UIViewController {
@@ -38,7 +38,7 @@ extension UI.Notebook {
         fileprivate let notebookUseCase: NotebookUseCase
         fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
-        fileprivate var model: Model
+        fileprivate var evaluator: Evaluator
 
         fileprivate lazy var notebookViewController: NotebookViewController = {
             let vc = NotebookViewController()
@@ -53,23 +53,23 @@ extension UI.Notebook {
             self.noteUseCase = dependencies.noteUseCase
             self.notebookUseCase = dependencies.notebookUseCase
             self.dependencies = dependencies
-            model = initialModel(withNotebook: notebook)
+            evaluator = Evaluator(withNotebook: notebook)
         }
 
         // MARK: - Private
 
         fileprivate func dispatch(event: ViewControllerEvent) {
-            handleEvaluation <| evaluateController(event: event, model: model)
+            updateEvaluator <| evaluator.evaluate(event: event)
         }
 
         fileprivate func dispatch(event: CoordinatorEvent) {
-            handleEvaluation <| evaluateCoordinator(event: event, model: model)
+            updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func handleEvaluation(result: EvaluatorResult) {
-            model = result.model
-            result.actions.forEach(perform)
-            result.updates.forEach(notebookViewController.apply)
+        fileprivate func updateEvaluator(evaluator: Evaluator) {
+            self.evaluator = evaluator
+            evaluator.actions.forEach(perform)
+            evaluator.updates.forEach(notebookViewController.apply)
         }
 
         fileprivate func perform(action: Action) {
