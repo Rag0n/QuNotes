@@ -14,51 +14,6 @@ extension UI {
 }
 
 extension UI.Notebook {
-    enum Action {
-        case addNote
-        case showNote(note: Note)
-        case deleteNote(note: Note)
-        case deleteNotebook(notebook: Notebook)
-        case updateNotebook(notebook: Notebook, title: String)
-        case finish
-    }
-
-    enum CoordinatorEvent {
-        case didUpdateNotes(notes: [Note])
-        case didAddNote(note: Note)
-        case didDeleteNote(note: Note)
-        case didUpdateNotebook(notebook: Notebook)
-        case didDeleteNotebook
-        case didFailToAddNote(error: AnyError)
-        case didFailToDeleteNote(error: AnyError)
-        case didFailToUpdateNotebook(error: AnyError)
-        case didFailToDeleteNotebook(error: AnyError)
-    }
-
-    struct Model {
-        let notebook: Notebook
-        let notes: [Note]
-    }
-
-    enum ViewControllerEvent {
-        case addNote
-        case selectNote(index: Int)
-        case deleteNote(index: Int)
-        case deleteNotebook
-        case filterNotes(filter: String?)
-        case didStartToEditTitle
-        case didFinishToEditTitle(newTitle: String?)
-    }
-
-    enum ViewControllerUpdate {
-        case updateAllNotes(notes: [String])
-        case hideBackButton
-        case showBackButton
-        case updateTitle(title: String)
-        case deleteNote(index: Int, notes: [String])
-        case showError(error: String, message: String)
-    }
-
     typealias ViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
 
     class CoordinatorImp: Coordinator {
