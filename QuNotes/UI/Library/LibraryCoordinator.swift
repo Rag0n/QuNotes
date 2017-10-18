@@ -36,7 +36,7 @@ extension UI.Library {
         fileprivate let notebookUseCase: NotebookUseCase
         fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
-        fileprivate var model: Model
+        fileprivate var evaluator: Evaluator
 
         fileprivate lazy var libraryViewController: LibraryViewController = {
             let vc = LibraryViewController()
@@ -48,23 +48,23 @@ extension UI.Library {
             self.navigationController = navigationController
             self.notebookUseCase = dependencies.notebookUseCase
             self.dependencies = dependencies
-            self.model = initialModel()
+            evaluator = Evaluator()
         }
 
         // MARK: - Private
 
         fileprivate func dispatch(event: ViewControllerEvent) {
-            handleEvaluation <| evaluateController(event: event, model: model)
+            updateEvaluator <| evaluator.evaluate(event: event)
         }
 
         fileprivate func dispatch(event: CoordinatorEvent) {
-            handleEvaluation <| evaluateCoordinator(event: event, model: model)
+            updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func handleEvaluation(result: EvaluatorResult) {
-            model = result.model
-            result.actions.forEach(perform)
-            result.updates.forEach(libraryViewController.apply)
+        fileprivate func updateEvaluator(evaluator: Evaluator) {
+            self.evaluator = evaluator
+            evaluator.actions.forEach(perform)
+            evaluator.updates.forEach(libraryViewController.apply)
         }
 
         fileprivate func perform(action: Action) {
