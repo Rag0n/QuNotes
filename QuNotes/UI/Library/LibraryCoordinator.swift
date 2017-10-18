@@ -14,43 +14,6 @@ extension UI {
 }
 
 extension UI.Library {
-    enum Action {
-        case addNotebook
-        case deleteNotebook(notebook: Notebook)
-        case updateNotebook(notebook: Notebook, title: String)
-        case showNotes(forNotebook: Notebook)
-    }
-
-    enum CoordinatorEvent {
-        case didUpdateNotebooks(notebooks: [Notebook])
-        case didAddNotebook(notebook: Notebook)
-        case didDelete(notebook: Notebook)
-        case didUpdate(notebook: Notebook)
-        case failedToAddNotebook(error: AnyError)
-        case failedToDeleteNotebook(error: AnyError)
-        case failedToUpdateNotebook(error: AnyError)
-    }
-
-    struct Model {
-        let notebooks: [Notebook]
-        let editingNotebook: Notebook?
-    }
-
-    enum ViewControllerEvent {
-        case addNotebook
-        case selectNotebook(index: Int)
-        case deleteNotebook(index: Int)
-        case updateNotebook(index: Int, title: String)
-    }
-
-    enum ViewControllerUpdate {
-        case updateAllNotebooks(notebooks: [NotebookCellViewModel])
-        case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
-        case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
-        case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
-        case showError(error: String, message: String)
-    }
-
     typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
 
     class CoordinatorImp: Coordinator {
