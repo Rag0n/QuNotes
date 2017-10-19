@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */; };
+		1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */; };
 		11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
@@ -134,6 +136,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluatorSpec.swift; sourceTree = "<group>"; };
+		1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluatorSpec.swift; sourceTree = "<group>"; };
 		11096D291F59EF4F00E1623C /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
@@ -403,6 +407,7 @@
 			children = (
 				11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */,
 				11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */,
+				1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */,
 				11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */,
 				11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */,
 				11CAE2C71F78277300062450 /* LibraryViewModel.swift */,
@@ -436,6 +441,7 @@
 			children = (
 				B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */,
 				118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */,
+				1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */,
 				B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */,
 				B212595097B91381FC124A0F /* NotebookViewController.xib */,
 				115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */,
@@ -681,6 +687,7 @@
 				11DFCEE91F82CCD300E9389F /* FileNotebookRepository.swift in Sources */,
 				1160CCE11F954C2E0033E9E2 /* DefaultTheme.swift in Sources */,
 				11C41FF71F744A9500397DD9 /* NotebookUseCaseSpec.swift in Sources */,
+				1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */,
 				11CDB3E41F969BE20014C58F /* TableViewCell+Extensions.swift in Sources */,
 				112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */,
 				11CDB3E21F969AF30014C58F /* LibraryViewModel.swift in Sources */,
@@ -695,6 +702,7 @@
 				11CDB3E61F969C030014C58F /* LibraryCoordinator.swift in Sources */,
 				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
 				11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */,
+				1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */,
 				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
 				B212512985214F3072C67564 /* Note.swift in Sources */,
 				1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */,
