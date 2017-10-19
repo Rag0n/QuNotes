@@ -58,7 +58,7 @@ extension UI.Note {
         fileprivate func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
             evaluator.actions.forEach(perform)
-            evaluator.updates.forEach(noteViewController.apply)
+            evaluator.effects.forEach(noteViewController.apply)
         }
 
         fileprivate func perform(action: Action) {

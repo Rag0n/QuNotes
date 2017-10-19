@@ -54,29 +54,29 @@ extension UI.Note {
     // MARK: - Evaluator
 
     struct Evaluator {
-        let updates: [ViewControllerEffect]
+        let effects: [ViewControllerEffect]
         let actions: [Action]
         let model: Model
 
         init(withNote note: Note) {
-            updates = []
+            effects = []
             actions = []
             model = Model(note: note)
         }
 
-        private init(updates: [ViewControllerEffect], actions: [Action], model: Model) {
-            self.updates = updates
+        private init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+            self.effects = effects
             self.actions = actions
             self.model = model
         }
 
         func evaluate(event: ViewControllerEvent) -> Evaluator {
             var actions: [Action] = []
-            var updates: [ViewControllerEffect] = []
+            var effects: [ViewControllerEffect] = []
 
             switch event {
             case .didLoad:
-                updates = [
+                effects = [
                     .updateTitle(title: model.note.title),
                     .updateContent(content: model.note.content),
                     .showTags(tags: model.note.tags)
@@ -93,59 +93,59 @@ extension UI.Note {
                 actions = [.removeTag(tag: tag)]
             }
 
-            return Evaluator(updates: updates, actions: actions, model: model)
+            return Evaluator(effects: effects, actions: actions, model: model)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
             var actions: [Action] = []
-            var updates: [ViewControllerEffect] = []
+            var effects: [ViewControllerEffect] = []
             var newModel = model
 
             switch event {
             case let .didUpdateTitle(note):
-                updates = [.updateTitle(title: note.title)]
+                effects = [.updateTitle(title: note.title)]
                 newModel = Model(note: note)
             case let .didUpdateContent(note):
-                updates = [.updateContent(content: note.content)]
+                effects = [.updateContent(content: note.content)]
                 newModel = Model(note: note)
             case let .didAddTag(note, tag):
-                updates = [.addTag(tag: tag)]
+                effects = [.addTag(tag: tag)]
                 newModel = Model(note: note)
             case let .didRemoveTag(note, tag):
-                updates = [.removeTag(tag: tag)]
+                effects = [.removeTag(tag: tag)]
                 newModel = Model(note: note)
             case .didDeleteNote:
                 actions = [.finish]
             case let .didFailToUpdateTitle(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [
+                effects = [
                     .updateTitle(title: model.note.title),
                     .showError(error: "Failed to update note's title", message: errorMessage)
                 ]
             case let .didFailToUpdateContent(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [
+                effects = [
                     .updateContent(content: model.note.content),
                     .showError(error: "Failed to update note's content", message: errorMessage)
                 ]
             case let .didFailToAddTag(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [
+                effects = [
                     .showTags(tags: model.note.tags),
                     .showError(error: "Failed to add tag", message: errorMessage)
                 ]
             case let .didFailToRemoveTag(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [
+                effects = [
                     .showTags(tags: model.note.tags),
                     .showError(error: "Failed to remove tag", message: errorMessage)
                 ]
             case let .didFailToDeleteNote(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [.showError(error: "Failed to delete note", message: errorMessage)]
+                effects = [.showError(error: "Failed to delete note", message: errorMessage)]
             }
 
-            return Evaluator(updates: updates, actions: actions, model: newModel)
+            return Evaluator(effects: effects, actions: actions, model: newModel)
         }
     }
 }

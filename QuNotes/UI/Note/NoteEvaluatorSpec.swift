@@ -26,15 +26,15 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains updateTitle effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.updateTitle(title: "title")))
+                    expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "title")))
                 }
 
                 it("contains updateContent effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.updateContent(content: "content")))
+                    expect(e.evaluate(event: event).effects).to(contain(.updateContent(content: "content")))
                 }
 
                 it("contains showTags effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showTags(tags: ["tag"])))
+                    expect(e.evaluate(event: event).effects).to(contain(.showTags(tags: ["tag"])))
                 }
             }
 
@@ -99,7 +99,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains updateTitle effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.updateTitle(title: "new title")))
+                    expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "new title")))
                 }
 
                 it("updates model with updated note") {
@@ -113,7 +113,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains updateContent effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.updateContent(content: "new content")))
+                    expect(e.evaluate(event: event).effects).to(contain(.updateContent(content: "new content")))
                 }
 
                 it("updates model with updated note") {
@@ -127,7 +127,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains addTag effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.addTag(tag: "added tag")))
+                    expect(e.evaluate(event: event).effects).to(contain(.addTag(tag: "added tag")))
                 }
 
                 it("updates model with updated note") {
@@ -141,7 +141,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains removeTag effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.removeTag(tag: "removed tag")))
+                    expect(e.evaluate(event: event).effects).to(contain(.removeTag(tag: "removed tag")))
                 }
 
                 it("updates model with updated note") {
@@ -165,11 +165,11 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains updateTitle effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.updateTitle(title: "title")))
+                    expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "title")))
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showError(error: "Failed to update note's title", message: "localized message")))
+                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to update note's title", message: "localized message")))
                 }
             }
 
@@ -179,11 +179,11 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains updateContent effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.updateContent(content: "content")))
+                    expect(e.evaluate(event: event).effects).to(contain(.updateContent(content: "content")))
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showError(error: "Failed to update note's content", message: "localized message")))
+                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to update note's content", message: "localized message")))
                 }
             }
 
@@ -193,11 +193,11 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showTags effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showTags(tags: ["tag"])))
+                    expect(e.evaluate(event: event).effects).to(contain(.showTags(tags: ["tag"])))
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showError(error: "Failed to add tag", message: "localized message")))
+                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to add tag", message: "localized message")))
                 }
             }
 
@@ -207,11 +207,11 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showTags effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showTags(tags: ["tag"])))
+                    expect(e.evaluate(event: event).effects).to(contain(.showTags(tags: ["tag"])))
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showError(error: "Failed to remove tag", message: "localized message")))
+                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to remove tag", message: "localized message")))
                 }
             }
 
@@ -221,7 +221,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).updates).to(contain(.showError(error: "Failed to delete note", message: "localized message")))
+                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to delete note", message: "localized message")))
                 }
             }
         }
