@@ -12,12 +12,8 @@ import Result
 
 class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
-        var e: UI.Note.Evaluator!
         let note = Note(createdDate: 1, updatedDate: 2, content: "content", title: "title", uuid: "uuid", tags: ["tag"])
-
-        beforeEach {
-            e = UI.Note.Evaluator(withNote: note)
-        }
+        let e = UI.Note.Evaluator(withNote: note)
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "localized message"])
         let error = AnyError(underlyingError)
 
@@ -40,10 +36,6 @@ class NoteEvaluatorSpec: QuickSpec {
                 it("contains showTags effect") {
                     expect(e.evaluate(event: event).updates).to(contain(.showTags(tags: ["tag"])))
                 }
-
-                it("doesnt contain any actions") {
-                    expect(e.evaluate(event: event).actions).to(beEmpty())
-                }
             }
 
             context("when receiving changeContent event") {
@@ -53,10 +45,6 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("contains updateContent action") {
                     expect(e.evaluate(event: event).actions).to(contain(.updateContent(content: "newContent")))
-                }
-
-                it("doesnt contain any effects") {
-                    expect(e.evaluate(event: event).updates).to(beEmpty())
                 }
             }
 
@@ -68,10 +56,6 @@ class NoteEvaluatorSpec: QuickSpec {
                 it("contains updateTitle action") {
                     expect(e.evaluate(event: event).actions).to(contain(.updateTitle(title: "newTitle")))
                 }
-
-                it("doesnt contain any effects") {
-                    expect(e.evaluate(event: event).updates).to(beEmpty())
-                }
             }
 
             context("when receiving delete event") {
@@ -81,10 +65,6 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("contains delete action") {
                     expect(e.evaluate(event: event).actions).to(contain(.deleteNote))
-                }
-
-                it("doesnt contain any effects") {
-                    expect(e.evaluate(event: event).updates).to(beEmpty())
                 }
             }
 
@@ -96,10 +76,6 @@ class NoteEvaluatorSpec: QuickSpec {
                 it("contains addTag action") {
                     expect(e.evaluate(event: event).actions).to(contain(.addTag(tag: "new tag")))
                 }
-
-                it("doesnt contain any effects") {
-                    expect(e.evaluate(event: event).updates).to(beEmpty())
-                }
             }
 
             context("when receiving removeTag event") {
@@ -109,10 +85,6 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("contains removeTag action") {
                     expect(e.evaluate(event: event).actions).to(contain(.removeTag(tag: "tag")))
-                }
-
-                it("doesnt contain any effects") {
-                    expect(e.evaluate(event: event).updates).to(beEmpty())
                 }
             }
         }
