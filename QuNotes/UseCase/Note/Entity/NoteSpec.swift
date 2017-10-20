@@ -47,4 +47,8 @@ extension Note {
     static func noteDummy() -> Note {
         return Note.noteDummy(withUUID: UUID.init().uuidString, tags: [])
     }
+
+    static func noteDummy(withTitle title: String) -> Note {
+        return Note(createdDate: 0, updatedDate: 0, content: "content", title: title, uuid: UUID.init().uuidString, tags: [])
+    }
 }

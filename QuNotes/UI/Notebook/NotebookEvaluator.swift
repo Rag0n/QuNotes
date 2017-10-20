@@ -90,8 +90,9 @@ extension UI.Notebook {
             case .deleteNotebook:
                 actions = [.deleteNotebook(notebook: model.notebook)]
             case .filterNotes(let filter):
+                let lowercasedFilter = filter?.lowercased()
                 var filteredNotes = model.notes
-                if let filter = filter {
+                if let filter = lowercasedFilter {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
                 let noteTitles = filteredNotes.map { $0.title }
@@ -162,5 +163,49 @@ extension UI.Notebook {
 private extension UI.Notebook {
     static func defaultNoteSorting(leftNote: Note, rightNote: Note) -> Bool {
         return leftNote.title < rightNote.title
+    }
+}
+
+// MARK: - ViewControllerEffect Equatable
+
+extension UI.Notebook.ViewControllerEffect: Equatable {}
+
+func ==(lhs: UI.Notebook.ViewControllerEffect, rhs: UI.Notebook.ViewControllerEffect) -> Bool {
+    switch (lhs, rhs) {
+    case (.updateAllNotes(let lNotes), .updateAllNotes(let rNotes)):
+        return lNotes == rNotes
+    case (.hideBackButton, .hideBackButton):
+        return true
+    case (.showBackButton, .showBackButton):
+        return true
+    case (.updateTitle(let lTitle), .updateTitle(let rTitle)):
+        return lTitle == rTitle
+    case (.deleteNote(let lIndex, let lNotes), .deleteNote(let rIndex, let rNotes)):
+        return (lIndex == rIndex) && (lNotes == rNotes)
+    case (.showError(let lError, let lMessage), .showError(let rError, let rMessage)):
+        return (lError == rError) && (lMessage == rMessage)
+    default: return false
+    }
+}
+
+// MARK: - Action Equtable
+
+extension UI.Notebook.Action: Equatable {}
+
+func ==(lhs: UI.Notebook.Action, rhs: UI.Notebook.Action) -> Bool {
+    switch (lhs, rhs) {
+    case (.addNote, .addNote):
+        return true
+    case (.showNote(let lNote), .showNote(let rNote)):
+        return lNote == rNote
+    case (.deleteNote(let lNote), .deleteNote(let rNote)):
+        return lNote == rNote
+    case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
+        return lNotebook == rNotebook
+    case (.updateNotebook(let lNotebook), .updateNotebook(let rNotebook)):
+        return lNotebook == rNotebook
+    case (.finish, .finish):
+        return true
+    default: return false
     }
 }
