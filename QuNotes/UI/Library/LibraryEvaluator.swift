@@ -22,7 +22,7 @@ extension UI.Library {
         case showNotes(forNotebook: Notebook)
     }
 
-    enum ViewControllerUpdate {
+    enum ViewControllerEffect {
         case updateAllNotebooks(notebooks: [NotebookCellViewModel])
         case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
         case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
@@ -50,25 +50,25 @@ extension UI.Library {
     // MARK: - Evaluator
 
     struct Evaluator {
-        let updates: [ViewControllerUpdate]
+        let effects: [ViewControllerEffect]
         let actions: [Action]
         let model: Model
 
         init() {
-            updates = []
+            effects = []
             actions = []
             model = Model(notebooks: [], editingNotebook: nil)
         }
 
-        private init(updates: [ViewControllerUpdate], actions: [Action], model: Model) {
-            self.updates = updates
+        private init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+            self.effects = effects
             self.actions = actions
             self.model = model
         }
 
         func evaluate(event: ViewControllerEvent) -> Evaluator {
             var actions: [Action] = []
-            let updates: [ViewControllerUpdate] = []
+            let effects: [ViewControllerEffect] = []
 
             switch event {
             case .addNotebook:
@@ -84,32 +84,32 @@ extension UI.Library {
                 actions = [.updateNotebook(notebook: notebook, title: title)]
             }
 
-            return Evaluator(updates: updates, actions: actions, model: model)
+            return Evaluator(effects: effects, actions: actions, model: model)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
             let actions: [Action] = []
-            var updates: [ViewControllerUpdate] = []
+            var effects: [ViewControllerEffect] = []
             var newModel = model
 
             switch event {
             case .didUpdateNotebooks(let notebooks):
                 let sortedNotebooks = notebooks.sorted(by: defaultNotebookSorting)
                 let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: model.editingNotebook)
-                updates = [.updateAllNotebooks(notebooks: notebookViewModels)]
+                effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: nil)
             case .didAddNotebook(let notebook):
                 let updatedNotebooks = model.notebooks + [notebook]
                 let sortedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
                 let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: notebook)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
-                updates = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
+                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: notebook)
             case .didDelete(let notebook):
                 let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(at: indexOfDeletedNotebook)
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
-                updates = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
+                effects = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks, editingNotebook: model.editingNotebook)
             case .didUpdate(let notebook):
                 let indexOfUpdatedNotebook = model.notebooks.index(of: notebook)!
@@ -117,12 +117,12 @@ extension UI.Library {
                 updatedNotebooks[indexOfUpdatedNotebook] = notebook
                 updatedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
-                updates = [.updateAllNotebooks(notebooks: notebookViewModels)]
+                effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
             case .failedToAddNotebook(let error):
                 let errorMessage = error.error.localizedDescription
                 let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
-                updates = [
+                effects = [
                     .updateAllNotebooks(notebooks: notebookViewModels),
                     .showError(error: "Failed to add notebook", message: errorMessage)
                 ]
@@ -130,20 +130,20 @@ extension UI.Library {
             case .failedToDeleteNotebook(let error):
                 let errorMessage = error.error.localizedDescription
                 let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
-                updates = [
+                effects = [
                     .updateAllNotebooks(notebooks: notebookViewModels),
                     .showError(error: "Failed to delete notebook", message: errorMessage)
                 ]
             case .failedToUpdateNotebook(let error):
                 let errorMessage = error.error.localizedDescription
                 let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
-                updates = [
+                effects = [
                     .updateAllNotebooks(notebooks: notebookViewModels),
                     .showError(error: "Failed to update notebook", message: errorMessage)
                 ]
             }
 
-            return Evaluator(updates: updates, actions: actions, model: newModel)
+            return Evaluator(effects: effects, actions: actions, model: newModel)
         }
     }
 }
