@@ -15,7 +15,7 @@ class NotebookViewController: UIViewController {
         self.dispatch = dispatch
     }
 
-    func apply(update: UI.Notebook.ViewControllerUpdate) {
+    func apply(update: UI.Notebook.ViewControllerEffect) {
         switch update {
         case let .updateAllNotes(notes):
             self.notes = notes

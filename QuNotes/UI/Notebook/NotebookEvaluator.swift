@@ -24,7 +24,7 @@ extension UI.Notebook {
         case finish
     }
 
-    enum ViewControllerUpdate {
+    enum ViewControllerEffect {
         case updateAllNotes(notes: [String])
         case hideBackButton
         case showBackButton
@@ -55,26 +55,28 @@ extension UI.Notebook {
         case didFinishToEditTitle(newTitle: String?)
     }
 
+    // MARK: - Evaluator
+
     struct Evaluator {
-        let updates: [ViewControllerUpdate]
+        let effects: [ViewControllerEffect]
         let actions: [Action]
         let model: Model
 
         init(withNotebook notebook: Notebook) {
-            updates = []
+            effects = []
             actions = []
             model = Model(notebook: notebook, notes: [])
         }
 
-        private init(updates: [ViewControllerUpdate], actions: [Action], model: Model) {
-            self.updates = updates
+        private init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+            self.effects = effects
             self.actions = actions
             self.model = model
         }
 
         func evaluate(event: ViewControllerEvent) -> Evaluator {
             var actions: [Action] = []
-            var updates: [ViewControllerUpdate] = []
+            var effects: [ViewControllerEffect] = []
 
             switch event {
             case .addNote:
@@ -93,27 +95,27 @@ extension UI.Notebook {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
                 let noteTitles = filteredNotes.map { $0.title }
-                updates = [.updateAllNotes(notes: noteTitles)]
+                effects = [.updateAllNotes(notes: noteTitles)]
             case .didStartToEditTitle:
-                updates = [.hideBackButton]
+                effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
-                updates = [.showBackButton]
+                effects = [.showBackButton]
                 actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
             }
 
-            return Evaluator(updates: updates, actions: actions, model: model)
+            return Evaluator(effects: effects, actions: actions, model: model)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
             var actions: [Action] = []
-            var updates: [ViewControllerUpdate] = []
+            var effects: [ViewControllerEffect] = []
             var newModel = model
 
             switch event {
             case let .didUpdateNotes(notes):
                 let sortedNotes = notes.sorted(by: defaultNoteSorting)
                 let noteTitles = sortedNotes.map { $0.title }
-                updates = [.updateAllNotes(notes: noteTitles)]
+                effects = [.updateAllNotes(notes: noteTitles)]
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
             case let .didAddNote(note):
                 let newNotes = model.notes + [note]
@@ -124,35 +126,35 @@ extension UI.Notebook {
                 let indexOfDeletedNote = model.notes.index(of: note)!
                 let updatedNotes = model.notes.removeWithoutMutation(at: indexOfDeletedNote)
                 let noteTitles = updatedNotes.map { $0.title }
-                updates = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
+                effects = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
                 newModel = Model(notebook: model.notebook, notes: updatedNotes)
             case let .didUpdateNotebook(notebook):
-                updates = [.updateTitle(title: notebook.name)]
+                effects = [.updateTitle(title: notebook.name)]
                 newModel = Model(notebook: notebook, notes: model.notes)
             case .didDeleteNotebook:
                 actions = [.finish]
             case let .didFailToAddNote(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [.showError(error: "Failed to add note", message: errorMessage)]
+                effects = [.showError(error: "Failed to add note", message: errorMessage)]
             case let .didFailToDeleteNote(error):
                 let errorMessage = error.error.localizedDescription
                 let noteTitles = model.notes.map { $0.title }
-                updates = [
+                effects = [
                     .updateAllNotes(notes: noteTitles),
                     .showError(error: "Failed to delete notebook", message: errorMessage)
                 ]
             case let .didFailToUpdateNotebook(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [
+                effects = [
                     .updateTitle(title: model.notebook.name),
                     .showError(error: "Failed to update notebook's title", message: errorMessage)
                 ]
             case let .didFailToDeleteNotebook(error):
                 let errorMessage = error.error.localizedDescription
-                updates = [.showError(error: "Failed to delete notebook", message: errorMessage)]
+                effects = [.showError(error: "Failed to delete notebook", message: errorMessage)]
             }
 
-            return Evaluator(updates: updates, actions: actions, model: newModel)
+            return Evaluator(effects: effects, actions: actions, model: newModel)
         }
     }
 }
