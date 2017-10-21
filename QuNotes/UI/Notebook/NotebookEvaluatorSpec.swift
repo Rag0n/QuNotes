@@ -85,7 +85,8 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("contains updateAllNotes effect with all note's titles") {
-                        expect(e.evaluate(event: event).effects).to(contain(.updateAllNotes(notes: ["AB", "ab", "g"])))
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.updateAllNotes(notes: ["AB", "ab", "g"])))
                     }
                 }
 
@@ -95,7 +96,8 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("contains updateAllNotes effect with only titles containing filter in any register") {
-                        expect(e.evaluate(event: event).effects).to(contain(.updateAllNotes(notes: ["AB", "ab"])))
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.updateAllNotes(notes: ["AB", "ab"])))
                     }
                 }
             }
@@ -121,7 +123,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when title is nil") {
                     it("contains updateNotebook action with empty title") {
-                        expect(e.evaluate(event: event).actions).to(contain(.updateNotebook(notebook: notebook, title: "")))
+                        expect(e.evaluate(event: event).actions)
+                            .to(contain(.updateNotebook(notebook: notebook, title: "")))
                     }
                 }
 
@@ -131,7 +134,8 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("contains updateNotebook action with title from event") {
-                        expect(e.evaluate(event: event).actions).to(contain(.updateNotebook(notebook: notebook, title: "new title")))
+                        expect(e.evaluate(event: event).actions)
+                            .to(contain(.updateNotebook(notebook: notebook, title: "new title")))
                     }
                 }
             }

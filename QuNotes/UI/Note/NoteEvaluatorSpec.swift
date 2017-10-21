@@ -169,7 +169,8 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to update note's title", message: "localized message")))
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to update note's title", message: "localized message")))
                 }
             }
 
@@ -183,7 +184,8 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to update note's content", message: "localized message")))
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to update note's content", message: "localized message")))
                 }
             }
 
@@ -197,7 +199,8 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to add tag", message: "localized message")))
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to add tag", message: "localized message")))
                 }
             }
 
@@ -211,7 +214,8 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to remove tag", message: "localized message")))
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to remove tag", message: "localized message")))
                 }
             }
 
@@ -221,7 +225,8 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
 
                 it("contains showError effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showError(error: "Failed to delete note", message: "localized message")))
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to delete note", message: "localized message")))
                 }
             }
         }

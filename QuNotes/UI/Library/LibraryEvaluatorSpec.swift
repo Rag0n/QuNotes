@@ -72,7 +72,8 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
 
                     it("has updateNotebook action with empty title") {
-                        expect(e.evaluate(event: event).actions).to(contain(.updateNotebook(notebook: notebook, title: "")))
+                        expect(e.evaluate(event: event).actions)
+                            .to(contain(.updateNotebook(notebook: notebook, title: "")))
                     }
                 }
 
@@ -82,7 +83,8 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
 
                     it("has updateNotebook action with title from event") {
-                        expect(e.evaluate(event: event).actions).to(contain(.updateNotebook(notebook: notebook, title: "title")))
+                        expect(e.evaluate(event: event).actions)
+                            .to(contain(.updateNotebook(notebook: notebook, title: "title")))
                     }
                 }
             }
