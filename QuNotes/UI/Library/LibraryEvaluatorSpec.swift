@@ -89,6 +89,208 @@ class LibraryEvaluatorSpec: QuickSpec {
         }
 
         describe("-evaluate:CoordinatorEvent:") {
+            var event: UI.Library.CoordinatorEvent!
+
+            context("when receiving didUpdateNotebooks event") {
+                let firstNotebook = Notebook(uuid: "uuid1", name: "bcd")
+                let secondNotebook = Notebook(uuid: "uuid2", name: "abc")
+                let thirdNotebook = Notebook(uuid: "uuid3", name: "Cde")
+                let expectedViewModels = [
+                    NotebookCellViewModel(title: "abc", isEditable: false),
+                    NotebookCellViewModel(title: "bcd", isEditable: false),
+                    NotebookCellViewModel(title: "Cde", isEditable: false),
+                ]
+
+                beforeEach {
+                    event = .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook, thirdNotebook])
+                }
+
+                it("has model with sorted by name notebooks") {
+                    expect(e.evaluate(event: event).model.notebooks)
+                        .to(equal([secondNotebook, firstNotebook, thirdNotebook]))
+                }
+
+                it("has updateAllNotebooks effect with correct order of ViewModels") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.updateAllNotebooks(notebooks: expectedViewModels)))
+                }
+
+                context("when there's editing notebook") {
+                    beforeEach {
+                        e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
+                            .evaluate(event: .didAddNotebook(notebook: thirdNotebook))
+                    }
+
+                    it("has model without editing notebook") {
+                        expect(e.evaluate(event: event).model.editingNotebook).to(beNil())
+                    }
+                }
+            }
+
+            context("when receiving didAddNotebook event") {
+                let firstNotebook = Notebook(uuid: "uuid1", name: "abc")
+                let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
+                let addedNotebook = Notebook(uuid: "uuid3", name: "bcd")
+                let expectedViewModels = [
+                    NotebookCellViewModel(title: "abc", isEditable: false),
+                    NotebookCellViewModel(title: "bcd", isEditable: true),
+                    NotebookCellViewModel(title: "cde", isEditable: false)
+                ]
+
+                beforeEach {
+                    e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
+                    event = .didAddNotebook(notebook: addedNotebook)
+                }
+
+                it("has model with editingNotebook equal to new notebook") {
+                    expect(e.evaluate(event: event).model.editingNotebook)
+                        .to(equal(addedNotebook))
+                }
+
+                it("has model with appended notebook and correct sorting") {
+                    expect(e.evaluate(event: event).model.notebooks)
+                        .to(equal([firstNotebook, addedNotebook, secondNotebook]))
+                }
+
+                it("has addNotebook effectwith correct viewModels and index") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.addNotebook(index: 1, notebooks: expectedViewModels)))
+                }
+            }
+
+            context("when receiving didDelete event") {
+                let firstNotebook = Notebook(uuid: "uuid1", name: "abc")
+                let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
+                let expectedViewModels = [
+                    NotebookCellViewModel(title: "abc", isEditable: false)
+                ]
+
+                beforeEach {
+                    e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
+                    event = .didDelete(notebook: secondNotebook)
+                }
+
+                it("has deleteNotebook effect without removed notebook") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.deleteNotebook(index: 1, notebooks: expectedViewModels)))
+                }
+
+                context("when there's editing notebook") {
+                    beforeEach {
+                        e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook]))
+                            .evaluate(event: .didAddNotebook(notebook: secondNotebook))
+                    }
+
+                    it("has model without editing notebook") {
+                        expect(e.evaluate(event: event).model.editingNotebook).to(beNil())
+                    }
+                }
+            }
+
+            context("when receiving didUpdate event") {
+                let firstNotebook = Notebook(uuid: "uuid1", name: "bcd")
+                let secondNotebook = Notebook(uuid: "uuid2", name: "oldName")
+                let expectedViewModels = [
+                    NotebookCellViewModel(title: "abc", isEditable: false),
+                    NotebookCellViewModel(title: "bcd", isEditable: false)
+                ]
+
+                beforeEach {
+                    e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
+                    event = .didUpdate(notebook: Notebook(uuid: "uuid2", name: "abc"))
+                }
+
+                it("has updateAllNotebooks effect with updated notebook") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.updateAllNotebooks(notebooks: expectedViewModels)))
+                }
+
+                context("when there's editing notebook") {
+                    beforeEach {
+                        e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook]))
+                            .evaluate(event: .didAddNotebook(notebook: secondNotebook))
+                    }
+
+                    it("has model without editing notebook") {
+                        expect(e.evaluate(event: event).model.editingNotebook).to(beNil())
+                    }
+                }
+            }
+
+            context("when receiving failedToAddNotebook event") {
+                beforeEach {
+                    event = .failedToAddNotebook(error: error)
+                }
+
+                it("contains updateAllNotebooks effect with notebooks from current model") {
+                    expect(e.evaluate(event: event).effects).to(contain(.updateAllNotebooks(notebooks: [])))
+                }
+
+                it("contains showError effect") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to add notebook", message: "localized message")))
+                }
+
+                context("when there's editing notebook") {
+                    beforeEach {
+                        e = e.evaluate(event: .didAddNotebook(notebook: Notebook.notebookDummy()))
+                    }
+
+                    it("has model without editing notebook") {
+                        expect(e.evaluate(event: event).model.editingNotebook).to(beNil())
+                    }
+                }
+            }
+
+            context("when receiving failedToDeleteNotebook event") {
+                beforeEach {
+                    event = .failedToDeleteNotebook(error: error)
+                }
+
+                it("contains updateAllNotebooks effect with notebooks from current model") {
+                    expect(e.evaluate(event: event).effects).to(contain(.updateAllNotebooks(notebooks: [])))
+                }
+
+                it("contains showError effect") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to delete notebook", message: "localized message")))
+                }
+
+                context("when there's editing notebook") {
+                    beforeEach {
+                        e = e.evaluate(event: .didAddNotebook(notebook: Notebook.notebookDummy()))
+                    }
+
+                    it("has model without editing notebook") {
+                        expect(e.evaluate(event: event).model.editingNotebook).to(beNil())
+                    }
+                }
+            }
+
+            context("when receiving failedToUpdateNotebook event") {
+                beforeEach {
+                    event = .failedToUpdateNotebook(error: error)
+                }
+
+                it("contains updateAllNotebooks effect with notebooks from current model") {
+                    expect(e.evaluate(event: event).effects).to(contain(.updateAllNotebooks(notebooks: [])))
+                }
+
+                it("contains showError effect") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.showError(error: "Failed to update notebook", message: "localized message")))
+                }
+
+                context("when there's editing notebook") {
+                    beforeEach {
+                        e = e.evaluate(event: .didAddNotebook(notebook: Notebook.notebookDummy()))
+                    }
+
+                    it("has model without editing notebook") {
+                        expect(e.evaluate(event: event).model.editingNotebook).to(beNil())
+                    }
+                }
+            }
         }
     }
 }

@@ -94,13 +94,14 @@ extension UI.Library {
 
             switch event {
             case .didUpdateNotebooks(let notebooks):
-                let sortedNotebooks = notebooks.sorted(by: defaultNotebookSorting)
-                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: model.editingNotebook)
+                let sortedNotebooks = notebooks.sorted(by: notebookNameSorting)
+                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks,
+                                                    editingNotebook: nil)
                 effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: nil)
             case .didAddNotebook(let notebook):
                 let updatedNotebooks = model.notebooks + [notebook]
-                let sortedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
+                let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
                 let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: notebook)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
@@ -110,12 +111,12 @@ extension UI.Library {
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(at: indexOfDeletedNotebook)
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
                 effects = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
-                newModel = Model(notebooks: updatedNotebooks, editingNotebook: model.editingNotebook)
+                newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
             case .didUpdate(let notebook):
                 let indexOfUpdatedNotebook = model.notebooks.index(of: notebook)!
                 var updatedNotebooks = model.notebooks
                 updatedNotebooks[indexOfUpdatedNotebook] = notebook
-                updatedNotebooks = updatedNotebooks.sorted(by: defaultNotebookSorting)
+                updatedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
                 effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
@@ -129,18 +130,20 @@ extension UI.Library {
                 newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
             case .failedToDeleteNotebook(let error):
                 let errorMessage = error.error.localizedDescription
-                let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
+                let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
                 effects = [
                     .updateAllNotebooks(notebooks: notebookViewModels),
                     .showError(error: "Failed to delete notebook", message: errorMessage)
                 ]
+                newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
             case .failedToUpdateNotebook(let error):
                 let errorMessage = error.error.localizedDescription
-                let notebookViewModels = viewModels(fromNotebooks: model.notebooks, editingNotebook: model.editingNotebook)
+                let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
                 effects = [
                     .updateAllNotebooks(notebooks: notebookViewModels),
                     .showError(error: "Failed to update notebook", message: errorMessage)
                 ]
+                newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -155,8 +158,8 @@ private extension UI.Library {
         }
     }
 
-    static func defaultNotebookSorting(leftNotebook: Notebook, rightNotebook: Notebook) -> Bool {
-        return leftNotebook.name < rightNotebook.name
+    static func notebookNameSorting(leftNotebook: Notebook, rightNotebook: Notebook) -> Bool {
+        return leftNotebook.name.lowercased() < rightNotebook.name.lowercased()
     }
 }
 
