@@ -8,7 +8,7 @@
 
 import UIKit
 
-typealias DidChangeTitleBlock = (_ title: String) -> Void
+typealias DidChangeTitleBlock = (_ title: String?) -> Void
 
 class LibraryTableViewCell: UITableViewCell {
     // MARK: - API
@@ -42,7 +42,7 @@ class LibraryTableViewCell: UITableViewCell {
 
 extension LibraryTableViewCell: UITextFieldDelegate {
     func textFieldDidEndEditing(_ textField: UITextField) {
-        onDidChangeTitle?(textField.text ?? "")
+        onDidChangeTitle?(textField.text)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

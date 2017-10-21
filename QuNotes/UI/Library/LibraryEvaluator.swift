@@ -44,7 +44,7 @@ extension UI.Library {
         case addNotebook
         case selectNotebook(index: Int)
         case deleteNotebook(index: Int)
-        case updateNotebook(index: Int, title: String)
+        case updateNotebook(index: Int, title: String?)
     }
 
     // MARK: - Evaluator
@@ -81,7 +81,7 @@ extension UI.Library {
                 actions = [.showNotes(forNotebook: notebook)]
             case .updateNotebook(let index, let title):
                 let notebook = model.notebooks[index]
-                actions = [.updateNotebook(notebook: notebook, title: title)]
+                actions = [.updateNotebook(notebook: notebook, title: title ?? "")]
             }
 
             return Evaluator(effects: effects, actions: actions, model: model)
