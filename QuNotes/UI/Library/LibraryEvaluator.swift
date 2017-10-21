@@ -159,3 +159,41 @@ private extension UI.Library {
         return leftNotebook.name < rightNotebook.name
     }
 }
+
+// MARK: - ViewControllerEffect Equatable
+
+extension UI.Library.ViewControllerEffect: Equatable {}
+
+func ==(lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffect) -> Bool {
+    switch (lhs, rhs) {
+    case (.updateAllNotebooks(let lNotebooks), .updateAllNotebooks(let rNotebooks)):
+        return lNotebooks == rNotebooks
+    case (.addNotebook(let lIndex, let lNotebooks), .addNotebook(let rIndex, let rNotebooks)):
+        return (lIndex == rIndex) && (lNotebooks == rNotebooks)
+    case (.updateNotebook(let lIndex, let lNotebooks), .updateNotebook(let rIndex, let rNotebooks)):
+        return (lIndex == rIndex) && (lNotebooks == rNotebooks)
+    case (.deleteNotebook(let lIndex, let lNotebooks), .deleteNotebook(let rIndex, let rNotebooks)):
+        return (lIndex == rIndex) && (lNotebooks == rNotebooks)
+    case (.showError(let lError, let lMessage), .showError(let rError, let rMessage)):
+        return (lError == rError) && (lMessage == rMessage)
+    default: return false
+    }
+}
+
+// MARK: - Action Equtable
+
+extension UI.Library.Action: Equatable {}
+
+func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
+    switch (lhs, rhs) {
+    case (.addNotebook, .addNotebook):
+        return true
+    case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
+        return lNotebook == rNotebook
+    case (.updateNotebook(let lNotebook, let lTitle), .updateNotebook(let rNotebook, let rTitle)):
+        return (lNotebook == rNotebook) && (lTitle == rTitle)
+    case (.showNotes(let lNotebook), .showNotes(let rNotebook)):
+        return lNotebook == rNotebook
+    default: return false
+    }
+}

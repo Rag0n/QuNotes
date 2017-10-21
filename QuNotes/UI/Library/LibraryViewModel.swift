@@ -10,3 +10,9 @@ struct NotebookCellViewModel {
     let title: String
     let isEditable: Bool
 }
+
+extension NotebookCellViewModel: Equatable {}
+
+func ==(lhs: NotebookCellViewModel, rhs: NotebookCellViewModel) -> Bool {
+    return (lhs.title == rhs.title) && (lhs.isEditable == rhs.isEditable)
+}
