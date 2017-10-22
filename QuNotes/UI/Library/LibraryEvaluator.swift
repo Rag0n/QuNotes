@@ -32,12 +32,9 @@ extension UI.Library {
 
     enum CoordinatorEvent {
         case didUpdateNotebooks(notebooks: [Notebook])
-        case didAddNotebook(notebook: Notebook)
-        case didDelete(notebook: Notebook)
-        case didUpdate(notebook: Notebook)
-        case failedToAddNotebook(error: AnyError)
-        case failedToDeleteNotebook(error: AnyError)
-        case failedToUpdateNotebook(error: AnyError)
+        case didAddNotebook(result: Result<Notebook, AnyError>)
+        case didUpdate(result: Result<Notebook, AnyError>)
+        case didDelete(result: Result<Notebook, AnyError>)
     }
 
     enum ViewControllerEvent {
@@ -60,7 +57,7 @@ extension UI.Library {
             model = Model(notebooks: [], editingNotebook: nil)
         }
 
-        private init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
@@ -99,20 +96,32 @@ extension UI.Library {
                                                     editingNotebook: nil)
                 effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: nil)
-            case .didAddNotebook(let notebook):
+            case .didAddNotebook(let result):
+                guard case let .success(notebook) = result else {
+                    return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to add notebook")
+                }
+
                 let updatedNotebooks = model.notebooks + [notebook]
                 let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
                 let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: notebook)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: notebook)
-            case .didDelete(let notebook):
+            case .didDelete(let result):
+                guard case let .success(notebook) = result else {
+                    return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to delete notebook")
+                }
+
                 let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(at: indexOfDeletedNotebook)
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
                 effects = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
-            case .didUpdate(let notebook):
+            case .didUpdate(let result):
+                guard case let .success(notebook) = result else {
+                    return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to update notebook")
+                }
+
                 let indexOfUpdatedNotebook = model.notebooks.index(of: notebook)!
                 var updatedNotebooks = model.notebooks
                 updatedNotebooks[indexOfUpdatedNotebook] = notebook
@@ -120,30 +129,6 @@ extension UI.Library {
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
                 effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
-            case .failedToAddNotebook(let error):
-                let errorMessage = error.error.localizedDescription
-                let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
-                effects = [
-                    .updateAllNotebooks(notebooks: notebookViewModels),
-                    .showError(error: "Failed to add notebook", message: errorMessage)
-                ]
-                newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
-            case .failedToDeleteNotebook(let error):
-                let errorMessage = error.error.localizedDescription
-                let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
-                effects = [
-                    .updateAllNotebooks(notebooks: notebookViewModels),
-                    .showError(error: "Failed to delete notebook", message: errorMessage)
-                ]
-                newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
-            case .failedToUpdateNotebook(let error):
-                let errorMessage = error.error.localizedDescription
-                let notebookViewModels = viewModels(fromNotebooks: model.notebooks)
-                effects = [
-                    .updateAllNotebooks(notebooks: notebookViewModels),
-                    .showError(error: "Failed to update notebook", message: errorMessage)
-                ]
-                newModel = Model(notebooks: model.notebooks, editingNotebook: nil)
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -160,6 +145,19 @@ private extension UI.Library {
 
     static func notebookNameSorting(leftNotebook: Notebook, rightNotebook: Notebook) -> Bool {
         return leftNotebook.name.lowercased() < rightNotebook.name.lowercased()
+    }
+
+    static func updateNotebooksAndShowError(notebooks: [Notebook], error: AnyError, reason: String) -> Evaluator {
+        let errorMessage = error.error.localizedDescription
+        let notebookViewModels = viewModels(fromNotebooks: notebooks)
+        let effects: [ViewControllerEffect] = [
+            .updateAllNotebooks(notebooks: notebookViewModels),
+            .showError(error: reason, message: errorMessage)
+        ]
+
+        return Evaluator(effects: effects,
+                         actions: [],
+                         model: Model(notebooks: notebooks, editingNotebook: nil))
     }
 }
 

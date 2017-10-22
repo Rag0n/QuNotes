@@ -70,32 +70,20 @@ extension UI.Library {
         fileprivate func perform(action: Action) {
             switch action {
             case .addNotebook:
-                switch notebookUseCase.add(withName: "") {
-                case let .success(notebook):
-                    dispatch(event: .didAddNotebook(notebook: notebook))
-                case let .failure(error):
-                    dispatch(event: .failedToAddNotebook(error: error))
-                }
+                let result = notebookUseCase.add(withName: "")
+                dispatch <| .didAddNotebook(result: result)
+            case .updateNotebook(let notebook, let title):
+                let result = notebookUseCase.update(notebook, name: title)
+                dispatch <| .didUpdate(result: result)
             case .deleteNotebook(let notebook):
-                switch notebookUseCase.delete(notebook) {
-                case let .success(notebook):
-                    dispatch(event: .didDelete(notebook: notebook))
-                case let .failure(error):
-                    dispatch(event: .failedToDeleteNotebook(error: error))
-                }
+                let result = notebookUseCase.delete(notebook)
+                dispatch <| .didDelete(result: result)
             case .showNotes(let notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
                                                                            dependencies: dependencies,
                                                                            notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
                     self.onStart()
-                }
-            case .updateNotebook(let notebook, let title):
-                switch notebookUseCase.update(notebook, name: title) {
-                case let .success(notebook):
-                    dispatch(event: .didUpdate(notebook: notebook))
-                case let .failure(error):
-                    dispatch(event: .failedToUpdateNotebook(error: error))
                 }
             }
         }
