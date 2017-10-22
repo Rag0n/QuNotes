@@ -98,9 +98,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                 let secondNotebook = Notebook(uuid: "uuid2", name: "abc")
                 let thirdNotebook = Notebook(uuid: "uuid3", name: "Cde")
                 let expectedViewModels = [
-                    NotebookCellViewModel(title: "abc", isEditable: false),
-                    NotebookCellViewModel(title: "bcd", isEditable: false),
-                    NotebookCellViewModel(title: "Cde", isEditable: false),
+                    UI.Library.NotebookViewModel(title: "abc", isEditable: false),
+                    UI.Library.NotebookViewModel(title: "bcd", isEditable: false),
+                    UI.Library.NotebookViewModel(title: "Cde", isEditable: false),
                 ]
 
                 beforeEach {
@@ -135,9 +135,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                     let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
                     let addedNotebook = Notebook(uuid: "uuid3", name: "bcd")
                     let expectedViewModels = [
-                        NotebookCellViewModel(title: "abc", isEditable: false),
-                        NotebookCellViewModel(title: "bcd", isEditable: true),
-                        NotebookCellViewModel(title: "cde", isEditable: false)
+                        UI.Library.NotebookViewModel(title: "abc", isEditable: false),
+                        UI.Library.NotebookViewModel(title: "bcd", isEditable: true),
+                        UI.Library.NotebookViewModel(title: "cde", isEditable: false)
                     ]
 
                     beforeEach {
@@ -192,7 +192,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                     let firstNotebook = Notebook(uuid: "uuid1", name: "abc")
                     let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
                     let expectedViewModels = [
-                        NotebookCellViewModel(title: "abc", isEditable: false)
+                        UI.Library.NotebookViewModel(title: "abc", isEditable: false)
                     ]
 
                     beforeEach {
@@ -248,8 +248,8 @@ class LibraryEvaluatorSpec: QuickSpec {
                     let firstNotebook = Notebook(uuid: "uuid1", name: "bcd")
                     let secondNotebook = Notebook(uuid: "uuid2", name: "oldName")
                     let expectedViewModels = [
-                        NotebookCellViewModel(title: "abc", isEditable: false),
-                        NotebookCellViewModel(title: "bcd", isEditable: false)
+                        UI.Library.NotebookViewModel(title: "abc", isEditable: false),
+                        UI.Library.NotebookViewModel(title: "bcd", isEditable: false)
                     ]
 
                     beforeEach {

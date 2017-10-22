@@ -10,6 +10,7 @@ import Foundation
 import Result
 
 extension UI.Library {
+    // MARK: - Data types
     struct Model {
         let notebooks: [Notebook]
         let editingNotebook: Notebook?
@@ -23,10 +24,10 @@ extension UI.Library {
     }
 
     enum ViewControllerEffect {
-        case updateAllNotebooks(notebooks: [NotebookCellViewModel])
-        case addNotebook(index: Int, notebooks: [NotebookCellViewModel])
-        case updateNotebook(index: Int, notebooks:  [NotebookCellViewModel])
-        case deleteNotebook(index: Int, notebooks: [NotebookCellViewModel])
+        case updateAllNotebooks(notebooks: [NotebookViewModel])
+        case addNotebook(index: Int, notebooks: [NotebookViewModel])
+        case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
+        case deleteNotebook(index: Int, notebooks: [NotebookViewModel])
         case showError(error: String, message: String)
     }
 
@@ -42,6 +43,11 @@ extension UI.Library {
         case selectNotebook(index: Int)
         case deleteNotebook(index: Int)
         case updateNotebook(index: Int, title: String?)
+    }
+
+    struct NotebookViewModel {
+        let title: String
+        let isEditable: Bool
     }
 
     // MARK: - Evaluator
@@ -137,9 +143,9 @@ extension UI.Library {
 }
 
 private extension UI.Library {
-    static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookCellViewModel] {
+    static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookViewModel] {
         return fromNotebooks.map {
-            NotebookCellViewModel(title: $0.name, isEditable: $0 == editingNotebook)
+            NotebookViewModel(title: $0.name, isEditable: $0 == editingNotebook)
         }
     }
 
@@ -197,4 +203,12 @@ func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
         return lNotebook == rNotebook
     default: return false
     }
+}
+
+// MARK: - NotebookViewModel Equatable
+
+extension UI.Library.NotebookViewModel: Equatable {}
+
+func ==(lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookViewModel) -> Bool {
+    return (lhs.title == rhs.title) && (lhs.isEditable == rhs.isEditable)
 }

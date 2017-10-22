@@ -51,7 +51,7 @@ class LibraryViewController: UIViewController {
     // MARK: - Private
 
     @IBOutlet private weak var tableView: UITableView!
-    fileprivate var notebooks: [NotebookCellViewModel]!
+    fileprivate var notebooks: [UI.Library.NotebookViewModel]!
     fileprivate var dispatch: UI.Library.ViewControllerDispacher!
 
     fileprivate enum Constants {
