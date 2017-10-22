@@ -15,8 +15,8 @@ class LibraryViewController: UIViewController {
         self.dispatch = dispatch
     }
 
-    func apply(update: UI.Library.ViewControllerEffect) {
-        switch update {
+    func perform(effect: UI.Library.ViewControllerEffect) {
+        switch effect {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
             tableView?.reloadData()

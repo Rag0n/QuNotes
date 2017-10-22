@@ -69,7 +69,7 @@ extension UI.Notebook {
         fileprivate func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
             evaluator.actions.forEach(perform)
-            evaluator.effects.forEach(notebookViewController.apply)
+            evaluator.effects.forEach(notebookViewController.perform)
         }
 
         fileprivate func perform(action: Action) {

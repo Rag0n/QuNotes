@@ -64,7 +64,7 @@ extension UI.Library {
         fileprivate func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
             evaluator.actions.forEach(perform)
-            evaluator.effects.forEach(libraryViewController.apply)
+            evaluator.effects.forEach(libraryViewController.perform)
         }
 
         fileprivate func perform(action: Action) {

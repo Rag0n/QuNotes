@@ -15,8 +15,8 @@ class NotebookViewController: UIViewController {
         self.dispatch = dispatch
     }
 
-    func apply(update: UI.Notebook.ViewControllerEffect) {
-        switch update {
+    func perform(effect: UI.Notebook.ViewControllerEffect) {
+        switch effect {
         case let .updateAllNotes(notes):
             self.notes = notes
             tableView?.reloadData()
