@@ -187,7 +187,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
             }
 
-            context("when receiving didDelete event") {
+            context("when receiving didDeleteNotebook event") {
                 context("when result is notebook") {
                     let firstNotebook = Notebook(uuid: "uuid1", name: "abc")
                     let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
@@ -197,7 +197,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     beforeEach {
                         e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
-                        event = .didDelete(result: Result(secondNotebook))
+                        event = .didDeleteNotebook(result: Result(secondNotebook))
                     }
 
                     it("has deleteNotebook effect without removed notebook") {
@@ -219,7 +219,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when result is error") {
                     beforeEach {
-                        event = .didDelete(result: Result(error: error))
+                        event = .didDeleteNotebook(result: Result(error: error))
                     }
 
                     it("contains updateAllNotebooks effect with notebooks from current model") {
@@ -243,7 +243,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
             }
 
-            context("when receiving didUpdate event") {
+            context("when receiving didUpdateNotebook event") {
                 context("when result is notebook") {
                     let firstNotebook = Notebook(uuid: "uuid1", name: "bcd")
                     let secondNotebook = Notebook(uuid: "uuid2", name: "oldName")
@@ -254,7 +254,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     beforeEach {
                         e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
-                        event = .didUpdate(result: Result(Notebook(uuid: "uuid2", name: "abc")))
+                        event = .didUpdateNotebook(result: Result(Notebook(uuid: "uuid2", name: "abc")))
                     }
 
                     it("has updateAllNotebooks effect with updated notebook") {
@@ -276,7 +276,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when result is error") {
                     beforeEach {
-                        event = .didUpdate(result: Result(error: error))
+                        event = .didUpdateNotebook(result: Result(error: error))
                     }
 
                     it("contains updateAllNotebooks effect with notebooks from current model") {

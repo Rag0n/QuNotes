@@ -33,8 +33,8 @@ extension UI.Library {
     enum CoordinatorEvent {
         case didUpdateNotebooks(notebooks: [Notebook])
         case didAddNotebook(result: Result<Notebook, AnyError>)
-        case didUpdate(result: Result<Notebook, AnyError>)
-        case didDelete(result: Result<Notebook, AnyError>)
+        case didUpdateNotebook(result: Result<Notebook, AnyError>)
+        case didDeleteNotebook(result: Result<Notebook, AnyError>)
     }
 
     enum ViewControllerEvent {
@@ -107,7 +107,7 @@ extension UI.Library {
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: notebook)
-            case .didDelete(let result):
+            case .didDeleteNotebook(let result):
                 guard case let .success(notebook) = result else {
                     return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to delete notebook")
                 }
@@ -117,7 +117,7 @@ extension UI.Library {
                 let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
                 effects = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
-            case .didUpdate(let result):
+            case .didUpdateNotebook(let result):
                 guard case let .success(notebook) = result else {
                     return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to update notebook")
                 }

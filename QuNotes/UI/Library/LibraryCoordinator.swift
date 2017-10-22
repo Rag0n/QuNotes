@@ -74,10 +74,10 @@ extension UI.Library {
                 dispatch <| .didAddNotebook(result: result)
             case .updateNotebook(let notebook, let title):
                 let result = notebookUseCase.update(notebook, name: title)
-                dispatch <| .didUpdate(result: result)
+                dispatch <| .didUpdateNotebook(result: result)
             case .deleteNotebook(let notebook):
                 let result = notebookUseCase.delete(notebook)
-                dispatch <| .didDelete(result: result)
+                dispatch <| .didDeleteNotebook(result: result)
             case .showNotes(let notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
                                                                            dependencies: dependencies,
