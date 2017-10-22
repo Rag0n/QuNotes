@@ -15,10 +15,7 @@ extension UI.Note {
 
     class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
-
-        func onStart() {
-        }
-
+        
         var rootViewController: UIViewController {
             get {
                 return noteViewController
