@@ -35,14 +35,10 @@ extension UI.Notebook {
 
     enum CoordinatorEvent {
         case didUpdateNotes(notes: [Note])
-        case didAddNote(note: Note)
-        case didDeleteNote(note: Note)
-        case didUpdateNotebook(notebook: Notebook)
-        case didDeleteNotebook
-        case didFailToAddNote(error: AnyError)
-        case didFailToDeleteNote(error: AnyError)
-        case didFailToUpdateNotebook(error: AnyError)
-        case didFailToDeleteNotebook(error: AnyError)
+        case didAddNote(result: Result<Note, AnyError>)
+        case didDeleteNote(result: Result<Note, AnyError>)
+        case didUpdateNotebook(result: Result<Notebook, AnyError>)
+        case didDeleteNotebook(error: AnyError?)
     }
 
     enum ViewControllerEvent {
@@ -68,7 +64,7 @@ extension UI.Notebook {
             model = Model(notebook: notebook, notes: [])
         }
 
-        private init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
@@ -118,41 +114,51 @@ extension UI.Notebook {
                 let noteTitles = sortedNotes.map { $0.title }
                 effects = [.updateAllNotes(notes: noteTitles)]
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
-            case let .didAddNote(note):
+            case let .didAddNote(result):
+                guard case let .success(note) = result else {
+                    return showError(error: result.error!,
+                                     reason: "Failed to add note",
+                                     model: model)
+                }
+
                 let newNotes = model.notes + [note]
                 let sortedNotes = newNotes.sorted(by: defaultNoteSorting)
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
                 actions = [.showNote(note: note)]
-            case let .didDeleteNote(note):
+            case let .didDeleteNote(result):
+                guard case let .success(note) = result else {
+                    let noteTitles = model.notes.map { $0.title }
+                    let additionalEffect: ViewControllerEffect = .updateAllNotes(notes: noteTitles)
+                    return showError(error: result.error!,
+                                     reason: "Failed to delete notebook",
+                                     model: model,
+                                     additionalEffect: additionalEffect)
+                }
+
                 let indexOfDeletedNote = model.notes.index(of: note)!
                 let updatedNotes = model.notes.removeWithoutMutation(at: indexOfDeletedNote)
                 let noteTitles = updatedNotes.map { $0.title }
                 effects = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
                 newModel = Model(notebook: model.notebook, notes: updatedNotes)
-            case let .didUpdateNotebook(notebook):
+            case let .didUpdateNotebook(result):
+                guard case let .success(notebook) = result else {
+                    let additionalEffect: ViewControllerEffect = .updateTitle(title: model.notebook.name)
+                    return showError(error: result.error!,
+                                     reason: "Failed to update notebook's title",
+                                     model: model,
+                                     additionalEffect: additionalEffect)
+                }
+
                 effects = [.updateTitle(title: notebook.name)]
                 newModel = Model(notebook: notebook, notes: model.notes)
-            case .didDeleteNotebook:
+            case let .didDeleteNotebook(error):
+                guard error == nil else {
+                    return showError(error: error!,
+                                     reason: "Failed to delete notebook",
+                                     model: model)
+                }
+
                 actions = [.finish]
-            case let .didFailToAddNote(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [.showError(error: "Failed to add note", message: errorMessage)]
-            case let .didFailToDeleteNote(error):
-                let errorMessage = error.error.localizedDescription
-                let noteTitles = model.notes.map { $0.title }
-                effects = [
-                    .updateAllNotes(notes: noteTitles),
-                    .showError(error: "Failed to delete notebook", message: errorMessage)
-                ]
-            case let .didFailToUpdateNotebook(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [
-                    .updateTitle(title: model.notebook.name),
-                    .showError(error: "Failed to update notebook's title", message: errorMessage)
-                ]
-            case let .didFailToDeleteNotebook(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [.showError(error: "Failed to delete notebook", message: errorMessage)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -160,9 +166,27 @@ extension UI.Notebook {
     }
 }
 
+// MARK: - Private
+
 private extension UI.Notebook {
     static func defaultNoteSorting(leftNote: Note, rightNote: Note) -> Bool {
         return leftNote.title < rightNote.title
+
+    static func showError(error: AnyError,
+                          reason: String,
+                          model: Model,
+                          additionalEffect: ViewControllerEffect? = nil) -> Evaluator {
+        let errorMessage = error.error.localizedDescription
+        var effects: [ViewControllerEffect] = [
+            .showError(error: reason, message: errorMessage)
+        ]
+        if let additionalEffect = additionalEffect {
+            effects.insert(additionalEffect, at: 0)
+        }
+
+        return Evaluator(effects: effects,
+                         actions: [],
+                         model: model)
     }
 }
 

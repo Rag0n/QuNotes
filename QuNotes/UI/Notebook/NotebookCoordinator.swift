@@ -22,7 +22,7 @@ extension UI.Notebook {
         func onStart() {
             let notes = noteUseCase.getAll()
             dispatch(event: .didUpdateNotes(notes: notes))
-            dispatch(event: .didUpdateNotebook(notebook: evaluator.model.notebook))
+            dispatch(event: .didUpdateNotebook(result: Result(evaluator.model.notebook)))
         }
 
         var rootViewController: UIViewController {
@@ -75,12 +75,19 @@ extension UI.Notebook {
         fileprivate func perform(action: Action) {
             switch action {
             case .addNote:
-                switch noteUseCase.add(withTitle: "") {
-                case let .success(note):
-                    dispatch(event: .didAddNote(note: note))
-                case let .failure(error):
-                    dispatch(event: .didFailToAddNote(error: error))
-                }
+                let result = noteUseCase.add(withTitle: "")
+                dispatch <| .didAddNote(result: result)
+            case .deleteNote(let note):
+                let result = noteUseCase.delete(note)
+                dispatch <| .didDeleteNote(result: result)
+            case .updateNotebook(let notebook, let title):
+                let result = notebookUseCase.update(notebook, name: title)
+                dispatch <| .didUpdateNotebook(result: result)
+            case .deleteNotebook(let notebook):
+                let result = notebookUseCase.delete(notebook)
+                dispatch <| .didDeleteNotebook(error: result.error)
+            case .finish:
+                navigationController.popViewController(animated: true)
             case .showNote(let note):
                 let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
                                                              dependencies: dependencies,
@@ -88,30 +95,6 @@ extension UI.Notebook {
                 navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [unowned self] in
                     self.onStart()
                 }
-            case .deleteNote(let note):
-                switch noteUseCase.delete(note) {
-                case let .success(note):
-                    dispatch(event: .didDeleteNote(note: note))
-                case let .failure(error):
-                    dispatch(event: .didFailToDeleteNote(error: error))
-                }
-                return
-            case .updateNotebook(let notebook, let title):
-                switch notebookUseCase.update(notebook, name: title) {
-                case let .success(notebook):
-                    dispatch(event: .didUpdateNotebook(notebook: notebook))
-                case let .failure(error):
-                    dispatch(event: .didFailToUpdateNotebook(error: error))
-                }
-            case .deleteNotebook(let notebook):
-                switch notebookUseCase.delete(notebook) {
-                case .success:
-                    dispatch(event: .didDeleteNotebook)
-                case let .failure(error):
-                    dispatch(event: .didFailToDeleteNotebook(error: error))
-                }
-            case .finish:
-                navigationController.popViewController(animated: true)
             }
         }
     }
