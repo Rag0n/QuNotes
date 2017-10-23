@@ -142,6 +142,165 @@ class NotebookEvaluatorSpec: QuickSpec {
         }
 
         describe("-evaluate:CoordinatorEvent:") {
+            var event: UI.Notebook.CoordinatorEvent!
+
+            context("when receiving didUpdateNotes event") {
+                let firstNote = Note.noteDummy(withTitle: "Bcd")
+                let secondNote = Note.noteDummy(withTitle: "abc")
+                let thirdNote = Note.noteDummy(withTitle: "cde")
+                let expectedViewModels = [
+                    "abc",
+                    "Bcd",
+                    "cde"
+                ]
+
+                beforeEach {
+                    event = .didUpdateNotes(notes: [firstNote, secondNote, thirdNote])
+                }
+
+                it("has model with sorted by name notes") {
+                    expect(e.evaluate(event: event).model.notes)
+                        .to(equal([secondNote, firstNote, thirdNote]))
+                }
+
+                it("has updateAllNotes effect with correct order of ViewModels") {
+                    expect(e.evaluate(event: event).effects)
+                        .to(contain(.updateAllNotes(notes: expectedViewModels)))
+                }
+            }
+
+            context("when receiving didAddNote event") {
+                context("when result is note") {
+                    let firstNote = Note.noteDummy(withTitle: "abc")
+                    let secondNote = Note.noteDummy(withTitle: "cde")
+                    let addedNote = Note.noteDummy(withTitle: "bcd")
+
+                    beforeEach {
+                        e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
+                        event = .didAddNote(result: Result(addedNote))
+                    }
+
+                    it("has model with appended note and correct sorting") {
+                        expect(e.evaluate(event: event).model.notes)
+                            .to(equal([firstNote, addedNote, secondNote]))
+                    }
+
+                    it("has showNote action with added note") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(contain(.showNote(note: addedNote)))
+                    }
+                }
+
+                context("when result is error") {
+                    beforeEach {
+                        event = .didAddNote(result: Result(error: error))
+                    }
+
+                    it("contains showError effect") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.showError(error: "Failed to add note", message: "localized message")))
+                    }
+                }
+            }
+
+            context("when receiving didDeleteNote event") {
+                let firstNote = Note.noteDummy(withTitle: "abc")
+                let secondNote = Note.noteDummy(withTitle: "cde")
+
+                context("when result is note") {
+                    beforeEach {
+                        e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
+                        event = .didDeleteNote(result: Result(secondNote))
+                    }
+
+                    it("has model without removed note") {
+                        expect(e.evaluate(event: event).model.notes)
+                            .to(equal([firstNote]))
+                    }
+
+                    it("has deleteNote effect with correct index and viewModels") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.deleteNote(index: 1, notes: ["abc"])))
+                    }
+                }
+
+                context("when result is error") {
+                    beforeEach {
+                        e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
+                        event = .didDeleteNote(result: Result(error: error))
+                    }
+
+                    it("contains showError effect") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.showError(error: "Failed to delete notebook", message: "localized message")))
+                    }
+
+                    it("contains updateAllNotes effect") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.updateAllNotes(notes: ["abc", "cde"])))
+                    }
+                }
+            }
+
+            context("when receiving didUpdateNotebook event") {
+                let notebook = Notebook.notebookDummy(withUUID: "uuid", name: "new name")
+
+                context("when result is notebook") {
+                    beforeEach {
+                        event = .didUpdateNotebook(result: Result(notebook))
+                    }
+
+                    it("has model with updated notebook") {
+                        expect(e.evaluate(event: event).model.notebook)
+                            .to(equal(notebook))
+                    }
+
+                    it("constains updateTitle effect with updated notebook name") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.updateTitle(title: "new name")))
+                    }
+                }
+
+                context("when result is error") {
+                    beforeEach {
+                        event = .didUpdateNotebook(result: Result(error: error))
+                    }
+
+                    it("contains showError effect") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.showError(error: "Failed to update notebook's title", message: "localized message")))
+                    }
+
+                    it("constains updateTitle effect with old notebook name") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.updateTitle(title: "name")))
+                    }
+                }
+            }
+
+            context("when receiving didDeleteNotebook event") {
+                context("when error is nil") {
+                    beforeEach {
+                        event = .didDeleteNotebook(error: nil)
+                    }
+
+                    it("constains finish action") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(contain(.finish))
+                    }
+                }
+
+                context("when error is not nil") {
+                    beforeEach {
+                        event = .didDeleteNotebook(error: error)
+                    }
+
+                    it("contains showError effect") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(contain(.showError(error: "Failed to delete notebook", message: "localized message")))
+                    }
+                }
+            }
         }
     }
 }

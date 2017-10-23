@@ -170,7 +170,8 @@ extension UI.Notebook {
 
 private extension UI.Notebook {
     static func defaultNoteSorting(leftNote: Note, rightNote: Note) -> Bool {
-        return leftNote.title < rightNote.title
+        return leftNote.title.lowercased() < rightNote.title.lowercased()
+    }
 
     static func showError(error: AnyError,
                           reason: String,
