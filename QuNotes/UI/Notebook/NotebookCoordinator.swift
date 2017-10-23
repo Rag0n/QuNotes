@@ -21,8 +21,8 @@ extension UI.Notebook {
 
         func onStart() {
             let notes = noteUseCase.getAll()
-            dispatch(event: .didUpdateNotes(notes: notes))
-            dispatch(event: .didUpdateNotebook(result: Result(evaluator.model.notebook)))
+            dispatch <| .didUpdateNotes(notes: notes)
+            dispatch <| .didUpdateNotebook(result: Result(evaluator.model.notebook))
         }
 
         var rootViewController: UIViewController {
@@ -92,7 +92,8 @@ extension UI.Notebook {
                 let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
                                                              dependencies: dependencies,
                                                              note: note)
-                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [unowned self] in
+                navigationController.pushCoordinator(coordinator: noteCoordinator,
+                                                     animated: true) { [unowned self] in
                     self.onStart()
                 }
             }

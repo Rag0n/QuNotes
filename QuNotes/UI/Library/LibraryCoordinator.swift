@@ -21,7 +21,7 @@ extension UI.Library {
 
         func onStart() {
             let notebooks = notebookUseCase.getAll()
-            dispatch(event: .didUpdateNotebooks(notebooks: notebooks))
+            dispatch <| .didUpdateNotebooks(notebooks: notebooks)
         }
 
         var rootViewController: UIViewController {
