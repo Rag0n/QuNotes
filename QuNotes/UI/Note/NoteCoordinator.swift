@@ -61,40 +61,20 @@ extension UI.Note {
         fileprivate func perform(action: Action) {
             switch action {
             case let .updateTitle(title):
-                switch noteUseCase.update(evaluator.model.note, newTitle: title) {
-                case let .success(note):
-                    dispatch(event: .didUpdateTitle(note: note))
-                case let .failure(error):
-                    dispatch(event: .didFailToUpdateTitle(error: error))
-                }
+                let result = noteUseCase.update(evaluator.model.note, newTitle: title)
+                dispatch <| .didUpdateTitle(result: result)
             case let .updateContent(content):
-                switch noteUseCase.update(evaluator.model.note, newContent: content) {
-                case let .success(note):
-                    dispatch(event: .didUpdateContent(note: note))
-                case let .failure(error):
-                    dispatch(event: .didFailToUpdateContent(error: error))
-                }
+                let result = noteUseCase.update(evaluator.model.note, newContent: content)
+                dispatch <| .didUpdateContent(result: result)
             case let .addTag(tag):
-                switch noteUseCase.addTag(tag: tag, toNote: evaluator.model.note) {
-                case let .success(note):
-                    dispatch(event: .didAddTag(note: note, tag: tag))
-                case let .failure(error):
-                    dispatch(event: .didFailToAddTag(error: error))
-                }
+                let result = noteUseCase.addTag(tag: tag, toNote: evaluator.model.note)
+                dispatch <| .didAddTag(result: result, tag: tag)
             case let .removeTag(tag):
-                switch noteUseCase.removeTag(tag: tag, fromNote: evaluator.model.note) {
-                case let .success(note):
-                    dispatch(event: .didRemoveTag(note: note, tag: tag))
-                case let .failure(error):
-                    dispatch(event: .didFailToRemoveTag(error: error))
-                }
+                let result = noteUseCase.removeTag(tag: tag, fromNote: evaluator.model.note)
+                dispatch <| .didRemoveTag(result: result, tag: tag)
             case .deleteNote:
-                switch noteUseCase.delete(evaluator.model.note) {
-                case .success:
-                    dispatch(event: .didDeleteNote)
-                case let .failure(error):
-                    dispatch(event: .didFailToDeleteNote(error: error))
-                }
+                let result = noteUseCase.delete(evaluator.model.note)
+                dispatch <| .didDeleteNote(error: result.error)
             case .finish:
                 navigationController.popViewController(animated: true)
             }

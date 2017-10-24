@@ -30,16 +30,11 @@ extension UI.Note {
     }
 
     enum CoordinatorEvent {
-        case didUpdateTitle(note: Note)
-        case didUpdateContent(note: Note)
-        case didAddTag(note: Note, tag: String)
-        case didRemoveTag(note: Note, tag: String)
-        case didDeleteNote
-        case didFailToUpdateTitle(error: AnyError)
-        case didFailToUpdateContent(error: AnyError)
-        case didFailToAddTag(error: AnyError)
-        case didFailToRemoveTag(error: AnyError)
-        case didFailToDeleteNote(error: AnyError)
+        case didUpdateTitle(result: Result<Note, AnyError>)
+        case didUpdateContent(result: Result<Note, AnyError>)
+        case didAddTag(result: Result<Note, AnyError>, tag: String)
+        case didRemoveTag(result: Result<Note, AnyError>, tag: String)
+        case didDeleteNote(error: AnyError?)
     }
 
     enum ViewControllerEvent {
@@ -64,7 +59,7 @@ extension UI.Note {
             model = Model(note: note)
         }
 
-        private init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
@@ -102,51 +97,83 @@ extension UI.Note {
             var newModel = model
 
             switch event {
-            case let .didUpdateTitle(note):
+            case let .didUpdateTitle(result):
+                guard case let .success(note) = result else {
+                    let additionalEffect: ViewControllerEffect = .updateTitle(title: model.note.title)
+                    return showError(error: result.error!,
+                                     reason: "Failed to update note's title",
+                                     model: model,
+                                     additionalEffect: additionalEffect)
+                }
+
                 effects = [.updateTitle(title: note.title)]
                 newModel = Model(note: note)
-            case let .didUpdateContent(note):
+            case let .didUpdateContent(result):
+                guard case let .success(note) = result else {
+                    let additionalEffect: ViewControllerEffect = .updateContent(content: model.note.content)
+                    return showError(error: result.error!,
+                                     reason: "Failed to update note's content",
+                                     model: model,
+                                     additionalEffect: additionalEffect)
+                }
+
                 effects = [.updateContent(content: note.content)]
                 newModel = Model(note: note)
-            case let .didAddTag(note, tag):
+            case let .didAddTag(result, tag):
+                guard case let .success(note) = result else {
+                    let additionalEffect: ViewControllerEffect = .showTags(tags: model.note.tags)
+                    return showError(error: result.error!,
+                                     reason: "Failed to add tag",
+                                     model: model,
+                                     additionalEffect: additionalEffect)
+                }
+
                 effects = [.addTag(tag: tag)]
                 newModel = Model(note: note)
-            case let .didRemoveTag(note, tag):
+            case let .didRemoveTag(result, tag):
+                guard case let .success(note) = result else {
+                    let additionalEffect: ViewControllerEffect = .showTags(tags: model.note.tags)
+                    return showError(error: result.error!,
+                                     reason: "Failed to remove tag",
+                                     model: model,
+                                     additionalEffect: additionalEffect)
+                }
+
                 effects = [.removeTag(tag: tag)]
                 newModel = Model(note: note)
-            case .didDeleteNote:
+            case let .didDeleteNote(error):
+                guard error == nil else {
+                    return showError(error: error!,
+                                     reason:  "Failed to delete note",
+                                     model: model)
+                }
+
                 actions = [.finish]
-            case let .didFailToUpdateTitle(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [
-                    .updateTitle(title: model.note.title),
-                    .showError(error: "Failed to update note's title", message: errorMessage)
-                ]
-            case let .didFailToUpdateContent(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [
-                    .updateContent(content: model.note.content),
-                    .showError(error: "Failed to update note's content", message: errorMessage)
-                ]
-            case let .didFailToAddTag(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [
-                    .showTags(tags: model.note.tags),
-                    .showError(error: "Failed to add tag", message: errorMessage)
-                ]
-            case let .didFailToRemoveTag(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [
-                    .showTags(tags: model.note.tags),
-                    .showError(error: "Failed to remove tag", message: errorMessage)
-                ]
-            case let .didFailToDeleteNote(error):
-                let errorMessage = error.error.localizedDescription
-                effects = [.showError(error: "Failed to delete note", message: errorMessage)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
         }
+    }
+}
+
+// MARK: - Private
+
+private extension UI.Note {
+    static func showError(error: AnyError,
+                          reason: String,
+                          model: Model,
+                          additionalEffect: ViewControllerEffect? = nil) -> Evaluator {
+        let errorMessage = error.error.localizedDescription
+        var effects: [ViewControllerEffect] = [
+            .showError(error: reason, message: errorMessage)
+        ]
+        if let additionalEffect = additionalEffect {
+            effects.insert(additionalEffect, at: 0)
+        }
+
+        return Evaluator(effects: effects,
+                         actions: [],
+                         model: model)
     }
 }
 
