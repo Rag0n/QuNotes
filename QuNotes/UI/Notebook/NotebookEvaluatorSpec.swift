@@ -24,6 +24,16 @@ class NotebookEvaluatorSpec: QuickSpec {
         describe("-evaluate:ViewControllerEvent:") {
             var event: UI.Notebook.ViewControllerEvent!
 
+            context("when receiving didLoad event") {
+                beforeEach {
+                    event = .didLoad
+                }
+
+                it("contains updateTitle effect") {
+                    expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "name")))
+                }
+            }
+
             context("when receiving addNote event") {
                 beforeEach {
                     event = .addNote
