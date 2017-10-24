@@ -25,7 +25,6 @@ class NotebookViewController: UIViewController {
         case .showBackButton:
             navigationItem.setHidesBackButton(false, animated: true)
         case let .updateTitle(title):
-            notebookTitle = title
             titleTextField?.text = title
         case let .deleteNote(index, notes):
             self.notes = notes
@@ -46,13 +45,13 @@ class NotebookViewController: UIViewController {
         setupNavigationBar()
         setupTableView()
         setupSearchController()
+        dispatch <| .didLoad
     }
 
     // MARK: - Private
 
     fileprivate var dispatch: UI.Notebook.ViewControllerDispacher!
     fileprivate var notes: [String]!
-    fileprivate var notebookTitle: String?
 
     @IBOutlet private weak var tableView: UITableView!
     @IBOutlet private weak var addButton: UIButton!
@@ -72,7 +71,6 @@ class NotebookViewController: UIViewController {
         titleTextField.keyboardAppearance = .dark
         titleTextField.returnKeyType = .done
         titleTextField.keyboardType = .asciiCapable
-        titleTextField.text = notebookTitle
         navigationItem.titleView = titleTextField
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
@@ -164,4 +162,3 @@ extension NotebookViewController: UITextFieldDelegate {
         return true
     }
 }
-

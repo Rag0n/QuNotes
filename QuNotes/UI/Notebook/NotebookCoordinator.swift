@@ -22,7 +22,6 @@ extension UI.Notebook {
         func onStart() {
             let notes = noteUseCase.getAll()
             dispatch <| .didUpdateNotes(notes: notes)
-            dispatch <| .didUpdateNotebook(result: Result(evaluator.model.notebook))
         }
 
         var rootViewController: UIViewController {

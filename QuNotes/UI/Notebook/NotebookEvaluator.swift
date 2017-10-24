@@ -42,6 +42,7 @@ extension UI.Notebook {
     }
 
     enum ViewControllerEvent {
+        case didLoad
         case addNote
         case selectNote(index: Int)
         case deleteNote(index: Int)
@@ -75,6 +76,8 @@ extension UI.Notebook {
             var effects: [ViewControllerEffect] = []
 
             switch event {
+            case .didLoad:
+                effects = [.updateTitle(title: model.notebook.name)]
             case .addNote:
                 actions = [.addNote]
             case .selectNote(let index):
