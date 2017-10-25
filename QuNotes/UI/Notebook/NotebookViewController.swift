@@ -92,11 +92,11 @@ class NotebookViewController: UIViewController {
     }
 
     @IBAction private func addNote() {
-        dispatch(.addNote)
+        dispatch <| .addNote
     }
 
     @objc private func onDeleteButtonClick() {
-        dispatch(.deleteNotebook)
+        dispatch <| .deleteNotebook
     }
 }
 
@@ -118,7 +118,7 @@ extension NotebookViewController: UITableViewDataSource {
 
 extension NotebookViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dispatch(.selectNote(index: indexPath.row))
+        dispatch <| .selectNote(index: indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -130,7 +130,7 @@ extension NotebookViewController: UITableViewDelegate {
 
     private func deleteContextualAction(forIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
-            self.dispatch(.deleteNote(index: indexPath.row))
+            self.dispatch <| .deleteNote(index: indexPath.row)
             success(true)
         }
         action.backgroundColor = .red
@@ -142,7 +142,7 @@ extension NotebookViewController: UITableViewDelegate {
 
 extension NotebookViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        dispatch(.filterNotes(filter: searchController.searchBar.text))
+        dispatch <| .filterNotes(filter: searchController.searchBar.text)
     }
 }
 
@@ -150,11 +150,11 @@ extension NotebookViewController: UISearchResultsUpdating {
 
 extension NotebookViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        dispatch(.didStartToEditTitle)
+        dispatch <| .didStartToEditTitle
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        dispatch(.didFinishToEditTitle(newTitle: textField.text))
+        dispatch <| .didFinishToEditTitle(newTitle: textField.text)
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
