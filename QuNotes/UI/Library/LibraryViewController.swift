@@ -61,7 +61,7 @@ class LibraryViewController: UIViewController {
     }
 
     @IBAction private func addNotebookButtonDidTap() {
-        dispatch(.addNotebook)
+        dispatch <| .addNotebook
     }
 
     @IBAction private func dismissKeyboard() {
@@ -85,7 +85,7 @@ extension LibraryViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
         cell.render(viewModel: notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
-            self.dispatch(.updateNotebook(index: indexPath.row, title: title))
+            self.dispatch <| .updateNotebook(index: indexPath.row, title: title)
         })
         return cell
     }
@@ -95,7 +95,7 @@ extension LibraryViewController: UITableViewDataSource {
 
 extension LibraryViewController: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        dispatch(.selectNotebook(index: indexPath.row))
+        dispatch <| .selectNotebook(index: indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
@@ -107,7 +107,7 @@ extension LibraryViewController: UITableViewDelegate {
 
     private func deleteContextualAction(forIndexPath indexPath: IndexPath) -> UIContextualAction {
         let action = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
-            self.dispatch(.deleteNotebook(index: indexPath.row))
+            self.dispatch <| .deleteNotebook(index: indexPath.row)
             success(true)
         }
         action.backgroundColor = .red
