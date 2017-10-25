@@ -14,7 +14,7 @@ class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
         let note = Note(createdDate: 1, updatedDate: 2, content: "content", title: "title", uuid: "uuid", tags: ["tag"])
         let e = UI.Note.Evaluator(withNote: note)
-        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "localized message"])
+        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
         describe("-evaluate:ViewControllerEvent:") {
@@ -25,16 +25,19 @@ class NoteEvaluatorSpec: QuickSpec {
                     event = .didLoad
                 }
 
-                it("contains updateTitle effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "title")))
+                it("has updateTitle effect") {
+                    expect(e.evaluate(event: event).effects[0])
+                        .to(equal(.updateTitle(title: "title")))
                 }
 
-                it("contains updateContent effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.updateContent(content: "content")))
+                it("has updateContent effect") {
+                    expect(e.evaluate(event: event).effects[1])
+                        .to(equal(.updateContent(content: "content")))
                 }
 
-                it("contains showTags effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showTags(tags: ["tag"])))
+                it("has showTags effect") {
+                    expect(e.evaluate(event: event).effects[2])
+                        .to(equal(.showTags(tags: ["tag"])))
                 }
             }
 
@@ -43,8 +46,9 @@ class NoteEvaluatorSpec: QuickSpec {
                     event = .changeContent(newContent: "newContent")
                 }
 
-                it("contains updateContent action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.updateContent(content: "newContent")))
+                it("has updateContent action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.updateContent(content: "newContent")))
                 }
             }
 
@@ -53,8 +57,9 @@ class NoteEvaluatorSpec: QuickSpec {
                     event = .changeTitle(newTitle: "newTitle")
                 }
 
-                it("contains updateTitle action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.updateTitle(title: "newTitle")))
+                it("has updateTitle action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.updateTitle(title: "newTitle")))
                 }
             }
 
@@ -63,8 +68,9 @@ class NoteEvaluatorSpec: QuickSpec {
                     event = .delete
                 }
 
-                it("contains delete action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.deleteNote))
+                it("has delete action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(UI.Note.Action.deleteNote))
                 }
             }
 
@@ -73,8 +79,9 @@ class NoteEvaluatorSpec: QuickSpec {
                     event = .addTag(tag: "new tag")
                 }
 
-                it("contains addTag action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.addTag(tag: "new tag")))
+                it("has addTag action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.addTag(tag: "new tag")))
                 }
             }
 
@@ -83,8 +90,9 @@ class NoteEvaluatorSpec: QuickSpec {
                     event = .removeTag(tag: "tag")
                 }
 
-                it("contains removeTag action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.removeTag(tag: "tag")))
+                it("has removeTag action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.removeTag(tag: "tag")))
                 }
             }
         }
@@ -94,148 +102,161 @@ class NoteEvaluatorSpec: QuickSpec {
             let updatedNote = Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
 
             context("when receiving didUpdateTitle event") {
-                context("when result is note") {
+                context("when successfully updates note's title") {
                     beforeEach {
                         event = .didUpdateTitle(result: Result(updatedNote))
                     }
 
-                    it("contains updateTitle effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "new title")))
+                    it("has updateTitle effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateTitle(title: "new title")))
                     }
 
                     it("updates model with updated note") {
-                        expect(e.evaluate(event: event).model.note.title).to(equal("new title"))
+                        expect(e.evaluate(event: event).model.note.title)
+                            .to(equal("new title"))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to update note's title") {
                     beforeEach {
                         event = .didUpdateTitle(result: Result(error: error))
                     }
 
-                    it("contains updateTitle effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "title")))
+                    it("has updateTitle effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateTitle(title: "title")))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to update note's title", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[1])
+                            .to(equal(.showError(error: "Failed to update note's title", message: "message")))
                     }
                 }
             }
 
             context("when receiving didUpdateContent event") {
-                context("when result is note") {
+                context("when successfully updates note's content") {
                     beforeEach {
                         event = .didUpdateContent(result: Result(updatedNote))
                     }
 
-                    it("contains updateContent effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.updateContent(content: "new content")))
+                    it("has updateContent effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateContent(content: "new content")))
                     }
 
                     it("updates model with updated note") {
-                        expect(e.evaluate(event: event).model.note.content).to(equal("new content"))
+                        expect(e.evaluate(event: event).model.note.content)
+                            .to(equal("new content"))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to update note's content") {
                     beforeEach {
                         event = .didUpdateContent(result: Result(error: error))
                     }
 
-                    it("contains updateContent effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.updateContent(content: "content")))
+                    it("has updateContent effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateContent(content: "content")))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to update note's content", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[1])
+                            .to(equal(.showError(error: "Failed to update note's content", message: "message")))
                     }
                 }
             }
 
             context("when receiving didAddTag event") {
-                context("when result is note") {
+                context("when successfuly adds tag") {
                     beforeEach {
                         event = .didAddTag(result: Result(updatedNote), tag: "added tag")
                     }
 
-                    it("contains addTag effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.addTag(tag: "added tag")))
+                    it("has addTag effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.addTag(tag: "added tag")))
                     }
 
                     it("updates model with updated note") {
-                        expect(e.evaluate(event: event).model.note.tags).to(equal(["added tag"]))
+                        expect(e.evaluate(event: event).model.note.tags)
+                            .to(equal(["added tag"]))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to add tag") {
                     beforeEach {
                         event = .didAddTag(result: Result(error: error), tag: "added tag")
                     }
 
-                    it("contains showTags effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.showTags(tags: ["tag"])))
+                    it("has showTags effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.showTags(tags: ["tag"])))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to add tag", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[1])
+                            .to(equal(.showError(error: "Failed to add tag", message: "message")))
                     }
                 }
             }
 
             context("when receiving didRemoveTag event") {
-                context("when result is note") {
+                context("when successfully removes tag") {
                     beforeEach {
                         event = .didRemoveTag(result: Result(updatedNote), tag: "removed tag")
                     }
 
-                    it("contains removeTag effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.removeTag(tag: "removed tag")))
+                    it("has removeTag effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.removeTag(tag: "removed tag")))
                     }
 
                     it("updates model with updated note") {
-                        expect(e.evaluate(event: event).model.note.tags).to(equal(["added tag"]))
+                        expect(e.evaluate(event: event).model.note.tags)
+                            .to(equal(["added tag"]))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to remove tag") {
                     beforeEach {
                         event = .didRemoveTag(result: Result(error: error), tag: "removed tag")
                     }
 
-                    it("contains showTags effect") {
-                        expect(e.evaluate(event: event).effects).to(contain(.showTags(tags: ["tag"])))
+                    it("has showTags effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.showTags(tags: ["tag"])))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to remove tag", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[1])
+                            .to(equal(.showError(error: "Failed to remove tag", message: "message")))
                     }
                 }
             }
 
             context("when receiving didDeleteNote event") {
-                context("when error is nil") {
+                context("when successfully deletes note") {
                     beforeEach {
                         event = .didDeleteNote(error: nil)
                     }
 
-                    it("contains finish action") {
-                        expect(e.evaluate(event: event).actions).to(contain(.finish))
+                    it("has finish action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(UI.Note.Action.finish))
                     }
                 }
 
-                context("when error is not nil") {
+                context("when fails to delete note") {
                     beforeEach {
                         event = .didDeleteNote(error: error)
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to delete note", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.showError(error: "Failed to delete note", message: "message")))
                     }
                 }
             }
