@@ -17,7 +17,7 @@ extension UI.Notebook {
 
     enum Action {
         case addNote
-        case showNote(note: Note)
+        case showNote(note: Note, isNewNote: Bool)
         case deleteNote(note: Note)
         case deleteNotebook(notebook: Notebook)
         case updateNotebook(notebook: Notebook, title: String)
@@ -82,7 +82,7 @@ extension UI.Notebook {
                 actions = [.addNote]
             case .selectNote(let index):
                 let note = model.notes[index]
-                actions = [.showNote(note: note)]
+                actions = [.showNote(note: note, isNewNote: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
                 actions = [.deleteNote(note: note)]
@@ -127,7 +127,7 @@ extension UI.Notebook {
                 let newNotes = model.notes + [note]
                 let sortedNotes = newNotes.sorted(by: defaultNoteSorting)
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
-                actions = [.showNote(note: note)]
+                actions = [.showNote(note: note, isNewNote: true)]
             case let .didDeleteNote(result):
                 guard case let .success(note) = result else {
                     let noteTitles = model.notes.map { $0.title }

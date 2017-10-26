@@ -87,10 +87,11 @@ extension UI.Notebook {
                 dispatch <| .didDeleteNotebook(error: result.error)
             case .finish:
                 navigationController.popViewController(animated: true)
-            case .showNote(let note):
+            case let .showNote(note, isNewNote):
                 let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
                                                              dependencies: dependencies,
-                                                             note: note)
+                                                             note: note,
+                                                             isNewNote: isNewNote)
                 navigationController.pushCoordinator(coordinator: noteCoordinator,
                                                      animated: true) { [unowned self] in
                     self.onStart()

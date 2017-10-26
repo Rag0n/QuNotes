@@ -36,7 +36,10 @@ extension UI.Note {
         }()
         fileprivate var activeNote: Note?
 
-        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, note: Note) {
+        init(withNavigationController navigationController: NavigationController,
+             dependencies: Dependencies,
+             note: Note,
+             isNewNote: Bool) {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
             evaluator = Evaluator(withNote: note)

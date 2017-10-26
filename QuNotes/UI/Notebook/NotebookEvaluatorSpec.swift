@@ -56,7 +56,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has showNote action") {
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.showNote(note: note)))
+                        .to(equal(.showNote(note: note, isNewNote: false)))
                 }
             }
 
@@ -204,7 +204,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has showNote action with added note") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.showNote(note: addedNote)))
+                            .to(equal(.showNote(note: addedNote, isNewNote: true)))
                     }
                 }
 
