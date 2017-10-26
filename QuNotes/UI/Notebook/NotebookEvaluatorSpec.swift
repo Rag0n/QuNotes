@@ -14,7 +14,7 @@ class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {
         let notebook = Notebook(uuid: "uuid", name: "name")
         var e: UI.Notebook.Evaluator!
-        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "localized message"])
+        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
         beforeEach {
@@ -29,8 +29,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     event = .didLoad
                 }
 
-                it("contains updateTitle effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.updateTitle(title: "name")))
+                it("has updateTitle effect") {
+                    expect(e.evaluate(event: event).effects[0])
+                        .to(equal(.updateTitle(title: "name")))
                 }
             }
 
@@ -39,8 +40,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     event = .addNote
                 }
 
-                it("contains addNote action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.addNote))
+                it("has addNote action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(UI.Notebook.Action.addNote))
                 }
             }
 
@@ -52,8 +54,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     e = e.evaluate(event: .didUpdateNotes(notes: [note]))
                 }
 
-                it("contains showNote action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.showNote(note: note)))
+                it("has showNote action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.showNote(note: note)))
                 }
             }
 
@@ -65,8 +68,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     e = e.evaluate(event: .didUpdateNotes(notes: [note]))
                 }
 
-                it("contains deleteNote action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.deleteNote(note: note)))
+                it("has deleteNote action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.deleteNote(note: note)))
                 }
             }
 
@@ -75,8 +79,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     event = .deleteNotebook
                 }
 
-                it("contains deleteNotebook action") {
-                    expect(e.evaluate(event: event).actions).to(contain(.deleteNotebook(notebook: notebook)))
+                it("has deleteNotebook action") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.deleteNotebook(notebook: notebook)))
                 }
             }
 
@@ -94,9 +99,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .filterNotes(filter: nil)
                     }
 
-                    it("contains updateAllNotes effect with all note's titles") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.updateAllNotes(notes: ["AB", "ab", "g"])))
+                    it("has updateAllNotes effect with all note's titles") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateAllNotes(notes: ["AB", "ab", "g"])))
                     }
                 }
 
@@ -105,9 +110,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .filterNotes(filter: "aB")
                     }
 
-                    it("contains updateAllNotes effect with only titles containing filter in any register") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.updateAllNotes(notes: ["AB", "ab"])))
+                    it("has updateAllNotes effect with only titles containing filter in any register") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateAllNotes(notes: ["AB", "ab"])))
                     }
                 }
             }
@@ -117,8 +122,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     event = .didStartToEditTitle
                 }
 
-                it("contains hideBackButton effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.hideBackButton))
+                it("has hideBackButton effect") {
+                    expect(e.evaluate(event: event).effects[0])
+                        .to(equal(UI.Notebook.ViewControllerEffect.hideBackButton))
                 }
             }
 
@@ -127,14 +133,15 @@ class NotebookEvaluatorSpec: QuickSpec {
                     event = .didFinishToEditTitle(newTitle: nil)
                 }
 
-                it("contains showBackButton effect") {
-                    expect(e.evaluate(event: event).effects).to(contain(.showBackButton))
+                it("has showBackButton effect") {
+                    expect(e.evaluate(event: event).effects[0])
+                        .to(equal(UI.Notebook.ViewControllerEffect.showBackButton))
                 }
 
                 context("when title is nil") {
-                    it("contains updateNotebook action with empty title") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(contain(.updateNotebook(notebook: notebook, title: "")))
+                    it("has updateNotebook action with empty title") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.updateNotebook(notebook: notebook, title: "")))
                     }
                 }
 
@@ -143,9 +150,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .didFinishToEditTitle(newTitle: "new title")
                     }
 
-                    it("contains updateNotebook action with title from event") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(contain(.updateNotebook(notebook: notebook, title: "new title")))
+                    it("has updateNotebook action with title from event") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.updateNotebook(notebook: notebook, title: "new title")))
                     }
                 }
             }
@@ -174,13 +181,13 @@ class NotebookEvaluatorSpec: QuickSpec {
                 }
 
                 it("has updateAllNotes effect with correct order of ViewModels") {
-                    expect(e.evaluate(event: event).effects)
-                        .to(contain(.updateAllNotes(notes: expectedViewModels)))
+                    expect(e.evaluate(event: event).effects[0])
+                        .to(equal(.updateAllNotes(notes: expectedViewModels)))
                 }
             }
 
             context("when receiving didAddNote event") {
-                context("when result is note") {
+                context("when successfully adds note") {
                     let firstNote = Note.noteDummy(withTitle: "abc")
                     let secondNote = Note.noteDummy(withTitle: "cde")
                     let addedNote = Note.noteDummy(withTitle: "bcd")
@@ -196,19 +203,19 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("has showNote action with added note") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(contain(.showNote(note: addedNote)))
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showNote(note: addedNote)))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to add note") {
                     beforeEach {
                         event = .didAddNote(result: Result(error: error))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to add note", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.showError(error: "Failed to add note", message: "message")))
                     }
                 }
             }
@@ -217,7 +224,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let firstNote = Note.noteDummy(withTitle: "abc")
                 let secondNote = Note.noteDummy(withTitle: "cde")
 
-                context("when result is note") {
+                context("when successfuly deletes note") {
                     beforeEach {
                         e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
                         event = .didDeleteNote(result: Result(secondNote))
@@ -229,25 +236,25 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("has deleteNote effect with correct index and viewModels") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.deleteNote(index: 1, notes: ["abc"])))
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.deleteNote(index: 1, notes: ["abc"])))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to delete note") {
                     beforeEach {
                         e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
                         event = .didDeleteNote(result: Result(error: error))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to delete notebook", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[1])
+                            .to(equal(.showError(error: "Failed to delete notebook", message: "message")))
                     }
 
-                    it("contains updateAllNotes effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.updateAllNotes(notes: ["abc", "cde"])))
+                    it("has updateAllNotes effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateAllNotes(notes: ["abc", "cde"])))
                     }
                 }
             }
@@ -255,7 +262,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             context("when receiving didUpdateNotebook event") {
                 let notebook = Notebook.notebookDummy(withUUID: "uuid", name: "new name")
 
-                context("when result is notebook") {
+                context("when successfully updates notebook") {
                     beforeEach {
                         event = .didUpdateNotebook(result: Result(notebook))
                     }
@@ -265,49 +272,49 @@ class NotebookEvaluatorSpec: QuickSpec {
                             .to(equal(notebook))
                     }
 
-                    it("constains updateTitle effect with updated notebook name") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.updateTitle(title: "new name")))
+                    it("has updateTitle effect with updated notebook name") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateTitle(title: "new name")))
                     }
                 }
 
-                context("when result is error") {
+                context("when fails to update notebook") {
                     beforeEach {
                         event = .didUpdateNotebook(result: Result(error: error))
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to update notebook's title", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[1])
+                            .to(equal(.showError(error: "Failed to update notebook's title", message: "message")))
                     }
 
-                    it("constains updateTitle effect with old notebook name") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.updateTitle(title: "name")))
+                    it("has updateTitle effect with old notebook name") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateTitle(title: "name")))
                     }
                 }
             }
 
             context("when receiving didDeleteNotebook event") {
-                context("when error is nil") {
+                context("when successfully deletes notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(error: nil)
                     }
 
-                    it("constains finish action") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(contain(.finish))
+                    it("has finish action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(UI.Notebook.Action.finish))
                     }
                 }
 
-                context("when error is not nil") {
+                context("when fails to delete notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(error: error)
                     }
 
-                    it("contains showError effect") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(contain(.showError(error: "Failed to delete notebook", message: "localized message")))
+                    it("has showError effect") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.showError(error: "Failed to delete notebook", message: "message")))
                     }
                 }
             }
