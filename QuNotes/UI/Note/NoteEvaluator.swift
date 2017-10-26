@@ -9,6 +9,7 @@ import Result
 extension UI.Note {
     struct Model {
         let note: Note
+        let isNew: Bool
     }
 
     enum Action {
@@ -22,6 +23,7 @@ extension UI.Note {
 
     enum ViewControllerEffect {
         case updateTitle(title: String)
+        case focusOnTitle
         case updateContent(content: String)
         case showTags(tags: [String])
         case addTag(tag: String)
@@ -53,10 +55,10 @@ extension UI.Note {
         let actions: [Action]
         let model: Model
 
-        init(withNote note: Note) {
+        init(withNote note: Note, isNew: Bool) {
             effects = []
             actions = []
-            model = Model(note: note)
+            model = Model(note: note, isNew: isNew)
         }
 
         fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
@@ -76,6 +78,9 @@ extension UI.Note {
                     .updateContent(content: model.note.content),
                     .showTags(tags: model.note.tags)
                 ]
+                if model.isNew {
+                    effects += [.focusOnTitle]
+                }
             case let .changeContent(newContent):
                 actions = [.updateContent(content: newContent)]
             case let .changeTitle(newTitle):
@@ -107,7 +112,7 @@ extension UI.Note {
                 }
 
                 effects = [.updateTitle(title: note.title)]
-                newModel = Model(note: note)
+                newModel = Model(note: note, isNew: model.isNew)
             case let .didUpdateContent(result):
                 guard case let .success(note) = result else {
                     let additionalEffect: ViewControllerEffect = .updateContent(content: model.note.content)
@@ -118,7 +123,7 @@ extension UI.Note {
                 }
 
                 effects = [.updateContent(content: note.content)]
-                newModel = Model(note: note)
+                newModel = Model(note: note, isNew: model.isNew)
             case let .didAddTag(result, tag):
                 guard case let .success(note) = result else {
                     let additionalEffect: ViewControllerEffect = .showTags(tags: model.note.tags)
@@ -129,7 +134,7 @@ extension UI.Note {
                 }
 
                 effects = [.addTag(tag: tag)]
-                newModel = Model(note: note)
+                newModel = Model(note: note, isNew: model.isNew)
             case let .didRemoveTag(result, tag):
                 guard case let .success(note) = result else {
                     let additionalEffect: ViewControllerEffect = .showTags(tags: model.note.tags)
@@ -140,7 +145,7 @@ extension UI.Note {
                 }
 
                 effects = [.removeTag(tag: tag)]
-                newModel = Model(note: note)
+                newModel = Model(note: note, isNew: model.isNew)
             case let .didDeleteNote(error):
                 guard error == nil else {
                     return showError(error: error!,
@@ -185,6 +190,8 @@ func ==(lhs: UI.Note.ViewControllerEffect, rhs: UI.Note.ViewControllerEffect) ->
     switch (lhs, rhs) {
     case (.updateTitle(let lTitle), .updateTitle(let rTitle)):
         return lTitle == rTitle
+    case (.focusOnTitle, .focusOnTitle):
+        return true
     case (.updateContent(let lContent), .updateContent(let rContent)):
         return lContent == rContent
     case (.showTags(let lTags), .showTags(let rTags)):

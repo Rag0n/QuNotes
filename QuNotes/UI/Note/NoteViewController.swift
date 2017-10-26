@@ -21,6 +21,8 @@ class NoteViewController: UIViewController {
         switch effect {
         case let .updateTitle(title):
             titleTextField?.text = title
+        case .focusOnTitle:
+            titleTextField?.becomeFirstResponder()
         case let .updateContent(content):
             editor?.text = content
         case let .showTags(tags):

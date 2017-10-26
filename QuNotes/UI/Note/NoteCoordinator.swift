@@ -42,7 +42,7 @@ extension UI.Note {
              isNewNote: Bool) {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
-            evaluator = Evaluator(withNote: note)
+            evaluator = Evaluator(withNote: note, isNew: isNewNote)
         }
 
         // MARK: - Private

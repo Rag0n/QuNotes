@@ -12,10 +12,14 @@ import Result
 
 class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
+        var e: UI.Note.Evaluator!
         let note = Note(createdDate: 1, updatedDate: 2, content: "content", title: "title", uuid: "uuid", tags: ["tag"])
-        let e = UI.Note.Evaluator(withNote: note)
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
+
+        beforeEach {
+            e = UI.Note.Evaluator(withNote: note, isNew: false)
+        }
 
         describe("-evaluate:ViewControllerEvent:") {
             var event: UI.Note.ViewControllerEvent!
@@ -38,6 +42,17 @@ class NoteEvaluatorSpec: QuickSpec {
                 it("has showTags effect") {
                     expect(e.evaluate(event: event).effects[2])
                         .to(equal(.showTags(tags: ["tag"])))
+                }
+
+                context("when note is new") {
+                    beforeEach {
+                        e = UI.Note.Evaluator(withNote: note, isNew: true)
+                    }
+
+                    it("has focusOnTitle effect") {
+                        expect(e.evaluate(event: event).effects[3])
+                            .to(equal(UI.Note.ViewControllerEffect.focusOnTitle))
+                    }
                 }
             }
 
