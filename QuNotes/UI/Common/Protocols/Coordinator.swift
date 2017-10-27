@@ -11,10 +11,18 @@ import UIKit
 protocol Coordinator {
     var rootViewController: UIViewController { get }
     func onStart()
+    func showError(title: String, message: String, controller: UIViewController)
 }
 
 extension Coordinator {
     func onStart() {
         // No op
+    }
+
+    func showError(title: String, message: String, controller: UIViewController) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(cancelAction)
+        controller.present(alertController, animated: true, completion: nil)
     }
 }
