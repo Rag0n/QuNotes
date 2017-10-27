@@ -87,6 +87,8 @@ extension UI.Notebook {
                 dispatch <| .didDeleteNotebook(error: result.error)
             case .finish:
                 navigationController.popViewController(animated: true)
+            case let .showError(title, message):
+                showError(title: title, message: message, controller: notebookViewController)
             case let .showNote(note, isNewNote):
                 let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
                                                              dependencies: dependencies,

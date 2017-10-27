@@ -30,11 +30,6 @@ class NotebookViewController: UIViewController {
             self.notes = notes
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.deleteRows(at: [indexPath], with: .automatic)
-        case let .showError(error, message):
-            let alertController = UIAlertController(title: error, message: message, preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-            alertController.addAction(cancelAction)
-            present(alertController, animated: true, completion: nil)
         }
     }
 

@@ -22,6 +22,7 @@ extension UI.Notebook {
         case deleteNotebook(notebook: Notebook)
         case updateNotebook(notebook: Notebook, title: String)
         case finish
+        case showError(title: String, message: String)
     }
 
     enum ViewControllerEffect {
@@ -30,7 +31,6 @@ extension UI.Notebook {
         case showBackButton
         case updateTitle(title: String)
         case deleteNote(index: Int, notes: [String])
-        case showError(error: String, message: String)
     }
 
     enum CoordinatorEvent {
@@ -181,15 +181,14 @@ private extension UI.Notebook {
                           model: Model,
                           additionalEffect: ViewControllerEffect? = nil) -> Evaluator {
         let errorMessage = error.error.localizedDescription
-        var effects: [ViewControllerEffect] = [
-            .showError(error: reason, message: errorMessage)
-        ]
+        let actions: [Action] = [.showError(title: reason, message: errorMessage)]
+        var effects: [ViewControllerEffect] = []
         if let additionalEffect = additionalEffect {
-            effects.insert(additionalEffect, at: 0)
+            effects.append(additionalEffect)
         }
 
         return Evaluator(effects: effects,
-                         actions: [],
+                         actions: actions,
                          model: model)
     }
 }
@@ -210,8 +209,6 @@ func ==(lhs: UI.Notebook.ViewControllerEffect, rhs: UI.Notebook.ViewControllerEf
         return lTitle == rTitle
     case (.deleteNote(let lIndex, let lNotes), .deleteNote(let rIndex, let rNotes)):
         return (lIndex == rIndex) && (lNotes == rNotes)
-    case (.showError(let lError, let lMessage), .showError(let rError, let rMessage)):
-        return (lError == rError) && (lMessage == rMessage)
     default: return false
     }
 }
@@ -234,6 +231,8 @@ func ==(lhs: UI.Notebook.Action, rhs: UI.Notebook.Action) -> Bool {
         return lNotebook == rNotebook
     case (.finish, .finish):
         return true
+    case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
+        return (lTitle == rTitle) && (lMessage == rMessage)
     default: return false
     }
 }
