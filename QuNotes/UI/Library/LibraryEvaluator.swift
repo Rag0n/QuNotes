@@ -11,6 +11,7 @@ import Result
 
 extension UI.Library {
     // MARK: - Data types
+
     struct Model {
         let notebooks: [Notebook]
         let editingNotebook: Notebook?
@@ -21,6 +22,7 @@ extension UI.Library {
         case deleteNotebook(notebook: Notebook)
         case updateNotebook(notebook: Notebook, title: String)
         case showNotes(forNotebook: Notebook)
+        case showError(title: String, message: String)
     }
 
     enum ViewControllerEffect {
@@ -28,7 +30,6 @@ extension UI.Library {
         case addNotebook(index: Int, notebooks: [NotebookViewModel])
         case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
         case deleteNotebook(index: Int, notebooks: [NotebookViewModel])
-        case showError(error: String, message: String)
     }
 
     enum CoordinatorEvent {
@@ -142,6 +143,8 @@ extension UI.Library {
     }
 }
 
+// MARK: - Private
+
 private extension UI.Library {
     static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookViewModel] {
         return fromNotebooks.map {
@@ -156,13 +159,11 @@ private extension UI.Library {
     static func updateNotebooksAndShowError(notebooks: [Notebook], error: AnyError, reason: String) -> Evaluator {
         let errorMessage = error.error.localizedDescription
         let notebookViewModels = viewModels(fromNotebooks: notebooks)
-        let effects: [ViewControllerEffect] = [
-            .updateAllNotebooks(notebooks: notebookViewModels),
-            .showError(error: reason, message: errorMessage)
-        ]
+        let actions: [Action] = [.showError(title: reason, message: errorMessage)]
+        let effects: [ViewControllerEffect] = [.updateAllNotebooks(notebooks: notebookViewModels)]
 
         return Evaluator(effects: effects,
-                         actions: [],
+                         actions: actions,
                          model: Model(notebooks: notebooks, editingNotebook: nil))
     }
 }
@@ -181,8 +182,6 @@ func ==(lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffe
         return (lIndex == rIndex) && (lNotebooks == rNotebooks)
     case (.deleteNotebook(let lIndex, let lNotebooks), .deleteNotebook(let rIndex, let rNotebooks)):
         return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-    case (.showError(let lError, let lMessage), .showError(let rError, let rMessage)):
-        return (lError == rError) && (lMessage == rMessage)
     default: return false
     }
 }
@@ -201,6 +200,8 @@ func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
         return (lNotebook == rNotebook) && (lTitle == rTitle)
     case (.showNotes(let lNotebook), .showNotes(let rNotebook)):
         return lNotebook == rNotebook
+    case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
+        return (lTitle == rTitle) && (lMessage == rMessage)
     default: return false
     }
 }

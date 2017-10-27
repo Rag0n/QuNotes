@@ -78,6 +78,8 @@ extension UI.Library {
             case .deleteNotebook(let notebook):
                 let result = notebookUseCase.delete(notebook)
                 dispatch <| .didDeleteNotebook(result: result)
+            case let .showError(title, message):
+                showError(title: title, message: message, controller: libraryViewController)
             case .showNotes(let notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
                                                                            dependencies: dependencies,
