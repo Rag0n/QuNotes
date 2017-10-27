@@ -31,11 +31,6 @@ class NoteViewController: UIViewController {
             tagView.addTag(tag)
         case let .removeTag(tag):
             tagView.removeTag(tag)
-        case let .showError(error, message):
-            let alertController = UIAlertController(title: error, message: message, preferredStyle: .alert)
-            let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-            alertController.addAction(cancelAction)
-            present(alertController, animated: true, completion: nil)
         }
     }
 

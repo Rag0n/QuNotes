@@ -19,6 +19,7 @@ extension UI.Note {
         case removeTag(tag: String)
         case deleteNote
         case finish
+        case showError(title: String, message: String)
     }
 
     enum ViewControllerEffect {
@@ -28,7 +29,6 @@ extension UI.Note {
         case showTags(tags: [String])
         case addTag(tag: String)
         case removeTag(tag: String)
-        case showError(error: String, message: String)
     }
 
     enum CoordinatorEvent {
@@ -169,15 +169,14 @@ private extension UI.Note {
                           model: Model,
                           additionalEffect: ViewControllerEffect? = nil) -> Evaluator {
         let errorMessage = error.error.localizedDescription
-        var effects: [ViewControllerEffect] = [
-            .showError(error: reason, message: errorMessage)
-        ]
+        let actions: [Action] = [.showError(title: reason, message: errorMessage)]
+        var effects: [ViewControllerEffect] = []
         if let additionalEffect = additionalEffect {
-            effects.insert(additionalEffect, at: 0)
+            effects.append(additionalEffect)
         }
 
         return Evaluator(effects: effects,
-                         actions: [],
+                         actions: actions,
                          model: model)
     }
 }
@@ -200,8 +199,6 @@ func ==(lhs: UI.Note.ViewControllerEffect, rhs: UI.Note.ViewControllerEffect) ->
         return lTag == rTag
     case (.removeTag(let lTag), .removeTag(let rTag)):
         return lTag == rTag
-    case (.showError(let lError, let lMessage), .showError(let rError, let rMessage)):
-        return (lError == rError) && (lMessage == rMessage)
     default: return false
     }
 }
@@ -224,6 +221,8 @@ func ==(lhs: UI.Note.Action, rhs: UI.Note.Action) -> Bool {
         return true
     case (.finish, .finish):
         return true
+    case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
+        return (lTitle == rTitle) && (lMessage == rMessage)
     default: return false
     }
 }

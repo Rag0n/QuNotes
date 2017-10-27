@@ -80,6 +80,8 @@ extension UI.Note {
                 dispatch <| .didDeleteNote(error: result.error)
             case .finish:
                 navigationController.popViewController(animated: true)
+            case let .showError(title, message):
+                showError(title: title, message: message, controller: noteViewController)
             }
         }
     }
