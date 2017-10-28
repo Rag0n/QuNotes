@@ -143,9 +143,9 @@ class NoteEvaluatorSpec: QuickSpec {
                             .to(equal(.updateTitle(title: "title")))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to update note's title", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to update note's title", message: "message")))
                     }
                 }
             }
@@ -177,9 +177,9 @@ class NoteEvaluatorSpec: QuickSpec {
                             .to(equal(.updateContent(content: "content")))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to update note's content", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to update note's content", message: "message")))
                     }
                 }
             }
@@ -211,9 +211,9 @@ class NoteEvaluatorSpec: QuickSpec {
                             .to(equal(.showTags(tags: ["tag"])))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to add tag", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to add tag", message: "message")))
                     }
                 }
             }
@@ -245,9 +245,9 @@ class NoteEvaluatorSpec: QuickSpec {
                             .to(equal(.showTags(tags: ["tag"])))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to remove tag", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to remove tag", message: "message")))
                     }
                 }
             }
@@ -269,9 +269,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         event = .didDeleteNote(error: error)
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.showError(error: "Failed to delete note", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to delete note", message: "message")))
                     }
                 }
             }
