@@ -213,9 +213,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .didAddNote(result: Result(error: error))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.showError(error: "Failed to add note", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to add note", message: "message")))
                     }
                 }
             }
@@ -247,9 +247,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .didDeleteNote(result: Result(error: error))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to delete notebook", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
                     }
 
                     it("has updateAllNotes effect") {
@@ -283,9 +283,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .didUpdateNotebook(result: Result(error: error))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to update notebook's title", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to update notebook's title", message: "message")))
                     }
 
                     it("has updateTitle effect with old notebook name") {
@@ -312,9 +312,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         event = .didDeleteNotebook(error: error)
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.showError(error: "Failed to delete notebook", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
                     }
                 }
             }
