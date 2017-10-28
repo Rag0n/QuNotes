@@ -175,9 +175,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                             .to(equal(.updateAllNotebooks(notebooks: [])))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to add notebook", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to add notebook", message: "message")))
                     }
 
                     context("when there's editing notebook") {
@@ -234,9 +234,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                             .to(equal(.updateAllNotebooks(notebooks: [])))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to delete notebook", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
                     }
 
                     context("when there's editing notebook") {
@@ -294,9 +294,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                             .to(equal(.updateAllNotebooks(notebooks: [])))
                     }
 
-                    it("has showError effect") {
-                        expect(e.evaluate(event: event).effects[1])
-                            .to(equal(.showError(error: "Failed to update notebook", message: "message")))
+                    it("has showError action") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to update notebook", message: "message")))
                     }
 
                     context("when there's editing notebook") {
