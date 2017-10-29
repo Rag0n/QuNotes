@@ -40,9 +40,8 @@ extension UI.Notebook {
         fileprivate var evaluator: Evaluator
 
         fileprivate lazy var notebookViewController: NotebookViewController = {
-            let vc = NotebookViewController()
+            let vc = NotebookViewController(withDispatch: dispatch)
             vc.navigationItem.largeTitleDisplayMode = .never
-            vc.inject(dispatch: dispatch)
             return vc
         }()
         fileprivate var activeNote: Note?
