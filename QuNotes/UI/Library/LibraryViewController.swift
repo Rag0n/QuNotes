@@ -11,10 +11,6 @@ import UIKit
 class LibraryViewController: UIViewController {
     // MARK: - API
 
-    func inject(dispatch: @escaping UI.Library.ViewControllerDispacher) {
-        self.dispatch = dispatch
-    }
-
     func perform(effect: UI.Library.ViewControllerEffect) {
         switch effect {
         case .updateAllNotebooks(let notebooks):
@@ -36,6 +32,15 @@ class LibraryViewController: UIViewController {
     }
 
     // MARK: - Life cycle
+
+    init(withDispatch dispatch: @escaping UI.Library.ViewControllerDispacher) {
+        self.dispatch = dispatch
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

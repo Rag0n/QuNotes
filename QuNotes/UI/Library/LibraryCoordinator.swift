@@ -39,9 +39,7 @@ extension UI.Library {
         fileprivate var evaluator: Evaluator
 
         fileprivate lazy var libraryViewController: LibraryViewController = {
-            let vc = LibraryViewController()
-            vc.inject(dispatch: dispatch)
-            return vc
+            return LibraryViewController(withDispatch: dispatch)
         }()
 
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
