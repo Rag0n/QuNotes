@@ -13,10 +13,6 @@ import WSTagsField
 class NoteViewController: UIViewController {
     // MARK: - API
 
-    func inject(dispatch: @escaping UI.Note.ViewControllerDispacher) {
-        self.dispatch = dispatch
-    }
-
     func perform(effect: UI.Note.ViewControllerEffect) {
         switch effect {
         case let .updateTitle(title):
@@ -35,6 +31,15 @@ class NoteViewController: UIViewController {
     }
 
     // MARK: - Life cycle
+
+    init(withDispatch dispatch: @escaping UI.Note.ViewControllerDispacher) {
+        self.dispatch = dispatch
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

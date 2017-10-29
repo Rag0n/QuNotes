@@ -30,9 +30,7 @@ extension UI.Note {
         fileprivate var evaluator: Evaluator
 
         fileprivate lazy var noteViewController: NoteViewController = {
-            let vc = NoteViewController()
-            vc.inject(dispatch: dispatch)
-            return vc
+            return NoteViewController(withDispatch: dispatch)
         }()
         fileprivate var activeNote: Note?
 
