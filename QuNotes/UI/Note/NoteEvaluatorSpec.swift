@@ -21,7 +21,7 @@ class NoteEvaluatorSpec: QuickSpec {
             e = UI.Note.Evaluator(withNote: note, isNew: false)
         }
 
-        describe("-evaluate:ViewControllerEvent:") {
+        describe("-evaluate:ViewControllerEvent") {
             var event: UI.Note.ViewControllerEvent!
 
             context("when receiving didLoad event") {
@@ -112,7 +112,7 @@ class NoteEvaluatorSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:CoordinatorEvent:") {
+        describe("-evaluate:CoordinatorEvent") {
             var event: UI.Note.CoordinatorEvent!
             let updatedNote = Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
 

@@ -20,7 +20,7 @@ class LibraryEvaluatorSpec: QuickSpec {
             e = UI.Library.Evaluator()
         }
 
-        describe("-evaluate:ViewControllerEvent:") {
+        describe("-evaluate:ViewControllerEvent") {
             var event: UI.Library.ViewControllerEvent!
 
             context("when receiving addNotebook event") {
@@ -93,7 +93,7 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:CoordinatorEvent:") {
+        describe("-evaluate:CoordinatorEvent") {
             var event: UI.Library.CoordinatorEvent!
 
             context("when receiving didUpdateNotebooks event") {
