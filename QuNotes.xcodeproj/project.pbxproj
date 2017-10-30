@@ -10,6 +10,8 @@
 		1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */; };
 		1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */; };
 		11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
+		111161E11FA7B5B600023B27 /* NotebookExperimentalSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111161E01FA7B5B600023B27 /* NotebookExperimentalSpec.swift */; };
+		111161E31FA7B61100023B27 /* NoteExperimentalSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111161E21FA7B61100023B27 /* NoteExperimentalSpec.swift */; };
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
@@ -50,6 +52,12 @@
 		118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		118D89B21F607AA40038EB6A /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE21F54A43A0046DC52 /* ThemeManager.swift */; };
+		11A1FE621FA7B3C1006BAF4C /* NotebookExperimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE611FA7B3C1006BAF4C /* NotebookExperimental.swift */; };
+		11A1FE631FA7B3C1006BAF4C /* NotebookExperimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE611FA7B3C1006BAF4C /* NotebookExperimental.swift */; };
+		11A1FE661FA7B41D006BAF4C /* NoteExperimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE651FA7B41D006BAF4C /* NoteExperimental.swift */; };
+		11A1FE671FA7B41D006BAF4C /* NoteExperimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE651FA7B41D006BAF4C /* NoteExperimental.swift */; };
+		11A1FE691FA7B429006BAF4C /* Experimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE681FA7B429006BAF4C /* Experimental.swift */; };
+		11A1FE6A1FA7B429006BAF4C /* Experimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE681FA7B429006BAF4C /* Experimental.swift */; };
 		11AD36AE1F1D4AC200D9E0A9 /* WSTagsField.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
@@ -137,6 +145,8 @@
 		1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluatorSpec.swift; sourceTree = "<group>"; };
 		1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluatorSpec.swift; sourceTree = "<group>"; };
 		11096D291F59EF4F00E1623C /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
+		111161E01FA7B5B600023B27 /* NotebookExperimentalSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookExperimentalSpec.swift; sourceTree = "<group>"; };
+		111161E21FA7B61100023B27 /* NoteExperimentalSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteExperimentalSpec.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		111EE5691F0C1A9E003612F1 /* FileNoteRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNoteRepository.swift; sourceTree = "<group>"; };
@@ -159,6 +169,9 @@
 		118569161F1A1C2C00D3CF1B /* FileReaderServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderServiceImp.swift; sourceTree = "<group>"; };
 		118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluator.swift; sourceTree = "<group>"; };
 		119955FC1F07C0FD007AB79A /* Notepad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Notepad.framework; path = Carthage/Build/iOS/Notepad.framework; sourceTree = "<group>"; };
+		11A1FE611FA7B3C1006BAF4C /* NotebookExperimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookExperimental.swift; sourceTree = "<group>"; };
+		11A1FE651FA7B41D006BAF4C /* NoteExperimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteExperimental.swift; sourceTree = "<group>"; };
+		11A1FE681FA7B429006BAF4C /* Experimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experimental.swift; sourceTree = "<group>"; };
 		11AE3C721F194E1700A13A74 /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = Carthage/Build/iOS/WSTagsField.framework; sourceTree = "<group>"; };
 		11B7057B1EEB42570039A863 /* QuNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11B705851EEB42570039A863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -345,6 +358,34 @@
 			path = FileReaderService;
 			sourceTree = "<group>";
 		};
+		11A1FE5F1FA7B2FE006BAF4C /* Business */ = {
+			isa = PBXGroup;
+			children = (
+				11A1FE681FA7B429006BAF4C /* Experimental.swift */,
+				11A1FE641FA7B405006BAF4C /* Note */,
+				11A1FE601FA7B335006BAF4C /* Notebook */,
+			);
+			path = Business;
+			sourceTree = "<group>";
+		};
+		11A1FE601FA7B335006BAF4C /* Notebook */ = {
+			isa = PBXGroup;
+			children = (
+				11A1FE611FA7B3C1006BAF4C /* NotebookExperimental.swift */,
+				111161E01FA7B5B600023B27 /* NotebookExperimentalSpec.swift */,
+			);
+			path = Notebook;
+			sourceTree = "<group>";
+		};
+		11A1FE641FA7B405006BAF4C /* Note */ = {
+			isa = PBXGroup;
+			children = (
+				11A1FE651FA7B41D006BAF4C /* NoteExperimental.swift */,
+				111161E21FA7B61100023B27 /* NoteExperimentalSpec.swift */,
+			);
+			path = Note;
+			sourceTree = "<group>";
+		};
 		11B705721EEB42560039A863 = {
 			isa = PBXGroup;
 			children = (
@@ -367,6 +408,7 @@
 			isa = PBXGroup;
 			children = (
 				117636381F08E8F2000A5CFC /* Service */,
+				11A1FE5F1FA7B2FE006BAF4C /* Business */,
 				112D49871EF539D800C75B6A /* UseCase */,
 				B2125E1507F73CB41C346C5D /* UI */,
 				113504271F16B9C2001938FD /* Utility */,
@@ -638,6 +680,7 @@
 				B21259DA25F8BA0EA1F35A56 /* NoteRepository.swift in Sources */,
 				B2125D7E514C51A140239F9D /* Note.swift in Sources */,
 				11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */,
+				11A1FE621FA7B3C1006BAF4C /* NotebookExperimental.swift in Sources */,
 				11C41FFF1F74525D00397DD9 /* NotebookUseCase.swift in Sources */,
 				111EE56A1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
@@ -645,6 +688,7 @@
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,
+				11A1FE691FA7B429006BAF4C /* Experimental.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */,
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
@@ -656,6 +700,7 @@
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */,
+				11A1FE661FA7B41D006BAF4C /* NoteExperimental.swift in Sources */,
 				1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */,
 				B212560DBEB110ABCFB85CAB /* NoteCoordinator.swift in Sources */,
 				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
@@ -682,6 +727,7 @@
 				11DFCEE91F82CCD300E9389F /* FileNotebookRepository.swift in Sources */,
 				1160CCE11F954C2E0033E9E2 /* DefaultTheme.swift in Sources */,
 				11C41FF71F744A9500397DD9 /* NotebookUseCaseSpec.swift in Sources */,
+				11A1FE6A1FA7B429006BAF4C /* Experimental.swift in Sources */,
 				1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */,
 				11CDB3E41F969BE20014C58F /* TableViewCell+Extensions.swift in Sources */,
 				112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */,
@@ -689,9 +735,13 @@
 				B212524617F56D3FE4541E82 /* NoteUseCaseSpec.swift in Sources */,
 				B21251CA0ECB61C9CE593D09 /* NoteRepository.swift in Sources */,
 				1160CCE21F954C310033E9E2 /* ThemeManager.swift in Sources */,
+				11A1FE631FA7B3C1006BAF4C /* NotebookExperimental.swift in Sources */,
+				111161E31FA7B61100023B27 /* NoteExperimentalSpec.swift in Sources */,
 				1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */,
 				11517D031F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */,
 				112A9D921F5AF3B5003DF85D /* Curry.swift in Sources */,
+				111161E11FA7B5B600023B27 /* NotebookExperimentalSpec.swift in Sources */,
+				11A1FE671FA7B41D006BAF4C /* NoteExperimental.swift in Sources */,
 				1160CCDB1F954A380033E9E2 /* UI.swift in Sources */,
 				11CDB3E61F969C030014C58F /* LibraryCoordinator.swift in Sources */,
 				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
