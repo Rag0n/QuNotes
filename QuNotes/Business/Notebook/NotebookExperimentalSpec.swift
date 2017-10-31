@@ -23,15 +23,18 @@ class NotebookExperimantalSpec: QuickSpec {
             var event: Experimental.Notebook.InputEvent!
 
             context("when receiving changeName event") {
-                let expectedModel = Experimental.Notebook.Model(uuid: "uuid", name: "new name", notes: [])
-
                 beforeEach {
                     event = .changeName(newName: "new name")
                 }
 
-                it("has updateModel action with new name") {
+                it("has updateFile action with notebook's URL") {
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.updateModel(model: expectedModel)))
+                        .to(equal(.updateFile(url: URL(string: "uuid.qvnotebook")!)))
+                }
+
+                it("updates model by changing notebook name") {
+                    expect(e.evaluate(event: event).model.name)
+                        .to(equal("new name"))
                 }
             }
 

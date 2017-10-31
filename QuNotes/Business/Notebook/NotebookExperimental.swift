@@ -20,7 +20,7 @@ extension Experimental.Notebook {
     }
 
     enum Action {
-        case updateModel(model: Model)
+        case updateFile(url: URL)
         case createFile(url: URL)
         case deleteFile(url: URL)
     }
@@ -50,8 +50,9 @@ extension Experimental.Notebook {
 
             switch event {
             case let .changeName(newName):
-                let updatedModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
-                actions = [.updateModel(model: updatedModel)]
+                newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
+                let notebookURL = URL(string: model.uuid)!.appendingPathExtension("qvnotebook")
+                actions = [.updateFile(url: notebookURL)]
             case let .addNote(noteToAdd):
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
@@ -108,8 +109,8 @@ extension Experimental.Notebook.Action: Equatable {}
 
 func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) -> Bool {
     switch (lhs, rhs) {
-    case (.updateModel(let lModel), .updateModel(let rModel)):
-        return lModel == rModel
+    case (.updateFile(let lURL), .updateFile(let rURL)):
+        return lURL == rURL
     case (.createFile(let lURL), .createFile(let rURL)):
         return lURL == rURL
     case (.deleteFile(let lURL), .deleteFile(let rURL)):
