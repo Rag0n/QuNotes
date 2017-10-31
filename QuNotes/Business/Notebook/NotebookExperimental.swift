@@ -6,6 +6,8 @@
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
+import Foundation
+
 extension Experimental {
     enum Notebook {}
 }
@@ -19,10 +21,12 @@ extension Experimental.Notebook {
 
     enum Action {
         case updateModel(model: Model)
+        case createFile(url: URL)
     }
 
     enum InputEvent {
         case changeName(newName: String)
+        case addNote
     }
 
     enum ResultEvent {
@@ -46,6 +50,15 @@ extension Experimental.Notebook {
             case let .changeName(newName):
                 let updatedModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
                 actions = [.updateModel(model: updatedModel)]
+            case .addNote:
+                let newNote = Experimental.Note.Model(uuid: UUID.init().uuidString, title: "", content: "")
+                let notes = model.notes + [newNote]
+                newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
+                let noteURL = URL(string: model.uuid)!
+                    .appendingPathExtension("qvnotebook")
+                    .appendingPathComponent(newNote.uuid)
+                    .appendingPathExtension("qvnote")
+                actions = [.createFile(url: noteURL)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -87,6 +100,8 @@ func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) ->
     switch (lhs, rhs) {
     case (.updateModel(let lModel), .updateModel(let rModel)):
         return lModel == rModel
+    case (.createFile(let lURL), .createFile(let rURL)):
+        return lURL == rURL
     default: return false
     }
 }

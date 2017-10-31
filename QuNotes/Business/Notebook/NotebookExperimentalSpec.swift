@@ -34,6 +34,31 @@ class NotebookExperimantalSpec: QuickSpec {
                         .to(equal(.updateModel(model: expectedModel)))
                 }
             }
+
+            context("when receiving addNote event") {
+                beforeEach {
+                    event = .addNote
+                }
+
+                it("has createFile action with URL of new note") {
+                    let e = e.evaluate(event: event)
+                    let expectedURL = URL(string: "uuid.qvnotebook/\(e.model.notes[0].uuid).qvnote")!
+                    expect(e.actions[0])
+                        .to(equal(.createFile(url: expectedURL)))
+                }
+
+                it("updates model by adding new note") {
+                    let note = e.evaluate(event: event).model.notes[0]
+                    expect(note).toNot(beNil())
+                    expect(note.title).to(equal(""))
+                    expect(note.content).to(equal(""))
+                }
+
+                it("creates note with uniq uuid") {
+                    let model = e.evaluate(event: event).evaluate(event: event).model
+                    expect(model.notes[0].uuid).toNot(equal(model.notes[1].uuid))
+                }
+            }
         }
     }
 }
