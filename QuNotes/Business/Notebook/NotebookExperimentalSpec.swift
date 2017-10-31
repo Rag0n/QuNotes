@@ -52,11 +52,35 @@ class NotebookExperimantalSpec: QuickSpec {
                         .to(equal(noteToAdd))
                 }
             }
+
+            context("when receiving removeNote event") {
+                let noteToRemove = Experimental.Note.Model(uuid: "noteUUID", title: "title", content: "content")
+
+                beforeEach {
+                    event = .removeNote(note: noteToRemove)
                 }
 
-                it("creates note with uniq uuid") {
-                    let model = e.evaluate(event: event).evaluate(event: event).model
-                    expect(model.notes[0].uuid).toNot(equal(model.notes[1].uuid))
+                context("when passed note is exist") {
+                    beforeEach {
+                        e = e.evaluate(event: .addNote(note: noteToRemove))
+                    }
+
+                    it("has deleteFile action with URL of deleted note") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.deleteFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)))
+                    }
+
+                    it("updates model by removing passed note") {
+                        expect(e.evaluate(event: event).model.notes)
+                            .to(beEmpty())
+                    }
+                }
+
+                context("when passed note is not exist") {
+                    it("has no actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
                 }
             }
         }

@@ -22,11 +22,13 @@ extension Experimental.Notebook {
     enum Action {
         case updateModel(model: Model)
         case createFile(url: URL)
+        case deleteFile(url: URL)
     }
 
     enum InputEvent {
         case changeName(newName: String)
         case addNote(note: Experimental.Note.Model)
+        case removeNote(note: Experimental.Note.Model)
     }
 
     enum ResultEvent {
@@ -58,6 +60,15 @@ extension Experimental.Notebook {
                     .appendingPathComponent(noteToAdd.uuid)
                     .appendingPathExtension("qvnote")
                 actions = [.createFile(url: noteURL)]
+            case let .removeNote(noteToRemove):
+                guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
+                let notes = model.notes.removeWithoutMutation(at: indexOfRemovedNote)
+                newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
+                let noteURL = URL(string: model.uuid)!
+                    .appendingPathExtension("qvnotebook")
+                    .appendingPathComponent(noteToRemove.uuid)
+                    .appendingPathExtension("qvnote")
+                actions = [.deleteFile(url: noteURL)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -100,6 +111,8 @@ func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) ->
     case (.updateModel(let lModel), .updateModel(let rModel)):
         return lModel == rModel
     case (.createFile(let lURL), .createFile(let rURL)):
+        return lURL == rURL
+    case (.deleteFile(let lURL), .deleteFile(let rURL)):
         return lURL == rURL
     default: return false
     }
