@@ -20,7 +20,9 @@ extension Experimental.Notebook {
     }
 
     enum Action {
+        // TODO: content?
         case updateFile(url: URL)
+        // TODO: content?
         case createFile(url: URL)
         case deleteFile(url: URL)
     }
@@ -29,10 +31,6 @@ extension Experimental.Notebook {
         case changeName(newName: String)
         case addNote(note: Experimental.Note.Model)
         case removeNote(note: Experimental.Note.Model)
-    }
-
-    enum ResultEvent {
-        case didChangeName(newName: String)
     }
 
     struct Evaluator {
@@ -51,37 +49,19 @@ extension Experimental.Notebook {
             switch event {
             case let .changeName(newName):
                 newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
-                let notebookURL = URL(string: model.uuid)!.appendingPathExtension("qvnotebook")
-                actions = [.updateFile(url: notebookURL)]
+                let url = notebookURL(fromModel: newModel)
+                actions = [.updateFile(url: url)]
             case let .addNote(noteToAdd):
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
-                let noteURL = URL(string: model.uuid)!
-                    .appendingPathExtension("qvnotebook")
-                    .appendingPathComponent(noteToAdd.uuid)
-                    .appendingPathExtension("qvnote")
-                actions = [.createFile(url: noteURL)]
+                let url = noteURL(forNote: noteToAdd, model: newModel)
+                actions = [.createFile(url: url)]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removeWithoutMutation(at: indexOfRemovedNote)
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
-                let noteURL = URL(string: model.uuid)!
-                    .appendingPathExtension("qvnotebook")
-                    .appendingPathComponent(noteToRemove.uuid)
-                    .appendingPathExtension("qvnote")
-                actions = [.deleteFile(url: noteURL)]
-            }
-
-            return Evaluator(actions: actions, model: newModel)
-        }
-
-        func evaluate(event: ResultEvent) -> Evaluator {
-            var actions: [Action] = []
-            var newModel = model
-
-            switch event {
-            case let .didChangeName(newName):
-                return Evaluator(actions: actions, model: newModel)
+                let url = noteURL(forNote: noteToRemove, model: newModel)
+                actions = [.deleteFile(url: url)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -94,6 +74,22 @@ extension Experimental.Notebook {
     }
 }
 
+// MARK: - Private
+
+private extension Experimental.Notebook {
+    static func notebookURL(fromModel model: Model) -> URL {
+        return URL(string: model.uuid)!.appendingPathExtension("qvnotebook")
+    }
+
+    static func noteURL(forNote note: Experimental.Note.Model, model: Model) -> URL {
+        return notebookURL(fromModel: model)
+            .appendingPathComponent(note.uuid)
+            .appendingPathExtension("qvnote")
+    }
+}
+
+// MARK: - Model equtable
+
 extension Experimental.Notebook.Model: Equatable {
     static func ==(lhs: Experimental.Notebook.Model, rhs: Experimental.Notebook.Model) -> Bool {
         return (
@@ -105,6 +101,7 @@ extension Experimental.Notebook.Model: Equatable {
 }
 
 // MARK: - Action Equtable
+
 extension Experimental.Notebook.Action: Equatable {}
 
 func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) -> Bool {
