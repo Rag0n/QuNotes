@@ -43,14 +43,23 @@ class NotebookExperimantalSpec: QuickSpec {
 
             context("when receiving addNote event") {
                 let noteToAdd = Experimental.Note.Model(uuid: "noteUUID", title: "title", content: "content")
+                let expectedNoteMeta = Experimental.Note.Meta(uuid: "noteUUID", title: "title")
+                let expectedNoteContent = Experimental.Note.Content(content: "content")
 
                 beforeEach {
                     event = .addNote(note: noteToAdd)
                 }
 
-                it("has createFile action with URL of new note") {
+                it("has createFile action with URL of new note meta") {
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)))
+                        .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote/meta.json")!,
+                                  content: expectedNoteMeta)))
+                }
+
+                it("has createFile action with URL of new note content") {
+                    expect(e.evaluate(event: event).actions[1])
+                        .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote/content.json")!,
+                                  content: expectedNoteContent)))
                 }
 
                 it("updates model by adding new note") {

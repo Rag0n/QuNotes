@@ -25,8 +25,8 @@ extension Experimental.Notebook {
     }
 
     enum Action {
-        case updateFile(url: URL, content: Meta)
-        case createFile(url: URL)
+        case updateFile(url: URL, content: Codable)
+        case createFile(url: URL, content: Codable)
         case deleteFile(url: URL)
     }
 
@@ -58,8 +58,14 @@ extension Experimental.Notebook {
             case let .addNote(noteToAdd):
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
-                let url = noteURL(forNote: noteToAdd, model: newModel)
-                actions = [.createFile(url: url)]
+                let metaURL = noteMetaURL(forNote: noteToAdd, model: newModel)
+                let noteMeta = Experimental.Note.Meta(uuid: noteToAdd.uuid, title: noteToAdd.title)
+                let contentURL = noteContentURL(forNote: noteToAdd, model: newModel)
+                let noteContent = Experimental.Note.Content(content: noteToAdd.content)
+                actions = [
+                    .createFile(url: metaURL, content: noteMeta),
+                    .createFile(url: contentURL, content: noteContent),
+                ]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removeWithoutMutation(at: indexOfRemovedNote)
@@ -96,6 +102,18 @@ private extension Experimental.Notebook {
             .appendingPathComponent(note.uuid)
             .appendingPathExtension("qvnote")
     }
+
+    static func noteMetaURL(forNote note: Experimental.Note.Model, model: Model) -> URL {
+        return noteURL(forNote: note, model: model)
+            .appendingPathComponent("meta")
+            .appendingPathExtension("json")
+    }
+
+    static func noteContentURL(forNote note: Experimental.Note.Model, model: Model) -> URL {
+        return noteURL(forNote: note, model: model)
+            .appendingPathComponent("content")
+            .appendingPathExtension("json")
+    }
 }
 
 // MARK: - Model equtable
@@ -128,10 +146,15 @@ extension Experimental.Notebook.Action: Equatable {}
 
 func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) -> Bool {
     switch (lhs, rhs) {
-    case (.updateFile(let lURL, let lContent), .updateFile(let rURL, let rContent)):
+    case (.updateFile(let lURL, let lContent as Experimental.Notebook.Meta),
+          .updateFile(let rURL, let rContent as Experimental.Notebook.Meta)):
         return (lURL == rURL) && (lContent == rContent)
-    case (.createFile(let lURL), .createFile(let rURL)):
-        return lURL == rURL
+    case (.createFile(let lURL, let lContent as Experimental.Note.Meta),
+          .createFile(let rURL, let rContent as Experimental.Note.Meta)):
+        return (lURL == rURL) && (lContent == rContent)
+    case (.createFile(let lURL, let lContent as Experimental.Note.Content),
+          .createFile(let rURL, let rContent as Experimental.Note.Content)):
+        return (lURL == rURL) && (lContent == rContent)
     case (.deleteFile(let lURL), .deleteFile(let rURL)):
         return lURL == rURL
     default: return false
