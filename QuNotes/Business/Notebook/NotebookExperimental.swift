@@ -13,16 +13,19 @@ extension Experimental {
 }
 
 extension Experimental.Notebook {
-    struct Model: Codable {
+    struct Model {
         let uuid: String
         let name: String
         let notes: [Experimental.Note.Model]
     }
 
+    struct Meta: Codable {
+        let uuid: String
+        let name: String
+    }
+
     enum Action {
-        // TODO: content?
-        case updateFile(url: URL)
-        // TODO: content?
+        case updateFile(url: URL, content: Meta)
         case createFile(url: URL)
         case deleteFile(url: URL)
     }
@@ -49,8 +52,9 @@ extension Experimental.Notebook {
             switch event {
             case let .changeName(newName):
                 newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
-                let url = notebookURL(fromModel: newModel)
-                actions = [.updateFile(url: url)]
+                let url = noteBookMetaURL(fromModel: newModel)
+                let content = Meta(uuid: newModel.uuid, name: newModel.name)
+                actions = [.updateFile(url: url, content: content)]
             case let .addNote(noteToAdd):
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
@@ -81,6 +85,12 @@ private extension Experimental.Notebook {
         return URL(string: model.uuid)!.appendingPathExtension("qvnotebook")
     }
 
+    static func noteBookMetaURL(fromModel model: Model) -> URL {
+        return notebookURL(fromModel: model)
+            .appendingPathComponent("meta")
+            .appendingPathExtension("json")
+    }
+
     static func noteURL(forNote note: Experimental.Note.Model, model: Model) -> URL {
         return notebookURL(fromModel: model)
             .appendingPathComponent(note.uuid)
@@ -100,14 +110,26 @@ extension Experimental.Notebook.Model: Equatable {
     }
 }
 
+// MARK: Meta equtable
+
+extension Experimental.Notebook.Meta: Equatable {
+    static func ==(lhs: Experimental.Notebook.Meta, rhs: Experimental.Notebook.Meta) -> Bool {
+        return (
+            lhs.uuid == rhs.uuid &&
+            lhs.name == rhs.name
+        )
+    }
+}
+
+
 // MARK: - Action Equtable
 
 extension Experimental.Notebook.Action: Equatable {}
 
 func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) -> Bool {
     switch (lhs, rhs) {
-    case (.updateFile(let lURL), .updateFile(let rURL)):
-        return lURL == rURL
+    case (.updateFile(let lURL, let lContent), .updateFile(let rURL, let rContent)):
+        return (lURL == rURL) && (lContent == rContent)
     case (.createFile(let lURL), .createFile(let rURL)):
         return lURL == rURL
     case (.deleteFile(let lURL), .deleteFile(let rURL)):

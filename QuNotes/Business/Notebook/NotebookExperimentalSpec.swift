@@ -23,13 +23,16 @@ class NotebookExperimantalSpec: QuickSpec {
             var event: Experimental.Notebook.InputEvent!
 
             context("when receiving changeName event") {
+                let expectedMetaContent = Experimental.Notebook.Meta(uuid: "uuid", name: "new name")
+
                 beforeEach {
                     event = .changeName(newName: "new name")
                 }
 
                 it("has updateFile action with notebook's URL") {
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.updateFile(url: URL(string: "uuid.qvnotebook")!)))
+                        .to(equal(.updateFile(url: URL(string: "uuid.qvnotebook/meta.json")!,
+                                              content: expectedMetaContent)))
                 }
 
                 it("updates model by changing notebook name") {
