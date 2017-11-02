@@ -15,6 +15,17 @@ extension Experimental.Note {
         let uuid: String
         let title: String
         let content: String
+        let notebook: Experimental.Notebook.Model?
+
+        init(uuid: String,
+             title: String,
+             content: String,
+             notebook: Experimental.Notebook.Model? = nil) {
+            self.uuid = uuid
+            self.title = title
+            self.content = content
+            self.notebook = notebook
+        }
     }
 
     struct Meta: Codable {
