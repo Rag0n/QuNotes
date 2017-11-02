@@ -50,21 +50,43 @@ class NotebookExperimantalSpec: QuickSpec {
                     event = .addNote(note: noteToAdd)
                 }
 
-                it("has createFile action with URL of new note meta") {
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote/meta.json")!,
-                                  content: expectedNoteMeta)))
+                context("when note with that uuid is not added yet") {
+                    it("has createFile action with URL of new note meta") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote/meta.json")!,
+                                                  content: expectedNoteMeta)))
+                    }
+
+                    it("has createFile action with URL of new note content") {
+                        expect(e.evaluate(event: event).actions[1])
+                            .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote/content.json")!,
+                                                  content: expectedNoteContent)))
+                    }
+
+                    it("updates model by adding new note") {
+                        expect(e.evaluate(event: event).model.notes[0])
+                            .to(equal(noteToAdd))
+                    }
                 }
 
-                it("has createFile action with URL of new note content") {
-                    expect(e.evaluate(event: event).actions[1])
-                        .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote/content.json")!,
-                                  content: expectedNoteContent)))
-                }
+                context("when note with that uuid is already added") {
+                    let alreadyAddedNote = Experimental.Note.Model(uuid: "noteUUID",
+                                                                   title: "another title",
+                                                                   content: "another content")
 
-                it("updates model by adding new note") {
-                    expect(e.evaluate(event: event).model.notes[0])
-                        .to(equal(noteToAdd))
+                    beforeEach {
+                        e = e.evaluate(event: .addNote(note: alreadyAddedNote))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model.notes[0])
+                            .to(equal(alreadyAddedNote))
+                    }
                 }
             }
 

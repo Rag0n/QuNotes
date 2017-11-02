@@ -56,8 +56,7 @@ extension Experimental.Notebook {
                 let content = Meta(uuid: newModel.uuid, name: newModel.name)
                 actions = [.updateFile(url: url, content: content)]
             case let .addNote(noteToAdd):
-                // TODO: What if note with that uuid is already exists?
-                // Need to guarantee uuid uniqueness
+                guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
                 let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
@@ -115,6 +114,10 @@ extension Experimental.Notebook.Model {
         return noteURL(forNote: note)
             .appendingPathComponent("content")
             .appendingPathExtension("json")
+    }
+
+    func hasNote(withUUID noteUUID: String) -> Bool {
+        return notes.filter({ $0.uuid == noteUUID }).count > 0
     }
 }
 
