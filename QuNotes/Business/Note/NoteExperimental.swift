@@ -6,6 +6,8 @@
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
+import Foundation
+
 extension Experimental {
     enum Note {}
 }
@@ -36,6 +38,46 @@ extension Experimental.Note {
     struct Content: Codable {
         let content: String
     }
+
+    enum Action {
+        case updateFile(url: URL, content: Codable)
+    }
+
+    enum InputEvent {
+        case changeTitle(newTitle: String)
+    }
+
+    struct Evaluator {
+        let actions: [Action]
+        let model: Model
+
+        init(model: Model) {
+            self.model = model
+            actions = []
+        }
+
+        func evaluate(event: InputEvent) -> Evaluator {
+            var actions: [Action] = []
+            var newModel = model
+
+            switch event {
+            case let .changeTitle(newTitle):
+                newModel = Model(uuid: model.uuid, title: newTitle, content: model.content)
+                let content = Meta(uuid: newModel.uuid, title: newModel.title)
+                if let notebook = model.notebook {
+                    let url = notebook.noteMetaURL(forNote: newModel)
+                    actions = [.updateFile(url: url, content: content)]
+                }
+            }
+
+            return Evaluator(actions: actions, model: newModel)
+        }
+
+        fileprivate init(actions: [Action], model: Model) {
+            self.actions = actions
+            self.model = model
+        }
+    }
 }
 
 // MARK: Datatypes equatable
@@ -62,5 +104,18 @@ extension Experimental.Note.Meta: Equatable {
 extension Experimental.Note.Content: Equatable {
     static func ==(lhs: Experimental.Note.Content, rhs: Experimental.Note.Content) -> Bool {
         return lhs.content == rhs.content
+    }
+}
+
+// MARK: - Action Equtable
+
+extension Experimental.Note.Action: Equatable {
+    static func ==(lhs: Experimental.Note.Action, rhs: Experimental.Note.Action) -> Bool {
+        switch (lhs, rhs) {
+        case (.updateFile(let lURL, let lContent as Experimental.Note.Meta),
+              .updateFile(let rURL, let rContent as Experimental.Note.Meta)):
+            return (lURL == rURL) && (lContent == rContent)
+        default: return false
+        }
     }
 }
