@@ -49,6 +49,34 @@ class NoteExperimantalSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving changeContent event") {
+                beforeEach {
+                    event = .changeContent(newContent: "new content")
+                }
+
+                it("updates model by changing note content") {
+                    expect(e.evaluate(event: event).model.content)
+                        .to(equal("new content"))
+                }
+
+                context("when note is added to notebook") {
+                    let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                    let model = Experimental.Note.Model(uuid: "uuid", title: "title",
+                                                        content: "content", notebook: notebookModel)
+                    let expectedContent = Experimental.Note.Content(content: "new content")
+                    let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!
+
+                    beforeEach {
+                        e = Experimental.Note.Evaluator(model: model)
+                    }
+
+                    it("has updateFile action with note's content URL") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.updateFile(url: expectedURL, content: expectedContent)))
+                    }
+                }
+            }
         }
     }
 }
