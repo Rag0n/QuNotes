@@ -36,7 +36,7 @@ class NoteExperimantalSpec: QuickSpec {
                     let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
                     let model = Experimental.Note.Model(uuid: "uuid", title: "title",
                                                                 content: "content", notebook: notebookModel)
-                    let expectedMetaContent = Experimental.Note.Meta(uuid: "uuid", title: "new title")
+                    let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "new title")
                     let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                     beforeEach {
@@ -45,7 +45,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("has updateFile action with note's meta URL") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.updateFile(url: expectedURL, content: expectedMetaContent)))
+                            .to(equal(.updateFile(url: expectedURL, content: expectedMeta)))
                     }
                 }
             }

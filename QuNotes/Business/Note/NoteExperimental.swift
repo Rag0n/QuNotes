@@ -64,10 +64,10 @@ extension Experimental.Note {
             switch event {
             case let .changeTitle(newTitle):
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content)
-                let content = Meta(uuid: newModel.uuid, title: newModel.title)
                 if let notebook = model.notebook {
+                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title)
                     let url = notebook.noteMetaURL(forNote: newModel)
-                    actions = [.updateFile(url: url, content: content)]
+                    actions = [.updateFile(url: url, content: fileContent)]
                 }
             case let .changeContent(newContent):
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent)
