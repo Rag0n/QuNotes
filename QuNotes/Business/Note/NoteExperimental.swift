@@ -45,6 +45,7 @@ extension Experimental.Note {
 
     enum InputEvent {
         case changeTitle(newTitle: String)
+        case changeContent(newContent: String)
     }
 
     struct Evaluator {
@@ -67,6 +68,13 @@ extension Experimental.Note {
                 if let notebook = model.notebook {
                     let url = notebook.noteMetaURL(forNote: newModel)
                     actions = [.updateFile(url: url, content: content)]
+                }
+            case let .changeContent(newContent):
+                newModel = Model(uuid: model.uuid, title: model.title, content: newContent)
+                if let notebook = model.notebook {
+                    let fileContent = Content(content: newContent);
+                    let url = notebook.noteContentURL(forNote: newModel)
+                    actions = [.updateFile(url: url, content: fileContent)]
                 }
             }
 
@@ -114,6 +122,9 @@ extension Experimental.Note.Action: Equatable {
         switch (lhs, rhs) {
         case (.updateFile(let lURL, let lContent as Experimental.Note.Meta),
               .updateFile(let rURL, let rContent as Experimental.Note.Meta)):
+            return (lURL == rURL) && (lContent == rContent)
+        case (.updateFile(let lURL, let lContent as Experimental.Note.Content),
+              .updateFile(let rURL, let rContent as Experimental.Note.Content)):
             return (lURL == rURL) && (lContent == rContent)
         default: return false
         }
