@@ -115,15 +115,14 @@ extension Experimental.Notebook.Model {
             .appendingPathComponent("content")
             .appendingPathExtension("json")
     }
-
-    func hasNote(withUUID noteUUID: String) -> Bool {
-        return notes.filter({ $0.uuid == noteUUID }).count > 0
-    }
 }
 
 // MARK: - Private
 
-private extension Experimental.Notebook {
+private extension Experimental.Notebook.Model {
+    func hasNote(withUUID noteUUID: String) -> Bool {
+        return notes.filter({ $0.uuid == noteUUID }).count > 0
+    }
 }
 
 // MARK: - Model equtable

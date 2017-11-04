@@ -84,8 +84,9 @@ class NotebookExperimantalSpec: QuickSpec {
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model.notes[0])
-                            .to(equal(alreadyAddedNote))
+                        let model = e.evaluate(event: event).model
+                        expect(model.notes.count).to(equal(1))
+                        expect(model.notes[0]).to(equal(alreadyAddedNote))
                     }
                 }
             }
