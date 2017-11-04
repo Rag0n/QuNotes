@@ -12,5 +12,47 @@ import Result
 
 class libraryExperimantalSpec: QuickSpec {
     override func spec() {
+        let model = Experimental.Library.Model(notebooks: [])
+        var e: Experimental.Library.Evaluator!
+
+        beforeEach {
+            e = Experimental.Library.Evaluator(model: model)
+        }
+
+        context("when initialized") {
+            it("has zero actions") {
+                expect(e.actions).to(beEmpty())
+            }
+
+            it("has passed model") {
+                expect(e.model).to(equal(model))
+            }
+        }
+
+        describe("-evaluate:") {
+            var event: Experimental.Library.InputEvent!
+
+            context("when receiving addNotebook event") {
+                let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID",
+                                                                name: "notebookName",
+                                                                notes: [])
+                let expectedMeta = Experimental.Notebook.Meta(uuid: "notebookUUID", name: "notebookName")
+
+                beforeEach {
+                    event = .addNotebook(notebook: notebookModel)
+                }
+
+                it("has createFile action with notebook meta url") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.createFile(url: URL(string: "notebookUUID.qvnotebook/meta.json")!,
+                                              content: expectedMeta)))
+                }
+
+                it("updates model by adding passed notebook") {
+                    expect(e.evaluate(event: event).model.notebooks)
+                        .to(equal([notebookModel]))
+                }
+            }
+        }
     }
 }
