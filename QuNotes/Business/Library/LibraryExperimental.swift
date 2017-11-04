@@ -40,6 +40,7 @@ extension Experimental.Library {
 
             switch (event) {
             case let .addNotebook(notebook):
+                guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
                 let fileURL = notebook.noteBookMetaURL()
                 let fileContent = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
@@ -56,9 +57,17 @@ extension Experimental.Library {
     }
 }
 
-// MARK: Model API
+// MARK: - Model API
 
-// MARK: Datatypes equtable
+// MARL: - Private
+
+private extension Experimental.Library.Model {
+    func hasNotebook(withUUID notebookUUID: String) -> Bool {
+        return notebooks.filter({ $0.uuid == notebookUUID }).count > 0
+    }
+}
+
+// MARK: - Datatypes equtable
 
 extension Experimental.Library.Model: Equatable {
     static func ==(lhs: Experimental.Library.Model, rhs: Experimental.Library.Model) -> Bool {

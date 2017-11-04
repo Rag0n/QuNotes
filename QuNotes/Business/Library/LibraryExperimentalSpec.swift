@@ -42,15 +42,37 @@ class libraryExperimantalSpec: QuickSpec {
                     event = .addNotebook(notebook: notebookModel)
                 }
 
-                it("has createFile action with notebook meta url") {
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.createFile(url: URL(string: "notebookUUID.qvnotebook/meta.json")!,
-                                              content: expectedMeta)))
+                context("when notebook with that uuid is not added yet") {
+                    it("has createFile action with notebook meta url") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.createFile(url: URL(string: "notebookUUID.qvnotebook/meta.json")!,
+                                                  content: expectedMeta)))
+                    }
+
+                    it("updates model by adding passed notebook") {
+                        expect(e.evaluate(event: event).model.notebooks)
+                            .to(equal([notebookModel]))
+                    }
                 }
 
-                it("updates model by adding passed notebook") {
-                    expect(e.evaluate(event: event).model.notebooks)
-                        .to(equal([notebookModel]))
+                context("when notebook with that uuid is already added") {
+                    let alreadyAddedNotebook = Experimental.Notebook.Model(uuid: "notebookUUID",
+                                                                           name: "",
+                                                                           notes: [])
+                    beforeEach {
+                        e = e.evaluate(event: .addNotebook(notebook: alreadyAddedNotebook))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+
+                    it("doesnt update model") {
+                        let model = e.evaluate(event: event).model
+                        expect(model.notebooks.count).to(equal(1))
+                        expect(model.notebooks[0]).to(equal(alreadyAddedNotebook))
+                    }
                 }
             }
         }
