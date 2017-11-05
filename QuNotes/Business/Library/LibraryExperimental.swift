@@ -19,10 +19,12 @@ extension Experimental.Library {
 
     enum Action {
         case createFile(url: URL, content: Codable)
+        case deleteFile(url: URL)
     }
 
     enum InputEvent {
         case addNotebook(notebook: Experimental.Notebook.Model)
+        case removeNotebook(notebook: Experimental.Notebook.Model)
     }
 
     struct Evaluator {
@@ -45,6 +47,12 @@ extension Experimental.Library {
                 let fileURL = notebook.noteBookMetaURL()
                 let fileContent = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
                 actions = [.createFile(url: fileURL, content: fileContent)]
+            case let .removeNotebook(notebook):
+                guard let indexOfRemovedNotebook = model.notebooks.index(of: notebook) else { break }
+                let newNotebooks = model.notebooks.removeWithoutMutation(at: indexOfRemovedNotebook)
+                newModel = Model(notebooks: newNotebooks)
+                let fileURL = notebook.notebookURL()
+                actions = [.deleteFile(url: fileURL)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -81,6 +89,8 @@ extension Experimental.Library.Action: Equatable {
         case (.createFile(let lURL, let lContent as Experimental.Notebook.Meta),
               .createFile(let rURL, let rContent as Experimental.Notebook.Meta)):
             return (lURL == rURL) && (lContent == rContent)
+        case (.deleteFile(let lURL), .deleteFile(let rURL)):
+            return lURL == rURL
         default: return false
         }
     }
