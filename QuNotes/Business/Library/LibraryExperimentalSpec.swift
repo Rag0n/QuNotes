@@ -74,6 +74,41 @@ class libraryExperimantalSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving removeNotebook event") {
+                context("when notebook with that uuid was not added") {
+                    let notAddedNotebookModel = Experimental.Notebook.Model(uuid: "notAddedNotebookUUID",
+                                                                            name: "notAddedNotebookName",
+                                                                            notes: [])
+
+                    beforeEach {
+                        event = .removeNotebook(notebook: notAddedNotebookModel)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+                }
+
+                context("when notebook with that uuid was added") {
+                    beforeEach {
+                        event = .removeNotebook(notebook: notebookViewModel)
+                    }
+
+                    it("removes notebook from model") {
+                        expect(e.evaluate(event: event).model.notebooks)
+                            .toNot(contain(notebookViewModel))
+                    }
+
+                    it("has deleteFile action with notebook url") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.deleteFile(url: URL(string: "NotebookViewModelUUID.qvnotebook")!)))
                     }
                 }
             }
