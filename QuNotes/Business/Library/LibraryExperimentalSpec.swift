@@ -12,7 +12,10 @@ import Result
 
 class libraryExperimantalSpec: QuickSpec {
     override func spec() {
-        let model = Experimental.Library.Model(notebooks: [])
+        let notebookViewModel = Experimental.Notebook.Model(uuid: "NotebookViewModelUUID",
+                                                            name: "NotebookViewModelName",
+                                                            notes: [])
+        let model = Experimental.Library.Model(notebooks: [notebookViewModel])
         var e: Experimental.Library.Evaluator!
 
         beforeEach {
@@ -33,34 +36,31 @@ class libraryExperimantalSpec: QuickSpec {
             var event: Experimental.Library.InputEvent!
 
             context("when receiving addNotebook event") {
-                let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID",
-                                                                name: "notebookName",
-                                                                notes: [])
-                let expectedMeta = Experimental.Notebook.Meta(uuid: "notebookUUID", name: "notebookName")
-
-                beforeEach {
-                    event = .addNotebook(notebook: notebookModel)
-                }
-
                 context("when notebook with that uuid is not added yet") {
+                    let newNotebook = Experimental.Notebook.Model(uuid: "NewNotebookUUID",
+                                                                  name: "NewNotebookName",
+                                                                  notes: [])
+                    let expectedMeta = Experimental.Notebook.Meta(uuid: "NewNotebookUUID", name: "NewNotebookName")
+
+                    beforeEach {
+                        event = .addNotebook(notebook: newNotebook)
+                    }
+
                     it("has createFile action with notebook meta url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.createFile(url: URL(string: "notebookUUID.qvnotebook/meta.json")!,
+                            .to(equal(.createFile(url: URL(string: "NewNotebookUUID.qvnotebook/meta.json")!,
                                                   content: expectedMeta)))
                     }
 
                     it("updates model by adding passed notebook") {
                         expect(e.evaluate(event: event).model.notebooks)
-                            .to(equal([notebookModel]))
+                            .to(contain(newNotebook))
                     }
                 }
 
                 context("when notebook with that uuid is already added") {
-                    let alreadyAddedNotebook = Experimental.Notebook.Model(uuid: "notebookUUID",
-                                                                           name: "",
-                                                                           notes: [])
                     beforeEach {
-                        e = e.evaluate(event: .addNotebook(notebook: alreadyAddedNotebook))
+                        event = .addNotebook(notebook: notebookViewModel)
                     }
 
                     it("hasnt got any actions") {
@@ -69,9 +69,11 @@ class libraryExperimantalSpec: QuickSpec {
                     }
 
                     it("doesnt update model") {
-                        let model = e.evaluate(event: event).model
-                        expect(model.notebooks.count).to(equal(1))
-                        expect(model.notebooks[0]).to(equal(alreadyAddedNotebook))
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
+                    }
+                }
+            }
                     }
                 }
             }
