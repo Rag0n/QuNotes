@@ -14,10 +14,16 @@ class NotebookExperimantalSpec: QuickSpec {
     override func spec() {
         let note = Experimental.Note.Model(uuid: "noteUUID", title: "title", content: "content")
         let model = Experimental.Notebook.Model(uuid: "uuid", name: "name", notes: [note])
-        var e: Experimental.Notebook.Evaluator!
+        let e = Experimental.Notebook.Evaluator(model: model)
 
-        beforeEach {
-            e = Experimental.Notebook.Evaluator(model: model)
+        context("when initialized") {
+            it("has zero actions") {
+                expect(e.actions).to(beEmpty())
+            }
+
+            it("has passed model") {
+                expect(e.model).to(equal(model))
+            }
         }
 
         describe("-evaluate:") {
