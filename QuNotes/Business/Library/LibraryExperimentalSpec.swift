@@ -16,11 +16,7 @@ class LibraryExperimantalSpec: QuickSpec {
                                                    name: "notebookName",
                                                    notes: [])
         let model = Experimental.Library.Model(notebooks: [notebook])
-        var e: Experimental.Library.Evaluator!
-
-        beforeEach {
-            e = Experimental.Library.Evaluator(model: model)
-        }
+        let e = Experimental.Library.Evaluator(model: model)
 
         context("when initialized") {
             it("has zero actions") {
