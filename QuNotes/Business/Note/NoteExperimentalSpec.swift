@@ -19,6 +19,16 @@ class NoteExperimantalSpec: QuickSpec {
             e = Experimental.Note.Evaluator(model: model)
         }
 
+        context("when initialized") {
+            it("has zero actions") {
+                expect(e.actions).to(beEmpty())
+            }
+
+            it("has passed model") {
+                expect(e.model).to(equal(model))
+            }
+        }
+
         describe("-evaluate:") {
             var event: Experimental.Note.InputEvent!
 
