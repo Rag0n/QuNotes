@@ -10,12 +10,12 @@ import Quick
 import Nimble
 import Result
 
-class libraryExperimantalSpec: QuickSpec {
+class LibraryExperimantalSpec: QuickSpec {
     override func spec() {
-        let notebookViewModel = Experimental.Notebook.Model(uuid: "NotebookViewModelUUID",
-                                                            name: "NotebookViewModelName",
-                                                            notes: [])
-        let model = Experimental.Library.Model(notebooks: [notebookViewModel])
+        let notebook = Experimental.Notebook.Model(uuid: "notebookUUID",
+                                                   name: "notebookName",
+                                                   notes: [])
+        let model = Experimental.Library.Model(notebooks: [notebook])
         var e: Experimental.Library.Evaluator!
 
         beforeEach {
@@ -37,10 +37,10 @@ class libraryExperimantalSpec: QuickSpec {
 
             context("when receiving addNotebook event") {
                 context("when notebook with that uuid is not added yet") {
-                    let newNotebook = Experimental.Notebook.Model(uuid: "NewNotebookUUID",
-                                                                  name: "NewNotebookName",
+                    let newNotebook = Experimental.Notebook.Model(uuid: "newNotebookUUID",
+                                                                  name: "newNotebookName",
                                                                   notes: [])
-                    let expectedMeta = Experimental.Notebook.Meta(uuid: "NewNotebookUUID", name: "NewNotebookName")
+                    let expectedMeta = Experimental.Notebook.Meta(uuid: "newNotebookUUID", name: "newNotebookName")
 
                     beforeEach {
                         event = .addNotebook(notebook: newNotebook)
@@ -48,7 +48,7 @@ class libraryExperimantalSpec: QuickSpec {
 
                     it("has createFile action with notebook meta url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.createFile(url: URL(string: "NewNotebookUUID.qvnotebook/meta.json")!,
+                            .to(equal(.createFile(url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!,
                                                   content: expectedMeta)))
                     }
 
@@ -60,7 +60,7 @@ class libraryExperimantalSpec: QuickSpec {
 
                 context("when notebook with that uuid is already added") {
                     beforeEach {
-                        event = .addNotebook(notebook: notebookViewModel)
+                        event = .addNotebook(notebook: notebook)
                     }
 
                     it("hasnt got any actions") {
@@ -77,12 +77,12 @@ class libraryExperimantalSpec: QuickSpec {
 
             context("when receiving removeNotebook event") {
                 context("when notebook with that uuid was not added") {
-                    let notAddedNotebookModel = Experimental.Notebook.Model(uuid: "notAddedNotebookUUID",
-                                                                            name: "notAddedNotebookName",
-                                                                            notes: [])
+                    let notAddedNotebook = Experimental.Notebook.Model(uuid: "notAddedNotebookUUID",
+                                                                       name: "notAddedNotebookName",
+                                                                       notes: [])
 
                     beforeEach {
-                        event = .removeNotebook(notebook: notAddedNotebookModel)
+                        event = .removeNotebook(notebook: notAddedNotebook)
                     }
 
                     it("doesnt update model") {
@@ -98,17 +98,17 @@ class libraryExperimantalSpec: QuickSpec {
 
                 context("when notebook with that uuid was added") {
                     beforeEach {
-                        event = .removeNotebook(notebook: notebookViewModel)
+                        event = .removeNotebook(notebook: notebook)
                     }
 
                     it("removes notebook from model") {
                         expect(e.evaluate(event: event).model.notebooks)
-                            .toNot(contain(notebookViewModel))
+                            .toNot(contain(notebook))
                     }
 
                     it("has deleteFile action with notebook url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteFile(url: URL(string: "NotebookViewModelUUID.qvnotebook")!)))
+                            .to(equal(.deleteFile(url: URL(string: "notebookUUID.qvnotebook")!)))
                     }
                 }
             }
