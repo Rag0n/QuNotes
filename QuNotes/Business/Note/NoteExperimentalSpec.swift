@@ -52,7 +52,8 @@ class NoteExperimantalSpec: QuickSpec {
                     let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
                     let model = Experimental.Note.Model(uuid: "uuid", title: "title",
                                                                 content: "content", notebook: notebookModel)
-                    let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "new title")
+                    let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "new title",
+                                                              updatedAt: Date().timeIntervalSince1970)
                     let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                     beforeEach {

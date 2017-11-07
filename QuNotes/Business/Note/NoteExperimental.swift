@@ -23,7 +23,6 @@ extension Experimental.Note {
         init(uuid: String,
              title: String,
              content: String,
-             notebook: Experimental.Notebook.Model? = nil) {
              notebook: Experimental.Notebook.Model? = nil,
              updatedDate: TimeInterval = 0) {
             self.uuid = uuid
@@ -37,6 +36,13 @@ extension Experimental.Note {
     struct Meta: Codable {
         let uuid: String
         let title: String
+        let updated_at: TimeInterval
+
+        init(uuid: String, title: String, updatedAt: TimeInterval = 0) {
+            self.uuid = uuid
+            self.title = title
+            self.updated_at = updatedAt
+        }
     }
 
     struct Content: Codable {
@@ -70,7 +76,8 @@ extension Experimental.Note {
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
                                  updatedDate: Date().timeIntervalSince1970)
                 if let notebook = model.notebook {
-                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title)
+                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
+                                           updatedAt: newModel.updatedDate)
                     let url = notebook.noteMetaURL(forNote: newModel)
                     actions = [.updateFile(url: url, content: fileContent)]
                 }
@@ -108,6 +115,9 @@ extension Experimental.Note.Model: Equatable {
 
 extension Experimental.Note.Meta: Equatable {
     static func ==(lhs: Experimental.Note.Meta, rhs: Experimental.Note.Meta) -> Bool {
+        if (lhs.updated_at != 0 && (lhs.updated_at - rhs.updated_at < Double.ulpOfOne)) {
+            return false
+        }
         return (
             lhs.uuid == rhs.uuid &&
             lhs.title == rhs.title
