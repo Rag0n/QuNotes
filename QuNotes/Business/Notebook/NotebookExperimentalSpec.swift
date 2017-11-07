@@ -51,7 +51,8 @@ class NotebookExperimantalSpec: QuickSpec {
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
                     let newNote = Experimental.Note.Model(uuid: "newNoteUUID", title: "title", content: "content")
-                    let expectedNoteMeta = Experimental.Note.Meta(uuid: "newNoteUUID", title: "title")
+                    let expectedNoteMeta = Experimental.Note.Meta(uuid: "newNoteUUID", title: "title",
+                                                                  updatedAt: Date().timeIntervalSince1970)
                     let expectedNoteContent = Experimental.Note.Content(content: "content")
 
                     beforeEach {

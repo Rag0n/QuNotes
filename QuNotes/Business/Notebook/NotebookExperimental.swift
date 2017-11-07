@@ -60,7 +60,7 @@ extension Experimental.Notebook {
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
                 let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
-                let noteMeta = Experimental.Note.Meta(uuid: noteToAdd.uuid, title: noteToAdd.title)
+                let noteMeta = Experimental.Note.Meta(uuid: noteToAdd.uuid, title: noteToAdd.title, updatedAt: noteToAdd.updatedDate)
                 let contentURL = newModel.noteContentURL(forNote: noteToAdd)
                 let noteContent = Experimental.Note.Content(content: noteToAdd.content)
                 actions = [

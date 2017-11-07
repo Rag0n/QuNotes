@@ -38,7 +38,7 @@ extension Experimental.Note {
         let title: String
         let updated_at: TimeInterval
 
-        init(uuid: String, title: String, updatedAt: TimeInterval = 0) {
+        init(uuid: String, title: String, updatedAt: TimeInterval) {
             self.uuid = uuid
             self.title = title
             self.updated_at = updatedAt
