@@ -18,17 +18,20 @@ extension Experimental.Note {
         let title: String
         let content: String
         let updatedDate: TimeInterval
+        let tags: [String]
         let notebook: Experimental.Notebook.Model?
 
         init(uuid: String,
              title: String,
              content: String,
+             tags: [String],
              notebook: Experimental.Notebook.Model? = nil,
              updatedDate: TimeInterval = 0) {
             self.uuid = uuid
             self.title = title
             self.content = content
             self.notebook = notebook
+            self.tags = tags
             self.updatedDate = updatedDate
         }
     }
@@ -37,11 +40,13 @@ extension Experimental.Note {
         let uuid: String
         let title: String
         let updated_at: TimeInterval
+        let tags: [String]
 
-        init(uuid: String, title: String, updatedAt: TimeInterval) {
+        init(uuid: String, title: String, tags: [String], updatedAt: TimeInterval) {
             self.uuid = uuid
             self.title = title
             self.updated_at = updatedAt
+            self.tags = tags
         }
     }
 
@@ -56,6 +61,7 @@ extension Experimental.Note {
     enum InputEvent {
         case changeTitle(newTitle: String)
         case changeContent(newContent: String)
+        case addTag(tag: String)
     }
 
     struct Evaluator {
@@ -74,19 +80,30 @@ extension Experimental.Note {
             switch event {
             case let .changeTitle(newTitle):
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
-                                 updatedDate: Date().timeIntervalSince1970)
+                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970)
                 if let notebook = model.notebook {
-                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
+                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title, tags: newModel.tags,
                                            updatedAt: newModel.updatedDate)
                     let url = notebook.noteMetaURL(forNote: newModel)
                     actions = [.updateFile(url: url, content: fileContent)]
                 }
             case let .changeContent(newContent):
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
-                                 updatedDate: Date().timeIntervalSince1970)
+                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970)
                 if let notebook = model.notebook {
                     let fileContent = Content(content: newContent);
                     let url = notebook.noteContentURL(forNote: newModel)
+                    actions = [.updateFile(url: url, content: fileContent)]
+                }
+            case let .addTag(tag):
+                guard !model.hasTag(tag) else { break }
+                let newTags = model.tags + [tag]
+                newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
+                                 tags: newTags, updatedDate: Date().timeIntervalSince1970)
+                if let notebook = model.notebook {
+                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
+                                           tags: newModel.tags, updatedAt: newModel.updatedDate)
+                    let url = notebook.noteMetaURL(forNote: newModel)
                     actions = [.updateFile(url: url, content: fileContent)]
                 }
             }
@@ -101,14 +118,23 @@ extension Experimental.Note {
     }
 }
 
-// MARK: Datatypes equatable
+// MARK: - Private
+
+private extension Experimental.Note.Model {
+    func hasTag(_ tag: String) -> Bool {
+        return tags.index(of: tag) != nil
+    }
+}
+
+// MARK: - Datatypes equatable
 
 extension Experimental.Note.Model: Equatable {
     static func ==(lhs: Experimental.Note.Model, rhs: Experimental.Note.Model) -> Bool {
         return (
             lhs.uuid == rhs.uuid &&
             lhs.title == rhs.title &&
-            lhs.content == rhs.content
+            lhs.content == rhs.content &&
+            lhs.tags == rhs.tags
         )
     }
 }
@@ -120,7 +146,8 @@ extension Experimental.Note.Meta: Equatable {
         }
         return (
             lhs.uuid == rhs.uuid &&
-            lhs.title == rhs.title
+            lhs.title == rhs.title &&
+            lhs.tags == rhs.tags
         )
     }
 }
