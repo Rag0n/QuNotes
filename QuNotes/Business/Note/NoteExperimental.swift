@@ -17,16 +17,20 @@ extension Experimental.Note {
         let uuid: String
         let title: String
         let content: String
+        let updatedDate: TimeInterval
         let notebook: Experimental.Notebook.Model?
 
         init(uuid: String,
              title: String,
              content: String,
              notebook: Experimental.Notebook.Model? = nil) {
+             notebook: Experimental.Notebook.Model? = nil,
+             updatedDate: TimeInterval = 0) {
             self.uuid = uuid
             self.title = title
             self.content = content
             self.notebook = notebook
+            self.updatedDate = updatedDate
         }
     }
 
@@ -63,14 +67,16 @@ extension Experimental.Note {
 
             switch event {
             case let .changeTitle(newTitle):
-                newModel = Model(uuid: model.uuid, title: newTitle, content: model.content)
+                newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
+                                 updatedDate: Date().timeIntervalSince1970)
                 if let notebook = model.notebook {
                     let fileContent = Meta(uuid: newModel.uuid, title: newModel.title)
                     let url = notebook.noteMetaURL(forNote: newModel)
                     actions = [.updateFile(url: url, content: fileContent)]
                 }
             case let .changeContent(newContent):
-                newModel = Model(uuid: model.uuid, title: model.title, content: newContent)
+                newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
+                                 updatedDate: Date().timeIntervalSince1970)
                 if let notebook = model.notebook {
                     let fileContent = Content(content: newContent);
                     let url = notebook.noteContentURL(forNote: newModel)

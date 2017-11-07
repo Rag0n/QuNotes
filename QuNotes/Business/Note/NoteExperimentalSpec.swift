@@ -42,6 +42,12 @@ class NoteExperimantalSpec: QuickSpec {
                         .to(equal("new title"))
                 }
 
+                it("updates model's updateDate") {
+                    let currentDate = Date()
+                    expect(e.evaluate(event: event).model.updatedDate)
+                        .to(beGreaterThan(currentDate.timeIntervalSince1970))
+                }
+
                 context("when note is added to notebook") {
                     let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
                     let model = Experimental.Note.Model(uuid: "uuid", title: "title",
@@ -68,6 +74,12 @@ class NoteExperimantalSpec: QuickSpec {
                 it("updates model by changing note content") {
                     expect(e.evaluate(event: event).model.content)
                         .to(equal("new content"))
+                }
+
+                it("updates model's updateDate") {
+                    let currentDate = Date()
+                    expect(e.evaluate(event: event).model.updatedDate)
+                        .to(beGreaterThan(currentDate.timeIntervalSince1970))
                 }
 
                 context("when note is added to notebook") {
