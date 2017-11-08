@@ -27,7 +27,7 @@ extension Experimental.Note {
              content: String,
              tags: [String],
              notebook: Experimental.Notebook.Model? = nil,
-             updatedDate: TimeInterval = 0) {
+             updatedDate: TimeInterval) {
             self.uuid = uuid
             self.title = title
             self.content = content

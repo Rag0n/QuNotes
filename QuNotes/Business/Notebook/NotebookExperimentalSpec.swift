@@ -12,7 +12,7 @@ import Result
 
 class NotebookExperimantalSpec: QuickSpec {
     override func spec() {
-        let note = Experimental.Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [])
+        let note = Experimental.Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], updatedDate: 0)
         let model = Experimental.Notebook.Model(uuid: "uuid", name: "name", notes: [note])
         let e = Experimental.Notebook.Evaluator(model: model)
 
@@ -50,7 +50,7 @@ class NotebookExperimantalSpec: QuickSpec {
 
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
-                    let newNote = Experimental.Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"])
+                    let newNote = Experimental.Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"], updatedDate: 0)
                     let expectedNoteMeta = Experimental.Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"], updatedAt: Date().timeIntervalSince1970)
                     let expectedNoteContent = Experimental.Note.Content(content: "content")
 
@@ -111,7 +111,7 @@ class NotebookExperimantalSpec: QuickSpec {
                 }
 
                 context("when passed note is not exist") {
-                    let notAddedNote = Experimental.Note.Model(uuid: "noteAddedNoteUUID", title: "title", content: "content", tags: [])
+                    let notAddedNote = Experimental.Note.Model(uuid: "noteAddedNoteUUID", title: "title", content: "content", tags: [], updatedDate: 0)
 
                     beforeEach {
                         event = .removeNote(note: notAddedNote)
