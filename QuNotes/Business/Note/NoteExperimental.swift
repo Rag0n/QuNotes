@@ -81,31 +81,28 @@ extension Experimental.Note {
             case let .changeTitle(newTitle):
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
                                  tags: model.tags, updatedDate: Date().timeIntervalSince1970)
-                if let notebook = model.notebook {
-                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title, tags: newModel.tags,
-                                           updatedAt: newModel.updatedDate)
-                    let url = notebook.noteMetaURL(forNote: newModel)
-                    actions = [.updateFile(url: url, content: fileContent)]
-                }
+                guard let notebook = model.notebook else { break }
+                let fileContent = Meta(uuid: newModel.uuid, title: newModel.title, tags: newModel.tags,
+                                       updatedAt: newModel.updatedDate)
+                let url = notebook.noteMetaURL(forNote: newModel)
+                actions = [.updateFile(url: url, content: fileContent)]
             case let .changeContent(newContent):
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
                                  tags: model.tags, updatedDate: Date().timeIntervalSince1970)
-                if let notebook = model.notebook {
-                    let fileContent = Content(content: newContent);
-                    let url = notebook.noteContentURL(forNote: newModel)
-                    actions = [.updateFile(url: url, content: fileContent)]
-                }
+                guard let notebook = model.notebook else { break }
+                let fileContent = Content(content: newContent);
+                let url = notebook.noteContentURL(forNote: newModel)
+                actions = [.updateFile(url: url, content: fileContent)]
             case let .addTag(tag):
                 guard !model.hasTag(tag) else { break }
                 let newTags = model.tags + [tag]
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
                                  tags: newTags, updatedDate: Date().timeIntervalSince1970)
-                if let notebook = model.notebook {
-                    let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
-                                           tags: newModel.tags, updatedAt: newModel.updatedDate)
-                    let url = notebook.noteMetaURL(forNote: newModel)
-                    actions = [.updateFile(url: url, content: fileContent)]
-                }
+                guard let notebook = model.notebook else { break }
+                let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
+                                       tags: newModel.tags, updatedAt: newModel.updatedDate)
+                let url = notebook.noteMetaURL(forNote: newModel)
+                actions = [.updateFile(url: url, content: fileContent)]
             }
 
             return Evaluator(actions: actions, model: newModel)
