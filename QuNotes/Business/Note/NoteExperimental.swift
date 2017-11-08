@@ -62,6 +62,7 @@ extension Experimental.Note {
         case changeTitle(newTitle: String)
         case changeContent(newContent: String)
         case addTag(tag: String)
+        case removeTag(tag: String)
     }
 
     struct Evaluator {
@@ -103,6 +104,16 @@ extension Experimental.Note {
                                        tags: newModel.tags, updatedAt: newModel.updatedDate)
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
+            case let .removeTag(tag):
+                guard let indexOfTag = model.tags.index(of: tag) else { break }
+                let newTags = model.tags.removeWithoutMutation(at: indexOfTag)
+                newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
+                                 tags: newTags, updatedDate: Date().timeIntervalSince1970)
+                guard let notebook = model.notebook else { break }
+                let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
+                                       tags: newModel.tags, updatedAt: newModel.updatedDate)
+                let url = notebook.noteMetaURL(forNote: newModel)
+                actions = [.updateFile(url: url, content: fileContent)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -127,6 +138,9 @@ private extension Experimental.Note.Model {
 
 extension Experimental.Note.Model: Equatable {
     static func ==(lhs: Experimental.Note.Model, rhs: Experimental.Note.Model) -> Bool {
+        if (lhs.updatedDate - rhs.updatedDate > Double.ulpOfOne) {
+            return false
+        }
         return (
             lhs.uuid == rhs.uuid &&
             lhs.title == rhs.title &&

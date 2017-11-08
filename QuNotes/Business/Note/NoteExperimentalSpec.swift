@@ -156,6 +156,63 @@ class NoteExperimantalSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving removeTag event") {
+                context("when that tag exist") {
+                    let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                                                        tags: ["tag"])
+
+                    beforeEach {
+                        e = Experimental.Note.Evaluator(model: model)
+                        event = .removeTag(tag: "tag")
+                    }
+
+                    it("updates model by removing tag") {
+                        expect(e.evaluate(event: event).model.tags)
+                            .to(beEmpty())
+                    }
+
+                    it("updates model's updateDate") {
+                        let currentDate = Date()
+                        expect(e.evaluate(event: event).model.updatedDate)
+                            .to(beGreaterThan(currentDate.timeIntervalSince1970))
+                    }
+
+                    context("when note is added to notebook") {
+                        let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                                                            tags: ["tag"], notebook: notebookModel)
+                        let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: [],
+                                                                  updatedAt: Date().timeIntervalSince1970)
+                        let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
+
+                        beforeEach {
+                            e = Experimental.Note.Evaluator(model: model)
+                        }
+
+                        it("has updateFile action with note's meta URL") {
+                            expect(e.evaluate(event: event).actions[0])
+                                .to(equal(.updateFile(url: expectedURL, content: expectedMeta)))
+                        }
+                    }
+                }
+
+                context("when that tag doesnt exist") {
+                    beforeEach {
+                        event = .removeTag(tag: "tag")
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+                }
+            }
         }
     }
 }
