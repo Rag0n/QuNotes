@@ -17,6 +17,7 @@ extension Experimental.Note {
         let uuid: String
         let title: String
         let content: String
+        let created_at: TimeInterval = 0
         let updatedDate: TimeInterval
         let tags: [String]
         let notebook: Experimental.Notebook.Model?
@@ -47,6 +48,13 @@ extension Experimental.Note {
             self.title = title
             self.updated_at = updatedAt
             self.tags = tags
+        }
+
+        init(model: Model) {
+            self.uuid = model.uuid
+            self.title = model.title
+            self.updated_at = model.updatedDate
+            self.tags = model.tags
         }
     }
 
@@ -83,8 +91,7 @@ extension Experimental.Note {
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
                                  tags: model.tags, updatedDate: Date().timeIntervalSince1970)
                 guard let notebook = model.notebook else { break }
-                let fileContent = Meta(uuid: newModel.uuid, title: newModel.title, tags: newModel.tags,
-                                       updatedAt: newModel.updatedDate)
+                let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
             case let .changeContent(newContent):
@@ -100,8 +107,7 @@ extension Experimental.Note {
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
                                  tags: newTags, updatedDate: Date().timeIntervalSince1970)
                 guard let notebook = model.notebook else { break }
-                let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
-                                       tags: newModel.tags, updatedAt: newModel.updatedDate)
+                let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
             case let .removeTag(tag):
@@ -110,8 +116,7 @@ extension Experimental.Note {
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
                                  tags: newTags, updatedDate: Date().timeIntervalSince1970)
                 guard let notebook = model.notebook else { break }
-                let fileContent = Meta(uuid: newModel.uuid, title: newModel.title,
-                                       tags: newModel.tags, updatedAt: newModel.updatedDate)
+                let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
             }
