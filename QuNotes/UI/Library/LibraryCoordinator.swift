@@ -22,6 +22,7 @@ extension UI.Library {
         func onStart() {
             let notebooks = notebookUseCase.getAll()
             dispatch <| .didUpdateNotebooks(notebooks: notebooks)
+            dispatch <| .loadNotebooks
         }
 
         var rootViewController: UIViewController {
@@ -42,11 +43,16 @@ extension UI.Library {
             return LibraryViewController(withDispatch: dispatch)
         }()
 
+        private(set) var library: Experimental.Library.Evaluator
+
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
             self.navigationController = navigationController
             self.notebookUseCase = dependencies.notebookUseCase
             self.dependencies = dependencies
             evaluator = Evaluator()
+
+            let initialModel = Experimental.Library.Model(notebooks: [])
+            library = Experimental.Library.Evaluator(model: initialModel)
         }
 
         // MARK: - Private
@@ -59,10 +65,19 @@ extension UI.Library {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
+        fileprivate func dispatch(event: Experimental.Library.InputEvent) {
+            updateLibrary <| library.evaluate(event: event)
+        }
+
         fileprivate func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
             evaluator.actions.forEach(perform)
             evaluator.effects.forEach(libraryViewController.perform)
+        }
+
+        fileprivate func updateLibrary(library: Experimental.Library.Evaluator) {
+            self.library = library
+            library.actions.forEach(perform)
         }
 
         fileprivate func perform(action: Action) {
@@ -80,11 +95,22 @@ extension UI.Library {
                 showError(title: title, message: message, controller: libraryViewController)
             case .showNotes(let notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
-                                                                           dependencies: dependencies,
-                                                                           notebook: notebook)
+                                                                     dependencies: dependencies,
+                                                                     notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
                     self.onStart()
                 }
+            }
+        }
+
+        fileprivate func perform(action: Experimental.Library.Action) {
+            switch action {
+            case let .createFile(url, content):
+                return
+            case let .deleteFile(url):
+                return
+            case let .readFiles(url, ext):
+                return
             }
         }
     }
