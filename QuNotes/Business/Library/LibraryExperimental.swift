@@ -20,9 +20,11 @@ extension Experimental.Library {
     enum Action {
         case createFile(url: URL, content: Codable)
         case deleteFile(url: URL)
+        case readFiles(url: URL, extension: String)
     }
 
     enum InputEvent {
+        case loadNotebooks
         case addNotebook(notebook: Experimental.Notebook.Model)
         case removeNotebook(notebook: Experimental.Notebook.Model)
     }
@@ -41,6 +43,8 @@ extension Experimental.Library {
             var newModel = model
 
             switch (event) {
+            case .loadNotebooks:
+                actions = [.readFiles(url: URL(string: "/")!, extension: "qvnotebook")]
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
@@ -91,6 +95,9 @@ extension Experimental.Library.Action: Equatable {
             return (lURL == rURL) && (lContent == rContent)
         case (.deleteFile(let lURL), .deleteFile(let rURL)):
             return lURL == rURL
+        case (.readFiles(let lURL, let lExtension),
+              .readFiles(let rURL, let rExtension)):
+            return (lURL == rURL) && (lExtension == rExtension)
         default: return false
         }
     }

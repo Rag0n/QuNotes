@@ -108,6 +108,22 @@ class LibraryExperimantalSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving loadNotebooks event") {
+                beforeEach {
+                    event = .loadNotebooks
+                }
+
+                it("doesnt update model") {
+                    expect(e.evaluate(event: event).model)
+                        .to(equal(model))
+                }
+
+                it("has readFiles action with root url and qvnotebook extension") {
+                    expect(e.evaluate(event: event).actions[0])
+                        .to(equal(.readFiles(url: URL(string: "/")!, extension: "qvnotebook")))
+                }
+            }
         }
     }
 }
