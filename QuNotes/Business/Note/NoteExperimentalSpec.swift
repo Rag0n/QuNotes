@@ -55,7 +55,8 @@ class NoteExperimantalSpec: QuickSpec {
                                                         tags: [], notebook: notebookModel, updatedDate: 0,
                                                         createdDate: 13)
                     let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "new title", tags: [],
-                                                              updatedAt: Date().timeIntervalSince1970)
+                                                              updatedAt: Date().timeIntervalSince1970,
+                                                              createdAt: 13)
                     let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                     beforeEach {
@@ -144,9 +145,11 @@ class NoteExperimantalSpec: QuickSpec {
                     context("when note is added to notebook") {
                         let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
                         let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                            tags: [], notebook: notebookModel, updatedDate: 0, createdDate: 19)
+                                                            tags: [], notebook: notebookModel, updatedDate: 0,
+                                                            createdDate: 19)
                         let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
-                                                                  updatedAt: Date().timeIntervalSince1970)
+                                                                  updatedAt: Date().timeIntervalSince1970,
+                                                                  createdAt: 19)
                         let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                         beforeEach {
@@ -188,7 +191,8 @@ class NoteExperimantalSpec: QuickSpec {
                                                             tags: ["tag"], notebook: notebookModel, updatedDate: 0,
                                                             createdDate: 21)
                         let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: [],
-                                                                  updatedAt: Date().timeIntervalSince1970)
+                                                                  updatedAt: Date().timeIntervalSince1970,
+                                                                  createdAt: 21)
                         let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                         beforeEach {

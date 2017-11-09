@@ -42,21 +42,24 @@ extension Experimental.Note {
     struct Meta: Codable {
         let uuid: String
         let title: String
-        let updated_at: TimeInterval
         let tags: [String]
+        let updated_at: TimeInterval
+        let created_at: TimeInterval
 
-        init(uuid: String, title: String, tags: [String], updatedAt: TimeInterval) {
+        init(uuid: String, title: String, tags: [String], updatedAt: TimeInterval, createdAt: TimeInterval) {
             self.uuid = uuid
             self.title = title
-            self.updated_at = updatedAt
             self.tags = tags
+            self.updated_at = updatedAt
+            self.created_at = createdAt
         }
 
         init(model: Model) {
             self.uuid = model.uuid
             self.title = model.title
-            self.updated_at = model.updatedDate
             self.tags = model.tags
+            self.updated_at = model.updatedDate
+            self.created_at = model.createdDate
         }
     }
 
@@ -166,6 +169,9 @@ extension Experimental.Note.Model: Equatable {
 
 extension Experimental.Note.Meta: Equatable {
     static func ==(lhs: Experimental.Note.Meta, rhs: Experimental.Note.Meta) -> Bool {
+        if (lhs.created_at - rhs.created_at > Double.ulpOfOne) {
+            return false
+        }
         if (lhs.updated_at != 0 && (lhs.updated_at - rhs.updated_at < Double.ulpOfOne)) {
             return false
         }
