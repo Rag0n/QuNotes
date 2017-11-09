@@ -17,9 +17,9 @@ extension Experimental.Note {
         let uuid: String
         let title: String
         let content: String
-        let created_at: TimeInterval = 0
-        let updatedDate: TimeInterval
         let tags: [String]
+        let createdDate: TimeInterval
+        let updatedDate: TimeInterval
         let notebook: Experimental.Notebook.Model?
 
         init(uuid: String,
@@ -27,13 +27,15 @@ extension Experimental.Note {
              content: String,
              tags: [String],
              notebook: Experimental.Notebook.Model? = nil,
-             updatedDate: TimeInterval) {
+             updatedDate: TimeInterval,
+             createdDate: TimeInterval) {
             self.uuid = uuid
             self.title = title
             self.content = content
             self.notebook = notebook
             self.tags = tags
             self.updatedDate = updatedDate
+            self.createdDate = createdDate
         }
     }
 
@@ -89,14 +91,16 @@ extension Experimental.Note {
             switch event {
             case let .changeTitle(newTitle):
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
-                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970)
+                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970,
+                                 createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
             case let .changeContent(newContent):
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
-                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970)
+                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970,
+                                 createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let fileContent = Content(content: newContent);
                 let url = notebook.noteContentURL(forNote: newModel)
@@ -105,7 +109,8 @@ extension Experimental.Note {
                 guard !model.hasTag(tag) else { break }
                 let newTags = model.tags + [tag]
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags, updatedDate: Date().timeIntervalSince1970)
+                                 tags: newTags, updatedDate: Date().timeIntervalSince1970,
+                                 createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
@@ -114,7 +119,8 @@ extension Experimental.Note {
                 guard let indexOfTag = model.tags.index(of: tag) else { break }
                 let newTags = model.tags.removeWithoutMutation(at: indexOfTag)
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags, updatedDate: Date().timeIntervalSince1970)
+                                 tags: newTags, updatedDate: Date().timeIntervalSince1970,
+                                 createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
@@ -143,6 +149,9 @@ private extension Experimental.Note.Model {
 
 extension Experimental.Note.Model: Equatable {
     static func ==(lhs: Experimental.Note.Model, rhs: Experimental.Note.Model) -> Bool {
+        if (lhs.createdDate - rhs.createdDate > Double.ulpOfOne) {
+            return false
+        }
         if (lhs.updatedDate - rhs.updatedDate > Double.ulpOfOne) {
             return false
         }
