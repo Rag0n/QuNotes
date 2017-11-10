@@ -45,6 +45,8 @@
 		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
 		1176363E1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
+		117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151B1FB61CCA00410F6F /* FileExecuter.swift */; };
+		117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151B1FB61CCA00410F6F /* FileExecuter.swift */; };
 		117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
 		1180E54E1F92A76C00B835BF /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1180E54D1F92A76C00B835BF /* UI.swift */; };
 		118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
@@ -167,6 +169,7 @@
 		116879891F798EC2009461D6 /* LibraryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryTableViewCell.xib; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
+		117D151B1FB61CCA00410F6F /* FileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExecuter.swift; sourceTree = "<group>"; };
 		117E1BE21F54A43A0046DC52 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		117E1BE41F54A4990046DC52 /* DefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
 		1180E54D1F92A76C00B835BF /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
@@ -354,6 +357,14 @@
 			path = CurrentDateService;
 			sourceTree = "<group>";
 		};
+		117D151A1FB61A7E00410F6F /* Executers */ = {
+			isa = PBXGroup;
+			children = (
+				117D151B1FB61CCA00410F6F /* FileExecuter.swift */,
+			);
+			path = Executers;
+			sourceTree = "<group>";
+		};
 		117E1BE11F54A4260046DC52 /* Theme */ = {
 			isa = PBXGroup;
 			children = (
@@ -422,6 +433,7 @@
 		11B7057D1EEB42570039A863 /* QuNotes */ = {
 			isa = PBXGroup;
 			children = (
+				117D151A1FB61A7E00410F6F /* Executers */,
 				117636381F08E8F2000A5CFC /* Service */,
 				11A1FE5F1FA7B2FE006BAF4C /* Business */,
 				112D49871EF539D800C75B6A /* UseCase */,
@@ -710,6 +722,7 @@
 				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
 				118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */,
 				11517D021F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */,
+				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */,
 				1153327B1FACFCF3008FEC2A /* LibraryExperimental.swift in Sources */,
@@ -730,6 +743,7 @@
 			files = (
 				11C41FF41F744A8900397DD9 /* NotebookUseCase.swift in Sources */,
 				118569181F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
+				117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				11DFCEEB1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift in Sources */,
 				111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
 				11C41FFE1F74521A00397DD9 /* NotebookSpec.swift in Sources */,
