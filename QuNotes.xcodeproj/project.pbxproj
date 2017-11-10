@@ -47,6 +47,9 @@
 		1176363F1F08E98F000A5CFC /* CurrentDateServiceImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */; };
 		117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151B1FB61CCA00410F6F /* FileExecuter.swift */; };
 		117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151B1FB61CCA00410F6F /* FileExecuter.swift */; };
+		117D151F1FB63F4500410F6F /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151E1FB63F4500410F6F /* URL+Extensions.swift */; };
+		117D15201FB63F4500410F6F /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151E1FB63F4500410F6F /* URL+Extensions.swift */; };
+		117D15221FB63F5E00410F6F /* URL+ExtensionsSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D15211FB63F5E00410F6F /* URL+ExtensionsSpec.swift */; };
 		117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
 		1180E54E1F92A76C00B835BF /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1180E54D1F92A76C00B835BF /* UI.swift */; };
 		118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118569131F1A1C1E00D3CF1B /* FileReaderService.swift */; };
@@ -170,6 +173,8 @@
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
 		117D151B1FB61CCA00410F6F /* FileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExecuter.swift; sourceTree = "<group>"; };
+		117D151E1FB63F4500410F6F /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		117D15211FB63F5E00410F6F /* URL+ExtensionsSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+ExtensionsSpec.swift"; sourceTree = "<group>"; };
 		117E1BE21F54A43A0046DC52 /* ThemeManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		117E1BE41F54A4990046DC52 /* DefaultTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTheme.swift; sourceTree = "<group>"; };
 		1180E54D1F92A76C00B835BF /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
@@ -316,6 +321,8 @@
 			children = (
 				113504291F16BA01001938FD /* Array+Extensions.swift */,
 				11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */,
+				117D151E1FB63F4500410F6F /* URL+Extensions.swift */,
+				117D15211FB63F5E00410F6F /* URL+ExtensionsSpec.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -694,6 +701,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */,
+				117D151F1FB63F4500410F6F /* URL+Extensions.swift in Sources */,
 				11DFCEE81F82CCCE00E9389F /* FileNotebookRepository.swift in Sources */,
 				1135042A1F16BA01001938FD /* Array+Extensions.swift in Sources */,
 				1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */,
@@ -758,6 +766,7 @@
 				1160CCE11F954C2E0033E9E2 /* DefaultTheme.swift in Sources */,
 				11C41FF71F744A9500397DD9 /* NotebookUseCaseSpec.swift in Sources */,
 				11A1FE6A1FA7B429006BAF4C /* Experimental.swift in Sources */,
+				117D15201FB63F4500410F6F /* URL+Extensions.swift in Sources */,
 				1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */,
 				11CDB3E41F969BE20014C58F /* TableViewCell+Extensions.swift in Sources */,
 				112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */,
@@ -772,6 +781,7 @@
 				112A9D921F5AF3B5003DF85D /* Curry.swift in Sources */,
 				111161E11FA7B5B600023B27 /* NotebookExperimentalSpec.swift in Sources */,
 				11A1FE671FA7B41D006BAF4C /* NoteExperimental.swift in Sources */,
+				117D15221FB63F5E00410F6F /* URL+ExtensionsSpec.swift in Sources */,
 				1160CCDB1F954A380033E9E2 /* UI.swift in Sources */,
 				11CDB3E61F969C030014C58F /* LibraryCoordinator.swift in Sources */,
 				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
