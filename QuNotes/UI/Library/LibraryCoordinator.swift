@@ -33,8 +33,9 @@ extension UI.Library {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasNotebookUseCase & UI.Notebook.CoordinatorImp.Dependencies
+        typealias Dependencies = HasNotebookUseCase & HasFileExecuter & UI.Notebook.CoordinatorImp.Dependencies
         fileprivate let notebookUseCase: NotebookUseCase
+        fileprivate let fileExecuter: FileExecuter
         fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator

@@ -9,6 +9,10 @@
 import Foundation
 import Result
 
+protocol HasFileExecuter {
+    var fileExecuter: FileExecuter { get }
+}
+
 class FileExecuter {
     // MARK: - API
 
@@ -17,8 +21,12 @@ class FileExecuter {
         return writeContent <| dataFromContent <| content
     }
 
+    func deleteFile(atURL url: URL) {
+
+    }
+
     // MARK: - Private
-    
+
     private lazy var encoder: JSONEncoder = {
         let enc = JSONEncoder()
         enc.outputFormatting = .prettyPrinted

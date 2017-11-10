@@ -46,7 +46,11 @@ class AppCoordinator: Coordinator {
         fileNotebookRepository.fileReader = fileReaderService
         notebookUseCase.repository = fileNotebookRepository
 
-        return AppDependency(noteUseCase: noteUseCase, notebookUseCase: notebookUseCase)
+        let fileExecuter = FileExecuter()
+
+        return AppDependency(noteUseCase: noteUseCase,
+                             notebookUseCase: notebookUseCase,
+                             fileExecuter: fileExecuter)
     }()
 
     private lazy var navigationController: NavigationController = {
