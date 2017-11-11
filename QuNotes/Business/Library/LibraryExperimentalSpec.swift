@@ -36,16 +36,16 @@ class LibraryExperimantalSpec: QuickSpec {
                     let newNotebook = Experimental.Notebook.Model(uuid: "newNotebookUUID",
                                                                   name: "newNotebookName",
                                                                   notes: [])
-                    let expectedMeta = Experimental.Notebook.Meta(uuid: "newNotebookUUID", name: "newNotebookName")
+                    let notebookMeta = Experimental.Notebook.Meta(uuid: "newNotebookUUID", name: "newNotebookName")
 
                     beforeEach {
                         event = .addNotebook(notebook: newNotebook)
                     }
 
-                    it("has createFile action with notebook meta url") {
+                    it("has createNotebook action with notebook meta url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.createFile(url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!,
-                                                  content: expectedMeta)))
+                            .to(equal(.createNotebook(notebook: notebookMeta,
+                                                      url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!)))
                     }
 
                     it("updates model by adding passed notebook") {

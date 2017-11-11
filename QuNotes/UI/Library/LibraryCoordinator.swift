@@ -106,7 +106,7 @@ extension UI.Library {
 
         fileprivate func perform(action: Experimental.Library.Action) {
             switch action {
-            case let .createFile(url, content):
+            case .createNotebook(let notebook, let url):
                 return
             case let .deleteFile(url):
                 return

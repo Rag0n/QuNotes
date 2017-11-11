@@ -18,7 +18,7 @@ extension Experimental.Library {
     }
 
     enum Action {
-        case createFile(url: URL, content: Codable)
+        case createNotebook(notebook: Experimental.Notebook.Meta, url: URL)
         case deleteFile(url: URL)
         case readFiles(url: URL, extension: String)
     }
@@ -48,9 +48,8 @@ extension Experimental.Library {
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
-                let fileURL = notebook.noteBookMetaURL()
-                let fileContent = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
-                actions = [.createFile(url: fileURL, content: fileContent)]
+                let notebookMeta = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
+                actions = [.createNotebook(notebook: notebookMeta, url: notebook.noteBookMetaURL())]
             case let .removeNotebook(notebook):
                 guard let indexOfRemovedNotebook = model.notebooks.index(of: notebook) else { break }
                 let newNotebooks = model.notebooks.removeWithoutMutation(at: indexOfRemovedNotebook)
@@ -90,9 +89,9 @@ extension Experimental.Library.Model: Equatable {
 extension Experimental.Library.Action: Equatable {
     static func ==(lhs: Experimental.Library.Action, rhs: Experimental.Library.Action) -> Bool {
         switch (lhs, rhs) {
-        case (.createFile(let lURL, let lContent as Experimental.Notebook.Meta),
-              .createFile(let rURL, let rContent as Experimental.Notebook.Meta)):
-            return (lURL == rURL) && (lContent == rContent)
+        case let (.createNotebook(lNotebook, lURL),
+                  .createNotebook(rNotebook, rURL)):
+            return (lURL == rURL) && (lNotebook == rNotebook)
         case (.deleteFile(let lURL), .deleteFile(let rURL)):
             return lURL == rURL
         case (.readFiles(let lURL, let lExtension),
