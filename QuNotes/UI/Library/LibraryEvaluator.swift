@@ -15,6 +15,14 @@ extension UI.Library {
     struct Model {
         let notebooks: [Notebook]
         let editingNotebook: Notebook?
+
+        let notebookMetas: [Experimental.Notebook.Meta]
+
+        init(notebooks: [Notebook], editingNotebook: Notebook?, notebookMetas: [Experimental.Notebook.Meta] = []) {
+            self.notebooks = notebooks
+            self.editingNotebook = editingNotebook
+            self.notebookMetas = notebookMetas
+        }
     }
     
     enum Action {
@@ -37,6 +45,8 @@ extension UI.Library {
         case didAddNotebook(result: Result<Notebook, AnyError>)
         case didUpdateNotebook(result: Result<Notebook, AnyError>)
         case didDeleteNotebook(result: Result<Notebook, AnyError>)
+
+        case didFailedToAddNotebook(notebook: Experimental.Notebook.Meta, error: Error)
     }
 
     enum ViewControllerEvent {
@@ -64,7 +74,8 @@ extension UI.Library {
             model = Model(notebooks: [], editingNotebook: nil)
         }
 
-        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        // TODO: make fileprivate
+        init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
@@ -92,11 +103,19 @@ extension UI.Library {
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
-            let actions: [Action] = []
+            var actions: [Action] = []
             var effects: [ViewControllerEffect] = []
             var newModel = model
 
             switch event {
+            case let .didFailedToAddNotebook(notebook, error):
+                let updatedNotebooks = model.notebookMetas.removeWithoutMutation(object: notebook)
+                newModel = Model(notebooks: model.notebooks,
+                                 editingNotebook: model.editingNotebook,
+                                 notebookMetas: updatedNotebooks)
+                let updatedViewModels = viewModels(fromNotebooks: updatedNotebooks)
+                effects = [.updateAllNotebooks(notebooks: updatedViewModels)]
+                actions = [.showError(title: "Failed to add notebook", message: error.localizedDescription)]
             case .didUpdateNotebooks(let notebooks):
                 let sortedNotebooks = notebooks.sorted(by: notebookNameSorting)
                 let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks,
@@ -149,6 +168,12 @@ private extension UI.Library {
     static func viewModels(fromNotebooks: [Notebook], editingNotebook: Notebook? = nil) -> [NotebookViewModel] {
         return fromNotebooks.map {
             NotebookViewModel(title: $0.name, isEditable: $0 == editingNotebook)
+        }
+    }
+
+    static func viewModels(fromNotebooks: [Experimental.Notebook.Meta]) -> [NotebookViewModel] {
+        return fromNotebooks.map {
+            NotebookViewModel(title: $0.name, isEditable: false)
         }
     }
 
