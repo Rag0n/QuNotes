@@ -71,6 +71,35 @@ class LibraryExperimantalSpec: QuickSpec {
                 }
             }
 
+            context("when receiving failedToAddNotebook event") {
+                context("when notebook is in model") {
+                    let notebookMeta = Experimental.Notebook.Meta(uuid: "notebookUUID", name: "notebookName")
+
+                    beforeEach {
+                        event = .failedToAddNotebook(notebook: notebookMeta)
+                    }
+
+                    it("removes notebook from model") {
+                        expect(e.evaluate(event: event).model.notebooks)
+                            .to(beEmpty())
+                    }
+                }
+
+                context("when notebook is not in model") {
+                    let notebookMeta = Experimental.Notebook.Meta(uuid: "anotherUUID", name: "anotherNotebookName")
+
+                    beforeEach {
+                        event = .failedToAddNotebook(notebook: notebookMeta)
+                    }
+
+                    it("does nothing") {
+                        let newE = e.evaluate(event: event)
+                        expect(newE.model).to(equal(e.model))
+                        expect(newE.actions).to(equal(e.actions))
+                    }
+                }
+            }
+
             context("when receiving removeNotebook event") {
                 context("when notebook with that uuid was not added") {
                     let notAddedNotebook = Experimental.Notebook.Model(uuid: "notAddedNotebookUUID",
