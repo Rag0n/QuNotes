@@ -49,6 +49,7 @@ extension UI.Library {
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
             self.navigationController = navigationController
             self.notebookUseCase = dependencies.notebookUseCase
+            self.fileExecuter = dependencies.fileExecuter
             self.dependencies = dependencies
             evaluator = Evaluator()
 
@@ -67,6 +68,7 @@ extension UI.Library {
         }
 
         fileprivate func dispatch(event: Experimental.Library.InputEvent) {
+        fileprivate func dispatchToLibrary(event: Experimental.Library.InputEvent) {
             updateLibrary <| library.evaluate(event: event)
         }
 
@@ -83,9 +85,8 @@ extension UI.Library {
 
         fileprivate func perform(action: Action) {
             switch action {
-            case .addNotebook:
-                let result = notebookUseCase.add(withName: "")
-                dispatch <| .didAddNotebook(result: result)
+            case let .addNotebook(notebook):
+                dispatchToLibrary <| .addNotebook(notebook: notebook)
             case .updateNotebook(let notebook, let title):
                 let result = notebookUseCase.update(notebook, name: title)
                 dispatch <| .didUpdateNotebook(result: result)
@@ -106,8 +107,12 @@ extension UI.Library {
 
         fileprivate func perform(action: Experimental.Library.Action) {
             switch action {
-            case .createNotebook(let notebook, let url):
-                return
+            case let .createNotebook(notebook, url):
+                let error = fileExecuter.createFile(atURL: url, content: notebook)
+                if let error = error {
+                    dispatchToLibrary <| .failedToAddNotebook(notebook: notebook)
+                    dispatch <| .didFailedToAddNotebook(notebook: notebook, error: error)
+                }
             case let .deleteFile(url):
                 return
             case let .readFiles(url, ext):
