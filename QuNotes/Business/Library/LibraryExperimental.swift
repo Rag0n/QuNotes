@@ -19,7 +19,7 @@ extension Experimental.Library {
 
     enum Action {
         case createNotebook(notebook: Experimental.Notebook.Meta, url: URL)
-        case deleteFile(url: URL)
+        case deleteNotebook(notebook: Experimental.Notebook.Model, url: URL)
         case readFiles(url: URL, extension: String)
     }
 
@@ -59,8 +59,7 @@ extension Experimental.Library {
                 guard let indexOfRemovedNotebook = model.notebooks.index(of: notebook) else { break }
                 let newNotebooks = model.notebooks.removeWithoutMutation(at: indexOfRemovedNotebook)
                 newModel = Model(notebooks: newNotebooks)
-                let fileURL = notebook.notebookURL()
-                actions = [.deleteFile(url: fileURL)]
+                actions = [.deleteNotebook(notebook: notebook, url: notebook.notebookURL())]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -97,8 +96,9 @@ extension Experimental.Library.Action: Equatable {
         case let (.createNotebook(lNotebook, lURL),
                   .createNotebook(rNotebook, rURL)):
             return (lURL == rURL) && (lNotebook == rNotebook)
-        case (.deleteFile(let lURL), .deleteFile(let rURL)):
-            return lURL == rURL
+        case let (.deleteNotebook(lNotebook, lURL),
+                  .deleteNotebook(rNotebook, rURL)):
+            return (lURL == rURL) && (lNotebook == rNotebook)
         case (.readFiles(let lURL, let lExtension),
               .readFiles(let rURL, let rExtension)):
             return (lURL == rURL) && (lExtension == rExtension)

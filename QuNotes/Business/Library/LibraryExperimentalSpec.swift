@@ -101,6 +101,23 @@ class LibraryExperimantalSpec: QuickSpec {
             }
 
             context("when receiving removeNotebook event") {
+                context("when notebook with that uuid was added") {
+                    beforeEach {
+                        event = .removeNotebook(notebook: notebook)
+                    }
+
+                    it("removes notebook from model") {
+                        expect(e.evaluate(event: event).model.notebooks)
+                            .toNot(contain(notebook))
+                    }
+
+                    it("has deleteNotebook action with notebook url") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.deleteNotebook(notebook: notebook,
+                                                      url: URL(string: "notebookUUID.qvnotebook")!)))
+                    }
+                }
+
                 context("when notebook with that uuid was not added") {
                     let notAddedNotebook = Experimental.Notebook.Model(uuid: "notAddedNotebookUUID",
                                                                        name: "notAddedNotebookName",
@@ -118,22 +135,6 @@ class LibraryExperimantalSpec: QuickSpec {
                     it("hasnt got any actions") {
                         expect(e.evaluate(event: event).actions)
                             .to(beEmpty())
-                    }
-                }
-
-                context("when notebook with that uuid was added") {
-                    beforeEach {
-                        event = .removeNotebook(notebook: notebook)
-                    }
-
-                    it("removes notebook from model") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .toNot(contain(notebook))
-                    }
-
-                    it("has deleteFile action with notebook url") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteFile(url: URL(string: "notebookUUID.qvnotebook")!)))
                     }
                 }
             }
