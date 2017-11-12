@@ -24,13 +24,21 @@ class LibraryEvaluatorSpec: QuickSpec {
             var event: UI.Library.ViewControllerEvent!
 
             context("when receiving addNotebook event") {
+                let notebookModel = Experimental.Notebook.Model(uuid: "uuid", name: "", notes: [])
+
                 beforeEach {
                     event = .addNotebook
                 }
 
-                it("has addNotebook action") {
+                it("has addNotebook action with notebook model") {
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(UI.Library.Action.addNotebook))
+                        .to(equalExceptUUID(action: .addNotebook(notebook: notebookModel)))
+                }
+
+                it("creates model with unique uuid") {
+                    let firstAction = e.evaluate(event: event).actions[0]
+                    let secondAction = e.evaluate(event: event).actions[0]
+                    expect(firstAction).toNot(equal(secondAction))
                 }
             }
 
@@ -341,5 +349,39 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+// MARK: - Custom matchers
+
+func equalExceptUUID(action: UI.Library.Action) -> Predicate<UI.Library.Action> {
+    return Predicate { (actualExpression: Expression<UI.Library.Action>) throws -> PredicateResult in
+        guard case .addNotebook(let notebook)? = try actualExpression.evaluate() else {
+            return PredicateResult(
+                status: .fail,
+                message: ExpectationMessage.fail("Received action is not addNotebook action")
+            )
+        }
+        guard case .addNotebook(let expectedNotebook) = action else {
+            return PredicateResult(
+                status: .fail,
+                message: ExpectationMessage.fail("Expected action is note addNotebook action")
+            )
+        }
+
+        var details = ""
+        let isNameEqual = notebook.name == expectedNotebook.name
+        details = isNameEqual ? details : details.appending("Name is not equal: expected \(expectedNotebook.name), got \(notebook.name) ")
+        let areNotesEqual = notebook.notes == expectedNotebook.notes
+        details = areNotesEqual ? details : details.appending("Notes are not equal: expected \(expectedNotebook.notes), got \(notebook.notes) ")
+
+
+        var msg = ExpectationMessage.expectedTo("receive .addNotebook action with equal notebooks: ")
+        msg = details.isEmpty ? msg : msg.appended(details: details)
+
+        return PredicateResult(
+            bool: isNameEqual && areNotesEqual,
+            message: msg
+        )
     }
 }

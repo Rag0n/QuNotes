@@ -26,7 +26,7 @@ extension UI.Library {
     }
     
     enum Action {
-        case addNotebook
+        case addNotebook(notebook: Experimental.Notebook.Model)
         case deleteNotebook(notebook: Notebook)
         case updateNotebook(notebook: Notebook, title: String)
         case showNotes(forNotebook: Notebook)
@@ -87,7 +87,8 @@ extension UI.Library {
 
             switch event {
             case .addNotebook:
-                actions = [.addNotebook]
+                let notebook = Experimental.Notebook.Model(uuid: UUID().uuidString, name: "", notes: [])
+                actions = [.addNotebook(notebook: notebook)]
             case .deleteNotebook(let index):
                 let notebook = model.notebooks[index]
                 actions = [.deleteNotebook(notebook: notebook)]
@@ -217,8 +218,8 @@ extension UI.Library.Action: Equatable {}
 
 func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
     switch (lhs, rhs) {
-    case (.addNotebook, .addNotebook):
-        return true
+    case let (.addNotebook(lNotebook), .addNotebook(rNotebook)):
+        return lNotebook == rNotebook
     case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
         return lNotebook == rNotebook
     case (.updateNotebook(let lNotebook, let lTitle), .updateNotebook(let rNotebook, let rTitle)):
