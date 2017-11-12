@@ -41,6 +41,7 @@ class FileExecuter {
         return { result in
             guard let data = result.value else { return result.error?.error }
             do {
+                try FileManager.default.createDirectory(atPath: url.deletingLastPathComponent().path, withIntermediateDirectories: true, attributes: nil)
                 try data.write(to: url)
                 return nil
             } catch {
