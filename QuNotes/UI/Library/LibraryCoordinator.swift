@@ -109,11 +109,9 @@ extension UI.Library {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
                 dispatchToLibrary <| .didAddNotebook(notebook: notebook, error: error)
-                if let error = error {
-                    dispatch <| .didFailedToAddNotebook(notebook: notebook, error: error)
-                }
             case let .deleteFile(url):
                 return
+                dispatch <| .didAddNotebook2(notebook: notebook, error: error)
             case let .readFiles(url, ext):
                 return
             }

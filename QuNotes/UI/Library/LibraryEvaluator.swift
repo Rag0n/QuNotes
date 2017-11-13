@@ -43,10 +43,9 @@ extension UI.Library {
     enum CoordinatorEvent {
         case didUpdateNotebooks(notebooks: [Notebook])
         case didAddNotebook(result: Result<Notebook, AnyError>)
+        case didAddNotebook2(notebook: Experimental.Notebook.Meta, error: Error?)
         case didUpdateNotebook(result: Result<Notebook, AnyError>)
         case didDeleteNotebook(result: Result<Notebook, AnyError>)
-
-        case didFailedToAddNotebook(notebook: Experimental.Notebook.Meta, error: Error)
     }
 
     enum ViewControllerEvent {
@@ -109,7 +108,8 @@ extension UI.Library {
             var newModel = model
 
             switch event {
-            case let .didFailedToAddNotebook(notebook, error):
+            case let .didAddNotebook2(notebook, error):
+                guard let error = error else { break }
                 let updatedNotebooks = model.notebookMetas.removeWithoutMutation(object: notebook)
                 newModel = Model(notebooks: model.notebooks,
                                  editingNotebook: model.editingNotebook,
@@ -229,6 +229,18 @@ func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
     case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
         return (lTitle == rTitle) && (lMessage == rMessage)
     default: return false
+    }
+}
+
+// MARK: - Model Equatable
+
+extension UI.Library.Model: Equatable {
+    static func==(lhs: UI.Library.Model, rhs: UI.Library.Model) -> Bool {
+        return (
+            lhs.notebooks == rhs.notebooks &&
+            lhs.editingNotebook == rhs.editingNotebook &&
+            lhs.notebookMetas == rhs.notebookMetas
+        )
     }
 }
 

@@ -104,32 +104,58 @@ class LibraryEvaluatorSpec: QuickSpec {
         describe("-evaluate:CoordinatorEvent") {
             var event: UI.Library.CoordinatorEvent!
 
-            context("when receiving didFailedToAddNotebook event") {
+            context("when receiving didAddNotebook2 event") {
                 let notebook = Experimental.Notebook.Meta(uuid: "uuid", name: "name")
                 let anotherNotebook = Experimental.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
                 let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
+                let model = UI.Library.Model(notebooks: [], editingNotebook: nil,
+                                             notebookMetas: [notebook, anotherNotebook])
 
                 beforeEach {
                     // TODO: replace by appropriate action
-                    let model = UI.Library.Model(notebooks: [], editingNotebook: nil,
-                                                 notebookMetas: [notebook, anotherNotebook])
                     e = UI.Library.Evaluator(effects: [], actions: [], model: model)
-                    event = .didFailedToAddNotebook(notebook: notebook, error: underlyingError)
                 }
 
-                it("removes that notebook from model") {
-                    expect(e.evaluate(event: event).model.notebookMetas)
-                        .to(equal([anotherNotebook]))
+                context("when successfully adds notebook") {
+                    beforeEach {
+                        event = .didAddNotebook2(notebook: notebook, error: nil)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+
+                    it("hasnt got any effects") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(beEmpty())
+                    }
                 }
 
-                it("has updateAllNotebooks effect with view models without notebook") {
-                    expect(e.evaluate(event: event).effects[0])
-                        .to(equal(.updateAllNotebooks(notebooks: [anotherNotebookViewModel])))
-                }
+                context("when failed to add notebook") {
+                    beforeEach {
+                        event = .didAddNotebook2(notebook: notebook, error: underlyingError)
+                    }
 
-                it("has showError action with message from error") {
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.showError(title: "Failed to add notebook", message: "message")))
+                    it("removes that notebook from model") {
+                        expect(e.evaluate(event: event).model.notebookMetas)
+                            .to(equal([anotherNotebook]))
+                    }
+
+                    it("has updateAllNotebooks effect with view models without notebook") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.updateAllNotebooks(notebooks: [anotherNotebookViewModel])))
+                    }
+
+                    it("has showError action with message from error") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.showError(title: "Failed to add notebook", message: "message")))
+                    }
                 }
             }
 
