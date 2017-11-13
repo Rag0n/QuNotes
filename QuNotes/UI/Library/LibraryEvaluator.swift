@@ -194,45 +194,41 @@ private extension UI.Library {
     }
 }
 
-// MARK: - ViewControllerEffect Equatable
+// MARK: - Equatables
 
-extension UI.Library.ViewControllerEffect: Equatable {}
-
-func ==(lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffect) -> Bool {
-    switch (lhs, rhs) {
-    case (.updateAllNotebooks(let lNotebooks), .updateAllNotebooks(let rNotebooks)):
-        return lNotebooks == rNotebooks
-    case (.addNotebook(let lIndex, let lNotebooks), .addNotebook(let rIndex, let rNotebooks)):
-        return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-    case (.updateNotebook(let lIndex, let lNotebooks), .updateNotebook(let rIndex, let rNotebooks)):
-        return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-    case (.deleteNotebook(let lIndex, let lNotebooks), .deleteNotebook(let rIndex, let rNotebooks)):
-        return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-    default: return false
+extension UI.Library.ViewControllerEffect: Equatable {
+    static func ==(lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffect) -> Bool {
+        switch (lhs, rhs) {
+        case (.updateAllNotebooks(let lNotebooks), .updateAllNotebooks(let rNotebooks)):
+            return lNotebooks == rNotebooks
+        case (.addNotebook(let lIndex, let lNotebooks), .addNotebook(let rIndex, let rNotebooks)):
+            return (lIndex == rIndex) && (lNotebooks == rNotebooks)
+        case (.updateNotebook(let lIndex, let lNotebooks), .updateNotebook(let rIndex, let rNotebooks)):
+            return (lIndex == rIndex) && (lNotebooks == rNotebooks)
+        case (.deleteNotebook(let lIndex, let lNotebooks), .deleteNotebook(let rIndex, let rNotebooks)):
+            return (lIndex == rIndex) && (lNotebooks == rNotebooks)
+        default: return false
+        }
     }
 }
 
-// MARK: - Action Equtable
-
-extension UI.Library.Action: Equatable {}
-
-func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
-    switch (lhs, rhs) {
-    case let (.addNotebook(lNotebook), .addNotebook(rNotebook)):
-        return lNotebook == rNotebook
-    case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
-        return lNotebook == rNotebook
-    case (.updateNotebook(let lNotebook, let lTitle), .updateNotebook(let rNotebook, let rTitle)):
-        return (lNotebook == rNotebook) && (lTitle == rTitle)
-    case (.showNotes(let lNotebook), .showNotes(let rNotebook)):
-        return lNotebook == rNotebook
-    case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
-        return (lTitle == rTitle) && (lMessage == rMessage)
-    default: return false
+extension UI.Library.Action: Equatable {
+    static func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
+        switch (lhs, rhs) {
+        case let (.addNotebook(lNotebook), .addNotebook(rNotebook)):
+            return lNotebook == rNotebook
+        case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
+            return lNotebook == rNotebook
+        case (.updateNotebook(let lNotebook, let lTitle), .updateNotebook(let rNotebook, let rTitle)):
+            return (lNotebook == rNotebook) && (lTitle == rTitle)
+        case (.showNotes(let lNotebook), .showNotes(let rNotebook)):
+            return lNotebook == rNotebook
+        case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
+            return (lTitle == rTitle) && (lMessage == rMessage)
+        default: return false
+        }
     }
 }
-
-// MARK: - Model Equatable
 
 extension UI.Library.Model: Equatable {
     static func==(lhs: UI.Library.Model, rhs: UI.Library.Model) -> Bool {
@@ -244,10 +240,8 @@ extension UI.Library.Model: Equatable {
     }
 }
 
-// MARK: - NotebookViewModel Equatable
-
-extension UI.Library.NotebookViewModel: Equatable {}
-
-func ==(lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookViewModel) -> Bool {
-    return (lhs.title == rhs.title) && (lhs.isEditable == rhs.isEditable)
+extension UI.Library.NotebookViewModel: Equatable {
+    static func ==(lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookViewModel) -> Bool {
+        return (lhs.title == rhs.title) && (lhs.isEditable == rhs.isEditable)
+    }
 }
