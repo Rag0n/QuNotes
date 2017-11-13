@@ -26,8 +26,8 @@ extension Experimental.Library {
     enum InputEvent {
         case loadNotebooks
         case addNotebook(notebook: Experimental.Notebook.Model)
-        case failedToAddNotebook(notebook: Experimental.Notebook.Meta)
         case removeNotebook(notebook: Experimental.Notebook.Model)
+        case didAddNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
     }
 
     struct Evaluator {
@@ -51,15 +51,16 @@ extension Experimental.Library {
                 newModel = Model(notebooks: model.notebooks + [notebook])
                 let notebookMeta = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
                 actions = [.createNotebook(notebook: notebookMeta, url: notebook.noteBookMetaURL())]
-            case let .failedToAddNotebook(notebook):
-                guard let notebook = model.notebooks.filter({$0.uuid == notebook.uuid}).first else { break }
-                let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
-                newModel = Model(notebooks: updatedNotebooks)
             case let .removeNotebook(notebook):
                 guard let indexOfRemovedNotebook = model.notebooks.index(of: notebook) else { break }
                 let newNotebooks = model.notebooks.removeWithoutMutation(at: indexOfRemovedNotebook)
                 newModel = Model(notebooks: newNotebooks)
                 actions = [.deleteNotebook(notebook: notebook, url: notebook.notebookURL())]
+            case let .didAddNotebook(notebook, error):
+                guard error != nil else { break }
+                guard let notebook = model.notebooks.filter({$0.uuid == notebook.uuid}).first else { break }
+                let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
+                newModel = Model(notebooks: updatedNotebooks)
             }
 
             return Evaluator(actions: actions, model: newModel)

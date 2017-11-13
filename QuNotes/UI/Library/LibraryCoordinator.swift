@@ -67,7 +67,6 @@ extension UI.Library {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func dispatch(event: Experimental.Library.InputEvent) {
         fileprivate func dispatchToLibrary(event: Experimental.Library.InputEvent) {
             updateLibrary <| library.evaluate(event: event)
         }
@@ -109,8 +108,8 @@ extension UI.Library {
             switch action {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
+                dispatchToLibrary <| .didAddNotebook(notebook: notebook, error: error)
                 if let error = error {
-                    dispatchToLibrary <| .failedToAddNotebook(notebook: notebook)
                     dispatch <| .didFailedToAddNotebook(notebook: notebook, error: error)
                 }
             case let .deleteFile(url):
