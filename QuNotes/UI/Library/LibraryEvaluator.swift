@@ -63,6 +63,7 @@ extension UI.Library {
     // MARK: - Evaluator
 
     struct Evaluator {
+        static var uuidGenerator: () -> String = { UUID().uuidString }
         let effects: [ViewControllerEffect]
         let actions: [Action]
         let model: Model
@@ -82,11 +83,21 @@ extension UI.Library {
 
         func evaluate(event: ViewControllerEvent) -> Evaluator {
             var actions: [Action] = []
-            let effects: [ViewControllerEffect] = []
+            var effects: [ViewControllerEffect] = []
+            var newModel = model
 
             switch event {
             case .addNotebook:
-                let notebook = Experimental.Notebook.Model(uuid: UUID().uuidString, name: "", notes: [])
+                let notebook = Experimental.Notebook.Model(uuid: Evaluator.uuidGenerator(), name: "", notes: [])
+                let meta = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
+                let updatedNotebookMetas = model.notebookMetas + [meta]
+                let sortedNotebookMetas = updatedNotebookMetas.sorted(by: notebookNameSorting)
+                let indexOfNewNotebook = sortedNotebookMetas.index(of: meta)!
+                let notebookViewModels = viewModels(fromNotebooks: sortedNotebookMetas)
+                newModel = Model(notebooks: model.notebooks,
+                                 editingNotebook: model.editingNotebook,
+                                 notebookMetas: sortedNotebookMetas)
+                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 actions = [.addNotebook(notebook: notebook)]
             case .deleteNotebook(let index):
                 let notebook = model.notebooks[index]
@@ -99,7 +110,7 @@ extension UI.Library {
                 actions = [.updateNotebook(notebook: notebook, title: title ?? "")]
             }
 
-            return Evaluator(effects: effects, actions: actions, model: model)
+            return Evaluator(effects: effects, actions: actions, model: newModel)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
@@ -180,6 +191,10 @@ private extension UI.Library {
 
     static func notebookNameSorting(leftNotebook: Notebook, rightNotebook: Notebook) -> Bool {
         return leftNotebook.name.lowercased() < rightNotebook.name.lowercased()
+    }
+
+    static func notebookNameSorting(lhs: Experimental.Notebook.Meta, rhs: Experimental.Notebook.Meta) -> Bool {
+        return lhs.name.lowercased() < rhs.name.lowercased()
     }
 
     static func updateNotebooksAndShowError(notebooks: [Notebook], error: AnyError, reason: String) -> Evaluator {

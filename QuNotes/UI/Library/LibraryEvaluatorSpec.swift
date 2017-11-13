@@ -24,10 +24,35 @@ class LibraryEvaluatorSpec: QuickSpec {
             var event: UI.Library.ViewControllerEvent!
 
             context("when receiving addNotebook event") {
-                let notebookModel = Experimental.Notebook.Model(uuid: "uuid", name: "", notes: [])
+                let notebookModel = Experimental.Notebook.Model(uuid: "newUUID", name: "", notes: [])
+                let notebookMeta = Experimental.Notebook.Meta(uuid: "newUUID", name: "")
+
+                let firstNotebookMeta = Experimental.Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebookMeta = Experimental.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let expectedViewModels = [
+                    UI.Library.NotebookViewModel(title: "", isEditable: false), // TODO: replace by true
+                    UI.Library.NotebookViewModel(title: "abc", isEditable: false),
+                    UI.Library.NotebookViewModel(title: "cde", isEditable: false),
+                ]
 
                 beforeEach {
+                    // TODO: replace by appropriate action
+                    let model = UI.Library.Model(notebooks: [], editingNotebook: nil,
+                                                 notebookMetas: [firstNotebookMeta, secondNotebookMeta])
+                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
                     event = .addNotebook
+                }
+
+                it("creates notebook model with unique uuid") {
+                    let firstAction = e.evaluate(event: event).actions[0]
+                    let secondAction = e.evaluate(event: event).actions[0]
+                    expect(firstAction).toNot(equal(secondAction))
+                }
+
+                it("updates model by adding notebook meta and sorting notebooks") {
+                    UI.Library.Evaluator.uuidGenerator = { "newUUID" }
+                    expect(e.evaluate(event: event).model.notebookMetas)
+                        .to(equal([notebookMeta, firstNotebookMeta, secondNotebookMeta]))
                 }
 
                 it("has addNotebook action with notebook model") {
@@ -35,10 +60,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                         .to(equalExceptUUID(action: .addNotebook(notebook: notebookModel)))
                 }
 
-                it("creates model with unique uuid") {
-                    let firstAction = e.evaluate(event: event).actions[0]
-                    let secondAction = e.evaluate(event: event).actions[0]
-                    expect(firstAction).toNot(equal(secondAction))
+                it("has addNotebook effect with correct viewModels and index") {
+                    expect(e.evaluate(event: event).effects[0])
+                        .to(equal(.addNotebook(index: 0, notebooks: expectedViewModels)))
                 }
             }
 
