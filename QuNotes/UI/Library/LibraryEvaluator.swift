@@ -45,7 +45,7 @@ extension UI.Library {
         case didAddNotebook(result: Result<Notebook, AnyError>)
         case didAddNotebook2(notebook: Experimental.Notebook.Meta, error: Error?)
         case didUpdateNotebook(result: Result<Notebook, AnyError>)
-        case didDeleteNotebook(result: Result<Notebook, AnyError>)
+        case didDeleteNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
     }
 
     enum ViewControllerEvent {
@@ -152,16 +152,16 @@ extension UI.Library {
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: notebook)
-            case .didDeleteNotebook(let result):
-                guard case let .success(notebook) = result else {
-                    return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to delete notebook")
-                }
-
-                let indexOfDeletedNotebook = model.notebooks.index(of: notebook)!
-                let updatedNotebooks = model.notebooks.removeWithoutMutation(at: indexOfDeletedNotebook)
-                let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
-                effects = [.deleteNotebook(index: indexOfDeletedNotebook, notebooks: notebookViewModels)]
-                newModel = Model(notebooks: updatedNotebooks, editingNotebook: nil)
+            case let .didDeleteNotebook(notebook, error):
+                guard let error = error else { break }
+                let updatedNotebookMetas = model.notebookMetas + [notebook]
+                let sortedNotebookMetas = updatedNotebookMetas.sorted(by: notebookNameSorting)
+                let notebookViewModels = viewModels(fromNotebooks: sortedNotebookMetas)
+                newModel = Model(notebooks: model.notebooks,
+                                 editingNotebook: model.editingNotebook,
+                                 notebookMetas: sortedNotebookMetas)
+                effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
+                actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
             case .didUpdateNotebook(let result):
                 guard case let .success(notebook) = result else {
                     return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to update notebook")
