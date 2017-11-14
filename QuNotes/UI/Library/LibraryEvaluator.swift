@@ -42,8 +42,7 @@ extension UI.Library {
 
     enum CoordinatorEvent {
         case didUpdateNotebooks(notebooks: [Notebook])
-        case didAddNotebook(result: Result<Notebook, AnyError>)
-        case didAddNotebook2(notebook: Experimental.Notebook.Meta, error: Error?)
+        case didAddNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
         case didUpdateNotebook(result: Result<Notebook, AnyError>)
         case didDeleteNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
     }
@@ -126,8 +125,12 @@ extension UI.Library {
             var newModel = model
 
             switch event {
-            case let .didAddNotebook2(notebook, error):
+            case let .didAddNotebook(notebook, error):
                 guard let error = error else { break }
+                // TODO: check if that notebook is still exist in model
+                // If not - should do nothing
+                // Also check if we are not select that notebook; If that notebook is selected,
+                // then we need somehow to go back
                 let updatedNotebooks = model.notebookMetas.removeWithoutMutation(object: notebook)
                 newModel = Model(notebooks: model.notebooks,
                                  editingNotebook: model.editingNotebook,
@@ -141,17 +144,6 @@ extension UI.Library {
                                                     editingNotebook: nil)
                 effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
                 newModel = Model(notebooks: sortedNotebooks, editingNotebook: nil)
-            case .didAddNotebook(let result):
-                guard case let .success(notebook) = result else {
-                    return updateNotebooksAndShowError(notebooks: model.notebooks, error: result.error!, reason: "Failed to add notebook")
-                }
-
-                let updatedNotebooks = model.notebooks + [notebook]
-                let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
-                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks, editingNotebook: notebook)
-                let indexOfNewNotebook = sortedNotebooks.index(of: notebook)!
-                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
-                newModel = Model(notebooks: sortedNotebooks, editingNotebook: notebook)
             case let .didDeleteNotebook(notebook, error):
                 guard let error = error else { break }
                 let updatedNotebookMetas = model.notebookMetas + [notebook]

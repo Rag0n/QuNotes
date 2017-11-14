@@ -110,7 +110,7 @@ extension UI.Library {
                 dispatchToLibrary <| .didAddNotebook(notebook: notebook, error: error)
             case let .deleteFile(url):
                 return
-                dispatch <| .didAddNotebook2(notebook: notebook, error: error)
+                dispatch <| .didAddNotebook(notebook: notebook, error: error)
             case let .readFiles(url, ext):
                 return
             }

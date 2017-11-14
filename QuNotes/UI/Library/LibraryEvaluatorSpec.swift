@@ -170,7 +170,7 @@ class LibraryEvaluatorSpec: QuickSpec {
         describe("-evaluate:CoordinatorEvent") {
             var event: UI.Library.CoordinatorEvent!
 
-            context("when receiving didAddNotebook2 event") {
+            context("when receiving didAddNotebook event") {
                 let notebook = Experimental.Notebook.Meta(uuid: "uuid", name: "name")
                 let anotherNotebook = Experimental.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
                 let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
@@ -184,7 +184,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when successfully adds notebook") {
                     beforeEach {
-                        event = .didAddNotebook2(notebook: notebook, error: nil)
+                        event = .didAddNotebook(notebook: notebook, error: nil)
                     }
 
                     it("doesnt update model") {
@@ -205,7 +205,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when failed to add notebook") {
                     beforeEach {
-                        event = .didAddNotebook2(notebook: notebook, error: underlyingError)
+                        event = .didAddNotebook(notebook: notebook, error: underlyingError)
                     }
 
                     it("removes that notebook from model") {
@@ -247,78 +247,6 @@ class LibraryEvaluatorSpec: QuickSpec {
                 it("has updateAllNotebooks effect with correct order of ViewModels") {
                     expect(e.evaluate(event: event).effects[0])
                         .to(equal(.updateAllNotebooks(notebooks: expectedViewModels)))
-                }
-
-                context("when there's editing notebook") {
-                    beforeEach {
-                        e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
-                            .evaluate(event: .didAddNotebook(result: Result(value: thirdNotebook)))
-                    }
-
-                    it("has model without editing notebook") {
-                        expect(e.evaluate(event: event).model.editingNotebook)
-                            .to(beNil())
-                    }
-                }
-            }
-
-            context("when receiving didAddNotebook event") {
-                context("when successfully adds notebook") {
-                    let firstNotebook = Notebook(uuid: "uuid1", name: "abc")
-                    let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
-                    let addedNotebook = Notebook(uuid: "uuid3", name: "bcd")
-                    let expectedViewModels = [
-                        UI.Library.NotebookViewModel(title: "abc", isEditable: false),
-                        UI.Library.NotebookViewModel(title: "bcd", isEditable: true),
-                        UI.Library.NotebookViewModel(title: "cde", isEditable: false)
-                    ]
-
-                    beforeEach {
-                        e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
-                        event = .didAddNotebook(result: Result(addedNotebook))
-                    }
-
-                    it("has model with editingNotebook equal to new notebook") {
-                        expect(e.evaluate(event: event).model.editingNotebook)
-                            .to(equal(addedNotebook))
-                    }
-
-                    it("has model with appended notebook and correct sorting") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .to(equal([firstNotebook, addedNotebook, secondNotebook]))
-                    }
-
-                    it("has addNotebook effect with correct viewModels and index") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.addNotebook(index: 1, notebooks: expectedViewModels)))
-                    }
-                }
-
-                context("when fails to add notebook") {
-                    beforeEach {
-                        event = .didAddNotebook(result: Result(error: error))
-                    }
-
-                    it("has updateAllNotebooks effect with notebooks from current model") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.updateAllNotebooks(notebooks: [])))
-                    }
-
-                    it("has showError action") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.showError(title: "Failed to add notebook", message: "message")))
-                    }
-
-                    context("when there's editing notebook") {
-                        beforeEach {
-                            e = e.evaluate(event: .didAddNotebook(result: Result(Notebook.notebookDummy())))
-                        }
-
-                        it("has model without editing notebook") {
-                            expect(e.evaluate(event: event).model.editingNotebook)
-                                .to(beNil())
-                        }
-                    }
                 }
             }
 
@@ -376,6 +304,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                         expect(e.evaluate(event: event).actions[0])
                             .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
                     }
+                }
             }
 
             context("when receiving didUpdateNotebook event") {
@@ -396,18 +325,6 @@ class LibraryEvaluatorSpec: QuickSpec {
                         expect(e.evaluate(event: event).effects[0])
                             .to(equal(.updateAllNotebooks(notebooks: expectedViewModels)))
                     }
-
-                    context("when there's editing notebook") {
-                        beforeEach {
-                            e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook]))
-                                .evaluate(event: .didAddNotebook(result: Result(secondNotebook)))
-                        }
-
-                        it("has model without editing notebook") {
-                            expect(e.evaluate(event: event).model.editingNotebook)
-                                .to(beNil())
-                        }
-                    }
                 }
 
                 context("when fails to update notebook") {
@@ -423,17 +340,6 @@ class LibraryEvaluatorSpec: QuickSpec {
                     it("has showError action") {
                         expect(e.evaluate(event: event).actions[0])
                             .to(equal(.showError(title: "Failed to update notebook", message: "message")))
-                    }
-
-                    context("when there's editing notebook") {
-                        beforeEach {
-                            e = e.evaluate(event: .didAddNotebook(result: Result(Notebook.notebookDummy())))
-                        }
-
-                        it("has model without editing notebook") {
-                            expect(e.evaluate(event: event).model.editingNotebook)
-                                .to(beNil())
-                        }
                     }
                 }
             }
