@@ -27,7 +27,7 @@ extension UI.Library {
     
     enum Action {
         case addNotebook(notebook: Experimental.Notebook.Model)
-        case deleteNotebook(notebook: Notebook)
+        case deleteNotebook(notebook: Experimental.Notebook.Meta)
         case updateNotebook(notebook: Notebook, title: String)
         case showNotes(forNotebook: Notebook)
         case showError(title: String, message: String)
@@ -100,8 +100,15 @@ extension UI.Library {
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 actions = [.addNotebook(notebook: notebook)]
             case .deleteNotebook(let index):
-                let notebook = model.notebooks[index]
-                actions = [.deleteNotebook(notebook: notebook)]
+                guard index < model.notebookMetas.count else { break }
+                let notebookMeta = model.notebookMetas[index]
+                let updatedNotebookMetas = model.notebookMetas.removeWithoutMutation(at: index)
+                let notebookViewModels = viewModels(fromNotebooks: updatedNotebookMetas)
+                effects = [.deleteNotebook(index: 0, notebooks: notebookViewModels)]
+                newModel = Model(notebooks: model.notebooks,
+                                 editingNotebook: model.editingNotebook,
+                                 notebookMetas: updatedNotebookMetas)
+                actions = [.deleteNotebook(notebook: notebookMeta)]
             case .selectNotebook(let index):
                 let notebook = model.notebooks[index]
                 actions = [.showNotes(forNotebook: notebook)]

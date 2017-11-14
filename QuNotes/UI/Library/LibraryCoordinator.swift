@@ -90,8 +90,7 @@ extension UI.Library {
                 let result = notebookUseCase.update(notebook, name: title)
                 dispatch <| .didUpdateNotebook(result: result)
             case .deleteNotebook(let notebook):
-                let result = notebookUseCase.delete(notebook)
-                dispatch <| .didDeleteNotebook(result: result)
+                return
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
             case .showNotes(let notebook):
