@@ -67,16 +67,58 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNotebook event") {
-                let notebook = Notebook.notebookDummy()
+                let firstNotebookMeta = Experimental.Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebookMeta = Experimental.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let expectedViewModels = [UI.Library.NotebookViewModel(title: "cde", isEditable: false)]
+                let model = UI.Library.Model(notebooks: [], editingNotebook: nil,
+                                             notebookMetas: [firstNotebookMeta, secondNotebookMeta])
 
                 beforeEach {
-                    e = e.evaluate(event: .didUpdateNotebooks(notebooks: [notebook]))
+                    // TODO: replace by appropriate action
+                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
                     event = .deleteNotebook(index: 0)
                 }
 
-                it("has deleteNotebook action") {
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.deleteNotebook(notebook: notebook)))
+                context("when notebook with that index exists") {
+                    beforeEach {
+                        event = .deleteNotebook(index: 0)
+                    }
+
+                    it("updates model by removing notebook meta") {
+                        expect(e.evaluate(event: event).model.notebookMetas)
+                            .to(equal([secondNotebookMeta]))
+                    }
+
+                    it("has deleteNotebook action with correct notebook") {
+                        expect(e.evaluate(event: event).actions[0])
+                            .to(equal(.deleteNotebook(notebook: firstNotebookMeta)))
+                    }
+
+                    it("has addNotebook effect with correct viewModels and index") {
+                        expect(e.evaluate(event: event).effects[0])
+                            .to(equal(.deleteNotebook(index: 0, notebooks: expectedViewModels)))
+                    }
+                }
+
+                context("when notebook with that index doesnt exist") {
+                    beforeEach {
+                        event = .deleteNotebook(index: 3)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+
+                    it("hasnt got any effects") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(beEmpty())
+                    }
                 }
             }
 
@@ -281,62 +323,59 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didDeleteNotebook event") {
+                let notebook = Experimental.Notebook.Meta(uuid: "uuid", name: "name")
+                let notebookViewModel = UI.Library.NotebookViewModel(title: "name", isEditable: false)
+                let anotherNotebook = Experimental.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
+                let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
+                let model = UI.Library.Model(notebooks: [], editingNotebook: nil,
+                                             notebookMetas: [anotherNotebook])
+
+                beforeEach {
+                    // TODO: replace by appropriate action
+                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
+                }
+
                 context("when successfully deletes notebook") {
-                    let firstNotebook = Notebook(uuid: "uuid1", name: "abc")
-                    let secondNotebook = Notebook(uuid: "uuid2", name: "cde")
-                    let expectedViewModels = [
-                        UI.Library.NotebookViewModel(title: "abc", isEditable: false)
-                    ]
-
                     beforeEach {
-                        e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook, secondNotebook]))
-                        event = .didDeleteNotebook(result: Result(secondNotebook))
+                        event = .didDeleteNotebook(notebook: notebook, error: nil)
                     }
 
-                    it("has deleteNotebook effect without removed notebook") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.deleteNotebook(index: 1, notebooks: expectedViewModels)))
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
                     }
 
-                    context("when there's editing notebook") {
-                        beforeEach {
-                            e = e.evaluate(event: .didUpdateNotebooks(notebooks: [firstNotebook]))
-                                .evaluate(event: .didAddNotebook(result: Result(secondNotebook)))
-                        }
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
 
-                        it("has model without editing notebook") {
-                            expect(e.evaluate(event: event).model.editingNotebook)
-                                .to(beNil())
-                        }
+                    it("hasnt got any effects") {
+                        expect(e.evaluate(event: event).effects)
+                            .to(beEmpty())
                     }
                 }
 
                 context("when fails to delete notebook") {
                     beforeEach {
-                        event = .didDeleteNotebook(result: Result(error: error))
+                        event = .didDeleteNotebook(notebook: notebook, error: error)
                     }
 
-                    it("has updateAllNotebooks effect with notebooks from current model") {
+                    it("adds that notebook back to model") {
+                        expect(e.evaluate(event: event).model.notebookMetas)
+                            .to(equal([anotherNotebook, notebook]))
+                    }
+
+                    it("has updateAllNotebooks effect with view models with notebook") {
                         expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.updateAllNotebooks(notebooks: [])))
+                            .to(equal(.updateAllNotebooks(notebooks: [anotherNotebookViewModel,
+                                                                      notebookViewModel])))
                     }
 
-                    it("has showError action") {
+                    it("has showError action with message from error") {
                         expect(e.evaluate(event: event).actions[0])
                             .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
                     }
-
-                    context("when there's editing notebook") {
-                        beforeEach {
-                            e = e.evaluate(event: .didAddNotebook(result: Result(Notebook.notebookDummy())))
-                        }
-
-                        it("has model without editing notebook") {
-                            expect(e.evaluate(event: event).model.editingNotebook)
-                                .to(beNil())
-                        }
-                    }
-                }
             }
 
             context("when receiving didUpdateNotebook event") {
