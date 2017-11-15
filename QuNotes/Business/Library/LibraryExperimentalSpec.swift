@@ -37,7 +37,6 @@ class LibraryExperimantalSpec: QuickSpec {
                     let newNotebook = Experimental.Notebook.Model(uuid: "newNotebookUUID",
                                                                   name: "newNotebookName",
                                                                   notes: [])
-                    let notebookMeta = Experimental.Notebook.Meta(uuid: "newNotebookUUID", name: "newNotebookName")
 
                     beforeEach {
                         event = .addNotebook(notebook: newNotebook)
@@ -45,7 +44,7 @@ class LibraryExperimantalSpec: QuickSpec {
 
                     it("has createNotebook action with notebook meta url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.createNotebook(notebook: notebookMeta,
+                            .to(equal(.createNotebook(notebook: newNotebook,
                                                       url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!)))
                     }
 
@@ -85,7 +84,7 @@ class LibraryExperimantalSpec: QuickSpec {
 
                     it("has deleteNotebook action with notebook url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteNotebook(notebook: notebook.meta,
+                            .to(equal(.deleteNotebook(notebook: notebook,
                                                       url: URL(string: "notebookUUID.qvnotebook")!)))
                     }
                 }
@@ -128,7 +127,7 @@ class LibraryExperimantalSpec: QuickSpec {
             }
 
             context("when receiving didAddNotebook event") {
-                let notebook = Experimental.Notebook.Meta(uuid: "notebookUUID", name: "notebookName")
+                let notebook = Experimental.Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
 
                 context("when successfully adds notebook") {
                     beforeEach {
@@ -159,8 +158,9 @@ class LibraryExperimantalSpec: QuickSpec {
                     }
 
                     context("when notebook is not in model") {
-                        let anotherNotebook = Experimental.Notebook.Meta(uuid: "anotherUUID",
-                                                                         name: "anotherNotebookName")
+                         let anotherNotebook = Experimental.Notebook.Model(uuid: "anotherNotebookUUID",
+                                                                           name: "anotherNotebookName",
+                                                                           notes: [])
 
                         beforeEach {
                             event = .didAddNotebook(notebook: anotherNotebook, error: error)

@@ -18,8 +18,8 @@ extension Experimental.Library {
     }
 
     enum Action {
-        case createNotebook(notebook: Experimental.Notebook.Meta, url: URL)
-        case deleteNotebook(notebook: Experimental.Notebook.Meta, url: URL)
+        case createNotebook(notebook: Experimental.Notebook.Model, url: URL)
+        case deleteNotebook(notebook: Experimental.Notebook.Model, url: URL)
         case readFiles(url: URL, extension: String)
     }
 
@@ -27,7 +27,7 @@ extension Experimental.Library {
         case loadNotebooks
         case addNotebook(notebook: Experimental.Notebook.Model)
         case removeNotebook(notebook: Experimental.Notebook.Meta)
-        case didAddNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
+        case didAddNotebook(notebook: Experimental.Notebook.Model, error: Error?)
     }
 
     struct Evaluator {
@@ -49,17 +49,16 @@ extension Experimental.Library {
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
-                actions = [.createNotebook(notebook: notebook.meta, url: notebook.noteBookMetaURL())]
+                actions = [.createNotebook(notebook: notebook, url: notebook.noteBookMetaURL())]
             case let .removeNotebook(notebookMeta):
                 guard let notebookToRemove = model.notebooks.filter({$0.uuid == notebookMeta.uuid}).first else {
                     break
                 }
                 let newNotebooks = model.notebooks.removeWithoutMutation(object: notebookToRemove)
                 newModel = Model(notebooks: newNotebooks)
-                actions = [.deleteNotebook(notebook: notebookMeta, url: notebookToRemove.notebookURL())]
+                actions = [.deleteNotebook(notebook: notebookToRemove, url: notebookToRemove.notebookURL())]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
-                guard let notebook = model.notebooks.filter({$0.uuid == notebook.uuid}).first else { break }
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
                 newModel = Model(notebooks: updatedNotebooks)
             }

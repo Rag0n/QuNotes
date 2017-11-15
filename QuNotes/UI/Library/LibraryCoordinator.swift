@@ -86,11 +86,8 @@ extension UI.Library {
             switch action {
             case let .addNotebook(notebook):
                 dispatchToLibrary <| .addNotebook(notebook: notebook)
-            case .updateNotebook(let notebook, let title):
-                let result = notebookUseCase.update(notebook, name: title)
-                dispatch <| .didUpdateNotebook(result: result)
-            case .deleteNotebook(let notebook):
-                return
+            case let .deleteNotebook(notebook):
+                dispatchToLibrary <| .removeNotebook(notebook: notebook)
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
             case .showNotes(let notebook):
@@ -106,11 +103,11 @@ extension UI.Library {
         fileprivate func perform(action: Experimental.Library.Action) {
             switch action {
             case let .createNotebook(notebook, url):
-                let error = fileExecuter.createFile(atURL: url, content: notebook)
+                let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
                 dispatchToLibrary <| .didAddNotebook(notebook: notebook, error: error)
             case let .deleteFile(url):
                 return
-                dispatch <| .didAddNotebook(notebook: notebook, error: error)
+                dispatch <| .didAddNotebook(notebook: notebook.meta, error: error)
             case let .readFiles(url, ext):
                 return
             }
