@@ -14,9 +14,24 @@ extension Experimental {
 
 extension Experimental.Notebook {
     struct Model {
-        let uuid: String
-        let name: String
+        let meta: Meta
         let notes: [Experimental.Note.Model]
+        var uuid: String {
+            return meta.uuid
+        }
+        var name: String {
+            return meta.name
+        }
+
+        init(uuid: String, name: String, notes: [Experimental.Note.Model]) {
+            self.meta = Meta(uuid: uuid, name: name)
+            self.notes = notes
+        }
+
+        init(meta: Meta, notes: [Experimental.Note.Model]) {
+            self.meta = meta
+            self.notes = notes
+        }
     }
 
     struct Meta: Codable {
@@ -53,8 +68,7 @@ extension Experimental.Notebook {
             case let .changeName(newName):
                 newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
                 let url = newModel.noteBookMetaURL()
-                let content = Meta(uuid: newModel.uuid, name: newModel.name)
-                actions = [.updateFile(url: url, content: content)]
+                actions = [.updateFile(url: url, content: newModel.meta)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 let notes = model.notes + [noteToAdd]
