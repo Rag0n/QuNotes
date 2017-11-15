@@ -75,7 +75,7 @@ class LibraryExperimantalSpec: QuickSpec {
             context("when receiving removeNotebook event") {
                 context("when notebook with that uuid was added") {
                     beforeEach {
-                        event = .removeNotebook(notebook: notebook)
+                        event = .removeNotebook(notebook: notebook.meta)
                     }
 
                     it("removes notebook from model") {
@@ -85,7 +85,7 @@ class LibraryExperimantalSpec: QuickSpec {
 
                     it("has deleteNotebook action with notebook url") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteNotebook(notebook: notebook,
+                            .to(equal(.deleteNotebook(notebook: notebook.meta,
                                                       url: URL(string: "notebookUUID.qvnotebook")!)))
                     }
                 }
@@ -96,7 +96,7 @@ class LibraryExperimantalSpec: QuickSpec {
                                                                        notes: [])
 
                     beforeEach {
-                        event = .removeNotebook(notebook: notAddedNotebook)
+                        event = .removeNotebook(notebook: notAddedNotebook.meta)
                     }
 
                     it("doesnt update model") {

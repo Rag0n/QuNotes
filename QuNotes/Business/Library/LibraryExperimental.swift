@@ -19,14 +19,14 @@ extension Experimental.Library {
 
     enum Action {
         case createNotebook(notebook: Experimental.Notebook.Meta, url: URL)
-        case deleteNotebook(notebook: Experimental.Notebook.Model, url: URL)
+        case deleteNotebook(notebook: Experimental.Notebook.Meta, url: URL)
         case readFiles(url: URL, extension: String)
     }
 
     enum InputEvent {
         case loadNotebooks
         case addNotebook(notebook: Experimental.Notebook.Model)
-        case removeNotebook(notebook: Experimental.Notebook.Model)
+        case removeNotebook(notebook: Experimental.Notebook.Meta)
         case didAddNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
     }
 
@@ -49,13 +49,14 @@ extension Experimental.Library {
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
-                let notebookMeta = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
-                actions = [.createNotebook(notebook: notebookMeta, url: notebook.noteBookMetaURL())]
-            case let .removeNotebook(notebook):
-                guard let indexOfRemovedNotebook = model.notebooks.index(of: notebook) else { break }
-                let newNotebooks = model.notebooks.removeWithoutMutation(at: indexOfRemovedNotebook)
+                actions = [.createNotebook(notebook: notebook.meta, url: notebook.noteBookMetaURL())]
+            case let .removeNotebook(notebookMeta):
+                guard let notebookToRemove = model.notebooks.filter({$0.uuid == notebookMeta.uuid}).first else {
+                    break
+                }
+                let newNotebooks = model.notebooks.removeWithoutMutation(object: notebookToRemove)
                 newModel = Model(notebooks: newNotebooks)
-                actions = [.deleteNotebook(notebook: notebook, url: notebook.notebookURL())]
+                actions = [.deleteNotebook(notebook: notebookMeta, url: notebookToRemove.notebookURL())]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
                 guard let notebook = model.notebooks.filter({$0.uuid == notebook.uuid}).first else { break }
