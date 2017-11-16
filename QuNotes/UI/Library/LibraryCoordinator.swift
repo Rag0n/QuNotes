@@ -20,9 +20,7 @@ extension UI.Library {
         // MARK: - Coordinator
 
         func onStart() {
-            let notebooks = notebookUseCase.getAll()
-            dispatch <| .didUpdateNotebooks(notebooks: notebooks)
-            dispatch <| .loadNotebooks
+            dispatchToLibrary <| .loadNotebooks
         }
 
         var rootViewController: UIViewController {
