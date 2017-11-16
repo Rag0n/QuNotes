@@ -174,6 +174,37 @@ class LibraryExperimantalSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didRemoveNotebook event") {
+                let notebook = Experimental.Notebook.Model(uuid: "removedUUID", name: "removeName", notes: [])
+
+                context("when successfully removes notebook") {
+                    beforeEach {
+                        event = .didRemoveNotebook(notebook: notebook, error: nil)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.evaluate(event: event).model)
+                            .to(equal(model))
+                    }
+
+                    it("hasnt got any actions") {
+                        expect(e.evaluate(event: event).actions)
+                            .to(beEmpty())
+                    }
+                }
+
+                context("when fails to remove notebook") {
+                    beforeEach {
+                        event = .didRemoveNotebook(notebook: notebook, error: error)
+                    }
+
+                    it("adds notebook back to model") {
+                        expect(e.evaluate(event: event).model.notebooks)
+                            .to(contain(notebook))
+                    }
+                }
+            }
         }
     }
 }

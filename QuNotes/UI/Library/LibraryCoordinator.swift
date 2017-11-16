@@ -105,9 +105,11 @@ extension UI.Library {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
                 dispatchToLibrary <| .didAddNotebook(notebook: notebook, error: error)
-            case let .deleteFile(url):
-                return
                 dispatch <| .didAddNotebook(notebook: notebook.meta, error: error)
+            case let .deleteNotebook(notebook, url):
+                let error = fileExecuter.deleteDirectory(at: url)
+                dispatchToLibrary <| .didRemoveNotebook(notebook: notebook, error: error)
+                dispatch <| .didDeleteNotebook(notebook: notebook.meta, error: error)
             case let .readFiles(url, ext):
                 return
             }

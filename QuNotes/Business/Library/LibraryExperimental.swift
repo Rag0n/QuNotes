@@ -28,6 +28,7 @@ extension Experimental.Library {
         case addNotebook(notebook: Experimental.Notebook.Model)
         case removeNotebook(notebook: Experimental.Notebook.Meta)
         case didAddNotebook(notebook: Experimental.Notebook.Model, error: Error?)
+        case didRemoveNotebook(notebook: Experimental.Notebook.Model, error: Error?)
     }
 
     struct Evaluator {
@@ -61,6 +62,10 @@ extension Experimental.Library {
                 guard error != nil else { break }
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
                 newModel = Model(notebooks: updatedNotebooks)
+            case let .didRemoveNotebook(notebook, error):
+                guard error != nil else { break }
+                let updatedNotebooks = model.notebooks + [notebook]
+                newModel = Model(notebooks: updatedNotebooks)
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -72,8 +77,6 @@ extension Experimental.Library {
         }
     }
 }
-
-// MARK: - Model API
 
 // MARL: - Private
 
@@ -107,5 +110,3 @@ extension Experimental.Library.Action: Equatable {
         }
     }
 }
-
-// MARK: - Action Equtable
