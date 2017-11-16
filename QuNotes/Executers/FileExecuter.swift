@@ -17,27 +17,33 @@ class FileExecuter {
     // MARK: - API
 
     func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
-        let writeContent = writeToURL <| url.appendedToDocumentsURL()
-        return writeContent <| dataFromContent <| content
+        let writeData = writeToURL <| url.appendedToDocumentsURL()
+        return writeData <| dataFromContent <| content
     }
 
-    func deleteFile(atURL url: URL) {
+    func deleteDirectory(at url: URL) -> Error? {
+        return removeItemAtURL <| url
+    }
 
+    func deleteFile(at url: URL) -> Error? {
+        return removeItemAtURL <| url
     }
 
     // MARK: - Private
 
-    private lazy var encoder: JSONEncoder = {
+    fileprivate lazy var encoder: JSONEncoder = {
         let enc = JSONEncoder()
         enc.outputFormatting = .prettyPrinted
         return enc
     }()
+}
 
-    private func dataFromContent<T: Encodable>(_ content: T) -> Result<Data, AnyError> {
+fileprivate extension FileExecuter {
+    func dataFromContent<T: Encodable>(_ content: T) -> Result<Data, AnyError> {
         return Result(try encoder.encode(content))
     }
 
-    private func writeToURL(_ url: URL) -> (Result<Data, AnyError>) -> Error? {
+    func writeToURL(_ url: URL) -> (Result<Data, AnyError>) -> Error? {
         return { result in
             guard let data = result.value else { return result.error?.error }
             do {
@@ -47,6 +53,16 @@ class FileExecuter {
             } catch {
                 return error
             }
+        }
+    }
+
+    func removeItemAtURL(_ url: URL) -> Error? {
+        do {
+            try FileManager.default.removeItem(at: url)
+            return nil
+        }
+        catch {
+            return error
         }
     }
 }
