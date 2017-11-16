@@ -14,10 +14,6 @@ extension UI.Library {
 
     struct Model {
         let notebooks: [Experimental.Notebook.Meta]
-
-        init(notebooks: [Experimental.Notebook.Meta]) {
-            self.notebooks = notebooks
-        }
     }
     
     enum Action {
@@ -80,22 +76,21 @@ extension UI.Library {
             switch event {
             case .addNotebook:
                 let notebook = Experimental.Notebook.Model(uuid: Evaluator.uuidGenerator(), name: "", notes: [])
-                let meta = Experimental.Notebook.Meta(uuid: notebook.uuid, name: notebook.name)
-                let updatedNotebookMetas = model.notebooks + [meta]
-                let sortedNotebookMetas = updatedNotebookMetas.sorted(by: notebookNameSorting)
-                let indexOfNewNotebook = sortedNotebookMetas.index(of: meta)!
-                let notebookViewModels = viewModels(fromNotebooks: sortedNotebookMetas)
-                newModel = Model(notebooks: sortedNotebookMetas)
+                let updatedNotebooks = model.notebooks + [notebook.meta]
+                let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
+                let indexOfNewNotebook = sortedNotebooks.index(of: notebook.meta)!
+                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks)
+                newModel = Model(notebooks: sortedNotebooks)
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 actions = [.addNotebook(notebook: notebook)]
             case .deleteNotebook(let index):
                 guard index < model.notebooks.count else { break }
-                let notebookMeta = model.notebooks[index]
-                let updatedNotebookMetas = model.notebooks.removeWithoutMutation(at: index)
-                let notebookViewModels = viewModels(fromNotebooks: updatedNotebookMetas)
+                let notebook = model.notebooks[index]
+                let updatedNotebooks = model.notebooks.removeWithoutMutation(at: index)
+                let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
                 effects = [.deleteNotebook(index: 0, notebooks: notebookViewModels)]
-                newModel = Model(notebooks: updatedNotebookMetas)
-                actions = [.deleteNotebook(notebook: notebookMeta)]
+                newModel = Model(notebooks: updatedNotebooks)
+                actions = [.deleteNotebook(notebook: notebook)]
             case .selectNotebook(let index):
                 actions = []
             case .updateNotebook(let index, let title):
