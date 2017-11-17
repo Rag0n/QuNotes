@@ -23,14 +23,14 @@ extension Experimental.Notebook {
             return meta.name
         }
 
-        init(uuid: String, name: String, notes: [Experimental.Note.Model]) {
-            self.meta = Meta(uuid: uuid, name: name)
-            self.notes = notes
-        }
-
         init(meta: Meta, notes: [Experimental.Note.Model]) {
             self.meta = meta
             self.notes = notes
+        }
+
+        init(uuid: String, name: String, notes: [Experimental.Note.Model]) {
+            let meta = Meta(uuid: uuid, name: name)
+            self.init(meta: meta, notes: notes)
         }
     }
 
@@ -103,31 +103,31 @@ extension Experimental.Notebook {
 
 extension Experimental.Notebook.Model {
     func notebookURL() -> URL {
-        return URL(string: uuid)!.appendingPathExtension("qvnotebook")
+        return URL(string: uuid)!.appendingPathExtension(Extension.notebook)
     }
 
     func noteBookMetaURL() -> URL {
         return notebookURL()
-            .appendingPathComponent("meta")
-            .appendingPathExtension("json")
+            .appendingPathComponent(Component.meta)
+            .appendingPathExtension(Extension.json)
     }
 
     func noteURL(forNote note: Experimental.Note.Model) -> URL {
         return notebookURL()
             .appendingPathComponent(note.uuid)
-            .appendingPathExtension("qvnote")
+            .appendingPathExtension(Extension.note)
     }
 
     func noteMetaURL(forNote note: Experimental.Note.Model) -> URL {
         return noteURL(forNote: note)
-            .appendingPathComponent("meta")
-            .appendingPathExtension("json")
+            .appendingPathComponent(Component.meta)
+            .appendingPathExtension(Extension.json)
     }
 
     func noteContentURL(forNote note: Experimental.Note.Model) -> URL {
         return noteURL(forNote: note)
-            .appendingPathComponent("content")
-            .appendingPathExtension("json")
+            .appendingPathComponent(Component.content)
+            .appendingPathExtension(Extension.json)
     }
 }
 
@@ -136,6 +136,17 @@ extension Experimental.Notebook.Model {
 private extension Experimental.Notebook.Model {
     func hasNote(withUUID noteUUID: String) -> Bool {
         return notes.filter({ $0.uuid == noteUUID }).count > 0
+    }
+
+    enum Extension {
+        static let json = "json"
+        static let note = "qvnote"
+        static let notebook = "qvnotebook"
+    }
+
+    enum Component {
+        static let meta = "meta"
+        static let content = "content"
     }
 }
 
