@@ -13,7 +13,7 @@ import Result
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
         let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
-                                            tags: [], updatedDate: 0, createdDate: 12)
+                                            tags: [], notebook: nil, updatedDate: 0, createdDate: 12)
         var e: Experimental.Note.Evaluator!
 
         beforeEach {
@@ -113,7 +113,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when tag was already added") {
                     let model = Experimental.Note.Model(uuid: "uuid", title: "title",
-                                                        content: "content", tags: ["tag"], updatedDate: 0,
+                                                        content: "content", tags: ["tag"], notebook: nil, updatedDate: 0,
                                                         createdDate: 18)
 
                     beforeEach {
@@ -169,7 +169,8 @@ class NoteExperimantalSpec: QuickSpec {
             context("when receiving removeTag event") {
                 context("when that tag exist") {
                     let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                        tags: ["tag"], updatedDate: 0, createdDate: 20)
+                                                        tags: ["tag"], notebook: nil, updatedDate: 0,
+                                                        createdDate: 20)
 
                     beforeEach {
                         e = Experimental.Note.Evaluator(model: model)

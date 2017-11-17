@@ -18,7 +18,7 @@ extension Experimental.Note {
         let content: String
         let notebook: Experimental.Notebook.Model?
 
-        init(meta: Meta, content: String, notebook: Experimental.Notebook.Model? = nil) {
+        init(meta: Meta, content: String, notebook: Experimental.Notebook.Model?) {
             self.meta = meta
             self.content = content
             self.notebook = notebook
@@ -64,7 +64,6 @@ extension Experimental.Note {
 
             switch event {
             case let .changeTitle(newTitle):
-                // TODO: add test case to check if we are not deleting notebook
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
                                  tags: model.tags, notebook: model.notebook,
                                  updatedDate: currentTimestamp(),
@@ -73,30 +72,33 @@ extension Experimental.Note {
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: newModel.meta)]
             case let .changeContent(newContent):
-                // TODO: add test case to check if we are not deleting notebook
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
-                                 tags: model.tags, updatedDate: currentTimestamp(),
+                                 tags: model.tags,
+                                 notebook: model.notebook,
+                                 updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let fileContent = Content(content: newContent);
                 let url = notebook.noteContentURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
             case let .addTag(tag):
-                // TODO: add test case to check if we are not deleting notebook
                 guard !model.hasTag(tag) else { break }
                 let newTags = model.tags + [tag]
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags, updatedDate: currentTimestamp(),
+                                 tags: newTags,
+                                 notebook: model.notebook,
+                                 updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let url = notebook.noteMetaURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: newModel.meta)]
             case let .removeTag(tag):
-                // TODO: add test case to check if we are not deleting notebook
                 guard let indexOfTag = model.tags.index(of: tag) else { break }
                 let newTags = model.tags.removeWithoutMutation(at: indexOfTag)
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags, updatedDate: currentTimestamp(),
+                                 tags: newTags,
+                                 notebook: model.notebook,
+                                 updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let url = notebook.noteMetaURL(forNote: newModel)
@@ -136,7 +138,7 @@ extension Experimental.Note.Model {
          title: String,
          content: String,
          tags: [String],
-         notebook: Experimental.Notebook.Model? = nil,
+         notebook: Experimental.Notebook.Model?,
          updatedDate: TimeInterval,
          createdDate: TimeInterval) {
         let meta = Experimental.Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: updatedDate, created_at: createdDate)
@@ -166,7 +168,8 @@ extension Experimental.Note.Model: Equatable {
             lhs.uuid == rhs.uuid &&
             lhs.title == rhs.title &&
             lhs.content == rhs.content &&
-            lhs.tags == rhs.tags
+            lhs.tags == rhs.tags &&
+            lhs.notebook == rhs.notebook
         )
     }
 }
