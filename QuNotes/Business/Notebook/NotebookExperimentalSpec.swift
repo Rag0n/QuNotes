@@ -53,8 +53,8 @@ class NotebookExperimantalSpec: QuickSpec {
                     let newNote = Experimental.Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"], updatedDate: 0, createdDate: 12)
                     let expectedNoteMeta = Experimental.Note.Meta(uuid: "newNoteUUID", title: "title",
                                                                   tags: ["tag"],
-                                                                  updatedAt: Date().timeIntervalSince1970,
-                                                                  createdAt: 12)
+                                                                  updated_at: Date().timeIntervalSince1970,
+                                                                  created_at: 12)
                     let expectedNoteContent = Experimental.Note.Content(content: "content")
 
                     beforeEach {

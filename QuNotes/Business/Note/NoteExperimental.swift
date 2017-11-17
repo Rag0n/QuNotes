@@ -14,28 +14,14 @@ extension Experimental {
 
 extension Experimental.Note {
     struct Model {
-        let uuid: String
-        let title: String
+        let meta: Meta
         let content: String
-        let tags: [String]
-        let createdDate: TimeInterval
-        let updatedDate: TimeInterval
         let notebook: Experimental.Notebook.Model?
 
-        init(uuid: String,
-             title: String,
-             content: String,
-             tags: [String],
-             notebook: Experimental.Notebook.Model? = nil,
-             updatedDate: TimeInterval,
-             createdDate: TimeInterval) {
-            self.uuid = uuid
-            self.title = title
+        init(meta: Meta, content: String, notebook: Experimental.Notebook.Model? = nil) {
+            self.meta = meta
             self.content = content
             self.notebook = notebook
-            self.tags = tags
-            self.updatedDate = updatedDate
-            self.createdDate = createdDate
         }
     }
 
@@ -45,22 +31,6 @@ extension Experimental.Note {
         let tags: [String]
         let updated_at: TimeInterval
         let created_at: TimeInterval
-
-        init(uuid: String, title: String, tags: [String], updatedAt: TimeInterval, createdAt: TimeInterval) {
-            self.uuid = uuid
-            self.title = title
-            self.tags = tags
-            self.updated_at = updatedAt
-            self.created_at = createdAt
-        }
-
-        init(model: Model) {
-            self.uuid = model.uuid
-            self.title = model.title
-            self.tags = model.tags
-            self.updated_at = model.updatedDate
-            self.created_at = model.createdDate
-        }
     }
 
     struct Content: Codable {
@@ -93,14 +63,16 @@ extension Experimental.Note {
 
             switch event {
             case let .changeTitle(newTitle):
+                // TODO: add test case to check if we are not deleting notebook
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
-                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970,
+                                 tags: model.tags, notebook: model.notebook,
+                                 updatedDate: Date().timeIntervalSince1970,
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
-                let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
-                actions = [.updateFile(url: url, content: fileContent)]
+                actions = [.updateFile(url: url, content: newModel.meta)]
             case let .changeContent(newContent):
+                // TODO: add test case to check if we are not deleting notebook
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
                                  tags: model.tags, updatedDate: Date().timeIntervalSince1970,
                                  createdDate: model.createdDate)
@@ -109,25 +81,25 @@ extension Experimental.Note {
                 let url = notebook.noteContentURL(forNote: newModel)
                 actions = [.updateFile(url: url, content: fileContent)]
             case let .addTag(tag):
+                // TODO: add test case to check if we are not deleting notebook
                 guard !model.hasTag(tag) else { break }
                 let newTags = model.tags + [tag]
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
                                  tags: newTags, updatedDate: Date().timeIntervalSince1970,
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
-                let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
-                actions = [.updateFile(url: url, content: fileContent)]
+                actions = [.updateFile(url: url, content: newModel.meta)]
             case let .removeTag(tag):
+                // TODO: add test case to check if we are not deleting notebook
                 guard let indexOfTag = model.tags.index(of: tag) else { break }
                 let newTags = model.tags.removeWithoutMutation(at: indexOfTag)
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
                                  tags: newTags, updatedDate: Date().timeIntervalSince1970,
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
-                let fileContent = Meta(model: newModel)
                 let url = notebook.noteMetaURL(forNote: newModel)
-                actions = [.updateFile(url: url, content: fileContent)]
+                actions = [.updateFile(url: url, content: newModel.meta)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -137,6 +109,37 @@ extension Experimental.Note {
             self.actions = actions
             self.model = model
         }
+    }
+}
+
+// MARK: Model API
+
+extension Experimental.Note.Model {
+    var uuid: String {
+        return meta.uuid
+    }
+    var title: String {
+        return meta.title
+    }
+    var tags: [String] {
+        return meta.tags
+    }
+    var createdDate: TimeInterval {
+        return meta.created_at
+    }
+    var updatedDate: TimeInterval {
+        return meta.updated_at
+    }
+
+    init(uuid: String,
+         title: String,
+         content: String,
+         tags: [String],
+         notebook: Experimental.Notebook.Model? = nil,
+         updatedDate: TimeInterval,
+         createdDate: TimeInterval) {
+        let meta = Experimental.Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: updatedDate, created_at: createdDate)
+        self.init(meta: meta, content: content, notebook: notebook)
     }
 }
 

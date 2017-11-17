@@ -74,11 +74,10 @@ extension Experimental.Notebook {
                 let notes = model.notes + [noteToAdd]
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
                 let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
-                let noteMeta = Experimental.Note.Meta(model: noteToAdd)
                 let contentURL = newModel.noteContentURL(forNote: noteToAdd)
                 let noteContent = Experimental.Note.Content(content: noteToAdd.content)
                 actions = [
-                    .createFile(url: metaURL, content: noteMeta),
+                    .createFile(url: metaURL, content: noteToAdd.meta),
                     .createFile(url: contentURL, content: noteContent),
                 ]
             case let .removeNote(noteToRemove):
