@@ -49,6 +49,7 @@ extension Experimental.Note {
     }
 
     struct Evaluator {
+        var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
         let actions: [Action]
         let model: Model
 
@@ -66,7 +67,7 @@ extension Experimental.Note {
                 // TODO: add test case to check if we are not deleting notebook
                 newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
                                  tags: model.tags, notebook: model.notebook,
-                                 updatedDate: Date().timeIntervalSince1970,
+                                 updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let url = notebook.noteMetaURL(forNote: newModel)
@@ -74,7 +75,7 @@ extension Experimental.Note {
             case let .changeContent(newContent):
                 // TODO: add test case to check if we are not deleting notebook
                 newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
-                                 tags: model.tags, updatedDate: Date().timeIntervalSince1970,
+                                 tags: model.tags, updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let fileContent = Content(content: newContent);
@@ -85,7 +86,7 @@ extension Experimental.Note {
                 guard !model.hasTag(tag) else { break }
                 let newTags = model.tags + [tag]
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags, updatedDate: Date().timeIntervalSince1970,
+                                 tags: newTags, updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let url = notebook.noteMetaURL(forNote: newModel)
@@ -95,7 +96,7 @@ extension Experimental.Note {
                 guard let indexOfTag = model.tags.index(of: tag) else { break }
                 let newTags = model.tags.removeWithoutMutation(at: indexOfTag)
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags, updatedDate: Date().timeIntervalSince1970,
+                                 tags: newTags, updatedDate: currentTimestamp(),
                                  createdDate: model.createdDate)
                 guard let notebook = model.notebook else { break }
                 let url = notebook.noteMetaURL(forNote: newModel)
@@ -175,7 +176,7 @@ extension Experimental.Note.Meta: Equatable {
         if (lhs.created_at - rhs.created_at > Double.ulpOfOne) {
             return false
         }
-        if (lhs.updated_at != 0 && (lhs.updated_at - rhs.updated_at < Double.ulpOfOne)) {
+        if (lhs.updated_at - rhs.updated_at > Double.ulpOfOne) {
             return false
         }
         return (

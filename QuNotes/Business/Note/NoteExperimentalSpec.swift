@@ -33,9 +33,10 @@ class NoteExperimantalSpec: QuickSpec {
         describe("-evaluate:") {
             var event: Experimental.Note.InputEvent!
 
-            context("when receiving changeName event") {
+            context("when receiving changeTitle event") {
                 beforeEach {
                     event = .changeTitle(newTitle: "new title")
+                    e.currentTimestamp = { 15 }
                 }
 
                 it("updates model by changing note title") {
@@ -44,9 +45,8 @@ class NoteExperimantalSpec: QuickSpec {
                 }
 
                 it("updates model's updateDate") {
-                    let currentDate = Date()
                     expect(e.evaluate(event: event).model.updatedDate)
-                        .to(beGreaterThan(currentDate.timeIntervalSince1970))
+                        .to(equal(15))
                 }
 
                 context("when note is added to notebook") {
@@ -55,12 +55,13 @@ class NoteExperimantalSpec: QuickSpec {
                                                         tags: [], notebook: notebookModel, updatedDate: 0,
                                                         createdDate: 13)
                     let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "new title", tags: [],
-                                                              updated_at: Date().timeIntervalSince1970,
+                                                              updated_at: 15,
                                                               created_at: 13)
                     let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                     beforeEach {
                         e = Experimental.Note.Evaluator(model: model)
+                        e.currentTimestamp = { 15 }
                     }
 
                     it("has updateFile action with note's meta URL") {
@@ -81,9 +82,9 @@ class NoteExperimantalSpec: QuickSpec {
                 }
 
                 it("updates model's updateDate") {
-                    let currentDate = Date()
+                    e.currentTimestamp = { 16 }
                     expect(e.evaluate(event: event).model.updatedDate)
-                        .to(beGreaterThan(currentDate.timeIntervalSince1970))
+                        .to(equal(16))
                 }
 
                 context("when note is added to notebook") {
@@ -137,9 +138,9 @@ class NoteExperimantalSpec: QuickSpec {
                     }
 
                     it("updates model's updateDate") {
-                        let currentDate = Date()
+                        e.currentTimestamp = { 18 }
                         expect(e.evaluate(event: event).model.updatedDate)
-                            .to(beGreaterThan(currentDate.timeIntervalSince1970))
+                            .to(equal(18))
                     }
 
                     context("when note is added to notebook") {
@@ -148,12 +149,13 @@ class NoteExperimantalSpec: QuickSpec {
                                                             tags: [], notebook: notebookModel, updatedDate: 0,
                                                             createdDate: 19)
                         let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
-                                                                  updated_at: Date().timeIntervalSince1970,
+                                                                  updated_at: 20,
                                                                   created_at: 19)
                         let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                         beforeEach {
                             e = Experimental.Note.Evaluator(model: model)
+                            e.currentTimestamp = { 20 }
                         }
 
                         it("has updateFile action with note's meta URL") {
@@ -180,9 +182,9 @@ class NoteExperimantalSpec: QuickSpec {
                     }
 
                     it("updates model's updateDate") {
-                        let currentDate = Date()
+                        e.currentTimestamp = { 20 }
                         expect(e.evaluate(event: event).model.updatedDate)
-                            .to(beGreaterThan(currentDate.timeIntervalSince1970))
+                            .to(equal(20))
                     }
 
                     context("when note is added to notebook") {
@@ -191,12 +193,13 @@ class NoteExperimantalSpec: QuickSpec {
                                                             tags: ["tag"], notebook: notebookModel, updatedDate: 0,
                                                             createdDate: 21)
                         let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: [],
-                                                                  updated_at: Date().timeIntervalSince1970,
+                                                                  updated_at: 22,
                                                                   created_at: 21)
                         let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                         beforeEach {
                             e = Experimental.Note.Evaluator(model: model)
+                            e.currentTimestamp = { 22 }
                         }
 
                         it("has updateFile action with note's meta URL") {
