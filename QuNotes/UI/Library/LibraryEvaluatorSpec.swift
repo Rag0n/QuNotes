@@ -49,7 +49,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
 
                 it("updates model by adding notebook meta and sorting notebooks") {
-                    UI.Library.Evaluator.uuidGenerator = { "newUUID" }
+                    e.uuidGenerator = { "newUUID" }
                     expect(e.evaluate(event: event).model.notebooks)
                         .to(equal([notebookMeta, firstNotebookMeta, secondNotebookMeta]))
                 }

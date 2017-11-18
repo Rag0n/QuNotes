@@ -49,9 +49,9 @@ extension Experimental.Note {
     }
 
     struct Evaluator {
-        var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
         let actions: [Action]
         let model: Model
+        var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
         init(model: Model) {
             self.model = model

@@ -50,10 +50,10 @@ extension UI.Library {
     // MARK: - Evaluator
 
     struct Evaluator {
-        static var uuidGenerator: () -> String = { UUID().uuidString }
         let effects: [ViewControllerEffect]
         let actions: [Action]
         let model: Model
+        var uuidGenerator: () -> String = { UUID().uuidString }
 
         init() {
             effects = []
@@ -75,7 +75,7 @@ extension UI.Library {
 
             switch event {
             case .addNotebook:
-                let notebook = Experimental.Notebook.Model(uuid: Evaluator.uuidGenerator(), name: "", notes: [])
+                let notebook = Experimental.Notebook.Model(uuid: uuidGenerator(), name: "", notes: [])
                 let updatedNotebooks = model.notebooks + [notebook.meta]
                 let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook.meta)!
