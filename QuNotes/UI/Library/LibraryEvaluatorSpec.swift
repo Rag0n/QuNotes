@@ -53,8 +53,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
 
                 it("has addNotebook action with notebook model") {
+                    e.uuidGenerator = { "newUUID" }
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equalExceptUUID(action: .addNotebook(notebook: notebookModel)))
+                        .to(equal(.addNotebook(notebook: notebookModel)))
                 }
 
                 it("has addNotebook effect with correct viewModels and index") {
@@ -238,39 +239,5 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
             }
         }
-    }
-}
-
-// MARK: - Custom matchers
-
-func equalExceptUUID(action: UI.Library.Action) -> Predicate<UI.Library.Action> {
-    return Predicate { (actualExpression: Expression<UI.Library.Action>) throws -> PredicateResult in
-        guard case .addNotebook(let notebook)? = try actualExpression.evaluate() else {
-            return PredicateResult(
-                status: .fail,
-                message: ExpectationMessage.fail("Received action is not addNotebook action")
-            )
-        }
-        guard case .addNotebook(let expectedNotebook) = action else {
-            return PredicateResult(
-                status: .fail,
-                message: ExpectationMessage.fail("Expected action is note addNotebook action")
-            )
-        }
-
-        var details = ""
-        let isNameEqual = notebook.name == expectedNotebook.name
-        details = isNameEqual ? details : details.appending("Name is not equal: expected \(expectedNotebook.name), got \(notebook.name) ")
-        let areNotesEqual = notebook.notes == expectedNotebook.notes
-        details = areNotesEqual ? details : details.appending("Notes are not equal: expected \(expectedNotebook.notes), got \(notebook.notes) ")
-
-
-        var msg = ExpectationMessage.expectedTo("receive .addNotebook action with equal notebooks: ")
-        msg = details.isEmpty ? msg : msg.appended(details: details)
-
-        return PredicateResult(
-            bool: isNameEqual && areNotesEqual,
-            message: msg
-        )
     }
 }
