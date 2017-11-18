@@ -55,17 +55,10 @@ extension UI.Library {
         let model: Model
         var uuidGenerator: () -> String = { UUID().uuidString }
 
-        init() {
+        init(notebooks: [Experimental.Notebook.Meta] = []) {
             effects = []
             actions = []
-            model = Model(notebooks: [])
-        }
-
-        // TODO: make fileprivate
-        init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
-            self.effects = effects
-            self.actions = actions
-            self.model = model
+            model = Model(notebooks: notebooks)
         }
 
         func evaluate(event: ViewControllerEvent) -> Evaluator {
@@ -128,6 +121,12 @@ extension UI.Library {
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
+        }
+
+        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+            self.effects = effects
+            self.actions = actions
+            self.model = model
         }
     }
 }

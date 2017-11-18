@@ -36,9 +36,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 ]
 
                 beforeEach {
-                    // TODO: replace by appropriate action
-                    let model = UI.Library.Model(notebooks: [firstNotebookMeta, secondNotebookMeta])
-                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
+                    e = UI.Library.Evaluator(notebooks:  [firstNotebookMeta, secondNotebookMeta])
                     event = .addNotebook
                 }
 
@@ -72,8 +70,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 let model = UI.Library.Model(notebooks: [firstNotebookMeta, secondNotebookMeta])
 
                 beforeEach {
-                    // TODO: replace by appropriate action
-                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
+                    e = UI.Library.Evaluator(notebooks: [firstNotebookMeta, secondNotebookMeta])
                     event = .deleteNotebook(index: 0)
                 }
 
@@ -140,8 +137,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 let model = UI.Library.Model(notebooks: [notebook, anotherNotebook])
 
                 beforeEach {
-                    // TODO: replace by appropriate action
-                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
+                    e = UI.Library.Evaluator(notebooks: [notebook, anotherNotebook])
                 }
 
                 context("when successfully adds notebook") {
@@ -195,8 +191,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 let model = UI.Library.Model(notebooks: [anotherNotebook])
 
                 beforeEach {
-                    // TODO: replace by appropriate action
-                    e = UI.Library.Evaluator(effects: [], actions: [], model: model)
+                    e = UI.Library.Evaluator(notebooks: [anotherNotebook])
                 }
 
                 context("when successfully deletes notebook") {
