@@ -76,7 +76,7 @@ extension UI.Library {
                 newModel = Model(notebooks: sortedNotebooks)
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
                 actions = [.addNotebook(notebook: notebook)]
-            case .deleteNotebook(let index):
+            case let .deleteNotebook(index):
                 guard index < model.notebooks.count else { break }
                 let notebook = model.notebooks[index]
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(at: index)
@@ -84,9 +84,9 @@ extension UI.Library {
                 effects = [.deleteNotebook(index: 0, notebooks: notebookViewModels)]
                 newModel = Model(notebooks: updatedNotebooks)
                 actions = [.deleteNotebook(notebook: notebook)]
-            case .selectNotebook(let index):
+            case let .selectNotebook(index):
                 actions = []
-            case .updateNotebook(let index, let title):
+            case let .updateNotebook(index, title):
                 actions = []
             }
 
@@ -150,13 +150,13 @@ private extension UI.Library {
 extension UI.Library.ViewControllerEffect: Equatable {
     static func ==(lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffect) -> Bool {
         switch (lhs, rhs) {
-        case (.updateAllNotebooks(let lNotebooks), .updateAllNotebooks(let rNotebooks)):
+        case let (.updateAllNotebooks(lNotebooks), .updateAllNotebooks(rNotebooks)):
             return lNotebooks == rNotebooks
-        case (.addNotebook(let lIndex, let lNotebooks), .addNotebook(let rIndex, let rNotebooks)):
+        case let (.addNotebook(lIndex, lNotebooks), .addNotebook(rIndex, rNotebooks)):
             return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-        case (.updateNotebook(let lIndex, let lNotebooks), .updateNotebook(let rIndex, let rNotebooks)):
+        case let (.updateNotebook(lIndex, lNotebooks), .updateNotebook(rIndex, rNotebooks)):
             return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-        case (.deleteNotebook(let lIndex, let lNotebooks), .deleteNotebook(let rIndex, let rNotebooks)):
+        case let (.deleteNotebook(lIndex, lNotebooks), .deleteNotebook(rIndex, rNotebooks)):
             return (lIndex == rIndex) && (lNotebooks == rNotebooks)
         default: return false
         }
@@ -168,11 +168,11 @@ extension UI.Library.Action: Equatable {
         switch (lhs, rhs) {
         case let (.addNotebook(lNotebook), .addNotebook(rNotebook)):
             return lNotebook == rNotebook
-        case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
+        case let (.deleteNotebook(lNotebook), .deleteNotebook(rNotebook)):
             return lNotebook == rNotebook
-        case (.showNotes(let lNotebook), .showNotes(let rNotebook)):
+        case let (.showNotes(lNotebook), .showNotes(rNotebook)):
             return lNotebook == rNotebook
-        case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
+        case let (.showError(lTitle, lMessage), .showError(rTitle, rMessage)):
             return (lTitle == rTitle) && (lMessage == rMessage)
         default: return false
         }
