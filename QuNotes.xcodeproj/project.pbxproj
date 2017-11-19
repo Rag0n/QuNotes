@@ -40,6 +40,7 @@
 		1160CCE31F954C9D0033E9E2 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212509F1CE5CE5D33073575 /* NoteViewController.swift */; };
 		1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
 		1168798B1F798EC2009461D6 /* LibraryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 116879891F798EC2009461D6 /* LibraryTableViewCell.xib */; };
+		116E40B81FC0BE570096BC6C /* FailingFileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */; };
 		117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1176363A1F08E92B000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
 		1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117636391F08E92B000A5CFC /* CurrentDateService.swift */; };
@@ -170,6 +171,7 @@
 		1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEvaluatorSpec.swift; sourceTree = "<group>"; };
 		116879881F798EC2009461D6 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
 		116879891F798EC2009461D6 /* LibraryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryTableViewCell.xib; sourceTree = "<group>"; };
+		116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailingFileExecuter.swift; sourceTree = "<group>"; };
 		117636391F08E92B000A5CFC /* CurrentDateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateService.swift; sourceTree = "<group>"; };
 		1176363D1F08E98F000A5CFC /* CurrentDateServiceImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentDateServiceImp.swift; sourceTree = "<group>"; };
 		117D151B1FB61CCA00410F6F /* FileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExecuter.swift; sourceTree = "<group>"; };
@@ -368,6 +370,7 @@
 			isa = PBXGroup;
 			children = (
 				117D151B1FB61CCA00410F6F /* FileExecuter.swift */,
+				116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */,
 			);
 			path = Executers;
 			sourceTree = "<group>";
@@ -734,6 +737,7 @@
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */,
 				1153327B1FACFCF3008FEC2A /* LibraryExperimental.swift in Sources */,
+				116E40B81FC0BE570096BC6C /* FailingFileExecuter.swift in Sources */,
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */,
