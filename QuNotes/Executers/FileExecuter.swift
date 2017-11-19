@@ -58,7 +58,7 @@ fileprivate extension FileExecuter {
 
     func removeItemAtURL(_ url: URL) -> Error? {
         do {
-            try FileManager.default.removeItem(at: url)
+            try FileManager.default.removeItem(at: url.appendedToDocumentsURL())
             return nil
         }
         catch {
