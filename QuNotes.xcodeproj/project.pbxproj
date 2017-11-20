@@ -757,7 +757,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1190D5AF1FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 				11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */,
 				117D151F1FB63F4500410F6F /* URL+Extensions.swift in Sources */,
 				11DFCEE81F82CCCE00E9389F /* FileNotebookRepository.swift in Sources */,
@@ -802,6 +801,7 @@
 				B212560DBEB110ABCFB85CAB /* NoteCoordinator.swift in Sources */,
 				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
 				B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */,
+				1190D5AF1FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -819,7 +819,6 @@
 				1160CCE01F954C140033E9E2 /* NavigationController.swift in Sources */,
 				11C41FFC1F74521A00397DD9 /* Notebook.swift in Sources */,
 				11CDB3DF1F969AD70014C58F /* NotebookViewController.swift in Sources */,
-				1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 				111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */,
 				118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
 				11CDB3E01F969ADD0014C58F /* LibraryViewController.swift in Sources */,
@@ -862,6 +861,7 @@
 				11CDB3E31F969BD10014C58F /* NoteTableViewCell.swift in Sources */,
 				11CDB3E81F969C150014C58F /* NotebookEvaluator.swift in Sources */,
 				B2125985206C842279B2FDB5 /* NoteEvaluator.swift in Sources */,
+				1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
