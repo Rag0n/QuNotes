@@ -13,7 +13,7 @@ extension Experimental {
 }
 
 extension Experimental.Notebook {
-    struct Model {
+    struct Model: AutoEquatable {
         let meta: Meta
         let notes: [Experimental.Note.Model]
         var uuid: String {
@@ -34,7 +34,7 @@ extension Experimental.Notebook {
         }
     }
 
-    struct Meta: Codable {
+    struct Meta: Codable, AutoEquatable {
         let uuid: String
         let name: String
     }
@@ -149,32 +149,8 @@ private extension Experimental.Notebook.Model {
     }
 }
 
-// MARK: - Model equtable
-
-extension Experimental.Notebook.Model: Equatable {
-    static func ==(lhs: Experimental.Notebook.Model, rhs: Experimental.Notebook.Model) -> Bool {
-        return (
-            lhs.uuid == rhs.uuid &&
-            lhs.name == rhs.name &&
-            lhs.notes == rhs.notes
-        )
-    }
-}
-
-// MARK: Meta equtable
-
-extension Experimental.Notebook.Meta: Equatable {
-    static func ==(lhs: Experimental.Notebook.Meta, rhs: Experimental.Notebook.Meta) -> Bool {
-        return (
-            lhs.uuid == rhs.uuid &&
-            lhs.name == rhs.name
-        )
-    }
-}
-
-
 // MARK: - Action Equtable
-
+// TODO: Fix action type(similar to library) and replace this extension by autoequatable
 extension Experimental.Notebook.Action: Equatable {
     static func ==(lhs: Experimental.Notebook.Action, rhs: Experimental.Notebook.Action) -> Bool {
         switch (lhs, rhs) {

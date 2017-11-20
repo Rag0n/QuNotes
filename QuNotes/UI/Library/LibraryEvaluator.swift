@@ -12,18 +12,18 @@ import Result
 extension UI.Library {
     // MARK: - Data types
 
-    struct Model {
+    struct Model: AutoEquatable {
         let notebooks: [Experimental.Notebook.Meta]
     }
     
-    enum Action {
+    enum Action: AutoEquatable {
         case addNotebook(notebook: Experimental.Notebook.Model)
         case deleteNotebook(notebook: Experimental.Notebook.Meta)
         case showNotes(forNotebook: Notebook)
         case showError(title: String, message: String)
     }
 
-    enum ViewControllerEffect {
+    enum ViewControllerEffect: AutoEquatable {
         case updateAllNotebooks(notebooks: [NotebookViewModel])
         case addNotebook(index: Int, notebooks: [NotebookViewModel])
         case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
@@ -42,7 +42,7 @@ extension UI.Library {
         case updateNotebook(index: Int, title: String?)
     }
 
-    struct NotebookViewModel {
+    struct NotebookViewModel: AutoEquatable {
         let title: String
         let isEditable: Bool
     }
@@ -142,51 +142,5 @@ private extension UI.Library {
 
     static func notebookNameSorting(lhs: Experimental.Notebook.Meta, rhs: Experimental.Notebook.Meta) -> Bool {
         return lhs.name.lowercased() < rhs.name.lowercased()
-    }
-}
-
-// MARK: - Equatables
-
-extension UI.Library.ViewControllerEffect: Equatable {
-    static func ==(lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffect) -> Bool {
-        switch (lhs, rhs) {
-        case let (.updateAllNotebooks(lNotebooks), .updateAllNotebooks(rNotebooks)):
-            return lNotebooks == rNotebooks
-        case let (.addNotebook(lIndex, lNotebooks), .addNotebook(rIndex, rNotebooks)):
-            return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-        case let (.updateNotebook(lIndex, lNotebooks), .updateNotebook(rIndex, rNotebooks)):
-            return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-        case let (.deleteNotebook(lIndex, lNotebooks), .deleteNotebook(rIndex, rNotebooks)):
-            return (lIndex == rIndex) && (lNotebooks == rNotebooks)
-        default: return false
-        }
-    }
-}
-
-extension UI.Library.Action: Equatable {
-    static func ==(lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
-        switch (lhs, rhs) {
-        case let (.addNotebook(lNotebook), .addNotebook(rNotebook)):
-            return lNotebook == rNotebook
-        case let (.deleteNotebook(lNotebook), .deleteNotebook(rNotebook)):
-            return lNotebook == rNotebook
-        case let (.showNotes(lNotebook), .showNotes(rNotebook)):
-            return lNotebook == rNotebook
-        case let (.showError(lTitle, lMessage), .showError(rTitle, rMessage)):
-            return (lTitle == rTitle) && (lMessage == rMessage)
-        default: return false
-        }
-    }
-}
-
-extension UI.Library.Model: Equatable {
-    static func==(lhs: UI.Library.Model, rhs: UI.Library.Model) -> Bool {
-        return lhs.notebooks == rhs.notebooks
-    }
-}
-
-extension UI.Library.NotebookViewModel: Equatable {
-    static func ==(lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookViewModel) -> Bool {
-        return (lhs.title == rhs.title) && (lhs.isEditable == rhs.isEditable)
     }
 }

@@ -13,11 +13,11 @@ extension Experimental {
 }
 
 extension Experimental.Library {
-    struct Model {
+    struct Model: AutoEquatable {
         let notebooks: [Experimental.Notebook.Model]
     }
 
-    enum Action {
+    enum Action: AutoEquatable {
         case createNotebook(notebook: Experimental.Notebook.Model, url: URL)
         case deleteNotebook(notebook: Experimental.Notebook.Model, url: URL)
         case readFiles(url: URL, extension: String)
@@ -83,30 +83,5 @@ extension Experimental.Library {
 private extension Experimental.Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
         return notebooks.filter({ $0.uuid == notebookUUID }).count > 0
-    }
-}
-
-// MARK: - Datatypes equtable
-
-extension Experimental.Library.Model: Equatable {
-    static func ==(lhs: Experimental.Library.Model, rhs: Experimental.Library.Model) -> Bool {
-        return lhs.notebooks == rhs.notebooks
-    }
-}
-
-extension Experimental.Library.Action: Equatable {
-    static func ==(lhs: Experimental.Library.Action, rhs: Experimental.Library.Action) -> Bool {
-        switch (lhs, rhs) {
-        case let (.createNotebook(lNotebook, lURL),
-                  .createNotebook(rNotebook, rURL)):
-            return (lURL == rURL) && (lNotebook == rNotebook)
-        case let (.deleteNotebook(lNotebook, lURL),
-                  .deleteNotebook(rNotebook, rURL)):
-            return (lURL == rURL) && (lNotebook == rNotebook)
-        case (.readFiles(let lURL, let lExtension),
-              .readFiles(let rURL, let rExtension)):
-            return (lURL == rURL) && (lExtension == rExtension)
-        default: return false
-        }
     }
 }

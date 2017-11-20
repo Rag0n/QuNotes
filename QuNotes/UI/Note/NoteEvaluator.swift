@@ -12,7 +12,7 @@ extension UI.Note {
         let isNew: Bool
     }
 
-    enum Action {
+    enum Action: AutoEquatable {
         case updateTitle(title: String)
         case updateContent(content: String)
         case addTag(tag: String)
@@ -22,7 +22,7 @@ extension UI.Note {
         case showError(title: String, message: String)
     }
 
-    enum ViewControllerEffect {
+    enum ViewControllerEffect: AutoEquatable {
         case updateTitle(title: String)
         case focusOnTitle
         case updateContent(content: String)
@@ -178,51 +178,5 @@ private extension UI.Note {
         return Evaluator(effects: effects,
                          actions: actions,
                          model: model)
-    }
-}
-
-// MARK: - ViewControllerEffect Equatable
-
-extension UI.Note.ViewControllerEffect: Equatable {}
-
-func ==(lhs: UI.Note.ViewControllerEffect, rhs: UI.Note.ViewControllerEffect) -> Bool {
-    switch (lhs, rhs) {
-    case (.updateTitle(let lTitle), .updateTitle(let rTitle)):
-        return lTitle == rTitle
-    case (.focusOnTitle, .focusOnTitle):
-        return true
-    case (.updateContent(let lContent), .updateContent(let rContent)):
-        return lContent == rContent
-    case (.showTags(let lTags), .showTags(let rTags)):
-        return lTags == rTags
-    case (.addTag(let lTag), .addTag(let rTag)):
-        return lTag == rTag
-    case (.removeTag(let lTag), .removeTag(let rTag)):
-        return lTag == rTag
-    default: return false
-    }
-}
-
-// MARK: - Action Equtable
-
-extension UI.Note.Action: Equatable {}
-
-func ==(lhs: UI.Note.Action, rhs: UI.Note.Action) -> Bool {
-    switch (lhs, rhs) {
-    case (.updateTitle(let lTitle), .updateTitle(let rTitle)):
-        return lTitle == rTitle
-    case (.updateContent(let lContent), .updateContent(let rContent)):
-        return lContent == rContent
-    case (.addTag(let lTag), .addTag(let rTag)):
-        return lTag == rTag
-    case (.removeTag(let lTag), .removeTag(let rTag)):
-        return lTag == rTag
-    case (.deleteNote, .deleteNote):
-        return true
-    case (.finish, .finish):
-        return true
-    case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
-        return (lTitle == rTitle) && (lMessage == rMessage)
-    default: return false
     }
 }

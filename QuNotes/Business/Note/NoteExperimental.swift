@@ -13,7 +13,7 @@ extension Experimental {
 }
 
 extension Experimental.Note {
-    struct Model {
+    struct Model: AutoEquatable {
         let meta: Meta
         let content: String
         let notebook: Experimental.Notebook.Model?
@@ -25,7 +25,7 @@ extension Experimental.Note {
         }
     }
 
-    struct Meta: Codable {
+    struct Meta: Codable, AutoEquatable {
         let uuid: String
         let title: String
         let tags: [String]
@@ -33,7 +33,7 @@ extension Experimental.Note {
         let created_at: TimeInterval
     }
 
-    struct Content: Codable {
+    struct Content: Codable, AutoEquatable {
         let content: String
     }
 
@@ -154,50 +154,8 @@ private extension Experimental.Note.Model {
     }
 }
 
-// MARK: - Datatypes equatable
-
-extension Experimental.Note.Model: Equatable {
-    static func ==(lhs: Experimental.Note.Model, rhs: Experimental.Note.Model) -> Bool {
-        if (lhs.createdDate - rhs.createdDate > Double.ulpOfOne) {
-            return false
-        }
-        if (lhs.updatedDate - rhs.updatedDate > Double.ulpOfOne) {
-            return false
-        }
-        return (
-            lhs.uuid == rhs.uuid &&
-            lhs.title == rhs.title &&
-            lhs.content == rhs.content &&
-            lhs.tags == rhs.tags &&
-            lhs.notebook == rhs.notebook
-        )
-    }
-}
-
-extension Experimental.Note.Meta: Equatable {
-    static func ==(lhs: Experimental.Note.Meta, rhs: Experimental.Note.Meta) -> Bool {
-        if (lhs.created_at - rhs.created_at > Double.ulpOfOne) {
-            return false
-        }
-        if (lhs.updated_at - rhs.updated_at > Double.ulpOfOne) {
-            return false
-        }
-        return (
-            lhs.uuid == rhs.uuid &&
-            lhs.title == rhs.title &&
-            lhs.tags == rhs.tags
-        )
-    }
-}
-
-extension Experimental.Note.Content: Equatable {
-    static func ==(lhs: Experimental.Note.Content, rhs: Experimental.Note.Content) -> Bool {
-        return lhs.content == rhs.content
-    }
-}
-
 // MARK: - Action Equtable
-
+// TODO: Fix action type(similar to library) and replace this extension by autoequatable
 extension Experimental.Note.Action: Equatable {
     static func ==(lhs: Experimental.Note.Action, rhs: Experimental.Note.Action) -> Bool {
         switch (lhs, rhs) {

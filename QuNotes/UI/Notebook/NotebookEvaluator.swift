@@ -15,7 +15,7 @@ extension UI.Notebook {
         let notes: [Note]
     }
 
-    enum Action {
+    enum Action: AutoEquatable {
         case addNote
         case showNote(note: Note, isNewNote: Bool)
         case deleteNote(note: Note)
@@ -25,7 +25,7 @@ extension UI.Notebook {
         case showError(title: String, message: String)
     }
 
-    enum ViewControllerEffect {
+    enum ViewControllerEffect: AutoEquatable {
         case updateAllNotes(notes: [String])
         case hideBackButton
         case showBackButton
@@ -190,49 +190,5 @@ private extension UI.Notebook {
         return Evaluator(effects: effects,
                          actions: actions,
                          model: model)
-    }
-}
-
-// MARK: - ViewControllerEffect Equatable
-
-extension UI.Notebook.ViewControllerEffect: Equatable {}
-
-func ==(lhs: UI.Notebook.ViewControllerEffect, rhs: UI.Notebook.ViewControllerEffect) -> Bool {
-    switch (lhs, rhs) {
-    case (.updateAllNotes(let lNotes), .updateAllNotes(let rNotes)):
-        return lNotes == rNotes
-    case (.hideBackButton, .hideBackButton):
-        return true
-    case (.showBackButton, .showBackButton):
-        return true
-    case (.updateTitle(let lTitle), .updateTitle(let rTitle)):
-        return lTitle == rTitle
-    case (.deleteNote(let lIndex, let lNotes), .deleteNote(let rIndex, let rNotes)):
-        return (lIndex == rIndex) && (lNotes == rNotes)
-    default: return false
-    }
-}
-
-// MARK: - Action Equtable
-
-extension UI.Notebook.Action: Equatable {}
-
-func ==(lhs: UI.Notebook.Action, rhs: UI.Notebook.Action) -> Bool {
-    switch (lhs, rhs) {
-    case (.addNote, .addNote):
-        return true
-    case (.showNote(let lNote), .showNote(let rNote)):
-        return lNote == rNote
-    case (.deleteNote(let lNote), .deleteNote(let rNote)):
-        return lNote == rNote
-    case (.deleteNotebook(let lNotebook), .deleteNotebook(let rNotebook)):
-        return lNotebook == rNotebook
-    case (.updateNotebook(let lNotebook), .updateNotebook(let rNotebook)):
-        return lNotebook == rNotebook
-    case (.finish, .finish):
-        return true
-    case (.showError(let lTitle, let lMessage), .showError(let rTitle, let rMessage)):
-        return (lTitle == rTitle) && (lMessage == rMessage)
-    default: return false
     }
 }
