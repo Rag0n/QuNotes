@@ -8,7 +8,7 @@ import Result
 
 extension UI.Note {
     struct Model {
-        let note: Note
+        let note: UseCase.Note
         let isNew: Bool
     }
 
@@ -32,10 +32,10 @@ extension UI.Note {
     }
 
     enum CoordinatorEvent {
-        case didUpdateTitle(result: Result<Note, AnyError>)
-        case didUpdateContent(result: Result<Note, AnyError>)
-        case didAddTag(result: Result<Note, AnyError>, tag: String)
-        case didRemoveTag(result: Result<Note, AnyError>, tag: String)
+        case didUpdateTitle(result: Result<UseCase.Note, AnyError>)
+        case didUpdateContent(result: Result<UseCase.Note, AnyError>)
+        case didAddTag(result: Result<UseCase.Note, AnyError>, tag: String)
+        case didRemoveTag(result: Result<UseCase.Note, AnyError>, tag: String)
         case didDeleteNote(error: AnyError?)
     }
 
@@ -55,7 +55,7 @@ extension UI.Note {
         let actions: [Action]
         let model: Model
 
-        init(withNote note: Note, isNew: Bool) {
+        init(withNote note: UseCase.Note, isNew: Bool) {
             effects = []
             actions = []
             model = Model(note: note, isNew: isNew)

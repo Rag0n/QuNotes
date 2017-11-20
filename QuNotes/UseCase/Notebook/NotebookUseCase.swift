@@ -18,31 +18,31 @@ class NotebookUseCase {
 
     var repository: NotebookRepository!
 
-    func getAll() -> [Notebook] {
+    func getAll() -> [UseCase.Notebook] {
         return repository.getAll().recover([])
     }
 
-    func add(withName name: String) -> Result<Notebook, AnyError> {
+    func add(withName name: String) -> Result<UseCase.Notebook, AnyError> {
         return repository.save <| newNotebookWithName <| name
     }
 
-    func update(_ notebook: Notebook, name: String) -> Result<Notebook, AnyError> {
+    func update(_ notebook: UseCase.Notebook, name: String) -> Result<UseCase.Notebook, AnyError> {
         return repository.save <| updatedNotebook(withNewName: name) <| notebook
     }
 
-    func delete(_ notebook: Notebook) -> Result<Notebook, AnyError> {
+    func delete(_ notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         return repository.delete(notebook: notebook)
     }
 
     // MARK: - Private
 
-    private func newNotebookWithName(name: String) -> Notebook {
-        return Notebook(uuid: UUID.init().uuidString, name: name)
+    private func newNotebookWithName(name: String) -> UseCase.Notebook {
+        return UseCase.Notebook(uuid: UUID.init().uuidString, name: name)
     }
 
-    private func updatedNotebook(withNewName name: String) -> (Notebook) -> Notebook {
+    private func updatedNotebook(withNewName name: String) -> (UseCase.Notebook) -> UseCase.Notebook {
         return { notebook in
-            return Notebook(uuid: notebook.uuid, name: name)
+            return UseCase.Notebook(uuid: notebook.uuid, name: name)
         }
     }
 }

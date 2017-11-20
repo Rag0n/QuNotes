@@ -143,7 +143,7 @@ class FileNoteRepositorySpec: QuickSpec {
         }
 
         describe("-save") {
-            let note = Note.noteDummy(withUUID: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57", tags: ["tag fixture", "another tag fixture"])
+            let note = UseCase.Note.noteDummy(withUUID: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57", tags: ["tag fixture", "another tag fixture"])
 
             context("when fileManager is unable to get document directory") {
                 beforeEach {
@@ -212,7 +212,7 @@ class FileNoteRepositorySpec: QuickSpec {
         }
         
         describe("-delete") {
-            let note = Note.noteDummy(withUUID: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57")
+            let note = UseCase.Note.noteDummy(withUUID: "2F1535F5-0B62-4CFC-8B5A-2C399B718E57")
             
             context("when fileManager is unable to get document directory") {
                 beforeEach {
@@ -360,7 +360,7 @@ class FileReaderSpy: FileReaderService {
 // MARK: - NoteDummyFileReaderSpy
 
 class NoteDummyFileReaderSpy: FileReaderSpy {
-    let noteDummy = Note.noteDummy()
+    let noteDummy = UseCase.Note.noteDummy()
 
     override func data() -> Data {
         let encoder = JSONEncoder()

@@ -19,7 +19,7 @@ extension UI.Library {
     enum Action: AutoEquatable {
         case addNotebook(notebook: Experimental.Notebook.Model)
         case deleteNotebook(notebook: Experimental.Notebook.Meta)
-        case showNotes(forNotebook: Notebook)
+        case showNotes(forNotebook: UseCase.Notebook)
         case showError(title: String, message: String)
     }
 

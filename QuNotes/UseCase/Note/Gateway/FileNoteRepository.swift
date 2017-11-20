@@ -20,19 +20,19 @@ class FileNoteRepository: NoteRepository {
     var fileManager: FileManager!
     var fileReader: FileReaderService!
 
-    func getAll() -> Result<[Note], AnyError> {
+    func getAll() -> Result<[UseCase.Note], AnyError> {
         return Result(try mapNoteFilesToNotes())
     }
 
-    func get(noteId: String) -> Result<Note, AnyError> {
+    func get(noteId: String) -> Result<UseCase.Note, AnyError> {
         return Result(try noteFromFile(withNoteUUID: noteId))
     }
 
-    func save(note: Note) -> Result<Note, AnyError> {
+    func save(note: UseCase.Note) -> Result<UseCase.Note, AnyError> {
         return Result(try saveNoteToFile(note))
     }
 
-    func delete(note: Note) -> Result<Note, AnyError> {
+    func delete(note: UseCase.Note) -> Result<UseCase.Note, AnyError> {
         return Result(try deleteNote(note))
     }
 
@@ -45,7 +45,7 @@ class FileNoteRepository: NoteRepository {
     }()
     private lazy var decoder = JSONDecoder()
 
-    private func mapNoteFilesToNotes() throws -> [Note] {
+    private func mapNoteFilesToNotes() throws -> [UseCase.Note] {
         return try noteFiles().map(noteFromFile)
     }
 
@@ -57,12 +57,12 @@ class FileNoteRepository: NoteRepository {
         return documentDirectoryContent.filter { $0.pathExtension == "qvnote" }
     }
 
-    private func noteFromFile(fileURL: URL) throws -> Note {
+    private func noteFromFile(fileURL: URL) throws -> UseCase.Note {
         let data = try fileReader.dataFrom(fileURL: fileURL)
-        return try decoder.decode(Note.self, from: data)
+        return try decoder.decode(UseCase.Note.self, from: data)
     }
 
-    private func noteFromFile(withNoteUUID noteUUID: String) throws -> Note  {
+    private func noteFromFile(withNoteUUID noteUUID: String) throws -> UseCase.Note  {
         let noteFileURL = try getNoteURLFromNoteId(noteId: noteUUID)
         return try noteFromFile(fileURL: noteFileURL)
     }
@@ -74,7 +74,7 @@ class FileNoteRepository: NoteRepository {
         return documentsURL.appendingPathComponent("\(noteId)").appendingPathExtension("qvnote")
     }
 
-    private func saveNoteToFile(_ note: Note) throws -> Note {
+    private func saveNoteToFile(_ note: UseCase.Note) throws -> UseCase.Note {
         let noteFileURL = try getNoteURLFromNoteId(noteId: note.uuid)
         let jsonData = try encoder.encode(note)
         guard fileManager.createFile(atPath: noteFileURL.path, contents: jsonData, attributes: nil) else {
@@ -83,7 +83,7 @@ class FileNoteRepository: NoteRepository {
         return note
     }
 
-    private func deleteNote(_ note: Note) throws -> Note {
+    private func deleteNote(_ note: UseCase.Note) throws -> UseCase.Note {
         try deleteFileWithNoteUUID(note.uuid)
         return note
     }

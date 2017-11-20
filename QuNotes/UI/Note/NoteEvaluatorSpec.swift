@@ -13,7 +13,7 @@ import Result
 class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
         var e: UI.Note.Evaluator!
-        let note = Note(createdDate: 1, updatedDate: 2, content: "content", title: "title", uuid: "uuid", tags: ["tag"])
+        let note = UseCase.Note(createdDate: 1, updatedDate: 2, content: "content", title: "title", uuid: "uuid", tags: ["tag"])
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
@@ -114,7 +114,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
         describe("-evaluate:CoordinatorEvent") {
             var event: UI.Note.CoordinatorEvent!
-            let updatedNote = Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
+            let updatedNote = UseCase.Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
 
             context("when receiving didUpdateTitle event") {
                 context("when successfully updates note's title") {

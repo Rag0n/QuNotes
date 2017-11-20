@@ -12,38 +12,38 @@ import Result
 
 class NotebookSpec: QuickSpec {
     override func spec() {
-        var notebook: Notebook!
+        var notebook: UseCase.Notebook!
 
         beforeEach {
-            notebook = Notebook(uuid: "uuid", name: "name")
+            notebook = UseCase.Notebook(uuid: "uuid", name: "name")
         }
 
         context("when comparing instances with not equal uuid") {
             it("returns false") {
-                let anotherNotebook = Notebook(uuid: "another uuid", name: "name")
+                let anotherNotebook = UseCase.Notebook(uuid: "another uuid", name: "name")
                 expect(notebook == anotherNotebook).to(beFalse())
             }
         }
 
         context("when comparing instances with equal uuid") {
             it("return true") {
-                let anotherNotebook = Notebook(uuid: "uuid", name: "another name")
+                let anotherNotebook = UseCase.Notebook(uuid: "uuid", name: "another name")
                 expect(notebook == anotherNotebook).to(beTrue())
             }
         }
     }
 }
 
-extension Notebook {
-    static func notebookDummy(withUUID uuid: String, name: String) -> Notebook {
-        return Notebook(uuid: uuid, name: name)
+extension UseCase.Notebook {
+    static func notebookDummy(withUUID uuid: String, name: String) -> UseCase.Notebook {
+        return UseCase.Notebook(uuid: uuid, name: name)
     }
 
-    static func notebookDummy(withUUID uuid: String) -> Notebook {
-        return Notebook.notebookDummy(withUUID: uuid, name: "dummy notebook name")
+    static func notebookDummy(withUUID uuid: String) -> UseCase.Notebook {
+        return UseCase.Notebook.notebookDummy(withUUID: uuid, name: "dummy notebook name")
     }
 
-    static func notebookDummy() -> Notebook {
-        return Notebook.notebookDummy(withUUID: UUID.init().uuidString, name: "dummy notebook name")
+    static func notebookDummy() -> UseCase.Notebook {
+        return UseCase.Notebook.notebookDummy(withUUID: UUID.init().uuidString, name: "dummy notebook name")
     }
 }

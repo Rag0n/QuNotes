@@ -32,11 +32,11 @@ extension UI.Note {
         fileprivate lazy var noteViewController: NoteViewController = {
             return NoteViewController(withDispatch: dispatch)
         }()
-        fileprivate var activeNote: Note?
+        fileprivate var activeNote: UseCase.Note?
 
         init(withNavigationController navigationController: NavigationController,
              dependencies: Dependencies,
-             note: Note,
+             note: UseCase.Note,
              isNewNote: Bool) {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase

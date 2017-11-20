@@ -44,9 +44,9 @@ extension UI.Notebook {
             vc.navigationItem.largeTitleDisplayMode = .never
             return vc
         }()
-        fileprivate var activeNote: Note?
+        fileprivate var activeNote: UseCase.Note?
 
-        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook) {
+        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: UseCase.Notebook) {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
             self.notebookUseCase = dependencies.notebookUseCase

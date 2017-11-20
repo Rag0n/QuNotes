@@ -5,17 +5,19 @@
 
 import Foundation
 
-struct Note: Codable {
-    let createdDate: Double
-    let updatedDate: Double
-    let content: String
-    let title: String
-    let uuid: String
-    let tags: [String]
+extension UseCase {
+    struct Note: Codable {
+        let createdDate: Double
+        let updatedDate: Double
+        let content: String
+        let title: String
+        let uuid: String
+        let tags: [String]
+    }
 }
 
-extension Note: Equatable {
-    static func ==(lhs: Note, rhs: Note) -> Bool {
+extension UseCase.Note: Equatable {
+    static func ==(lhs: UseCase.Note, rhs: UseCase.Note) -> Bool {
         return lhs.uuid == rhs.uuid
     }
 }

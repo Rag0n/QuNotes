@@ -20,15 +20,15 @@ class FileNotebookRepository: NotebookRepository {
     var fileManager: FileManager!
     var fileReader: FileReaderService!
 
-    func getAll() -> Result<[Notebook], AnyError> {
+    func getAll() -> Result<[UseCase.Notebook], AnyError> {
         return Result(try notebooksFromNotebookFiles())
     }
 
-    func save(notebook: Notebook) -> Result<Notebook, AnyError> {
+    func save(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         return Result(try saveNotebookToFile(notebook))
     }
 
-    func delete(notebook: Notebook) -> Result<Notebook, AnyError> {
+    func delete(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         return Result(try deleteNotebook(notebook))
     }
 
@@ -47,7 +47,7 @@ class FileNotebookRepository: NotebookRepository {
     }()
     private lazy var decoder = JSONDecoder()
 
-    private func notebooksFromNotebookFiles() throws -> [Notebook] {
+    private func notebooksFromNotebookFiles() throws -> [UseCase.Notebook] {
         return try notebookFiles().map(notebookMetaFile).map(notebookFromMetaFile)
     }
 
@@ -65,12 +65,12 @@ class FileNotebookRepository: NotebookRepository {
             .appendingPathExtension(Constants.notebookMetaFileExtension)
     }
 
-    private func notebookFromMetaFile(metaURL: URL) throws -> Notebook {
+    private func notebookFromMetaFile(metaURL: URL) throws -> UseCase.Notebook {
         let data = try fileReader.dataFrom(fileURL: metaURL)
-        return try decoder.decode(Notebook.self, from: data)
+        return try decoder.decode(UseCase.Notebook.self, from: data)
     }
 
-    private func saveNotebookToFile(_ notebook: Notebook) throws -> Notebook {
+    private func saveNotebookToFile(_ notebook: UseCase.Notebook) throws -> UseCase.Notebook {
         let notebookDirectory = try notebookDirectoryURL(fromNotebookId: notebook.uuid)
         try fileManager.createDirectory(atPath: notebookDirectory.path, withIntermediateDirectories: true, attributes: nil)
         let notebookMetaFileURL = try notebookMetaFile(notebookURL: notebookDirectory)
@@ -90,7 +90,7 @@ class FileNotebookRepository: NotebookRepository {
             .appendingPathExtension(Constants.notebookFileExtension)
     }
 
-    private func deleteNotebook(_ notebook: Notebook) throws -> Notebook {
+    private func deleteNotebook(_ notebook: UseCase.Notebook) throws -> UseCase.Notebook {
         try deleteNotebookDirectory(withUUID: notebook.uuid)
         return notebook
     }

@@ -81,7 +81,7 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-update:newContent:") {
-            let note = Note.noteDummy()
+            let note = UseCase.Note.noteDummy()
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
@@ -115,7 +115,7 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-update:newTitle:") {
-            let note = Note.noteDummy()
+            let note = UseCase.Note.noteDummy()
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
@@ -149,7 +149,7 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-delete") {
-            let note = Note.noteDummy()
+            let note = UseCase.Note.noteDummy()
             var deletingRepositorySpy: SuccessfullyDeletingNoteRepositorySpy!
 
             beforeEach {
@@ -183,7 +183,7 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-addTag:toNote:") {
-            let note = Note.noteDummy()
+            let note = UseCase.Note.noteDummy()
             var savingRepositorySpy: SuccessfullySavingNoteRepositorySpy!
 
             beforeEach {
@@ -205,7 +205,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 context("when note already has some tags") {
-                    let note = Note.noteDummyWithTags(["tag fixture"])
+                    let note = UseCase.Note.noteDummyWithTags(["tag fixture"])
 
                     it("returns updated note with appended tag") {
                         let updatedNote = useCase.addTag(tag: "another tag fixture", toNote: note).value
@@ -228,7 +228,7 @@ class NoteUseCaseSpec: QuickSpec {
         }
 
         describe("-removeTag:fromNote:") {
-            let note = Note.noteDummy()
+            let note = UseCase.Note.noteDummy()
 
             context("when save method succedes") {
                 beforeEach {
@@ -243,7 +243,7 @@ class NoteUseCaseSpec: QuickSpec {
                 }
 
                 context("when note has this tag") {
-                    let note = Note.noteDummyWithTags(["tag fixture", "another tag fixture"])
+                    let note = UseCase.Note.noteDummyWithTags(["tag fixture", "another tag fixture"])
 
                     it("returns note with removed tag and new updatedDate") {
                         let updatedNote = useCase.removeTag(tag: "tag fixture", fromNote: note).value
@@ -283,19 +283,19 @@ class FailingNoteRepositoryStub: NoteRepository {
     static let anyError = AnyError(error)
     static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
 
-    func getAll() -> Result<[Note], AnyError> {
+    func getAll() -> Result<[UseCase.Note], AnyError> {
         return .failure(FailingNoteRepositoryStub.anyError)
     }
 
-    func get(noteId: String) -> Result<Note, AnyError> {
+    func get(noteId: String) -> Result<UseCase.Note, AnyError> {
         return .failure(FailingNoteRepositoryStub.anyError)
     }
 
-    func save(note: Note) -> Result<Note, AnyError> {
+    func save(note: UseCase.Note) -> Result<UseCase.Note, AnyError> {
         return .failure(FailingNoteRepositoryStub.anyError)
     }
 
-    func delete(note: Note) -> Result<Note, AnyError> {
+    func delete(note: UseCase.Note) -> Result<UseCase.Note, AnyError> {
         return .failure(FailingNoteRepositoryStub.anyError)
     }
 }
@@ -305,41 +305,41 @@ class FailingToSaveNoteRepositoryStub: FailingNoteRepositoryStub {}
 class FailingToDeleteNoteRepositoryStub: FailingNoteRepositoryStub {}
 
 class SuccessfullySavingNoteRepositorySpy: FailingNoteRepositoryStub {
-    private(set) var passedNote: Note?
+    private(set) var passedNote: UseCase.Note?
 
-    override func save(note: Note) -> Result<Note, AnyError> {
+    override func save(note: UseCase.Note) -> Result<UseCase.Note, AnyError> {
         passedNote = note
         return .success(note)
     }
 }
 
 class SuccessfullyDeletingNoteRepositorySpy: FailingNoteRepositoryStub {
-    private(set) var passedNote: Note?
+    private(set) var passedNote: UseCase.Note?
 
-    override func delete(note: Note) -> Result<Note, AnyError> {
+    override func delete(note: UseCase.Note) -> Result<UseCase.Note, AnyError> {
         passedNote = note
         return .success(note)
     }
 }
 
 class ReturningArrayOfNotesNoteRepositoryStub: FailingNoteRepositoryStub {
-    static let notes = [Note.noteDummy(), Note.noteDummy()]
+    static let notes = [UseCase.Note.noteDummy(), UseCase.Note.noteDummy()]
 
-    override func getAll() -> Result<[Note], AnyError> {
+    override func getAll() -> Result<[UseCase.Note], AnyError> {
         return .success(ReturningArrayOfNotesNoteRepositoryStub.notes)
     }
 }
 
 // MARK: - Custom matchers
 
-func equal(note expectedNote: Note,
+func equal(note expectedNote: UseCase.Note,
            withNewCreatedDate createdDate: Double? = nil,
            withNewUpdatedDate updatedDate: Double? = nil,
            withNewContent content: String? = nil,
            withNewTitle title: String? = nil,
            withNewUUID uuid: String? = nil,
-           withNewTags tags: [String]? = nil) -> Predicate<Note> {
-    return Predicate { (actualExpression: Expression<Note>) throws -> PredicateResult in
+           withNewTags tags: [String]? = nil) -> Predicate<UseCase.Note> {
+    return Predicate { (actualExpression: Expression<UseCase.Note>) throws -> PredicateResult in
         var msg = ExpectationMessage.expectedTo("receive equal note with new properties: ")
         guard let note = try actualExpression.evaluate() else {
             return PredicateResult(

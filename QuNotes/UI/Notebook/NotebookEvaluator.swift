@@ -11,16 +11,16 @@ import Result
 
 extension UI.Notebook {
     struct Model {
-        let notebook: Notebook
-        let notes: [Note]
+        let notebook: UseCase.Notebook
+        let notes: [UseCase.Note]
     }
 
     enum Action: AutoEquatable {
         case addNote
-        case showNote(note: Note, isNewNote: Bool)
-        case deleteNote(note: Note)
-        case deleteNotebook(notebook: Notebook)
-        case updateNotebook(notebook: Notebook, title: String)
+        case showNote(note: UseCase.Note, isNewNote: Bool)
+        case deleteNote(note: UseCase.Note)
+        case deleteNotebook(notebook: UseCase.Notebook)
+        case updateNotebook(notebook: UseCase.Notebook, title: String)
         case finish
         case showError(title: String, message: String)
     }
@@ -34,10 +34,10 @@ extension UI.Notebook {
     }
 
     enum CoordinatorEvent {
-        case didUpdateNotes(notes: [Note])
-        case didAddNote(result: Result<Note, AnyError>)
-        case didDeleteNote(result: Result<Note, AnyError>)
-        case didUpdateNotebook(result: Result<Notebook, AnyError>)
+        case didUpdateNotes(notes: [UseCase.Note])
+        case didAddNote(result: Result<UseCase.Note, AnyError>)
+        case didDeleteNote(result: Result<UseCase.Note, AnyError>)
+        case didUpdateNotebook(result: Result<UseCase.Notebook, AnyError>)
         case didDeleteNotebook(error: AnyError?)
     }
 
@@ -59,7 +59,7 @@ extension UI.Notebook {
         let actions: [Action]
         let model: Model
 
-        init(withNotebook notebook: Notebook) {
+        init(withNotebook notebook: UseCase.Notebook) {
             effects = []
             actions = []
             model = Model(notebook: notebook, notes: [])
@@ -172,7 +172,7 @@ extension UI.Notebook {
 // MARK: - Private
 
 private extension UI.Notebook {
-    static func defaultNoteSorting(leftNote: Note, rightNote: Note) -> Bool {
+    static func defaultNoteSorting(leftNote: UseCase.Note, rightNote: UseCase.Note) -> Bool {
         return leftNote.title.lowercased() < rightNote.title.lowercased()
     }
 

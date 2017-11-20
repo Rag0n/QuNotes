@@ -8,13 +8,15 @@
 
 import Foundation
 
-struct Notebook: Codable {
-    let uuid: String
-    let name: String
+extension UseCase {
+    struct Notebook: Codable {
+        let uuid: String
+        let name: String
+    }
 }
 
-extension Notebook: Equatable {
-    static func ==(lhs: Notebook, rhs: Notebook) -> Bool {
+extension UseCase.Notebook: Equatable {
+    static func ==(lhs: UseCase.Notebook, rhs: UseCase.Notebook) -> Bool {
         return lhs.uuid == rhs.uuid
     }
 }

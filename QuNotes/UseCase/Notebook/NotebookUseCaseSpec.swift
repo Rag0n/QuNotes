@@ -75,7 +75,7 @@ class NotebookUseCaseSpec: QuickSpec {
         }
 
         describe("-update:name") {
-            var oldNotebook: Notebook!
+            var oldNotebook: UseCase.Notebook!
 
             beforeEach {
                 useCase.repository = SuccessfullySavingNotebookRepositorySpy()
@@ -112,7 +112,7 @@ class NotebookUseCaseSpec: QuickSpec {
         }
 
         describe("-delete:") {
-            let notebook = Notebook.notebookDummy()
+            let notebook = UseCase.Notebook.notebookDummy()
             var deletingRepositorySpy: SuccessfullyDeletingNotebookRepositorySpy!
 
             beforeEach {
@@ -153,15 +153,15 @@ class FailingNotebookRepositoryStub: NotebookRepository {
     static let anyError = AnyError(error)
     static let error = FileNoteRepositoryError.failedToFindDocumentDirectory
 
-    func getAll() -> Result<[Notebook], AnyError> {
+    func getAll() -> Result<[UseCase.Notebook], AnyError> {
         return .failure(FailingNotebookRepositoryStub.anyError)
     }
 
-    func save(notebook: Notebook) -> Result<Notebook, AnyError> {
+    func save(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         return .failure(FailingNotebookRepositoryStub.anyError)
     }
 
-    func delete(notebook: Notebook) -> Result<Notebook, AnyError> {
+    func delete(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         return .failure(FailingNotebookRepositoryStub.anyError)
     }
 }
@@ -171,26 +171,26 @@ class FailingToSaveNotebookRepositoryStub: FailingNotebookRepositoryStub {}
 class FailingToDeleteNotebookRepositoryStub: FailingNotebookRepositoryStub {}
 
 class ReturningArrayOfNotebooksRepositoryStub: FailingNotebookRepositoryStub {
-    static let notebooks = [Notebook.notebookDummy(), Notebook.notebookDummy()]
+    static let notebooks = [UseCase.Notebook.notebookDummy(), UseCase.Notebook.notebookDummy()]
 
-    override func getAll() -> Result<[Notebook], AnyError> {
+    override func getAll() -> Result<[UseCase.Notebook], AnyError> {
         return .success(ReturningArrayOfNotebooksRepositoryStub.notebooks)
     }
 }
 
 class SuccessfullySavingNotebookRepositorySpy: FailingNotebookRepositoryStub {
-    private(set) var passedNotebook: Notebook?
+    private(set) var passedNotebook: UseCase.Notebook?
 
-    override func save(notebook: Notebook) -> Result<Notebook, AnyError> {
+    override func save(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         passedNotebook = notebook
         return .success(notebook)
     }
 }
 
 class SuccessfullyDeletingNotebookRepositorySpy: FailingNotebookRepositoryStub {
-    private(set) var passedNotebook: Notebook?
+    private(set) var passedNotebook: UseCase.Notebook?
 
-    override func delete(notebook: Notebook) -> Result<Notebook, AnyError> {
+    override func delete(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError> {
         passedNotebook = notebook
         return .success(notebook)
     }

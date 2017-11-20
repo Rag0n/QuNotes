@@ -9,7 +9,7 @@
 import Result
 
 protocol NotebookRepository {
-    func getAll() -> Result<[Notebook], AnyError>
-    func save(notebook: Notebook) -> Result<Notebook, AnyError>
-    func delete(notebook: Notebook) -> Result<Notebook, AnyError>
+    func getAll() -> Result<[UseCase.Notebook], AnyError>
+    func save(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError>
+    func delete(notebook: UseCase.Notebook) -> Result<UseCase.Notebook, AnyError>
 }

@@ -12,7 +12,7 @@ import Result
 
 class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {
-        let notebook = Notebook(uuid: "uuid", name: "name")
+        let notebook = UseCase.Notebook(uuid: "uuid", name: "name")
         var e: UI.Notebook.Evaluator!
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
@@ -47,7 +47,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving selectNote event") {
-                let note = Note.noteDummy()
+                let note = UseCase.Note.noteDummy()
 
                 beforeEach {
                     event = .selectNote(index: 0)
@@ -61,7 +61,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNote event") {
-                let note = Note.noteDummy()
+                let note = UseCase.Note.noteDummy()
 
                 beforeEach {
                     event = .deleteNote(index: 0)
@@ -86,9 +86,9 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving filterNotes event") {
-                let firstNote = Note.noteDummy(withTitle: "AB")
-                let secondNote = Note.noteDummy(withTitle: "ab")
-                let thirdNote = Note.noteDummy(withTitle: "g")
+                let firstNote = UseCase.Note.noteDummy(withTitle: "AB")
+                let secondNote = UseCase.Note.noteDummy(withTitle: "ab")
+                let thirdNote = UseCase.Note.noteDummy(withTitle: "g")
 
                 beforeEach {
                     e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote, thirdNote]))
@@ -162,9 +162,9 @@ class NotebookEvaluatorSpec: QuickSpec {
             var event: UI.Notebook.CoordinatorEvent!
 
             context("when receiving didUpdateNotes event") {
-                let firstNote = Note.noteDummy(withTitle: "Bcd")
-                let secondNote = Note.noteDummy(withTitle: "abc")
-                let thirdNote = Note.noteDummy(withTitle: "cde")
+                let firstNote = UseCase.Note.noteDummy(withTitle: "Bcd")
+                let secondNote = UseCase.Note.noteDummy(withTitle: "abc")
+                let thirdNote = UseCase.Note.noteDummy(withTitle: "cde")
                 let expectedViewModels = [
                     "abc",
                     "Bcd",
@@ -188,9 +188,9 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving didAddNote event") {
                 context("when successfully adds note") {
-                    let firstNote = Note.noteDummy(withTitle: "abc")
-                    let secondNote = Note.noteDummy(withTitle: "cde")
-                    let addedNote = Note.noteDummy(withTitle: "bcd")
+                    let firstNote = UseCase.Note.noteDummy(withTitle: "abc")
+                    let secondNote = UseCase.Note.noteDummy(withTitle: "cde")
+                    let addedNote = UseCase.Note.noteDummy(withTitle: "bcd")
 
                     beforeEach {
                         e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
@@ -221,8 +221,8 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didDeleteNote event") {
-                let firstNote = Note.noteDummy(withTitle: "abc")
-                let secondNote = Note.noteDummy(withTitle: "cde")
+                let firstNote = UseCase.Note.noteDummy(withTitle: "abc")
+                let secondNote = UseCase.Note.noteDummy(withTitle: "cde")
 
                 context("when successfuly deletes note") {
                     beforeEach {
@@ -260,7 +260,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didUpdateNotebook event") {
-                let notebook = Notebook.notebookDummy(withUUID: "uuid", name: "new name")
+                let notebook = UseCase.Notebook.notebookDummy(withUUID: "uuid", name: "new name")
 
                 context("when successfully updates notebook") {
                     beforeEach {

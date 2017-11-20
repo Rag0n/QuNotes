@@ -75,6 +75,8 @@
 		11A1FE6A1FA7B429006BAF4C /* Experimental.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE681FA7B429006BAF4C /* Experimental.swift */; };
 		11AD36AE1F1D4AC200D9E0A9 /* WSTagsField.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
+		11B5C5831FC2203C00AC0F3A /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B5C5821FC2203C00AC0F3A /* UseCase.swift */; };
+		11B5C5841FC2203C00AC0F3A /* UseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B5C5821FC2203C00AC0F3A /* UseCase.swift */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
 		11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11B705871EEB42570039A863 /* LaunchScreen.storyboard */; };
 		11B705A11EEBCB0E0039A863 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; };
@@ -197,6 +199,7 @@
 		11A1FE651FA7B41D006BAF4C /* NoteExperimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteExperimental.swift; sourceTree = "<group>"; };
 		11A1FE681FA7B429006BAF4C /* Experimental.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Experimental.swift; sourceTree = "<group>"; };
 		11AE3C721F194E1700A13A74 /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = Carthage/Build/iOS/WSTagsField.framework; sourceTree = "<group>"; };
+		11B5C5821FC2203C00AC0F3A /* UseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UseCase.swift; sourceTree = "<group>"; };
 		11B7057B1EEB42570039A863 /* QuNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11B705851EEB42570039A863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11B705881EEB42570039A863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -289,6 +292,7 @@
 		112D49871EF539D800C75B6A /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				11B5C5821FC2203C00AC0F3A /* UseCase.swift */,
 				112D498D1EF539D800C75B6A /* Note */,
 				112D49921EF539D800C75B6A /* Notebook */,
 			);
@@ -786,6 +790,7 @@
 				11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */,
 				118569141F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
 				118569171F1A1C2C00D3CF1B /* FileReaderServiceImp.swift in Sources */,
+				11B5C5831FC2203C00AC0F3A /* UseCase.swift in Sources */,
 				118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */,
 				11517D021F76DBDF00DDDDD3 /* NotebookRepository.swift in Sources */,
 				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
@@ -815,9 +820,9 @@
 				117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				11DFCEEB1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift in Sources */,
 				111EE56B1F0C1A9E003612F1 /* FileNoteRepository.swift in Sources */,
-				11C41FFE1F74521A00397DD9 /* NotebookSpec.swift in Sources */,
 				1160CCE01F954C140033E9E2 /* NavigationController.swift in Sources */,
 				11C41FFC1F74521A00397DD9 /* Notebook.swift in Sources */,
+				11C41FFE1F74521A00397DD9 /* NotebookSpec.swift in Sources */,
 				11CDB3DF1F969AD70014C58F /* NotebookViewController.swift in Sources */,
 				111EE56D1F0C1AAF003612F1 /* FileNoteRepositorySpec.swift in Sources */,
 				118569151F1A1C1E00D3CF1B /* FileReaderService.swift in Sources */,
@@ -848,8 +853,6 @@
 				1176363B1F08E930000A5CFC /* CurrentDateService.swift in Sources */,
 				11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */,
 				1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */,
-				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
-				B212512985214F3072C67564 /* Note.swift in Sources */,
 				1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */,
 				1153327E1FACFD02008FEC2A /* LibraryExperimentalSpec.swift in Sources */,
 				11CDB3E51F969C000014C58F /* NotebookCoordinator.swift in Sources */,
@@ -860,7 +863,10 @@
 				1160CCE31F954C9D0033E9E2 /* NoteViewController.swift in Sources */,
 				11CDB3E31F969BD10014C58F /* NoteTableViewCell.swift in Sources */,
 				11CDB3E81F969C150014C58F /* NotebookEvaluator.swift in Sources */,
+				11B5C5841FC2203C00AC0F3A /* UseCase.swift in Sources */,
 				B2125985206C842279B2FDB5 /* NoteEvaluator.swift in Sources */,
+				B212512985214F3072C67564 /* Note.swift in Sources */,
+				B2125C69A0C798B0A473230E /* NoteSpec.swift in Sources */,
 				1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

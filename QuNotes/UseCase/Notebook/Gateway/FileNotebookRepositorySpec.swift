@@ -91,7 +91,7 @@ class FileNotebookRepositorySpec: QuickSpec {
         }
 
         describe("-save:") {
-            let notebook = Notebook.notebookDummy(withUUID: "notebookUuid", name: "notebook name")
+            let notebook = UseCase.Notebook.notebookDummy(withUUID: "notebookUuid", name: "notebook name")
 
             context("when fileManager is unable to get document directory") {
                 beforeEach {
@@ -181,7 +181,7 @@ class FileNotebookRepositorySpec: QuickSpec {
         }
 
         describe("-delete:") {
-            let notebook = Notebook.notebookDummy(withUUID: "notebookUuid")
+            let notebook = UseCase.Notebook.notebookDummy(withUUID: "notebookUuid")
 
             context("when fileManager is unable to get document directory") {
                 beforeEach {
@@ -235,7 +235,7 @@ class FileNotebookRepositorySpec: QuickSpec {
 // MARK: - NotebookDummyFileReaderSpy
 
 class NotebookDummyFileReaderSpy: FileReaderSpy {
-    let notebookDummy = Notebook.notebookDummy()
+    let notebookDummy = UseCase.Notebook.notebookDummy()
 
     override func data() -> Data {
         let encoder = JSONEncoder()

@@ -6,8 +6,8 @@
 import Result
 
 protocol NoteRepository {
-    func getAll() -> Result<[Note], AnyError>
-    func get(noteId: String) -> Result<Note, AnyError>
-    func save(note: Note) -> Result<Note, AnyError>
-    func delete(note: Note) -> Result<Note, AnyError>
+    func getAll() -> Result<[UseCase.Note], AnyError>
+    func get(noteId: String) -> Result<UseCase.Note, AnyError>
+    func save(note: UseCase.Note) -> Result<UseCase.Note, AnyError>
+    func delete(note: UseCase.Note) -> Result<UseCase.Note, AnyError>
 }
