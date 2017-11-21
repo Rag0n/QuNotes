@@ -102,6 +102,7 @@
 		11DFCEE81F82CCCE00E9389F /* FileNotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */; };
 		11DFCEE91F82CCD300E9389F /* FileNotebookRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */; };
 		11DFCEEB1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11DFCEEA1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift */; };
+		11E39D741FC494C500D9232D /* Difference.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11E39D731FC494C500D9232D /* Difference.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
 		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FA13221F6B0B6500B09A92 /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */; };
@@ -146,6 +147,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				11E39D741FC494C500D9232D /* Difference.framework in CopyFiles */,
 				11AD36AE1F1D4AC200D9E0A9 /* WSTagsField.framework in CopyFiles */,
 				117636371F07FA4B000A5CFC /* Notepad.framework in CopyFiles */,
 				11FBDBAC1EED947700135646 /* Result.framework in CopyFiles */,
@@ -213,6 +215,7 @@
 		11C41FFA1F74521900397DD9 /* UseCaseNotebookSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UseCaseNotebookSpec.swift; sourceTree = "<group>"; };
 		11DFCEE71F82CCCE00E9389F /* FileNotebookRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNotebookRepository.swift; sourceTree = "<group>"; };
 		11DFCEEA1F82CCEA00E9389F /* FileNotebookRepositorySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileNotebookRepositorySpec.swift; sourceTree = "<group>"; };
+		11E39D731FC494C500D9232D /* Difference.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Difference.framework; path = Carthage/Build/iOS/Difference.framework; sourceTree = "<group>"; };
 		11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluator.swift; sourceTree = "<group>"; };
 		11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		11FBDBC41EED987400135646 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
@@ -493,6 +496,7 @@
 		11B7059E1EEBCB0E0039A863 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				11E39D731FC494C500D9232D /* Difference.framework */,
 				11AE3C721F194E1700A13A74 /* WSTagsField.framework */,
 				119955FC1F07C0FD007AB79A /* Notepad.framework */,
 				11B705A71EEBD3810039A863 /* Result.framework */,
