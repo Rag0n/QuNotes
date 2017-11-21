@@ -1,5 +1,5 @@
 //
-//  LibraryExperimental.swift
+//  Library.swift
 //  QuNotes
 //
 //  Created by Alexander Guschin on 03.11.2017.
@@ -8,27 +8,23 @@
 
 import Foundation
 
-extension Experimental {
-    enum Library {}
-}
-
-extension Experimental.Library {
+enum Library {
     struct Model: AutoEquatable {
-        let notebooks: [Experimental.Notebook.Model]
+        let notebooks: [Notebook.Model]
     }
 
     enum Action: AutoEquatable {
-        case createNotebook(notebook: Experimental.Notebook.Model, url: URL)
-        case deleteNotebook(notebook: Experimental.Notebook.Model, url: URL)
+        case createNotebook(notebook: Notebook.Model, url: URL)
+        case deleteNotebook(notebook: Notebook.Model, url: URL)
         case readFiles(url: URL, extension: String)
     }
 
     enum InputEvent {
         case loadNotebooks
-        case addNotebook(notebook: Experimental.Notebook.Model)
-        case removeNotebook(notebook: Experimental.Notebook.Meta)
-        case didAddNotebook(notebook: Experimental.Notebook.Model, error: Error?)
-        case didRemoveNotebook(notebook: Experimental.Notebook.Model, error: Error?)
+        case addNotebook(notebook: Notebook.Model)
+        case removeNotebook(notebook: Notebook.Meta)
+        case didAddNotebook(notebook: Notebook.Model, error: Error?)
+        case didRemoveNotebook(notebook: Notebook.Model, error: Error?)
     }
 
     struct Evaluator {
@@ -80,7 +76,7 @@ extension Experimental.Library {
 
 // MARL: - Private
 
-private extension Experimental.Library.Model {
+private extension Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
         return notebooks.filter({ $0.uuid == notebookUUID }).count > 0
     }

@@ -24,21 +24,21 @@ fileprivate func compareArrays<T>(lhs: [T], rhs: [T], compare: (_ lhs: T, _ rhs:
 
 
 // MARK: - AutoEquatable for classes, protocols, structs
-// MARK: - Experimental.Library.Model AutoEquatable
-extension Experimental.Library.Model: Equatable {}
-internal func == (lhs: Experimental.Library.Model, rhs: Experimental.Library.Model) -> Bool {
+// MARK: - Library.Model AutoEquatable
+extension Library.Model: Equatable {}
+internal func == (lhs: Library.Model, rhs: Library.Model) -> Bool {
     guard lhs.notebooks == rhs.notebooks else { return false }
     return true
 }
-// MARK: - Experimental.Note.Content AutoEquatable
-extension Experimental.Note.Content: Equatable {}
-internal func == (lhs: Experimental.Note.Content, rhs: Experimental.Note.Content) -> Bool {
+// MARK: - Note.Content AutoEquatable
+extension Note.Content: Equatable {}
+internal func == (lhs: Note.Content, rhs: Note.Content) -> Bool {
     guard lhs.content == rhs.content else { return false }
     return true
 }
-// MARK: - Experimental.Note.Meta AutoEquatable
-extension Experimental.Note.Meta: Equatable {}
-internal func == (lhs: Experimental.Note.Meta, rhs: Experimental.Note.Meta) -> Bool {
+// MARK: - Note.Meta AutoEquatable
+extension Note.Meta: Equatable {}
+internal func == (lhs: Note.Meta, rhs: Note.Meta) -> Bool {
     guard lhs.uuid == rhs.uuid else { return false }
     guard lhs.title == rhs.title else { return false }
     guard lhs.tags == rhs.tags else { return false }
@@ -46,24 +46,24 @@ internal func == (lhs: Experimental.Note.Meta, rhs: Experimental.Note.Meta) -> B
     guard lhs.created_at == rhs.created_at else { return false }
     return true
 }
-// MARK: - Experimental.Note.Model AutoEquatable
-extension Experimental.Note.Model: Equatable {}
-internal func == (lhs: Experimental.Note.Model, rhs: Experimental.Note.Model) -> Bool {
+// MARK: - Note.Model AutoEquatable
+extension Note.Model: Equatable {}
+internal func == (lhs: Note.Model, rhs: Note.Model) -> Bool {
     guard lhs.meta == rhs.meta else { return false }
     guard lhs.content == rhs.content else { return false }
     guard compareOptionals(lhs: lhs.notebook, rhs: rhs.notebook, compare: ==) else { return false }
     return true
 }
-// MARK: - Experimental.Notebook.Meta AutoEquatable
-extension Experimental.Notebook.Meta: Equatable {}
-internal func == (lhs: Experimental.Notebook.Meta, rhs: Experimental.Notebook.Meta) -> Bool {
+// MARK: - Notebook.Meta AutoEquatable
+extension Notebook.Meta: Equatable {}
+internal func == (lhs: Notebook.Meta, rhs: Notebook.Meta) -> Bool {
     guard lhs.uuid == rhs.uuid else { return false }
     guard lhs.name == rhs.name else { return false }
     return true
 }
-// MARK: - Experimental.Notebook.Model AutoEquatable
-extension Experimental.Notebook.Model: Equatable {}
-internal func == (lhs: Experimental.Notebook.Model, rhs: Experimental.Notebook.Model) -> Bool {
+// MARK: - Notebook.Model AutoEquatable
+extension Notebook.Model: Equatable {}
+internal func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
     guard lhs.meta == rhs.meta else { return false }
     guard lhs.notes == rhs.notes else { return false }
     return true
@@ -83,9 +83,9 @@ internal func == (lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookVie
 }
 
 // MARK: - AutoEquatable for Enums
-// MARK: - Experimental.Library.Action AutoEquatable
-extension Experimental.Library.Action: Equatable {}
-internal func == (lhs: Experimental.Library.Action, rhs: Experimental.Library.Action) -> Bool {
+// MARK: - Library.Action AutoEquatable
+extension Library.Action: Equatable {}
+internal func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
     switch (lhs, rhs) {
     case (.createNotebook(let lhs), .createNotebook(let rhs)):
         if lhs.notebook != rhs.notebook { return false }

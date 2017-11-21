@@ -42,7 +42,7 @@ extension UI.Library {
             return LibraryViewController(withDispatch: dispatch)
         }()
 
-        private(set) var library: Experimental.Library.Evaluator
+        private(set) var library: Library.Evaluator
 
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
             self.navigationController = navigationController
@@ -51,8 +51,8 @@ extension UI.Library {
             self.dependencies = dependencies
             evaluator = Evaluator()
 
-            let initialModel = Experimental.Library.Model(notebooks: [])
-            library = Experimental.Library.Evaluator(model: initialModel)
+            let initialModel = Library.Model(notebooks: [])
+            library = Library.Evaluator(model: initialModel)
         }
 
         // MARK: - Private
@@ -65,7 +65,7 @@ extension UI.Library {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func dispatchToLibrary(event: Experimental.Library.InputEvent) {
+        fileprivate func dispatchToLibrary(event: Library.InputEvent) {
             updateLibrary <| library.evaluate(event: event)
         }
 
@@ -75,7 +75,7 @@ extension UI.Library {
             evaluator.effects.forEach(libraryViewController.perform)
         }
 
-        fileprivate func updateLibrary(library: Experimental.Library.Evaluator) {
+        fileprivate func updateLibrary(library: Library.Evaluator) {
             self.library = library
             library.actions.forEach(perform)
         }
@@ -88,7 +88,7 @@ extension UI.Library {
                 dispatchToLibrary <| .removeNotebook(notebook: notebook)
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
-            case .showNotes(let notebook):
+            case let .showNotes(notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
                                                                      dependencies: dependencies,
                                                                      notebook: notebook)
@@ -98,7 +98,7 @@ extension UI.Library {
             }
         }
 
-        fileprivate func perform(action: Experimental.Library.Action) {
+        fileprivate func perform(action: Library.Action) {
             switch action {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook.meta)

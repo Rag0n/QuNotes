@@ -12,9 +12,9 @@ import Result
 
 class NotebookExperimantalSpec: QuickSpec {
     override func spec() {
-        let note = Experimental.Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil, updatedDate: 0, createdDate: 123)
-        let model = Experimental.Notebook.Model(uuid: "uuid", name: "name", notes: [note])
-        let e = Experimental.Notebook.Evaluator(model: model)
+        let note = Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil, updatedDate: 0, createdDate: 123)
+        let model = Notebook.Model(uuid: "uuid", name: "name", notes: [note])
+        let e = Notebook.Evaluator(model: model)
 
         context("when initialized") {
             it("has zero actions") {
@@ -27,10 +27,10 @@ class NotebookExperimantalSpec: QuickSpec {
         }
 
         describe("-evaluate:") {
-            var event: Experimental.Notebook.InputEvent!
+            var event: Notebook.InputEvent!
 
             context("when receiving changeName event") {
-                let expectedMetaContent = Experimental.Notebook.Meta(uuid: "uuid", name: "new name")
+                let expectedMetaContent = Notebook.Meta(uuid: "uuid", name: "new name")
 
                 beforeEach {
                     event = .changeName(newName: "new name")
@@ -50,12 +50,12 @@ class NotebookExperimantalSpec: QuickSpec {
 
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
-                    let newNote = Experimental.Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"], notebook: nil, updatedDate: 12, createdDate: 12)
-                    let expectedNoteMeta = Experimental.Note.Meta(uuid: "newNoteUUID", title: "title",
+                    let newNote = Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"], notebook: nil, updatedDate: 12, createdDate: 12)
+                    let expectedNoteMeta = Note.Meta(uuid: "newNoteUUID", title: "title",
                                                                   tags: ["tag"],
                                                                   updated_at: 12,
                                                                   created_at: 12)
-                    let expectedNoteContent = Experimental.Note.Content(content: "content")
+                    let expectedNoteContent = Note.Content(content: "content")
 
                     beforeEach {
                         event = .addNote(note: newNote)
@@ -114,7 +114,7 @@ class NotebookExperimantalSpec: QuickSpec {
                 }
 
                 context("when passed note is not exist") {
-                    let notAddedNote = Experimental.Note.Model(uuid: "noteAddedNoteUUID", title: "title", content: "content", tags: [], notebook: nil, updatedDate: 0, createdDate: 14)
+                    let notAddedNote = Note.Model(uuid: "noteAddedNoteUUID", title: "title", content: "content", tags: [], notebook: nil, updatedDate: 0, createdDate: 14)
 
                     beforeEach {
                         event = .removeNote(note: notAddedNote)

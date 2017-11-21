@@ -1,5 +1,5 @@
 //
-//  NoteExperimentalSpec.swift
+//  NoteSpec.swift
 //  QuNotesTests
 //
 //  Created by Alexander Guschin on 30.10.2017.
@@ -9,15 +9,21 @@
 import Quick
 import Nimble
 import Result
+import Difference
 
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
-        let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+        let model = Note.Model(uuid: "uuid", title: "title", content: "content",
                                             tags: [], notebook: nil, updatedDate: 0, createdDate: 12)
-        var e: Experimental.Note.Evaluator!
+        var e: Note.Evaluator!
 
         beforeEach {
-            e = Experimental.Note.Evaluator(model: model)
+            e = Note.Evaluator(model: model)
+            let secondModel = Note.Model(uuid: "uuid", title: "title", content: "????",
+                                         tags: [], notebook: nil, updatedDate: 0, createdDate: 15)
+
+            let modelDiff = dumpDiff(model, secondModel)
+            let modelDiff2 = dumpDiff(model, secondModel)
         }
 
         context("when initialized") {
@@ -31,7 +37,7 @@ class NoteExperimantalSpec: QuickSpec {
         }
 
         describe("-evaluate:") {
-            var event: Experimental.Note.InputEvent!
+            var event: Note.InputEvent!
 
             context("when receiving changeTitle event") {
                 beforeEach {
@@ -50,17 +56,17 @@ class NoteExperimantalSpec: QuickSpec {
                 }
 
                 context("when note is added to notebook") {
-                    let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                    let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                    let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                    let model = Note.Model(uuid: "uuid", title: "title", content: "content",
                                                         tags: [], notebook: notebookModel, updatedDate: 0,
                                                         createdDate: 13)
-                    let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "new title", tags: [],
+                    let expectedMeta = Note.Meta(uuid: "uuid", title: "new title", tags: [],
                                                               updated_at: 15,
                                                               created_at: 13)
                     let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                     beforeEach {
-                        e = Experimental.Note.Evaluator(model: model)
+                        e = Note.Evaluator(model: model)
                         e.currentTimestamp = { 15 }
                     }
 
@@ -88,15 +94,15 @@ class NoteExperimantalSpec: QuickSpec {
                 }
 
                 context("when note is added to notebook") {
-                    let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                    let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                    let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                    let model = Note.Model(uuid: "uuid", title: "title", content: "content",
                                                         tags: [], notebook: notebookModel, updatedDate: 0,
                                                         createdDate: 16)
-                    let expectedContent = Experimental.Note.Content(content: "new content")
+                    let expectedContent = Note.Content(content: "new content")
                     let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!
 
                     beforeEach {
-                        e = Experimental.Note.Evaluator(model: model)
+                        e = Note.Evaluator(model: model)
                     }
 
                     it("has updateFile action with note's content URL") {
@@ -112,12 +118,12 @@ class NoteExperimantalSpec: QuickSpec {
                 }
 
                 context("when tag was already added") {
-                    let model = Experimental.Note.Model(uuid: "uuid", title: "title",
+                    let model = Note.Model(uuid: "uuid", title: "title",
                                                         content: "content", tags: ["tag"], notebook: nil, updatedDate: 0,
                                                         createdDate: 18)
 
                     beforeEach {
-                        e = Experimental.Note.Evaluator(model: model)
+                        e = Note.Evaluator(model: model)
                     }
 
                     it("doesnt update model") {
@@ -144,17 +150,17 @@ class NoteExperimantalSpec: QuickSpec {
                     }
 
                     context("when note is added to notebook") {
-                        let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                        let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                        let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let model = Note.Model(uuid: "uuid", title: "title", content: "content",
                                                             tags: [], notebook: notebookModel, updatedDate: 0,
                                                             createdDate: 19)
-                        let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
+                        let expectedMeta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
                                                                   updated_at: 20,
                                                                   created_at: 19)
                         let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                         beforeEach {
-                            e = Experimental.Note.Evaluator(model: model)
+                            e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 20 }
                         }
 
@@ -168,12 +174,12 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving removeTag event") {
                 context("when that tag exist") {
-                    let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                    let model = Note.Model(uuid: "uuid", title: "title", content: "content",
                                                         tags: ["tag"], notebook: nil, updatedDate: 0,
                                                         createdDate: 20)
 
                     beforeEach {
-                        e = Experimental.Note.Evaluator(model: model)
+                        e = Note.Evaluator(model: model)
                         event = .removeTag(tag: "tag")
                     }
 
@@ -189,17 +195,17 @@ class NoteExperimantalSpec: QuickSpec {
                     }
 
                     context("when note is added to notebook") {
-                        let notebookModel = Experimental.Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                        let model = Experimental.Note.Model(uuid: "uuid", title: "title", content: "content",
+                        let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let model = Note.Model(uuid: "uuid", title: "title", content: "content",
                                                             tags: ["tag"], notebook: notebookModel, updatedDate: 0,
                                                             createdDate: 21)
-                        let expectedMeta = Experimental.Note.Meta(uuid: "uuid", title: "title", tags: [],
+                        let expectedMeta = Note.Meta(uuid: "uuid", title: "title", tags: [],
                                                                   updated_at: 22,
                                                                   created_at: 21)
                         let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
 
                         beforeEach {
-                            e = Experimental.Note.Evaluator(model: model)
+                            e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 22 }
                         }
 

@@ -13,12 +13,12 @@ extension UI.Library {
     // MARK: - Data types
 
     struct Model: AutoEquatable {
-        let notebooks: [Experimental.Notebook.Meta]
+        let notebooks: [Notebook.Meta]
     }
     
     enum Action: AutoEquatable {
-        case addNotebook(notebook: Experimental.Notebook.Model)
-        case deleteNotebook(notebook: Experimental.Notebook.Meta)
+        case addNotebook(notebook: Notebook.Model)
+        case deleteNotebook(notebook: Notebook.Meta)
         case showNotes(forNotebook: UseCase.Notebook)
         case showError(title: String, message: String)
     }
@@ -31,8 +31,8 @@ extension UI.Library {
     }
 
     enum CoordinatorEvent {
-        case didAddNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
-        case didDeleteNotebook(notebook: Experimental.Notebook.Meta, error: Error?)
+        case didAddNotebook(notebook: Notebook.Meta, error: Error?)
+        case didDeleteNotebook(notebook: Notebook.Meta, error: Error?)
     }
 
     enum ViewControllerEvent {
@@ -55,7 +55,7 @@ extension UI.Library {
         let model: Model
         var uuidGenerator: () -> String = { UUID().uuidString }
 
-        init(notebooks: [Experimental.Notebook.Meta] = []) {
+        init(notebooks: [Notebook.Meta] = []) {
             effects = []
             actions = []
             model = Model(notebooks: notebooks)
@@ -68,7 +68,7 @@ extension UI.Library {
 
             switch event {
             case .addNotebook:
-                let notebook = Experimental.Notebook.Model(uuid: uuidGenerator(), name: "", notes: [])
+                let notebook = Notebook.Model(uuid: uuidGenerator(), name: "", notes: [])
                 let updatedNotebooks = model.notebooks + [notebook.meta]
                 let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook.meta)!
@@ -134,13 +134,13 @@ extension UI.Library {
 // MARK: - Private
 
 private extension UI.Library {
-    static func viewModels(fromNotebooks: [Experimental.Notebook.Meta]) -> [NotebookViewModel] {
+    static func viewModels(fromNotebooks: [Notebook.Meta]) -> [NotebookViewModel] {
         return fromNotebooks.map {
             NotebookViewModel(title: $0.name, isEditable: false)
         }
     }
 
-    static func notebookNameSorting(lhs: Experimental.Notebook.Meta, rhs: Experimental.Notebook.Meta) -> Bool {
+    static func notebookNameSorting(lhs: Notebook.Meta, rhs: Notebook.Meta) -> Bool {
         return lhs.name.lowercased() < rhs.name.lowercased()
     }
 }

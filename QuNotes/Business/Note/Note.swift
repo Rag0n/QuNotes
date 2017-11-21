@@ -1,5 +1,5 @@
 //
-//  NoteExperimental.swift
+//  Note.swift
 //  QuNotes
 //
 //  Created by Alexander Guschin on 30.10.2017.
@@ -8,17 +8,13 @@
 
 import Foundation
 
-extension Experimental {
-    enum Note {}
-}
-
-extension Experimental.Note {
+enum Note {
     struct Model: AutoEquatable {
         let meta: Meta
         let content: String
-        let notebook: Experimental.Notebook.Model?
+        let notebook: Notebook.Model?
 
-        init(meta: Meta, content: String, notebook: Experimental.Notebook.Model?) {
+        init(meta: Meta, content: String, notebook: Notebook.Model?) {
             self.meta = meta
             self.content = content
             self.notebook = notebook
@@ -117,7 +113,7 @@ extension Experimental.Note {
 
 // MARK: Model API
 
-extension Experimental.Note.Model {
+extension Note.Model {
     var uuid: String {
         return meta.uuid
     }
@@ -138,17 +134,17 @@ extension Experimental.Note.Model {
          title: String,
          content: String,
          tags: [String],
-         notebook: Experimental.Notebook.Model?,
+         notebook: Notebook.Model?,
          updatedDate: TimeInterval,
          createdDate: TimeInterval) {
-        let meta = Experimental.Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: updatedDate, created_at: createdDate)
+        let meta = Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: updatedDate, created_at: createdDate)
         self.init(meta: meta, content: content, notebook: notebook)
     }
 }
 
 // MARK: - Private
 
-private extension Experimental.Note.Model {
+private extension Note.Model {
     func hasTag(_ tag: String) -> Bool {
         return tags.index(of: tag) != nil
     }
@@ -156,14 +152,14 @@ private extension Experimental.Note.Model {
 
 // MARK: - Action Equtable
 // TODO: Fix action type(similar to library) and replace this extension by autoequatable
-extension Experimental.Note.Action: Equatable {
-    static func ==(lhs: Experimental.Note.Action, rhs: Experimental.Note.Action) -> Bool {
+extension Note.Action: Equatable {
+    static func ==(lhs: Note.Action, rhs: Note.Action) -> Bool {
         switch (lhs, rhs) {
-        case (.updateFile(let lURL, let lContent as Experimental.Note.Meta),
-              .updateFile(let rURL, let rContent as Experimental.Note.Meta)):
+        case (.updateFile(let lURL, let lContent as Note.Meta),
+              .updateFile(let rURL, let rContent as Note.Meta)):
             return (lURL == rURL) && (lContent == rContent)
-        case (.updateFile(let lURL, let lContent as Experimental.Note.Content),
-              .updateFile(let rURL, let rContent as Experimental.Note.Content)):
+        case (.updateFile(let lURL, let lContent as Note.Content),
+              .updateFile(let rURL, let rContent as Note.Content)):
             return (lURL == rURL) && (lContent == rContent)
         default: return false
         }

@@ -1,5 +1,5 @@
 //
-//  LibraryExperimentalSpec.swift
+//  LibrarySpec.swift
 //  QuNotesTests
 //
 //  Created by Alexander Guschin on 03.11.2017.
@@ -12,11 +12,11 @@ import Result
 
 class LibraryExperimantalSpec: QuickSpec {
     override func spec() {
-        let notebook = Experimental.Notebook.Model(uuid: "notebookUUID",
+        let notebook = Notebook.Model(uuid: "notebookUUID",
                                                    name: "notebookName",
                                                    notes: [])
-        let model = Experimental.Library.Model(notebooks: [notebook])
-        let e = Experimental.Library.Evaluator(model: model)
+        let model = Library.Model(notebooks: [notebook])
+        let e = Library.Evaluator(model: model)
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
 
         context("when initialized") {
@@ -30,11 +30,11 @@ class LibraryExperimantalSpec: QuickSpec {
         }
 
         describe("-evaluate:") {
-            var event: Experimental.Library.InputEvent!
+            var event: Library.InputEvent!
 
             context("when receiving addNotebook event") {
                 context("when notebook with that uuid is not added yet") {
-                    let newNotebook = Experimental.Notebook.Model(uuid: "newNotebookUUID",
+                    let newNotebook = Notebook.Model(uuid: "newNotebookUUID",
                                                                   name: "newNotebookName",
                                                                   notes: [])
 
@@ -90,7 +90,7 @@ class LibraryExperimantalSpec: QuickSpec {
                 }
 
                 context("when notebook with that uuid was not added") {
-                    let notAddedNotebook = Experimental.Notebook.Model(uuid: "notAddedNotebookUUID",
+                    let notAddedNotebook = Notebook.Model(uuid: "notAddedNotebookUUID",
                                                                        name: "notAddedNotebookName",
                                                                        notes: [])
 
@@ -127,7 +127,7 @@ class LibraryExperimantalSpec: QuickSpec {
             }
 
             context("when receiving didAddNotebook event") {
-                let notebook = Experimental.Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
+                let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
 
                 context("when successfully adds notebook") {
                     beforeEach {
@@ -158,7 +158,7 @@ class LibraryExperimantalSpec: QuickSpec {
                     }
 
                     context("when notebook is not in model") {
-                         let anotherNotebook = Experimental.Notebook.Model(uuid: "anotherNotebookUUID",
+                         let anotherNotebook = Notebook.Model(uuid: "anotherNotebookUUID",
                                                                            name: "anotherNotebookName",
                                                                            notes: [])
 
@@ -176,7 +176,7 @@ class LibraryExperimantalSpec: QuickSpec {
             }
 
             context("when receiving didRemoveNotebook event") {
-                let notebook = Experimental.Notebook.Model(uuid: "removedUUID", name: "removeName", notes: [])
+                let notebook = Notebook.Model(uuid: "removedUUID", name: "removeName", notes: [])
 
                 context("when successfully removes notebook") {
                     beforeEach {

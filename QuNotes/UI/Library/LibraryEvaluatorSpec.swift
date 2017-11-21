@@ -24,11 +24,11 @@ class LibraryEvaluatorSpec: QuickSpec {
             var event: UI.Library.ViewControllerEvent!
 
             context("when receiving addNotebook event") {
-                let notebookModel = Experimental.Notebook.Model(uuid: "newUUID", name: "", notes: [])
-                let notebookMeta = Experimental.Notebook.Meta(uuid: "newUUID", name: "")
+                let notebookModel = Notebook.Model(uuid: "newUUID", name: "", notes: [])
+                let notebookMeta = Notebook.Meta(uuid: "newUUID", name: "")
 
-                let firstNotebookMeta = Experimental.Notebook.Meta(uuid: "firstUUID", name: "abc")
-                let secondNotebookMeta = Experimental.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let firstNotebookMeta = Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebookMeta = Notebook.Meta(uuid: "secondUUID", name: "cde")
                 let expectedViewModels = [
                     UI.Library.NotebookViewModel(title: "", isEditable: false), // TODO: replace by true
                     UI.Library.NotebookViewModel(title: "abc", isEditable: false),
@@ -65,8 +65,8 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNotebook event") {
-                let firstNotebookMeta = Experimental.Notebook.Meta(uuid: "firstUUID", name: "abc")
-                let secondNotebookMeta = Experimental.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let firstNotebookMeta = Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebookMeta = Notebook.Meta(uuid: "secondUUID", name: "cde")
                 let expectedViewModels = [UI.Library.NotebookViewModel(title: "cde", isEditable: false)]
                 let model = UI.Library.Model(notebooks: [firstNotebookMeta, secondNotebookMeta])
 
@@ -132,8 +132,8 @@ class LibraryEvaluatorSpec: QuickSpec {
             var event: UI.Library.CoordinatorEvent!
 
             context("when receiving didAddNotebook event") {
-                let notebook = Experimental.Notebook.Meta(uuid: "uuid", name: "name")
-                let anotherNotebook = Experimental.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
+                let notebook = Notebook.Meta(uuid: "uuid", name: "name")
+                let anotherNotebook = Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
                 let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
                 let model = UI.Library.Model(notebooks: [notebook, anotherNotebook])
 
@@ -185,9 +185,9 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didDeleteNotebook event") {
-                let notebook = Experimental.Notebook.Meta(uuid: "uuid", name: "name")
+                let notebook = Notebook.Meta(uuid: "uuid", name: "name")
                 let notebookViewModel = UI.Library.NotebookViewModel(title: "name", isEditable: false)
-                let anotherNotebook = Experimental.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
+                let anotherNotebook = Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
                 let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
                 let model = UI.Library.Model(notebooks: [anotherNotebook])
 
