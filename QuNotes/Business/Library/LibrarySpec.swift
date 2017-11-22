@@ -8,16 +8,17 @@
 
 import Quick
 import Nimble
-import Result
 
 class LibraryExperimantalSpec: QuickSpec {
     override func spec() {
-        let notebook = Notebook.Model(uuid: "notebookUUID",
-                                                   name: "notebookName",
-                                                   notes: [])
+        let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
         let model = Library.Model(notebooks: [notebook])
-        let e = Library.Evaluator(model: model)
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
+        var e: Library.Evaluator!
+
+        beforeEach {
+            e = Library.Evaluator(model: model)
+        }
 
         context("when initialized") {
             it("has zero actions") {
@@ -34,39 +35,39 @@ class LibraryExperimantalSpec: QuickSpec {
 
             context("when receiving addNotebook event") {
                 context("when notebook with that uuid is not added yet") {
-                    let newNotebook = Notebook.Model(uuid: "newNotebookUUID",
-                                                                  name: "newNotebookName",
-                                                                  notes: [])
+                    let newNotebook = Notebook.Model(uuid: "newNotebookUUID", name: "newNotebookName", notes: [])
 
                     beforeEach {
                         event = .addNotebook(notebook: newNotebook)
+                        e = e.evaluate(event: event)
                     }
 
-                    it("has createNotebook action with notebook meta url") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.createNotebook(notebook: newNotebook,
-                                                      url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!)))
+                    it("has createNotebook action with notebook & meta url") {
+                        expect(e.actions).to(equalDiff([
+                            .createNotebook(notebook: newNotebook,
+                                             url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!)
+                        ]))
                     }
 
                     it("updates model by adding passed notebook") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .to(contain(newNotebook))
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [notebook, newNotebook])
+                        ))
                     }
                 }
 
                 context("when notebook with that uuid is already added") {
                     beforeEach {
                         event = .addNotebook(notebook: notebook)
+                        e = e.evaluate(event: event)
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
                 }
             }
@@ -75,37 +76,36 @@ class LibraryExperimantalSpec: QuickSpec {
                 context("when notebook with that uuid was added") {
                     beforeEach {
                         event = .removeNotebook(notebook: notebook.meta)
+                        e = e.evaluate(event: event)
                     }
 
                     it("removes notebook from model") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .toNot(contain(notebook))
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [])
+                        ))
                     }
 
                     it("has deleteNotebook action with notebook url") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteNotebook(notebook: notebook,
-                                                      url: URL(string: "notebookUUID.qvnotebook")!)))
+                        expect(e.actions).to(equalDiff([
+                            .deleteNotebook(notebook: notebook,
+                                            url: URL(string: "notebookUUID.qvnotebook")!)
+                        ]))
                     }
                 }
 
                 context("when notebook with that uuid was not added") {
-                    let notAddedNotebook = Notebook.Model(uuid: "notAddedNotebookUUID",
-                                                                       name: "notAddedNotebookName",
-                                                                       notes: [])
-
                     beforeEach {
+                        let notAddedNotebook = Notebook.Model(uuid: "nAUUID", name: "nAName", notes: [])
                         event = .removeNotebook(notebook: notAddedNotebook.meta)
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
                 }
             }
@@ -113,95 +113,94 @@ class LibraryExperimantalSpec: QuickSpec {
             context("when receiving loadNotebooks event") {
                 beforeEach {
                     event = .loadNotebooks
+                    e = e.evaluate(event: event)
                 }
 
                 it("doesnt update model") {
-                    expect(e.evaluate(event: event).model)
-                        .to(equal(model))
+                    expect(e.model).to(equalDiff(model))
                 }
 
                 it("has readFiles action with root url and qvnotebook extension") {
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.readFiles(url: URL(string: "/")!, extension: "qvnotebook")))
+                    expect(e.actions).to(equalDiff([
+                        .readFiles(url: URL(string: "/")!, extension: "qvnotebook")
+                    ]))
                 }
             }
 
             context("when receiving didAddNotebook event") {
-                let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
-
                 context("when successfully adds notebook") {
                     beforeEach {
+                        let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
                         event = .didAddNotebook(notebook: notebook, error: nil)
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
                 }
 
-                context("when failed to add notebook") {
+                context("when fails to add notebook") {
                     context("when notebook is in model") {
                         beforeEach {
                             event = .didAddNotebook(notebook: notebook, error: error)
+                            e = e.evaluate(event: event)
                         }
 
                         it("removes notebook from model") {
-                            expect(e.evaluate(event: event).model.notebooks)
-                                .to(beEmpty())
+                            expect(e.model).to(equalDiff(
+                                Library.Model(notebooks: [])
+                            ))
                         }
                     }
 
                     context("when notebook is not in model") {
-                         let anotherNotebook = Notebook.Model(uuid: "anotherNotebookUUID",
-                                                                           name: "anotherNotebookName",
-                                                                           notes: [])
-
                         beforeEach {
+                            let anotherNotebook = Notebook.Model(uuid: "aUUID", name: "aName", notes: [])
                             event = .didAddNotebook(notebook: anotherNotebook, error: error)
+                            e = e.evaluate(event: event)
                         }
 
                         it("does nothing") {
-                            let newE = e.evaluate(event: event)
-                            expect(newE.model).to(equal(e.model))
-                            expect(newE.actions).to(equal(e.actions))
+                            expect(e.model).to(equal(model))
+                            expect(e.actions).to(equal([]))
                         }
                     }
                 }
             }
 
             context("when receiving didRemoveNotebook event") {
-                let notebook = Notebook.Model(uuid: "removedUUID", name: "removeName", notes: [])
+                let removedNotebook = Notebook.Model(uuid: "removedUUID", name: "removeName", notes: [])
 
                 context("when successfully removes notebook") {
                     beforeEach {
-                        event = .didRemoveNotebook(notebook: notebook, error: nil)
+                        event = .didRemoveNotebook(notebook: removedNotebook, error: nil)
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
                 }
 
                 context("when fails to remove notebook") {
                     beforeEach {
-                        event = .didRemoveNotebook(notebook: notebook, error: error)
+                        event = .didRemoveNotebook(notebook: removedNotebook, error: error)
+                        e = e.evaluate(event: event)
                     }
 
                     it("adds notebook back to model") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .to(contain(notebook))
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [notebook, removedNotebook])
+                        ))
                     }
                 }
             }
