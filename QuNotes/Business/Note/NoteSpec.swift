@@ -8,22 +8,15 @@
 
 import Quick
 import Nimble
-import Result
-import Difference
 
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
-        let model = Note.Model(uuid: "uuid", title: "title", content: "content",
-                                            tags: [], notebook: nil, updatedDate: 0, createdDate: 12)
+        let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
+        let model = Note.Model(meta: meta, content: "content", notebook: nil)
         var e: Note.Evaluator!
 
         beforeEach {
             e = Note.Evaluator(model: model)
-            let secondModel = Note.Model(uuid: "uuid", title: "title", content: "????",
-                                         tags: [], notebook: nil, updatedDate: 0, createdDate: 15)
-
-            let modelDiff = dumpDiff(model, secondModel)
-            let modelDiff2 = dumpDiff(model, secondModel)
         }
 
         context("when initialized") {
@@ -43,36 +36,31 @@ class NoteExperimantalSpec: QuickSpec {
                 beforeEach {
                     event = .changeTitle(newTitle: "new title")
                     e.currentTimestamp = { 15 }
+                    e = e.evaluate(event: event)
                 }
 
-                it("updates model by changing note title") {
-                    expect(e.evaluate(event: event).model.title)
-                        .to(equal("new title"))
-                }
-
-                it("updates model's updateDate") {
-                    expect(e.evaluate(event: event).model.updatedDate)
-                        .to(equal(15))
+                it("updates model by changing title and updatedDate") {
+                    expect(e.model).to(equalDiff(
+                        Note.Model(uuid: "uuid", title: "new title", content: "content", tags: ["tag"],
+                                   notebook: nil, updatedDate: 15, createdDate: 12)
+                    ))
                 }
 
                 context("when note is added to notebook") {
-                    let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                    let model = Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                        tags: [], notebook: notebookModel, updatedDate: 0,
-                                                        createdDate: 13)
-                    let expectedMeta = Note.Meta(uuid: "uuid", title: "new title", tags: [],
-                                                              updated_at: 15,
-                                                              created_at: 13)
-                    let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
-
                     beforeEach {
+                        let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                         e = Note.Evaluator(model: model)
                         e.currentTimestamp = { 15 }
+                        e = e.evaluate(event: event)
                     }
 
-                    it("has updateFile action with note's meta URL") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.updateFile(url: expectedURL, content: expectedMeta)))
+                    it("has updateFile action with meta & meta URL") {
+                        expect(e.actions).to(equalDiff([
+                            .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                        content: Note.Meta(uuid: "uuid", title: "new title", tags: ["tag"],
+                                                           updated_at: 15, created_at: 12))
+                        ]))
                     }
                 }
             }
@@ -80,93 +68,79 @@ class NoteExperimantalSpec: QuickSpec {
             context("when receiving changeContent event") {
                 beforeEach {
                     event = .changeContent(newContent: "new content")
-                }
-
-                it("updates model by changing note content") {
-                    expect(e.evaluate(event: event).model.content)
-                        .to(equal("new content"))
-                }
-
-                it("updates model's updateDate") {
                     e.currentTimestamp = { 16 }
-                    expect(e.evaluate(event: event).model.updatedDate)
-                        .to(equal(16))
+                    e = e.evaluate(event: event)
+                }
+
+                it("updates model by changing content and updatedDate") {
+                    expect(e.model).to(equalDiff(
+                        Note.Model(uuid: "uuid", title: "title", content: "new content", tags: ["tag"],
+                                   notebook: nil, updatedDate: 16, createdDate: 12)
+                    ))
                 }
 
                 context("when note is added to notebook") {
-                    let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                    let model = Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                        tags: [], notebook: notebookModel, updatedDate: 0,
-                                                        createdDate: 16)
-                    let expectedContent = Note.Content(content: "new content")
-                    let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!
-
                     beforeEach {
+                        let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                         e = Note.Evaluator(model: model)
+                        e = e.evaluate(event: event)
                     }
 
-                    it("has updateFile action with note's content URL") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.updateFile(url: expectedURL, content: expectedContent)))
+                    it("has updateFile action with content & content URL") {
+                        expect(e.actions).to(equalDiff([
+                            .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
+                                        content: Note.Content(content: "new content"))
+                        ]))
                     }
                 }
             }
 
             context("when receiving addTag event") {
-                beforeEach {
-                    event = .addTag(tag: "tag")
-                }
-
                 context("when tag was already added") {
-                    let model = Note.Model(uuid: "uuid", title: "title",
-                                                        content: "content", tags: ["tag"], notebook: nil, updatedDate: 0,
-                                                        createdDate: 18)
-
                     beforeEach {
-                        e = Note.Evaluator(model: model)
+                        event = .addTag(tag: "tag")
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
                 }
 
                 context("when tag is new") {
-                    it("updates model by appending tag") {
-                        expect(e.evaluate(event: event).model.tags)
-                            .to(equal(["tag"]))
+                    beforeEach {
+                        event = .addTag(tag: "new tag")
+                        e.currentTimestamp = { 18 }
+                        e = e.evaluate(event: event)
                     }
 
-                    it("updates model's updateDate") {
-                        e.currentTimestamp = { 18 }
-                        expect(e.evaluate(event: event).model.updatedDate)
-                            .to(equal(18))
+                    it("updates model by appending tag and updating updateDate") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(uuid: "uuid", title: "title", content: "content", tags: ["tag", "new tag"],
+                                       notebook: nil, updatedDate: 18, createdDate: 12)
+                        ))
                     }
 
                     context("when note is added to notebook") {
-                        let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                        let model = Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                            tags: [], notebook: notebookModel, updatedDate: 0,
-                                                            createdDate: 19)
-                        let expectedMeta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
-                                                                  updated_at: 20,
-                                                                  created_at: 19)
-                        let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
-
                         beforeEach {
+                            let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                            let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 20 }
+                            e = e.evaluate(event: event)
                         }
 
-                        it("has updateFile action with note's meta URL") {
-                            expect(e.evaluate(event: event).actions[0])
-                                .to(equal(.updateFile(url: expectedURL, content: expectedMeta)))
+                        it("has updateFile action with meta & meta URL") {
+                            expect(e.actions).to(equalDiff([
+                                .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                            content: Note.Meta(uuid: "uuid", title: "title", tags: ["tag", "new tag"],
+                                                               updated_at: 20, created_at: 12))
+                            ]))
                         }
                     }
                 }
@@ -174,61 +148,50 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving removeTag event") {
                 context("when that tag exist") {
-                    let model = Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                        tags: ["tag"], notebook: nil, updatedDate: 0,
-                                                        createdDate: 20)
-
                     beforeEach {
-                        e = Note.Evaluator(model: model)
                         event = .removeTag(tag: "tag")
-                    }
-
-                    it("updates model by removing tag") {
-                        expect(e.evaluate(event: event).model.tags)
-                            .to(beEmpty())
-                    }
-
-                    it("updates model's updateDate") {
                         e.currentTimestamp = { 20 }
-                        expect(e.evaluate(event: event).model.updatedDate)
-                            .to(equal(20))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("updates model by removing tag and updating updatedDate") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(uuid: "uuid", title: "title", content: "content", tags: [],
+                                       notebook: nil, updatedDate: 20, createdDate: 12)
+                        ))
                     }
 
                     context("when note is added to notebook") {
-                        let notebookModel = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
-                        let model = Note.Model(uuid: "uuid", title: "title", content: "content",
-                                                            tags: ["tag"], notebook: notebookModel, updatedDate: 0,
-                                                            createdDate: 21)
-                        let expectedMeta = Note.Meta(uuid: "uuid", title: "title", tags: [],
-                                                                  updated_at: 22,
-                                                                  created_at: 21)
-                        let expectedURL = URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!
-
                         beforeEach {
+                            let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                            let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 22 }
+                            e = e.evaluate(event: event)
                         }
 
-                        it("has updateFile action with note's meta URL") {
-                            expect(e.evaluate(event: event).actions[0])
-                                .to(equal(.updateFile(url: expectedURL, content: expectedMeta)))
+                        it("has updateFile action with meta & meta URL") {
+                            expect(e.actions).to(equalDiff([
+                                .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                            content: Note.Meta(uuid: "uuid", title: "title", tags: [],
+                                                               updated_at: 22, created_at: 12))
+                            ]))
                         }
                     }
                 }
 
                 context("when that tag doesnt exist") {
                     beforeEach {
-                        event = .removeTag(tag: "tag")
+                        event = .removeTag(tag: "not existing tag")
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
                 }
             }
