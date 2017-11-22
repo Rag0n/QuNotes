@@ -8,13 +8,18 @@
 
 import Quick
 import Nimble
-import Result
 
 class NotebookExperimantalSpec: QuickSpec {
     override func spec() {
-        let note = Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil, updatedDate: 0, createdDate: 123)
-        let model = Notebook.Model(uuid: "uuid", name: "name", notes: [note])
-        let e = Notebook.Evaluator(model: model)
+        let note = Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil,
+                              updatedDate: 0, createdDate: 123)
+        let meta = Notebook.Meta(uuid: "uuid", name: "name")
+        let model = Notebook.Model(meta: meta, notes: [note])
+        var e: Notebook.Evaluator!
+
+        beforeEach {
+            e = Notebook.Evaluator(model: model)
+        }
 
         context("when initialized") {
             it("has zero actions") {
@@ -22,7 +27,7 @@ class NotebookExperimantalSpec: QuickSpec {
             }
 
             it("has passed model") {
-                expect(e.model).to(equal(model))
+                expect(e.model).to(equalDiff(model))
             }
         }
 
@@ -30,68 +35,64 @@ class NotebookExperimantalSpec: QuickSpec {
             var event: Notebook.InputEvent!
 
             context("when receiving changeName event") {
-                let expectedMetaContent = Notebook.Meta(uuid: "uuid", name: "new name")
-
                 beforeEach {
                     event = .changeName(newName: "new name")
+                    e = e.evaluate(event: event)
                 }
 
-                it("has updateFile action with notebook's URL") {
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.updateFile(url: URL(string: "uuid.qvnotebook/meta.json")!,
-                                              content: expectedMetaContent)))
+                it("has updateFile action with notebook & notebook URL") {
+                    expect(e.actions).to(equalDiff([
+                        .updateFile(url: URL(string: "uuid.qvnotebook/meta.json")!,
+                                    content: Notebook.Meta(uuid: "uuid", name: "new name"))
+                    ]))
                 }
 
-                it("updates model by changing notebook name") {
-                    expect(e.evaluate(event: event).model.name)
-                        .to(equal("new name"))
+                it("updates model by changing name") {
+                    expect(e.model).to(equalDiff(
+                        Notebook.Model(uuid: "uuid", name: "new name", notes: [note])
+                    ))
                 }
             }
 
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
-                    let newNote = Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"], notebook: nil, updatedDate: 12, createdDate: 12)
-                    let expectedNoteMeta = Note.Meta(uuid: "newNoteUUID", title: "title",
-                                                                  tags: ["tag"],
-                                                                  updated_at: 12,
-                                                                  created_at: 12)
-                    let expectedNoteContent = Note.Content(content: "content")
+                    let newNote = Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"],
+                                             notebook: nil, updatedDate: 12, createdDate: 12)
 
                     beforeEach {
                         event = .addNote(note: newNote)
+                        e = e.evaluate(event: event)
                     }
 
-                    it("has createFile action with URL of new note meta") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
-                                                  content: expectedNoteMeta)))
-                    }
-
-                    it("has createFile action with URL of new note content") {
-                        expect(e.evaluate(event: event).actions[1])
-                            .to(equal(.createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!,
-                                                  content: expectedNoteContent)))
+                    it("has createFile actions with URL of new meta and content") {
+                        expect(e.actions).to(equalDiff([
+                            .createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
+                                        content: Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
+                                                           updated_at: 12, created_at: 12)),
+                            .createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!,
+                                        content: Note.Content(content: "content"))
+                        ]))
                     }
 
                     it("updates model by adding new note") {
-                        expect(e.evaluate(event: event).model.notes)
-                            .to(contain(newNote))
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: meta, notes: [note, newNote])
+                        ))
                     }
                 }
 
                 context("when note with that uuid is already added") {
                     beforeEach {
                         event = .addNote(note: note)
+                        e = e.evaluate(event: event)
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
                 }
             }
@@ -100,34 +101,36 @@ class NotebookExperimantalSpec: QuickSpec {
                 context("when passed note is exist") {
                     beforeEach {
                         event = .removeNote(note: note)
+                        e = e.evaluate(event: event)
                     }
 
                     it("has deleteFile action with URL of deleted note") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)))
+                        expect(e.actions).to(equalDiff([
+                            .deleteFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
+                        ]))
                     }
 
                     it("updates model by removing passed note") {
-                        expect(e.evaluate(event: event).model.notes)
-                            .to(beEmpty())
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: meta, notes: [])
+                        ))
                     }
                 }
 
                 context("when passed note is not exist") {
-                    let notAddedNote = Note.Model(uuid: "noteAddedNoteUUID", title: "title", content: "content", tags: [], notebook: nil, updatedDate: 0, createdDate: 14)
-
                     beforeEach {
+                        let notAddedNote = Note.Model(uuid: "nAUUID", title: "t", content: "c", tags: [],
+                                                      notebook: nil, updatedDate: 14, createdDate: 14)
                         event = .removeNote(note: notAddedNote)
+                        e = e.evaluate(event: event)
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
                 }
             }
