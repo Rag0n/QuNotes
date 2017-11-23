@@ -29,6 +29,10 @@ class FileExecuter {
         return removeItemAtURL <| url
     }
 
+    func contentOfDocumentsFolder(withExtension ext: String) -> Result<[URL], AnyError>  {
+        return Result(try contentOfDocumentsFolder(withExtension: ext))
+    }
+
     // MARK: - Private
 
     fileprivate lazy var encoder: JSONEncoder = {
@@ -64,5 +68,12 @@ fileprivate extension FileExecuter {
         catch {
             return error
         }
+    }
+
+    func contentOfDocumentsFolder(withExtension ext: String) throws -> [URL] {
+        let directoryContent = try FileManager.default.contentsOfDirectory(at: URL.documentsURL(),
+                                                                           includingPropertiesForKeys: nil,
+                                                                           options: [])
+        return directoryContent.filter { $0.pathExtension == ext }
     }
 }

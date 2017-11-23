@@ -105,7 +105,8 @@ extension UI.Library {
                 dispatchToLibrary <| .didRemoveNotebook(notebook: notebook, error: error)
                 dispatch <| .didDeleteNotebook(notebook: notebook.meta, error: error)
             case let .readDirectories(ext):
-                return
+                let result = fileExecuter.contentOfDocumentsFolder(withExtension: ext)
+                
             }
         }
     }
