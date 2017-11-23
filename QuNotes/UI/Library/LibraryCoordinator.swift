@@ -108,7 +108,7 @@ extension UI.Library {
                 let error = fileExecuter.deleteDirectory(at: url)
                 dispatchToLibrary <| .didRemoveNotebook(notebook: notebook, error: error)
                 dispatch <| .didDeleteNotebook(notebook: notebook.meta, error: error)
-            case let .readFiles(url, ext):
+            case let .readDirectories(ext):
                 return
             }
         }
