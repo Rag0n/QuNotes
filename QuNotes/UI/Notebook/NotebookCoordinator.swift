@@ -9,10 +9,6 @@
 import UIKit
 import Result
 
-extension UI {
-    enum Notebook {}
-}
-
 extension UI.Notebook {
     typealias ViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
     

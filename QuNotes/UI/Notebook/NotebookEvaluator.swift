@@ -9,6 +9,10 @@
 import Foundation
 import Result
 
+extension UI {
+    enum Notebook {}
+}
+
 extension UI.Notebook {
     struct Model {
         let notebook: UseCase.Notebook

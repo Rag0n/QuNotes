@@ -6,10 +6,6 @@
 import UIKit
 import Result
 
-extension UI {
-    enum Note {}
-}
-
 extension UI.Note {
     typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
 

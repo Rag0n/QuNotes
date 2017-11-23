@@ -6,6 +6,10 @@
 import Foundation
 import Result
 
+extension UI {
+    enum Note {}
+}
+
 extension UI.Note {
     struct Model {
         let note: UseCase.Note

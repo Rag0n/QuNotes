@@ -9,6 +9,10 @@
 import Foundation
 import Result
 
+extension UI {
+    enum Library {}
+}
+
 extension UI.Library {
     // MARK: - Data types
 
