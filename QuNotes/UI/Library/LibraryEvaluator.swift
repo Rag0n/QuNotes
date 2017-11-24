@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 extension UI {
     enum Library {}

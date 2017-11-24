@@ -17,7 +17,7 @@ enum Library {
     enum Action: AutoEquatable {
         case createNotebook(notebook: Notebook.Model, url: URL)
         case deleteNotebook(notebook: Notebook.Model, url: URL)
-        case readDirectories
+        case readBaseDirectory
         case readNotebooks(urls: [URL])
         case handleError(error: NSError)
     }
@@ -28,7 +28,7 @@ enum Library {
         case removeNotebook(notebook: Notebook.Meta)
         case didAddNotebook(notebook: Notebook.Model, error: Error?)
         case didRemoveNotebook(notebook: Notebook.Model, error: Error?)
-        case didReadDirectories(directories: Result<[URL], NSError>)
+        case didReadBaseDirectory(urls: Result<[URL], NSError>)
     }
 
     struct Evaluator {
@@ -46,7 +46,7 @@ enum Library {
 
             switch (event) {
             case .loadNotebooks:
-                actions = [.readDirectories]
+                actions = [.readBaseDirectory]
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
@@ -66,15 +66,14 @@ enum Library {
                 guard error != nil else { break }
                 let updatedNotebooks = model.notebooks + [notebook]
                 newModel = Model(notebooks: updatedNotebooks)
-            case let .didReadDirectories(result):
+            case let .didReadBaseDirectory(result):
                 guard let urls = result.value else {
                     actions = [.handleError(error: result.error!)]
                     break
                 }
-                let notebookURLs = urls.filter { $0.pathExtension == "qvnotebook" }
-                let metaURLs = notebookURLs.map { notebookURL in
-                    notebookURL.appendingPathComponent("meta").appendingPathExtension("json")
-                }
+                let metaURLs = urls
+                    .filter { $0.pathExtension == "qvnotebook" }
+                    .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
                 actions = [.readNotebooks(urls: metaURLs)]
             }
 

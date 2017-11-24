@@ -121,9 +121,9 @@ class LibraryExperimantalSpec: QuickSpec {
                     expect(e.model).to(equalDiff(model))
                 }
 
-                it("has readDirectories action") {
+                it("has readBaseDirectory action") {
                     expect(e.actions).to(equalDiff([
-                        Library.Action.readDirectories
+                        Library.Action.readBaseDirectory
                     ]))
                 }
             }
@@ -206,7 +206,7 @@ class LibraryExperimantalSpec: QuickSpec {
                 }
             }
 
-            fcontext("when receiving didReadDirectories event") {
+            fcontext("when receiving didReadBaseDirecotry event") {
                 context("when successfuly reads directories") {
                     beforeEach {
                         let urls = [
@@ -214,7 +214,7 @@ class LibraryExperimantalSpec: QuickSpec {
                             URL(string: "/notANotebookURL")!,
                             URL(string: "/secondNotebookURL.qvnotebook")!,
                         ]
-                        event = .didReadDirectories(directories: Result(value: urls))
+                        event = .didReadBaseDirectory(urls: Result(value: urls))
                         e = e.evaluate(event: event)
                     }
 
@@ -228,7 +228,7 @@ class LibraryExperimantalSpec: QuickSpec {
 
                 context("when fails to read directories") {
                     beforeEach {
-                        event = .didReadDirectories(directories: Result(error: error))
+                        event = .didReadBaseDirectory(urls: Result(error: error))
                         e = e.evaluate(event: event)
                     }
 
