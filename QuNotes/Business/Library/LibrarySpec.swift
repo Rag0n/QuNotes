@@ -8,6 +8,7 @@
 
 import Quick
 import Nimble
+import Result
 
 class LibraryExperimantalSpec: QuickSpec {
     override func spec() {
@@ -201,6 +202,40 @@ class LibraryExperimantalSpec: QuickSpec {
                         expect(e.model).to(equalDiff(
                             Library.Model(notebooks: [notebook, removedNotebook])
                         ))
+                    }
+                }
+            }
+
+            fcontext("when receiving didReadDirectories event") {
+                context("when successfuly reads directories") {
+                    beforeEach {
+                        let urls = [
+                            URL(string: "/firstNotebookURL.qvnotebook")!,
+                            URL(string: "/notANotebookURL")!,
+                            URL(string: "/secondNotebookURL.qvnotebook")!,
+                        ]
+                        event = .didReadDirectories(directories: Result(value: urls))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has readNotebooks action with notebook urls & notebook meta type") {
+                        expect(e.actions).to(equalDiff([
+                            .readNotebooks(urls: [URL(string: "/firstNotebookURL.qvnotebook/meta.json")!,
+                                                  URL(string: "/secondNotebookURL.qvnotebook/meta.json")!])
+                        ]))
+                    }
+                }
+
+                context("when fails to read directories") {
+                    beforeEach {
+                        event = .didReadDirectories(directories: Result(error: error))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has handleError action") {
+                        expect(e.actions).to(equalDiff([
+                            .handleError(error: error)
+                        ]))
                     }
                 }
             }

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Result
 
 enum Library {
     struct Model: AutoEquatable {
@@ -17,6 +18,8 @@ enum Library {
         case createNotebook(notebook: Notebook.Model, url: URL)
         case deleteNotebook(notebook: Notebook.Model, url: URL)
         case readDirectories
+        case readNotebooks(urls: [URL])
+        case handleError(error: NSError)
     }
 
     enum InputEvent {
@@ -25,6 +28,7 @@ enum Library {
         case removeNotebook(notebook: Notebook.Meta)
         case didAddNotebook(notebook: Notebook.Model, error: Error?)
         case didRemoveNotebook(notebook: Notebook.Model, error: Error?)
+        case didReadDirectories(directories: Result<[URL], NSError>)
     }
 
     struct Evaluator {
@@ -62,6 +66,16 @@ enum Library {
                 guard error != nil else { break }
                 let updatedNotebooks = model.notebooks + [notebook]
                 newModel = Model(notebooks: updatedNotebooks)
+            case let .didReadDirectories(result):
+                guard let urls = result.value else {
+                    actions = [.handleError(error: result.error!)]
+                    break
+                }
+                let notebookURLs = urls.filter { $0.pathExtension == "qvnotebook" }
+                let metaURLs = notebookURLs.map { notebookURL in
+                    notebookURL.appendingPathComponent("meta").appendingPathExtension("json")
+                }
+                actions = [.readNotebooks(urls: metaURLs)]
             }
 
             return Evaluator(actions: actions, model: newModel)

@@ -29,7 +29,7 @@ class FileExecuter {
         return removeItemAtURL <| url
     }
 
-    func contentOfDocumentsFolder() -> Result<[URL], AnyError>  {
+    func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
         return Result(try contentOfDocumentsFolder())
     }
 
