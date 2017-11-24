@@ -95,7 +95,7 @@ internal func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
         if lhs.notebook != rhs.notebook { return false }
         if lhs.url != rhs.url { return false }
         return true
-    case (.readDirectories(let lhs), .readDirectories(let rhs)):
+    case (.readDirectories, .readDirectories):
         return lhs == rhs
     default: return false
     }

@@ -29,8 +29,8 @@ class FileExecuter {
         return removeItemAtURL <| url
     }
 
-    func contentOfDocumentsFolder(withExtension ext: String) -> Result<[URL], AnyError>  {
-        return Result(try contentOfDocumentsFolder(withExtension: ext))
+    func contentOfDocumentsFolder() -> Result<[URL], AnyError>  {
+        return Result(try contentOfDocumentsFolder())
     }
 
     // MARK: - Private
@@ -70,10 +70,9 @@ fileprivate extension FileExecuter {
         }
     }
 
-    func contentOfDocumentsFolder(withExtension ext: String) throws -> [URL] {
-        let directoryContent = try FileManager.default.contentsOfDirectory(at: URL.documentsURL(),
-                                                                           includingPropertiesForKeys: nil,
-                                                                           options: [])
-        return directoryContent.filter { $0.pathExtension == ext }
+    func contentOfDocumentsFolder() throws -> [URL] {
+        return try FileManager.default.contentsOfDirectory(at: URL.documentsURL(),
+                                                           includingPropertiesForKeys: nil,
+                                                           options: [])
     }
 }

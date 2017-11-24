@@ -120,9 +120,9 @@ class LibraryExperimantalSpec: QuickSpec {
                     expect(e.model).to(equalDiff(model))
                 }
 
-                it("has readDirectories action with qvnotebook extension") {
+                it("has readDirectories action") {
                     expect(e.actions).to(equalDiff([
-                        .readDirectories(ext: "qvnotebook")
+                        Library.Action.readDirectories
                     ]))
                 }
             }

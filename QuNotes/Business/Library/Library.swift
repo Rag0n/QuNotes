@@ -16,7 +16,7 @@ enum Library {
     enum Action: AutoEquatable {
         case createNotebook(notebook: Notebook.Model, url: URL)
         case deleteNotebook(notebook: Notebook.Model, url: URL)
-        case readDirectories(ext: String)
+        case readDirectories
     }
 
     enum InputEvent {
@@ -42,7 +42,7 @@ enum Library {
 
             switch (event) {
             case .loadNotebooks:
-                actions = [.readDirectories(ext: "qvnotebook")]
+                actions = [.readDirectories]
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
