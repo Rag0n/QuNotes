@@ -109,8 +109,8 @@ extension UI.Library {
                 dispatchToLibrary <| .didReadBaseDirectory(urls: result)
             case let .readNotebooks(url):
                 return
-            case let .handleError(error):
-                return
+            case let .handleError(title, message):
+                showError(title: title, message: message, controller: libraryViewController)
             }
         }
     }

@@ -19,7 +19,7 @@ enum Library {
         case deleteNotebook(notebook: Notebook.Model, url: URL)
         case readBaseDirectory
         case readNotebooks(urls: [URL])
-        case handleError(error: NSError)
+        case handleError(title: String, message: String)
     }
 
     enum InputEvent {
@@ -68,7 +68,8 @@ enum Library {
                 newModel = Model(notebooks: updatedNotebooks)
             case let .didReadBaseDirectory(result):
                 guard let urls = result.value else {
-                    actions = [.handleError(error: result.error!)]
+                    actions = [.handleError(title: "Failed to load notebooks",
+                                            message: result.error!.localizedDescription)]
                     break
                 }
                 let metaURLs = urls

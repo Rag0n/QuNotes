@@ -234,7 +234,7 @@ class LibraryExperimantalSpec: QuickSpec {
 
                     it("has handleError action") {
                         expect(e.actions).to(equalDiff([
-                            .handleError(error: error)
+                            .handleError(title: "Failed to load notebooks", message: "message")
                         ]))
                     }
                 }
