@@ -107,8 +107,9 @@ extension UI.Library {
             case .readBaseDirectory:
                 let result = fileExecuter.contentOfDocumentsFolder()
                 dispatchToLibrary <| .didReadBaseDirectory(urls: result)
-            case let .readNotebooks(url):
-                return
+            case let .readNotebooks(urls):
+                let results = urls.map { fileExecuter.readFile(at: $0, contentType: Notebook.Meta.self) }
+                dispatchToLibrary <| .didReadNotebooks(notebooks: results)
             case let .handleError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
             case .didLoadNotebooks(let notebooks):
