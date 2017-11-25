@@ -14,12 +14,14 @@ enum Library {
         let notebooks: [Notebook.Model]
     }
 
+    // TODO: didLoadNotebook is not an action name
     enum Action: AutoEquatable {
         case createNotebook(notebook: Notebook.Model, url: URL)
         case deleteNotebook(notebook: Notebook.Model, url: URL)
         case readBaseDirectory
         case readNotebooks(urls: [URL])
         case handleError(title: String, message: String)
+        case didLoadNotebooks(notebooks: [Notebook.Meta])
     }
 
     enum InputEvent {
@@ -29,6 +31,7 @@ enum Library {
         case didAddNotebook(notebook: Notebook.Model, error: Error?)
         case didRemoveNotebook(notebook: Notebook.Model, error: Error?)
         case didReadBaseDirectory(urls: Result<[URL], NSError>)
+        case didReadNotebooks(notebooks: [Result<Notebook.Meta, AnyError>])
     }
 
     struct Evaluator {
@@ -76,6 +79,16 @@ enum Library {
                     .filter { $0.pathExtension == "qvnotebook" }
                     .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
                 actions = [.readNotebooks(urls: metaURLs)]
+            case let .didReadNotebooks(results):
+                let errors = results.filter { $0.error != nil }
+                if errors.count > 0 {
+                    var errorMessage = errors.reduce("") { $0 + $1.error!.localizedDescription + "\n" }
+                    errorMessage = String(errorMessage.dropLast(1))
+                    actions = [.handleError(title: "Unable to load notebooks", message: errorMessage)]
+                    break
+                }
+                let notebooks = results.map { $0.value! }
+                actions = [.didLoadNotebooks(notebooks: notebooks)]
             }
 
             return Evaluator(actions: actions, model: newModel)

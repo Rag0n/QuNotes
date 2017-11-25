@@ -103,6 +103,8 @@ internal func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
         if lhs.title != rhs.title { return false }
         if lhs.message != rhs.message { return false }
         return true
+    case (.didLoadNotebooks(let lhs), .didLoadNotebooks(let rhs)):
+        return lhs == rhs
     default: return false
     }
 }

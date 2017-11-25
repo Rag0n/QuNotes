@@ -206,7 +206,7 @@ class LibraryExperimantalSpec: QuickSpec {
                 }
             }
 
-            fcontext("when receiving didReadBaseDirecotry event") {
+            context("when receiving didReadBaseDirecotry event") {
                 context("when successfuly reads directories") {
                     beforeEach {
                         let urls = [
@@ -236,6 +236,66 @@ class LibraryExperimantalSpec: QuickSpec {
                         expect(e.actions).to(equalDiff([
                             .handleError(title: "Failed to load notebooks", message: "message")
                         ]))
+                    }
+                }
+            }
+
+            context("when receiving didReadNotebooks event") {
+                context("when notebooks list is empty") {
+                    beforeEach {
+                        event = .didReadNotebooks(notebooks: [])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has didLoadNotebooks action with empty list") {
+                        expect(e.actions).to(equalDiff([
+                            .didLoadNotebooks(notebooks: [])
+                        ]))
+                    }
+                }
+
+                context("when notebooks list has result with notebook") {
+                    beforeEach {
+                        let notebook = Notebook.Meta(uuid: "uuid", name: "name")
+                        event = .didReadNotebooks(notebooks: [Result(value: notebook)])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has didLoadNotebooks action with 1 notebook") {
+                        expect(e.actions).to(equalDiff([
+                            .didLoadNotebooks(notebooks: [Notebook.Meta(uuid: "uuid", name: "name")])
+                        ]))
+                    }
+                }
+
+                context("when notebook list has result with error") {
+                    beforeEach {
+                        event = .didReadNotebooks(notebooks: [Result(error: AnyError(error))])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has handleError action with message from error") {
+                        expect(e.actions).to(equalDiff([
+                            .handleError(title: "Unable to load notebooks", message: "message")
+                        ]))
+                    }
+                }
+
+                context("when notebook list has result with notebook and several errors") {
+                    beforeEach {
+                        let notebook = Notebook.Meta(uuid: "uuid", name: "name")
+                        let secondError = NSError(domain: "error domain", code: 1,
+                                                  userInfo: [NSLocalizedDescriptionKey: "secondMessage"])
+                        event = .didReadNotebooks(notebooks: [Result(error: AnyError(error)),
+                                                              Result(value: notebook),
+                                                              Result(error: AnyError(secondError))])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has handleError action with combined message from errors") {
+                        expect(e.actions).to(equalDiff([
+                            .handleError(title: "Unable to load notebooks", message: "message\nsecondMessage")
+                            ]))
                     }
                 }
             }
