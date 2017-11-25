@@ -34,6 +34,7 @@ extension UI.Library {
     }
 
     enum CoordinatorEvent {
+        case didLoadNotebooks(notebooks: [Notebook.Meta])
         case didAddNotebook(notebook: Notebook.Meta, error: Error?)
         case didDeleteNotebook(notebook: Notebook.Meta, error: Error?)
     }
@@ -102,6 +103,11 @@ extension UI.Library {
             var newModel = model
 
             switch event {
+            case let .didLoadNotebooks(notebooks):
+                let sortedNotebooks = notebooks.sorted(by: notebookNameSorting)
+                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks)
+                effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
+                newModel = Model(notebooks: sortedNotebooks)
             case let .didAddNotebook(notebook, error):
                 guard let error = error else { break }
                 // TODO: check if that notebook is still exist in model

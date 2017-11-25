@@ -113,7 +113,7 @@ extension UI.Library {
             case let .handleError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
             case .didLoadNotebooks(let notebooks):
-                return
+                dispatch <| .didLoadNotebooks(notebooks: notebooks)
             }
         }
     }

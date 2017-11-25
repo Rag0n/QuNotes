@@ -131,6 +131,52 @@ class LibraryEvaluatorSpec: QuickSpec {
         describe("-evaluate:CoordinatorEvent") {
             var event: UI.Library.CoordinatorEvent!
 
+            context("when receiving didLoadNotebooks") {
+                context("when notebook list is empty") {
+                    beforeEach {
+                        event = .didLoadNotebooks(notebooks: [])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has model with empty notebooks") {
+                        expect(e.model).to(equalDiff(UI.Library.Model(notebooks: [])))
+                    }
+
+                    it("has updateAllNotebooks effect with empty viewModels") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotebooks(notebooks: [])
+                        ]))
+                    }
+                }
+
+                context("when notebook lsit is not empty") {
+                    let firstNotebook = Notebook.Meta(uuid: "uuid1", name: "bcd")
+                    let secondNotebook = Notebook.Meta(uuid: "uuid2", name: "abc")
+                    let thirdNotebook = Notebook.Meta(uuid: "uuid3", name: "Cde")
+
+                    beforeEach {
+                        event = .didLoadNotebooks(notebooks: [firstNotebook, secondNotebook, thirdNotebook])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has model with sorted by name notebooks") {
+                        expect(e.model).to(equalDiff(
+                            UI.Library.Model(notebooks: [secondNotebook, firstNotebook, thirdNotebook])
+                        ))
+                    }
+
+                    it("has updateAllNotebooks effect with sorted viewModels") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotebooks(notebooks: [
+                                UI.Library.NotebookViewModel(title: "abc", isEditable: false),
+                                UI.Library.NotebookViewModel(title: "bcd", isEditable: false),
+                                UI.Library.NotebookViewModel(title: "Cde", isEditable: false),
+                            ])
+                        ]))
+                    }
+                }
+            }
+
             context("when receiving didAddNotebook event") {
                 let notebook = Notebook.Meta(uuid: "uuid", name: "name")
                 let anotherNotebook = Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
