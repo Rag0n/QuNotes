@@ -33,6 +33,16 @@ class FileExecuter {
         return Result(try contentOfDocumentsFolder())
     }
 
+    func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
+        do {
+            let data = try Data(contentsOf: url)
+            let content = try decoder.decode(contentType, from: data)
+            return Result.success(content)
+        } catch {
+            return Result.failure(AnyError(error))
+        }
+    }
+
     // MARK: - Private
 
     fileprivate lazy var encoder: JSONEncoder = {
@@ -40,6 +50,7 @@ class FileExecuter {
         enc.outputFormatting = .prettyPrinted
         return enc
     }()
+    private lazy var decoder = JSONDecoder()
 }
 
 fileprivate extension FileExecuter {
