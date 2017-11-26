@@ -33,7 +33,7 @@ extension UI.Notebook {
         fileprivate let notebookUseCase: NotebookUseCase
         fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
-        fileprivate var evaluator: Evaluator
+        fileprivate var evaluator: Evaluator!
 
         fileprivate lazy var notebookViewController: NotebookViewController = {
             let vc = NotebookViewController(withDispatch: dispatch)
@@ -42,12 +42,12 @@ extension UI.Notebook {
         }()
         fileprivate var activeNote: UseCase.Note?
 
-        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: UseCase.Notebook) {
+        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook.Meta) {
             self.navigationController = navigationController
             self.noteUseCase = dependencies.noteUseCase
             self.notebookUseCase = dependencies.notebookUseCase
             self.dependencies = dependencies
-            evaluator = Evaluator(withNotebook: notebook)
+            // TODO: initialize eveluator
         }
 
         // MARK: - Private
