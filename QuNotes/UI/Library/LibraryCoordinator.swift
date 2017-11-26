@@ -27,54 +27,17 @@ extension UI.Library {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasNotebookUseCase & HasFileExecuter & UI.Notebook.CoordinatorImp.Dependencies
-        fileprivate let notebookUseCase: NotebookUseCase
-        fileprivate let fileExecuter: FileExecuter
-        fileprivate let dependencies: Dependencies
-        fileprivate let navigationController: NavigationController
-        fileprivate var evaluator: Evaluator
-
-        fileprivate lazy var libraryViewController: LibraryViewController = {
-            return LibraryViewController(withDispatch: dispatch)
-        }()
-
-        private(set) var library: Library.Evaluator
+        typealias Dependencies = HasFileExecuter & UI.Notebook.CoordinatorImp.Dependencies
 
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
             self.navigationController = navigationController
-            self.notebookUseCase = dependencies.notebookUseCase
             self.fileExecuter = dependencies.fileExecuter
             self.dependencies = dependencies
             evaluator = Evaluator()
-
-            let initialModel = Library.Model(notebooks: [])
-            library = Library.Evaluator(model: initialModel)
+            libraryEvaluator = Library.Evaluator(model: Library.Model(notebooks: []))
         }
 
         // MARK: - Private
-
-        fileprivate func dispatch(event: ViewControllerEvent) {
-            updateEvaluator <| evaluator.evaluate(event: event)
-        }
-
-        fileprivate func dispatch(event: CoordinatorEvent) {
-            updateEvaluator <| evaluator.evaluate(event: event)
-        }
-
-        fileprivate func dispatchToLibrary(event: Library.InputEvent) {
-            updateLibrary <| library.evaluate(event: event)
-        }
-
-        fileprivate func updateEvaluator(evaluator: Evaluator) {
-            self.evaluator = evaluator
-            evaluator.actions.forEach(perform)
-            evaluator.effects.forEach(libraryViewController.perform)
-        }
-
-        fileprivate func updateLibrary(library: Library.Evaluator) {
-            self.library = library
-            library.actions.forEach(perform)
-        }
 
         fileprivate func perform(action: Action) {
             switch action {
@@ -116,6 +79,43 @@ extension UI.Library {
             case .didLoadNotebooks(let notebooks):
                 dispatch <| .didLoadNotebooks(notebooks: notebooks)
             }
+        }
+
+        // MARK: State
+
+        fileprivate let fileExecuter: FileExecuter
+        fileprivate let dependencies: Dependencies
+        fileprivate let navigationController: NavigationController
+        fileprivate var evaluator: Evaluator
+        fileprivate var libraryEvaluator: Library.Evaluator
+
+        fileprivate lazy var libraryViewController: LibraryViewController = {
+            return LibraryViewController(withDispatch: dispatch)
+        }()
+
+        // MARK: Utility
+
+        func dispatch(event: ViewControllerEvent) {
+            updateEvaluator <| evaluator.evaluate(event: event)
+        }
+
+        func dispatch(event: CoordinatorEvent) {
+            updateEvaluator <| evaluator.evaluate(event: event)
+        }
+
+        func dispatchToLibrary(event: Library.InputEvent) {
+            updateLibrary <| libraryEvaluator.evaluate(event: event)
+        }
+
+        func updateEvaluator(evaluator: Evaluator) {
+            self.evaluator = evaluator
+            evaluator.actions.forEach(perform)
+            evaluator.effects.forEach(libraryViewController.perform)
+        }
+
+        func updateLibrary(library: Library.Evaluator) {
+            self.libraryEvaluator = library
+            library.actions.forEach(perform)
         }
     }
 }
