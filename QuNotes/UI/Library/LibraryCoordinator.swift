@@ -85,7 +85,13 @@ extension UI.Library {
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
             case let .showNotebook(notebook):
-                return
+                let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
+                                                                     dependencies: dependencies,
+                                                                     notebook: notebook)
+                navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
+                    // TODO: There's no need to update all notebook. Should update only passed notebook
+                    self.onStart()
+                }
             }
         }
 
