@@ -22,7 +22,7 @@ extension UI.Library {
     enum Action: AutoEquatable {
         case addNotebook(notebook: Notebook.Model)
         case deleteNotebook(notebook: Notebook.Meta)
-        case showNotes(forNotebook: UseCase.Notebook)
+        case showNotebook(notebook: Notebook.Meta)
         case showError(title: String, message: String)
     }
 
@@ -89,7 +89,7 @@ extension UI.Library {
                 newModel = Model(notebooks: updatedNotebooks)
                 actions = [.deleteNotebook(notebook: notebook)]
             case let .selectNotebook(index):
-                actions = []
+                actions = [.showNotebook(notebook: model.notebooks[index])]
             case let .updateNotebook(index, title):
                 actions = []
             }

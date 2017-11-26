@@ -84,13 +84,8 @@ extension UI.Library {
                 dispatchToLibrary <| .removeNotebook(notebook: notebook)
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
-            case let .showNotes(notebook):
-                let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
-                                                                     dependencies: dependencies,
-                                                                     notebook: notebook)
-                navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
-                    self.onStart()
-                }
+            case let .showNotebook(notebook):
+                return
             }
         }
 

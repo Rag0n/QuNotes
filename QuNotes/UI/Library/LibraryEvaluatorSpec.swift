@@ -121,6 +121,14 @@ class LibraryEvaluatorSpec: QuickSpec {
             context("when receiving selectNotebook event") {
                 beforeEach {
                     event = .selectNotebook(index: 0)
+                    e = UI.Library.Evaluator(notebooks: [Notebook.Meta(uuid: "uuid", name: "name")])
+                    e = e.evaluate(event: event)
+                }
+
+                it("has showNotebook action") {
+                    expect(e.actions).to(equalDiff([
+                        .showNotebook(notebook: Notebook.Meta(uuid: "uuid", name: "name"))
+                    ]))
                 }
             }
 

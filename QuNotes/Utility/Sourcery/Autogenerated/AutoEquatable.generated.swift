@@ -116,7 +116,7 @@ internal func == (lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
         return lhs == rhs
     case (.deleteNotebook(let lhs), .deleteNotebook(let rhs)):
         return lhs == rhs
-    case (.showNotes(let lhs), .showNotes(let rhs)):
+    case (.showNotebook(let lhs), .showNotebook(let rhs)):
         return lhs == rhs
     case (.showError(let lhs), .showError(let rhs)):
         if lhs.title != rhs.title { return false }
