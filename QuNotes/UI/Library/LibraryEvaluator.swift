@@ -24,6 +24,7 @@ extension UI.Library {
         case deleteNotebook(notebook: Notebook.Meta)
         case updateNotebook(notebook: Notebook.Meta)
         case showNotebook(notebook: Notebook.Meta)
+        case reloadNotebook(notebook: Notebook.Meta)
         case showError(title: String, message: String)
     }
 
@@ -38,6 +39,7 @@ extension UI.Library {
         case didLoadNotebooks(notebooks: [Notebook.Meta])
         case didAddNotebook(notebook: Notebook.Meta, error: Error?)
         case didDeleteNotebook(notebook: Notebook.Meta, error: Error?)
+        case didFinishShowing(notebook: Notebook.Meta)
     }
 
     enum ViewControllerEvent {
@@ -131,6 +133,8 @@ extension UI.Library {
                 newModel = Model(notebooks: sortedNotebookMetas)
                 effects = [.updateAllNotebooks(notebooks: viewModels(from: sortedNotebookMetas))]
                 actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
+            case let .didFinishShowing(notebook):
+                actions = [.reloadNotebook(notebook: notebook)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

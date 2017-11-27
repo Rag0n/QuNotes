@@ -45,7 +45,9 @@ extension UI.Library {
                 dispatchToLibrary <| .addNotebook(notebook: notebook)
             case let .deleteNotebook(notebook):
                 dispatchToLibrary <| .removeNotebook(notebook: notebook)
-            case .updateNotebook(let notebook):
+            case let .updateNotebook(notebook):
+                return
+            case let .reloadNotebook(notebook):
                 return
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
@@ -54,8 +56,7 @@ extension UI.Library {
                                                                      dependencies: dependencies,
                                                                      notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
-                    // TODO: There's no need to update all notebook. Should update only passed notebook
-                    self.onStart()
+                    self.dispatch <| .didFinishShowing(notebook: notebook)
                 }
             }
         }

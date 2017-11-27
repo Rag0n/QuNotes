@@ -120,6 +120,8 @@ internal func == (lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
         return lhs == rhs
     case (.showNotebook(let lhs), .showNotebook(let rhs)):
         return lhs == rhs
+    case (.reloadNotebook(let lhs), .reloadNotebook(let rhs)):
+        return lhs == rhs
     case (.showError(let lhs), .showError(let rhs)):
         if lhs.title != rhs.title { return false }
         if lhs.message != rhs.message { return false }

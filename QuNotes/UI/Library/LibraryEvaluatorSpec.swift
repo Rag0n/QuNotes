@@ -340,6 +340,23 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didFinishShowing event") {
+                let notebook = Notebook.Meta(uuid: "sUUID", name: "sName")
+
+                beforeEach {
+                    event = .didFinishShowing(notebook: notebook)
+                    e = UI.Library.Evaluator(notebooks: [Notebook.Meta(uuid: "fUUID", name: "fName"),
+                                                        notebook])
+                    e = e.evaluate(event: event)
+                }
+
+                it("has reloadNotebook action with passed notebook") {
+                    expect(e.actions).to(equalDiff([
+                        .reloadNotebook(notebook: notebook)
+                    ]))
+                }
+            }
         }
     }
 }
