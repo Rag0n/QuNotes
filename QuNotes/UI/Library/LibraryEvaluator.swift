@@ -75,18 +75,16 @@ extension UI.Library {
             case .addNotebook:
                 let notebook = Notebook.Model(uuid: uuidGenerator(), name: "", notes: [])
                 let updatedNotebooks = model.notebooks + [notebook.meta]
-                let sortedNotebooks = updatedNotebooks.sorted(by: notebookNameSorting)
+                let sortedNotebooks = updatedNotebooks.sorted(by: name)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook.meta)!
-                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks)
                 newModel = Model(notebooks: sortedNotebooks)
-                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: notebookViewModels)]
+                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: viewModels(from: sortedNotebooks))]
                 actions = [.addNotebook(notebook: notebook)]
             case let .deleteNotebook(index):
                 guard index < model.notebooks.count else { break }
                 let notebook = model.notebooks[index]
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(at: index)
-                let notebookViewModels = viewModels(fromNotebooks: updatedNotebooks)
-                effects = [.deleteNotebook(index: 0, notebooks: notebookViewModels)]
+                effects = [.deleteNotebook(index: 0, notebooks: viewModels(from: updatedNotebooks))]
                 newModel = Model(notebooks: updatedNotebooks)
                 actions = [.deleteNotebook(notebook: notebook)]
             case let .selectNotebook(index):
@@ -101,9 +99,9 @@ extension UI.Library {
                 let updatedNotebook = Notebook.Meta(uuid: oldNotebook.uuid, name: title)
                 var notebooks = model.notebooks
                 notebooks[index] = updatedNotebook
-                notebooks = notebooks.sorted(by: notebookNameSorting)
+                notebooks = notebooks.sorted(by: name)
                 newModel = Model(notebooks: notebooks)
-                effects = [.updateNotebook(index: index, notebooks: viewModels(fromNotebooks: notebooks))]
+                effects = [.updateNotebook(index: index, notebooks: viewModels(from: notebooks))]
                 actions = [.updateNotebook(notebook: updatedNotebook)]
             }
 
@@ -117,9 +115,8 @@ extension UI.Library {
 
             switch event {
             case let .didLoadNotebooks(notebooks):
-                let sortedNotebooks = notebooks.sorted(by: notebookNameSorting)
-                let notebookViewModels = viewModels(fromNotebooks: sortedNotebooks)
-                effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
+                let sortedNotebooks = notebooks.sorted(by: name)
+                effects = [.updateAllNotebooks(notebooks: viewModels(from: sortedNotebooks))]
                 newModel = Model(notebooks: sortedNotebooks)
             case let .didAddNotebook(notebook, error):
                 guard let error = error else { break }
@@ -129,16 +126,14 @@ extension UI.Library {
                 // then we need somehow to go back
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
                 newModel = Model(notebooks: updatedNotebooks)
-                let updatedViewModels = viewModels(fromNotebooks: updatedNotebooks)
-                effects = [.updateAllNotebooks(notebooks: updatedViewModels)]
+                effects = [.updateAllNotebooks(notebooks: viewModels(from: updatedNotebooks))]
                 actions = [.showError(title: "Failed to add notebook", message: error.localizedDescription)]
             case let .didDeleteNotebook(notebook, error):
                 guard let error = error else { break }
                 let updatedNotebookMetas = model.notebooks + [notebook]
-                let sortedNotebookMetas = updatedNotebookMetas.sorted(by: notebookNameSorting)
-                let notebookViewModels = viewModels(fromNotebooks: sortedNotebookMetas)
+                let sortedNotebookMetas = updatedNotebookMetas.sorted(by: name)
                 newModel = Model(notebooks: sortedNotebookMetas)
-                effects = [.updateAllNotebooks(notebooks: notebookViewModels)]
+                effects = [.updateAllNotebooks(notebooks: viewModels(from: sortedNotebookMetas))]
                 actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
             }
 
@@ -156,13 +151,13 @@ extension UI.Library {
 // MARK: - Private
 
 private extension UI.Library {
-    static func viewModels(fromNotebooks: [Notebook.Meta]) -> [NotebookViewModel] {
-        return fromNotebooks.map {
+    static func viewModels(from: [Notebook.Meta]) -> [NotebookViewModel] {
+        return from.map {
             NotebookViewModel(title: $0.name, isEditable: false)
         }
     }
 
-    static func notebookNameSorting(lhs: Notebook.Meta, rhs: Notebook.Meta) -> Bool {
+    static func name(lhs: Notebook.Meta, rhs: Notebook.Meta) -> Bool {
         return lhs.name.lowercased() < rhs.name.lowercased()
     }
 }
