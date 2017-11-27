@@ -22,6 +22,7 @@ extension UI.Library {
     enum Action: AutoEquatable {
         case addNotebook(notebook: Notebook.Model)
         case deleteNotebook(notebook: Notebook.Meta)
+        case updateNotebook(notebook: Notebook.Meta)
         case showNotebook(notebook: Notebook.Meta)
         case showError(title: String, message: String)
     }
@@ -91,7 +92,19 @@ extension UI.Library {
             case let .selectNotebook(index):
                 actions = [.showNotebook(notebook: model.notebooks[index])]
             case let .updateNotebook(index, title):
-                actions = []
+                guard index < model.notebooks.count else { break }
+                guard let title = title else {
+                    effects = [.updateNotebook(index: index, notebooks: viewModels(from: model.notebooks))]
+                    break
+                }
+                let oldNotebook = model.notebooks[index]
+                let updatedNotebook = Notebook.Meta(uuid: oldNotebook.uuid, name: title)
+                var notebooks = model.notebooks
+                notebooks[index] = updatedNotebook
+                notebooks = notebooks.sorted(by: notebookNameSorting)
+                newModel = Model(notebooks: notebooks)
+                effects = [.updateNotebook(index: index, notebooks: viewModels(fromNotebooks: notebooks))]
+                actions = [.updateNotebook(notebook: updatedNotebook)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

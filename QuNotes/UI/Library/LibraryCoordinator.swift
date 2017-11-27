@@ -45,6 +45,8 @@ extension UI.Library {
                 dispatchToLibrary <| .addNotebook(notebook: notebook)
             case let .deleteNotebook(notebook):
                 dispatchToLibrary <| .removeNotebook(notebook: notebook)
+            case .updateNotebook(let notebook):
+                return
             case let .showError(title, message):
                 showError(title: title, message: message, controller: libraryViewController)
             case let .showNotebook(notebook):

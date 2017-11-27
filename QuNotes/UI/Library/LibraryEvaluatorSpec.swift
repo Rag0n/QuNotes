@@ -133,6 +133,76 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving updateNotebook event") {
+                context("when library has specified notebook") {
+                    let firstNotebook = Notebook.Meta(uuid: "fUUID", name: "fName")
+
+                    beforeEach {
+                        let secondNotebook = Notebook.Meta(uuid: "sUUID", name: "sName")
+                        e = UI.Library.Evaluator(notebooks: [firstNotebook, secondNotebook])
+                    }
+
+                    context("with new title") {
+                        beforeEach {
+                            event = .updateNotebook(index: 1, title: "a new name")
+                            e = e.evaluate(event: event)
+                        }
+
+                        it("updates model by changing notebook name") {
+                            expect(e.model).to(equalDiff(
+                                UI.Library.Model(notebooks: [Notebook.Meta(uuid: "sUUID", name: "a new name"),
+                                                             firstNotebook])
+                            ))
+                        }
+
+                        it("has updateNotebook effect with updated title") {
+                            expect(e.effects).to(equalDiff([
+                                .updateNotebook(index: 1, notebooks: [
+                                    UI.Library.NotebookViewModel(title: "a new name", isEditable: false),
+                                    UI.Library.NotebookViewModel(title: "fName", isEditable: false)
+                                ])
+                            ]))
+                        }
+
+                        it("has updateNotebook action with updated notebook") {
+                            expect(e.actions).to(equalDiff([
+                                .updateNotebook(notebook: Notebook.Meta(uuid: "sUUID", name: "a new name"))
+                            ]))
+                        }
+                    }
+
+                    context("without new title") {
+                        beforeEach {
+                            event = .updateNotebook(index: 1, title: nil)
+                            e = e.evaluate(event: event)
+                        }
+
+                        it("has updateNotebook effect with current title") {
+                            expect(e.effects).to(equalDiff([
+                                .updateNotebook(index: 1, notebooks: [
+                                    UI.Library.NotebookViewModel(title: "fName", isEditable: false),
+                                    UI.Library.NotebookViewModel(title: "sName", isEditable: false),
+                                ])
+                            ]))
+                        }
+
+                        it("doesnt have actions") {
+                            expect(e.actions).to(beEmpty())
+                        }
+                    }
+                }
+
+                context("when library doesnt have specified notebook") {
+                    beforeEach {
+                        event = .updateNotebook(index: 1, title: "title")
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("does nothing") {
+                        expect(e.model).to(equalDiff(UI.Library.Model(notebooks: [])))
+                        expect(e.actions).to(beEmpty())
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
             }
         }
 
