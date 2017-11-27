@@ -85,7 +85,7 @@ extension LibraryViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
         cell.render(viewModel: notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
-            self.dispatch <| .updateNotebook(index: indexPath.row, title: title)
+            self.dispatch <| .updateNotebook(index: indexPath.row, title: title ?? "")
         })
         return cell
     }

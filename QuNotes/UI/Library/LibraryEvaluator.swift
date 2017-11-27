@@ -44,7 +44,7 @@ extension UI.Library {
         case addNotebook
         case selectNotebook(index: Int)
         case deleteNotebook(index: Int)
-        case updateNotebook(index: Int, title: String?)
+        case updateNotebook(index: Int, title: String)
     }
 
     struct NotebookViewModel: AutoEquatable {
@@ -91,10 +91,6 @@ extension UI.Library {
                 actions = [.showNotebook(notebook: model.notebooks[index])]
             case let .updateNotebook(index, title):
                 guard index < model.notebooks.count else { break }
-                guard let title = title else {
-                    effects = [.updateNotebook(index: index, notebooks: viewModels(from: model.notebooks))]
-                    break
-                }
                 let oldNotebook = model.notebooks[index]
                 let updatedNotebook = Notebook.Meta(uuid: oldNotebook.uuid, name: title)
                 var notebooks = model.notebooks
