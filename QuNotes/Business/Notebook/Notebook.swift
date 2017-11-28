@@ -39,9 +39,11 @@ enum Notebook {
         case updateFile(url: URL, content: Codable)
         case createFile(url: URL, content: Codable)
         case deleteFile(url: URL)
+        case readDirectory(atURL: URL)
     }
 
     enum InputEvent {
+        case loadNotes
         case changeName(newName: String)
         case addNote(note: Note.Model)
         case removeNote(note: Note.Model)
@@ -61,6 +63,8 @@ enum Notebook {
             var newModel = model
 
             switch event {
+            case .loadNotes:
+                actions = [.readDirectory(atURL: model.notebookURL())]
             case let .changeName(newName):
                 newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
                 let url = newModel.noteBookMetaURL()
@@ -160,6 +164,8 @@ extension Notebook.Action: Equatable {
               .createFile(let rURL, let rContent as Note.Content)):
             return (lURL == rURL) && (lContent == rContent)
         case (.deleteFile(let lURL), .deleteFile(let rURL)):
+            return lURL == rURL
+        case (.readDirectory(let lURL), .readDirectory(let rURL)):
             return lURL == rURL
         default: return false
         }

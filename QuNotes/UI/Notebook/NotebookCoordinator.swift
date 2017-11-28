@@ -14,7 +14,7 @@ extension UI.Notebook {
         // MARK: - Coordinator
 
         func onStart() {
-            // TODO: load notes for notebook meta
+            .loadNotes |> dispatchToNotebook
         }
 
         var rootViewController: UIViewController {

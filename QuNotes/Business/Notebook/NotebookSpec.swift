@@ -34,6 +34,23 @@ class NotebookExperimantalSpec: QuickSpec {
         describe("-evaluate:") {
             var event: Notebook.InputEvent!
 
+            context("when receiving loadNotes event") {
+                beforeEach {
+                    event = .loadNotes
+                    e = e.evaluate(event: event)
+                }
+
+                it("doesnt update model") {
+                    expect(e.model).to(equalDiff(model))
+                }
+
+                it("has readDirectory action") {
+                    expect(e.actions).to(equalDiff([
+                        Notebook.Action.readDirectory(atURL: URL(string: "uuid.qvnotebook")!)
+                    ]))
+                }
+            }
+
             context("when receiving changeName event") {
                 beforeEach {
                     event = .changeName(newName: "new name")
