@@ -8,9 +8,11 @@
 
 import Quick
 import Nimble
+import Result
 
 class NotebookExperimantalSpec: QuickSpec {
     override func spec() {
+        let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let note = Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil,
                               updatedDate: 0, createdDate: 123)
         let meta = Notebook.Meta(uuid: "uuid", name: "name")
@@ -148,6 +150,40 @@ class NotebookExperimantalSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(model))
+                    }
+                }
+            }
+
+            fcontext("when receiving didReadDirectory event") {
+                context("when successfuly reads directories") {
+                    beforeEach {
+                        let urls = [
+                            URL(string: "/uuid/firstNote.qvnote")!,
+                            URL(string: "/uuid/notANote.txt")!,
+                            URL(string: "/uuid/secondNote.qvnote")!,
+                        ]
+                        event = .didReadDirectory(urls: Result(value: urls))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has readNotes action with notes urls") {
+                        expect(e.actions).to(equalDiff([
+                            .readNotes(urls: [URL(string: "/uuid/firstNote.qvnote/meta.json")!,
+                                              URL(string: "/uuid/secondNote.qvnote/meta.json")!])
+                        ]))
+                    }
+                }
+
+                context("when fails to read directories") {
+                    beforeEach {
+                        event = .didReadDirectory(urls: Result(error: error))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has handleError action") {
+                        expect(e.actions).to(equalDiff([
+                            .handleError(title: "Failed to load notes", message: "message")
+                        ]))
                     }
                 }
             }

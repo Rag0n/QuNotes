@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Result
 
 enum Notebook {
     struct Model: AutoEquatable {
@@ -40,6 +41,8 @@ enum Notebook {
         case createFile(url: URL, content: Codable)
         case deleteFile(url: URL)
         case readDirectory(atURL: URL)
+        case readNotes(urls: [URL])
+        case handleError(title: String, message: String)
     }
 
     enum InputEvent {
@@ -47,6 +50,7 @@ enum Notebook {
         case changeName(newName: String)
         case addNote(note: Note.Model)
         case removeNote(note: Note.Model)
+        case didReadDirectory(urls: Result<[URL], NSError>)
     }
 
     struct Evaluator {
@@ -86,6 +90,16 @@ enum Notebook {
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
                 let url = newModel.noteURL(forNote: noteToRemove)
                 actions = [.deleteFile(url: url)]
+            case let .didReadDirectory(result):
+                guard let urls = result.value else {
+                    actions = [.handleError(title: "Failed to load notes",
+                                            message: result.error!.localizedDescription)]
+                    break
+                }
+                let notesURL = urls
+                    .filter { $0.pathExtension == "qvnote" }
+                    .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
+                actions = [.readNotes(urls: notesURL)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -167,6 +181,10 @@ extension Notebook.Action: Equatable {
             return lURL == rURL
         case (.readDirectory(let lURL), .readDirectory(let rURL)):
             return lURL == rURL
+        case (.readNotes(let lURL), .readNotes(let rURL)):
+            return lURL == rURL
+        case let (.handleError(lTitle, lMessage), .handleError(rTitle, rMessage)):
+            return (lTitle == rTitle) && (lMessage == rMessage)
         default: return false
         }
     }
