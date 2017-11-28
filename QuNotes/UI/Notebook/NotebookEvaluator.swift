@@ -15,8 +15,8 @@ extension UI {
 
 extension UI.Notebook {
     struct Model {
-        let notebook: UseCase.Notebook
-        let notes: [UseCase.Note]
+        let notebook: Notebook.Meta
+        let notes: [Note.Meta]
     }
 
     enum Action: AutoEquatable {
@@ -63,7 +63,7 @@ extension UI.Notebook {
         let actions: [Action]
         let model: Model
 
-        init(withNotebook notebook: UseCase.Notebook) {
+        init(notebook: Notebook.Meta) {
             effects = []
             actions = []
             model = Model(notebook: notebook, notes: [])
@@ -86,12 +86,13 @@ extension UI.Notebook {
                 actions = [.addNote]
             case .selectNote(let index):
                 let note = model.notes[index]
-                actions = [.showNote(note: note, isNewNote: false)]
+//                actions = [.showNote(note: note, isNewNote: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
-                actions = [.deleteNote(note: note)]
+//                actions = [.deleteNote(note: note)]
             case .deleteNotebook:
-                actions = [.deleteNotebook(notebook: model.notebook)]
+                break
+//                actions = [.deleteNotebook(notebook: model.notebook)]
             case .filterNotes(let filter):
                 let lowercasedFilter = filter?.lowercased()
                 var filteredNotes = model.notes
@@ -104,7 +105,7 @@ extension UI.Notebook {
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
                 effects = [.showBackButton]
-                actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
+//                actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
             }
 
             return Evaluator(effects: effects, actions: actions, model: model)
@@ -120,7 +121,7 @@ extension UI.Notebook {
                 let sortedNotes = notes.sorted(by: defaultNoteSorting)
                 let noteTitles = sortedNotes.map { $0.title }
                 effects = [.updateAllNotes(notes: noteTitles)]
-                newModel = Model(notebook: model.notebook, notes: sortedNotes)
+//                newModel = Model(notebook: model.notebook, notes: sortedNotes)
             case let .didAddNote(result):
                 guard case let .success(note) = result else {
                     return showError(error: result.error!,
@@ -128,10 +129,10 @@ extension UI.Notebook {
                                      model: model)
                 }
 
-                let newNotes = model.notes + [note]
-                let sortedNotes = newNotes.sorted(by: defaultNoteSorting)
-                newModel = Model(notebook: model.notebook, notes: sortedNotes)
-                actions = [.showNote(note: note, isNewNote: true)]
+//                let newNotes = model.notes + [note]
+//                let sortedNotes = newNotes.sorted(by: defaultNoteSorting)
+//                newModel = Model(notebook: model.notebook, notes: sortedNotes)
+//                actions = [.showNote(note: note, isNewNote: true)]
             case let .didDeleteNote(result):
                 guard case let .success(note) = result else {
                     let noteTitles = model.notes.map { $0.title }
@@ -142,11 +143,11 @@ extension UI.Notebook {
                                      additionalEffect: additionalEffect)
                 }
 
-                let indexOfDeletedNote = model.notes.index(of: note)!
-                let updatedNotes = model.notes.removeWithoutMutation(at: indexOfDeletedNote)
-                let noteTitles = updatedNotes.map { $0.title }
-                effects = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
-                newModel = Model(notebook: model.notebook, notes: updatedNotes)
+//                let indexOfDeletedNote = model.notes.index(of: note)!
+//                let updatedNotes = model.notes.removeWithoutMutation(at: indexOfDeletedNote)
+//                let noteTitles = updatedNotes.map { $0.title }
+//                effects = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
+//                newModel = Model(notebook: model.notebook, notes: updatedNotes)
             case let .didUpdateNotebook(result):
                 guard case let .success(notebook) = result else {
                     let additionalEffect: ViewControllerEffect = .updateTitle(title: model.notebook.name)
@@ -157,7 +158,7 @@ extension UI.Notebook {
                 }
 
                 effects = [.updateTitle(title: notebook.name)]
-                newModel = Model(notebook: notebook, notes: model.notes)
+//                newModel = Model(notebook: notebook, notes: model.notes)
             case let .didDeleteNotebook(error):
                 guard error == nil else {
                     return showError(error: error!,
