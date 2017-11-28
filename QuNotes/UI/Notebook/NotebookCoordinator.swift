@@ -25,8 +25,9 @@ extension UI.Notebook {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasNoteUseCase
+        typealias Dependencies = HasFileExecuter & HasNoteUseCase
         fileprivate let dependencies: Dependencies
+        fileprivate let fileExecuter: FileExecuter
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator!
         fileprivate var notebookEvaluator: Notebook.Evaluator
@@ -40,6 +41,7 @@ extension UI.Notebook {
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook.Meta) {
             self.navigationController = navigationController
             self.dependencies = dependencies
+            self.fileExecuter = dependencies.fileExecuter
             self.notebookEvaluator = Notebook.Evaluator(model: Notebook.Model(meta: notebook, notes: []))
         }
 
@@ -72,6 +74,17 @@ extension UI.Notebook {
         }
 
         fileprivate func perform(action: Notebook.Action) {
+            switch action {
+            case let .readDirectory(url):
+                let urls = fileExecuter.contentOfFolder(at: url)
+                 dispatchToNotebook <| .didReadDirectory(urls: urls)
+            case let .readNotes(urls):
+                let results = urls.map { fileExecuter.readFile(at: $0, contentType: Note.Meta.self) }
+            case let .handleError(title, message):
+                showError(title: title, message: message, controller: notebookViewController)
+            default:
+                return
+            }
         }
     }
 

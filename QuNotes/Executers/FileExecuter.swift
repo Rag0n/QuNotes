@@ -29,8 +29,12 @@ class FileExecuter {
         return removeItemAtURL <| url
     }
 
+    func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
+        return Result(try contentOfFolder(at: url))
+    }
+
     func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
-        return Result(try contentOfDocumentsFolder())
+        return Result(try contentOfFolder(at: URL.documentsURL()))
     }
 
     func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
@@ -81,8 +85,8 @@ fileprivate extension FileExecuter {
         }
     }
 
-    func contentOfDocumentsFolder() throws -> [URL] {
-        return try FileManager.default.contentsOfDirectory(at: URL.documentsURL(),
+    func contentOfFolder(at url: URL) throws -> [URL] {
+        return try FileManager.default.contentsOfDirectory(at: url,
                                                            includingPropertiesForKeys: nil,
                                                            options: [])
     }
