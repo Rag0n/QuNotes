@@ -81,6 +81,13 @@ internal func == (lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookVie
     guard lhs.isEditable == rhs.isEditable else { return false }
     return true
 }
+// MARK: - UI.Notebook.Model AutoEquatable
+extension UI.Notebook.Model: Equatable {}
+internal func == (lhs: UI.Notebook.Model, rhs: UI.Notebook.Model) -> Bool {
+    guard lhs.notebook == rhs.notebook else { return false }
+    guard lhs.notes == rhs.notes else { return false }
+    return true
+}
 
 // MARK: - AutoEquatable for Enums
 // MARK: - Library.Action AutoEquatable

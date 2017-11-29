@@ -14,7 +14,7 @@ extension UI {
 }
 
 extension UI.Notebook {
-    struct Model {
+    struct Model: AutoEquatable {
         let notebook: Notebook.Meta
         let notes: [Note.Meta]
     }
@@ -43,6 +43,7 @@ extension UI.Notebook {
         case didDeleteNote(result: Result<UseCase.Note, AnyError>)
         case didUpdateNotebook(result: Result<Notebook.Meta, AnyError>)
         case didDeleteNotebook(error: AnyError?)
+        case didLoadNotes(notes: [Note.Meta])
     }
 
     enum ViewControllerEvent {
@@ -118,10 +119,11 @@ extension UI.Notebook {
 
             switch event {
             case let .didUpdateNotes(notes):
-                let sortedNotes = notes.sorted(by: defaultNoteSorting)
-                let noteTitles = sortedNotes.map { $0.title }
-                effects = [.updateAllNotes(notes: noteTitles)]
+//                let sortedNotes = notes.sorted(by: defaultNoteSorting)
+//                let noteTitles = sortedNotes.map { $0.title }
+//                effects = [.updateAllNotes(notes: noteTitles)]
 //                newModel = Model(notebook: model.notebook, notes: sortedNotes)
+                break
             case let .didAddNote(result):
                 guard case let .success(note) = result else {
                     return showError(error: result.error!,
@@ -167,6 +169,10 @@ extension UI.Notebook {
                 }
 
                 actions = [.finish]
+            case let .didLoadNotes(notes):
+                let sortedNotes = notes.sorted(by: title)
+                newModel = Model(notebook: model.notebook, notes: sortedNotes)
+                effects = [.updateAllNotes(notes: noteTitles(fromNotes: sortedNotes))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -177,8 +183,8 @@ extension UI.Notebook {
 // MARK: - Private
 
 private extension UI.Notebook {
-    static func defaultNoteSorting(leftNote: UseCase.Note, rightNote: UseCase.Note) -> Bool {
-        return leftNote.title.lowercased() < rightNote.title.lowercased()
+    static func title(lhs: Note.Meta, rhs: Note.Meta) -> Bool {
+        return lhs.title.lowercased() < rhs.title.lowercased()
     }
 
     static func showError(error: AnyError,
@@ -195,5 +201,9 @@ private extension UI.Notebook {
         return Evaluator(effects: effects,
                          actions: actions,
                          model: model)
+    }
+
+    static func noteTitles(fromNotes notes: [Note.Meta]) -> [String] {
+        return notes.map { $0.title }
     }
 }

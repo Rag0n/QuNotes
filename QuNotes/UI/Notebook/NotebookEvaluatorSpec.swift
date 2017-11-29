@@ -10,17 +10,65 @@ import Quick
 import Nimble
 import Result
 
-//class NotebookEvaluatorSpec: QuickSpec {
-//    override func spec() {
-//        let notebook = UseCase.Notebook(uuid: "uuid", name: "name")
-//        var e: UI.Notebook.Evaluator!
-//        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
-//        let error = AnyError(underlyingError)
-//
-//        beforeEach {
-//            e = UI.Notebook.Evaluator(withNotebook: notebook)
-//        }
-//
+class NotebookEvaluatorSpec: QuickSpec {
+    override func spec() {
+        let notebook = Notebook.Meta(uuid: "uuid", name: "name")
+        var e: UI.Notebook.Evaluator!
+        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
+        let error = AnyError(underlyingError)
+
+        beforeEach {
+            e = UI.Notebook.Evaluator(notebook: notebook)
+        }
+
+        describe("-evaluate:CoordinatorEvent") {
+            var event: UI.Notebook.CoordinatorEvent!
+
+            context("when receiving didLoadNotes") {
+                context("when note list is empty") {
+                    beforeEach {
+                        event = .didLoadNotes(notes: [])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has model with empty notebooks") {
+                        expect(e.model).to(equalDiff(UI.Notebook.Model(notebook: notebook, notes: [])))
+                    }
+
+                    it("has updateAllNotebooks effect with empty viewModels") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotes(notes: [])
+                        ]))
+                    }
+                }
+
+                context("when notebook list is not empty") {
+                    let firstNote = Note.Meta(uuid: "fU", title: "b", tags: ["t"], updated_at: 1, created_at: 1)
+                    let secondNote = Note.Meta(uuid: "sU", title: "a", tags: ["t"], updated_at: 2, created_at: 2)
+                    let thirdNote = Note.Meta(uuid: "tU", title: "C", tags: ["t"], updated_at: 3, created_at: 3)
+
+                    beforeEach {
+                        event = .didLoadNotes(notes: [firstNote, secondNote, thirdNote])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has model with sorted by name notebooks") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote])
+                        ))
+                    }
+
+                    it("has updateAllNotebooks effect with sorted viewModels") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotes(notes: ["a", "b", "C"])
+                        ]))
+                    }
+                }
+            }
+        }
+    }
+}
+
 //        describe("-evaluate:ViewControllerEvent") {
 //            var event: UI.Notebook.ViewControllerEvent!
 //
@@ -157,9 +205,7 @@ import Result
 //                }
 //            }
 //        }
-//
-//        describe("-evaluate:CoordinatorEvent") {
-//            var event: UI.Notebook.CoordinatorEvent!
+
 //
 //            context("when receiving didUpdateNotes event") {
 //                let firstNote = UseCase.Note.noteDummy(withTitle: "Bcd")

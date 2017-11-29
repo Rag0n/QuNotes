@@ -79,9 +79,12 @@ extension UI.Notebook {
                 let urls = fileExecuter.contentOfFolder(at: url)
                  dispatchToNotebook <| .didReadDirectory(urls: urls)
             case let .readNotes(urls):
-                let results = urls.map { fileExecuter.readFile(at: $0, contentType: Note.Meta.self) }
+                let result = urls.map { fileExecuter.readFile(at: $0, contentType: Note.Meta.self) }
+                dispatchToNotebook <| .didReadNotes(notes: result)
             case let .handleError(title, message):
                 showError(title: title, message: message, controller: notebookViewController)
+            case let .didLoadNotes(notes):
+                dispatch <| .didLoadNotes(notes: notes)
             default:
                 return
             }
