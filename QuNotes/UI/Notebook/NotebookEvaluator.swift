@@ -23,8 +23,8 @@ extension UI.Notebook {
         case addNote
         case showNote(note: UseCase.Note, isNewNote: Bool)
         case deleteNote(note: UseCase.Note)
-        case deleteNotebook(notebook: UseCase.Notebook)
-        case updateNotebook(notebook: UseCase.Notebook, title: String)
+        case deleteNotebook(notebook: Notebook.Meta)
+        case updateNotebook(notebook: Notebook.Meta, title: String)
         case finish
         case showError(title: String, message: String)
     }
@@ -41,7 +41,7 @@ extension UI.Notebook {
         case didUpdateNotes(notes: [UseCase.Note])
         case didAddNote(result: Result<UseCase.Note, AnyError>)
         case didDeleteNote(result: Result<UseCase.Note, AnyError>)
-        case didUpdateNotebook(result: Result<UseCase.Notebook, AnyError>)
+        case didUpdateNotebook(result: Result<Notebook.Meta, AnyError>)
         case didDeleteNotebook(error: AnyError?)
     }
 
