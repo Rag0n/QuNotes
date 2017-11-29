@@ -10,8 +10,6 @@ import UIKit
 import Result
 
 extension UI.Library {
-    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
-
     class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
 
@@ -98,27 +96,29 @@ extension UI.Library {
 
         // MARK: Utility
 
-        func dispatch(event: ViewControllerEvent) {
+        fileprivate func dispatch(event: ViewControllerEvent) {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        func dispatch(event: CoordinatorEvent) {
+        fileprivate func dispatch(event: CoordinatorEvent) {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        func dispatchToLibrary(event: Library.InputEvent) {
+        fileprivate func dispatchToLibrary(event: Library.InputEvent) {
             updateLibrary <| libraryEvaluator.evaluate(event: event)
         }
 
-        func updateEvaluator(evaluator: Evaluator) {
+        fileprivate func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
             evaluator.actions.forEach(perform)
             evaluator.effects.forEach(libraryViewController.perform)
         }
 
-        func updateLibrary(library: Library.Evaluator) {
+        fileprivate func updateLibrary(library: Library.Evaluator) {
             self.libraryEvaluator = library
             library.actions.forEach(perform)
         }
     }
+
+    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
 }
