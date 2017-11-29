@@ -36,6 +36,7 @@ enum Notebook {
         let name: String
     }
 
+    // TODO: didLoadNotes is not an action name
     enum Action {
         case updateFile(url: URL, content: Codable)
         case createFile(url: URL, content: Codable)
@@ -43,6 +44,7 @@ enum Notebook {
         case readDirectory(atURL: URL)
         case readNotes(urls: [URL])
         case handleError(title: String, message: String)
+        case didLoadNotes(notes: [Note.Meta])
     }
 
     enum InputEvent {
@@ -51,6 +53,7 @@ enum Notebook {
         case addNote(note: Note.Model)
         case removeNote(note: Note.Model)
         case didReadDirectory(urls: Result<[URL], NSError>)
+        case didReadNotes(notes: [Result<Note.Meta, AnyError>])
     }
 
     struct Evaluator {
@@ -100,6 +103,16 @@ enum Notebook {
                     .filter { $0.pathExtension == "qvnote" }
                     .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
                 actions = [.readNotes(urls: notesURL)]
+            case let .didReadNotes(result):
+                let errors = result.filter { $0.error != nil }
+                guard errors.count == 0 else {
+                    var errorMessage = errors.reduce("") { $0 + $1.error!.localizedDescription + "\n" }
+                    errorMessage = String(errorMessage.dropLast(1))
+                    actions = [.handleError(title: "Unable to load notes", message: errorMessage)]
+                    break
+                }
+                let notes = result.map { $0.value! }
+                actions = [.didLoadNotes(notes: notes)]
             }
 
             return Evaluator(actions: actions, model: newModel)
@@ -185,6 +198,8 @@ extension Notebook.Action: Equatable {
             return lURL == rURL
         case let (.handleError(lTitle, lMessage), .handleError(rTitle, rMessage)):
             return (lTitle == rTitle) && (lMessage == rMessage)
+        case let (.didLoadNotes(lNotes), .didLoadNotes(rNotes)):
+            return lNotes == rNotes
         default: return false
         }
     }

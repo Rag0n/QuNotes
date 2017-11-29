@@ -154,7 +154,7 @@ class NotebookExperimantalSpec: QuickSpec {
                 }
             }
 
-            fcontext("when receiving didReadDirectory event") {
+            context("when receiving didReadDirectory event") {
                 context("when successfuly reads directories") {
                     beforeEach {
                         let urls = [
@@ -183,6 +183,67 @@ class NotebookExperimantalSpec: QuickSpec {
                     it("has handleError action") {
                         expect(e.actions).to(equalDiff([
                             .handleError(title: "Failed to load notes", message: "message")
+                        ]))
+                    }
+                }
+            }
+
+            context("when receiving didReadNotes event") {
+                context("when note list is empty") {
+                    beforeEach {
+                        event = .didReadNotes(notes: [])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has didLoadNotes action with empty list") {
+                        expect(e.actions).to(equalDiff([
+                            .didLoadNotes(notes: [])
+                        ]))
+                    }
+                }
+
+                context("when note list has result with note") {
+                    beforeEach {
+                        let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
+                        event = .didReadNotes(notes: [Result(value: note)])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has didLoadNotes action with 1 note") {
+                        expect(e.actions).to(equalDiff([
+                            .didLoadNotes(notes: [Note.Meta(uuid: "u", title: "t", tags: ["t"],
+                                                            updated_at: 2, created_at: 2)])
+                        ]))
+                    }
+                }
+
+                context("when note list has result with error") {
+                    beforeEach {
+                        event = .didReadNotes(notes: [Result(error: AnyError(error))])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has handleError action with message from error") {
+                        expect(e.actions).to(equalDiff([
+                            .handleError(title: "Unable to load notes", message: "message")
+                        ]))
+                    }
+                }
+
+                context("when note list has result with note and several errors") {
+                    beforeEach {
+                        let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
+                        let secondError = NSError(domain: "error domain", code: 1,
+                                                  userInfo: [NSLocalizedDescriptionKey: "secondMessage"])
+                        event = .didReadNotes(notes: [Result(error: AnyError(error)),
+                                                      Result(value: note),
+                                                      Result(error: AnyError(secondError))])
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has handleError action with combined message from errors") {
+                        expect(e.actions).to(equalDiff([
+                            .handleError(title: "Unable to load notes", message: "message\nsecondMessage")
                         ]))
                     }
                 }
