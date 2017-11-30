@@ -20,8 +20,8 @@ extension UI.Notebook {
     }
 
     enum Action: AutoEquatable {
-        case addNote
-        case showNote(note: Note.Meta, isNewNote: Bool)
+        case addNote(note: Note.Model)
+        case showNote(note: Note.Meta, isNew: Bool)
         case deleteNote(note: Note.Meta)
         case deleteNotebook(notebook: Notebook.Meta)
         case updateNotebook(notebook: Notebook.Meta, title: String)
@@ -63,6 +63,8 @@ extension UI.Notebook {
         let effects: [ViewControllerEffect]
         let actions: [Action]
         let model: Model
+        var uuidGenerator: () -> String = { UUID().uuidString }
+        var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
         init(notebook: Notebook.Meta) {
             effects = []
@@ -79,15 +81,23 @@ extension UI.Notebook {
         func evaluate(event: ViewControllerEvent) -> Evaluator {
             var actions: [Action] = []
             var effects: [ViewControllerEffect] = []
+            var newModel = model
 
             switch event {
             case .didLoad:
                 effects = [.updateTitle(title: model.notebook.name)]
             case .addNote:
-                actions = [.addNote]
+                let note = Note.Model(uuid: uuidGenerator(), title: "", content: "", tags: [], notebook: nil,
+                                      updatedDate: currentTimestamp(), createdDate: currentTimestamp())
+                let sortedNotes = (model.notes + [note.meta]).sorted(by: title)
+                newModel = Model(notebook: model.notebook, notes: sortedNotes)
+                actions = [
+                    .addNote(note: note),
+                    .showNote(note: note.meta, isNew: true)
+                ]
             case .selectNote(let index):
                 let note = model.notes[index]
-                actions = [.showNote(note: note, isNewNote: false)]
+                actions = [.showNote(note: note, isNew: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
                 actions = [.deleteNote(note: note)]
@@ -107,7 +117,7 @@ extension UI.Notebook {
                 actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
             }
 
-            return Evaluator(effects: effects, actions: actions, model: model)
+            return Evaluator(effects: effects, actions: actions, model: newModel	)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {

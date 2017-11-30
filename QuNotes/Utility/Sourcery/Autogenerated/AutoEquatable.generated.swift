@@ -203,11 +203,11 @@ internal func == (lhs: UI.Note.ViewControllerEffect, rhs: UI.Note.ViewController
 extension UI.Notebook.Action: Equatable {}
 internal func == (lhs: UI.Notebook.Action, rhs: UI.Notebook.Action) -> Bool {
     switch (lhs, rhs) {
-    case (.addNote, .addNote):
-        return true
+    case (.addNote(let lhs), .addNote(let rhs)):
+        return lhs == rhs
     case (.showNote(let lhs), .showNote(let rhs)):
         if lhs.note != rhs.note { return false }
-        if lhs.isNewNote != rhs.isNewNote { return false }
+        if lhs.isNew != rhs.isNew { return false }
         return true
     case (.deleteNote(let lhs), .deleteNote(let rhs)):
         return lhs == rhs

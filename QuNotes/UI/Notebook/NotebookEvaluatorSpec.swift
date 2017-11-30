@@ -38,16 +38,32 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving addNote event") {
+
+                let anotherNote = Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
+                let expectedNote = Note.Meta(uuid: "nUUID", title: "", tags: [], updated_at: 66, created_at: 66)
+
                 beforeEach {
                     event = .addNote
+                    e = e.evaluate(event: .didLoadNotes(notes: [anotherNote]))
+                    e.currentTimestamp = { 66 }
+                    e.uuidGenerator = { "nUUID" }
                     e = e.evaluate(event: event)
                 }
 
-                it("has addNote action") {
+                it("has addNote and showNote actions") {
                     expect(e.actions).to(equalDiff([
-                        .addNote
+                        .addNote(note: Note.Model(meta: expectedNote, content: "", notebook: nil)),
+                        .showNote(note: expectedNote, isNew: true)
                     ]))
                 }
+
+                it("updates model by adding new note meta") {
+                    expect(e.model).to(equalDiff(
+                        UI.Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote])
+                    ))
+                }
+
+                // TODO: Add addNote effect
             }
 
             context("when receiving selectNote event") {
@@ -61,7 +77,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has showNote action") {
                     expect(e.actions).to(equalDiff([
-                        .showNote(note: note, isNewNote: false)
+                        .showNote(note: note, isNew: false)
                     ]))
                 }
             }
