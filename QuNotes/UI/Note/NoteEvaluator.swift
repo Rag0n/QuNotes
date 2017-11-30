@@ -12,7 +12,7 @@ extension UI {
 
 extension UI.Note {
     struct Model {
-        let note: UseCase.Note
+        let note: Note.Model
         let isNew: Bool
     }
 
@@ -36,10 +36,6 @@ extension UI.Note {
     }
 
     enum CoordinatorEvent {
-        case didUpdateTitle(result: Result<UseCase.Note, AnyError>)
-        case didUpdateContent(result: Result<UseCase.Note, AnyError>)
-        case didAddTag(result: Result<UseCase.Note, AnyError>, tag: String)
-        case didRemoveTag(result: Result<UseCase.Note, AnyError>, tag: String)
         case didDeleteNote(error: AnyError?)
     }
 
@@ -59,7 +55,7 @@ extension UI.Note {
         let actions: [Action]
         let model: Model
 
-        init(withNote note: UseCase.Note, isNew: Bool) {
+        init(withNote note: Note.Model, isNew: Bool) {
             effects = []
             actions = []
             model = Model(note: note, isNew: isNew)
@@ -106,50 +102,6 @@ extension UI.Note {
             var newModel = model
 
             switch event {
-            case let .didUpdateTitle(result):
-                guard case let .success(note) = result else {
-                    let additionalEffect: ViewControllerEffect = .updateTitle(title: model.note.title)
-                    return showError(error: result.error!,
-                                     reason: "Failed to update note's title",
-                                     model: model,
-                                     additionalEffect: additionalEffect)
-                }
-
-                effects = [.updateTitle(title: note.title)]
-                newModel = Model(note: note, isNew: model.isNew)
-            case let .didUpdateContent(result):
-                guard case let .success(note) = result else {
-                    let additionalEffect: ViewControllerEffect = .updateContent(content: model.note.content)
-                    return showError(error: result.error!,
-                                     reason: "Failed to update note's content",
-                                     model: model,
-                                     additionalEffect: additionalEffect)
-                }
-
-                effects = [.updateContent(content: note.content)]
-                newModel = Model(note: note, isNew: model.isNew)
-            case let .didAddTag(result, tag):
-                guard case let .success(note) = result else {
-                    let additionalEffect: ViewControllerEffect = .showTags(tags: model.note.tags)
-                    return showError(error: result.error!,
-                                     reason: "Failed to add tag",
-                                     model: model,
-                                     additionalEffect: additionalEffect)
-                }
-
-                effects = [.addTag(tag: tag)]
-                newModel = Model(note: note, isNew: model.isNew)
-            case let .didRemoveTag(result, tag):
-                guard case let .success(note) = result else {
-                    let additionalEffect: ViewControllerEffect = .showTags(tags: model.note.tags)
-                    return showError(error: result.error!,
-                                     reason: "Failed to remove tag",
-                                     model: model,
-                                     additionalEffect: additionalEffect)
-                }
-
-                effects = [.removeTag(tag: tag)]
-                newModel = Model(note: note, isNew: model.isNew)
             case let .didDeleteNote(error):
                 guard error == nil else {
                     return showError(error: error!,

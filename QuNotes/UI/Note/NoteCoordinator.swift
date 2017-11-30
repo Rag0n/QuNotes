@@ -20,22 +20,19 @@ extension UI.Note {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasNoteUseCase
-        fileprivate let noteUseCase: NoteUseCase
+        typealias Dependencies = HasFileExecuter
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
 
         fileprivate lazy var noteViewController: NoteViewController = {
             return NoteViewController(withDispatch: dispatch)
         }()
-        fileprivate var activeNote: UseCase.Note?
 
         init(withNavigationController navigationController: NavigationController,
              dependencies: Dependencies,
-             note: UseCase.Note,
+             note: Note.Model,
              isNewNote: Bool) {
             self.navigationController = navigationController
-            self.noteUseCase = dependencies.noteUseCase
             evaluator = Evaluator(withNote: note, isNew: isNewNote)
         }
 
@@ -58,20 +55,15 @@ extension UI.Note {
         fileprivate func perform(action: Action) {
             switch action {
             case let .updateTitle(title):
-                let result = noteUseCase.update(evaluator.model.note, newTitle: title)
-                dispatch <| .didUpdateTitle(result: result)
+                break
             case let .updateContent(content):
-                let result = noteUseCase.update(evaluator.model.note, newContent: content)
-                dispatch <| .didUpdateContent(result: result)
+                break
             case let .addTag(tag):
-                let result = noteUseCase.addTag(tag: tag, toNote: evaluator.model.note)
-                dispatch <| .didAddTag(result: result, tag: tag)
+                break
             case let .removeTag(tag):
-                let result = noteUseCase.removeTag(tag: tag, fromNote: evaluator.model.note)
-                dispatch <| .didRemoveTag(result: result, tag: tag)
+                break
             case .deleteNote:
-                let result = noteUseCase.delete(evaluator.model.note)
-                dispatch <| .didDeleteNote(error: result.error)
+                break
             case .finish:
                 navigationController.popViewController(animated: true)
             case let .showError(title, message):

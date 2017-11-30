@@ -205,7 +205,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
                 }
 
-                context("when notebook lsit is not empty") {
+                context("when notebook list is not empty") {
                     let firstNotebook = Notebook.Meta(uuid: "uuid1", name: "bcd")
                     let secondNotebook = Notebook.Meta(uuid: "uuid2", name: "abc")
                     let thirdNotebook = Notebook.Meta(uuid: "uuid3", name: "Cde")

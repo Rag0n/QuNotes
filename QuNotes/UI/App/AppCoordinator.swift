@@ -31,19 +31,8 @@ class AppCoordinator: Coordinator {
     private let window: UIWindow
 
     private lazy var dependency: AppDependency = {
-        let fileReaderService = FileReaderServiceImp()
-        let fileNoteRepository = FileNoteRepository()
-        fileNoteRepository.fileManager = FileManager.default
-        fileNoteRepository.fileReader = fileReaderService
-        let currentDateService = CurrentDateServiceImp()
-        let noteUseCase = NoteUseCase()
-        noteUseCase.repository = fileNoteRepository
-        noteUseCase.currentDateService = currentDateService
-
         let fileExecuter = FileExecuter()
-
-        return AppDependency(noteUseCase: noteUseCase,
-                             fileExecuter: fileExecuter)
+        return AppDependency(fileExecuter: fileExecuter)
     }()
 
     private lazy var navigationController: NavigationController = {

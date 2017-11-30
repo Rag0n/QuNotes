@@ -3,7 +3,6 @@
 // Copyright (c) 2017 Alexander Guschin. All rights reserved.
 //
 
-struct AppDependency: HasNoteUseCase, HasFileExecuter {
-    let noteUseCase: NoteUseCase
+struct AppDependency: HasFileExecuter {
     let fileExecuter: FileExecuter
 }

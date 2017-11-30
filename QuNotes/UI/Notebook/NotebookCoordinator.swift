@@ -25,7 +25,7 @@ extension UI.Notebook {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasFileExecuter & HasNoteUseCase
+        typealias Dependencies = HasFileExecuter
         fileprivate let dependencies: Dependencies
         fileprivate let fileExecuter: FileExecuter
         fileprivate let navigationController: NavigationController
@@ -72,6 +72,40 @@ extension UI.Notebook {
         }
 
         fileprivate func perform(action: Action) {
+            switch action {
+            case .addNote:
+//                dispatch <| .addNote(note: note)
+//                let result = noteUseCase.add(withTitle: "")
+//                dispatch <| .didAddNote(result: result)
+                break;
+            case .deleteNote(let note):
+//                let result = noteUseCase.delete(note)
+//                dispatch <| .didDeleteNote(result: result)
+                break
+            case .updateNotebook(let notebook, let title):
+//                let result = notebookUseCase.update(notebook, name: title)
+//                dispatch <| .didUpdateNotebook(result: result)
+                break
+            case .deleteNotebook(let notebook):
+//                let result = notebookUseCase.delete(notebook)
+//                dispatch <| .didDeleteNotebook(error: result.error)
+                break
+            case .finish:
+//                navigationController.popViewController(animated: true)
+                break
+            case let .showError(title, message):
+                showError(title: title, message: message, controller: notebookViewController)
+            case let .showNote(note, isNewNote):
+//                let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
+//                                                             dependencies: dependencies,
+//                                                             note: note,
+//                                                             isNewNote: isNewNote)
+//                navigationController.pushCoordinator(coordinator: noteCoordinator,
+//                                                     animated: true) { [unowned self] in
+//                                                        self.onStart()
+//                }
+                break
+            }
         }
 
         fileprivate func perform(action: Notebook.Action) {

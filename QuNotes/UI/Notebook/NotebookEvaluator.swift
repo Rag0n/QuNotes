@@ -38,9 +38,6 @@ extension UI.Notebook {
     }
 
     enum CoordinatorEvent {
-        case didUpdateNotes(notes: [UseCase.Note])
-        case didAddNote(result: Result<UseCase.Note, AnyError>)
-        case didDeleteNote(result: Result<UseCase.Note, AnyError>)
         case didUpdateNotebook(result: Result<Notebook.Meta, AnyError>)
         case didDeleteNotebook(error: AnyError?)
         case didLoadNotes(notes: [Note.Meta])
@@ -126,38 +123,6 @@ extension UI.Notebook {
             var newModel = model
 
             switch event {
-            case let .didUpdateNotes(notes):
-//                let sortedNotes = notes.sorted(by: defaultNoteSorting)
-//                let noteTitles = sortedNotes.map { $0.title }
-//                effects = [.updateAllNotes(notes: noteTitles)]
-//                newModel = Model(notebook: model.notebook, notes: sortedNotes)
-                break
-            case let .didAddNote(result):
-                guard case let .success(note) = result else {
-                    return showError(error: result.error!,
-                                     reason: "Failed to add note",
-                                     model: model)
-                }
-
-//                let newNotes = model.notes + [note]
-//                let sortedNotes = newNotes.sorted(by: defaultNoteSorting)
-//                newModel = Model(notebook: model.notebook, notes: sortedNotes)
-//                actions = [.showNote(note: note, isNewNote: true)]
-            case let .didDeleteNote(result):
-                guard case let .success(note) = result else {
-                    let noteTitles = model.notes.map { $0.title }
-                    let additionalEffect: ViewControllerEffect = .updateAllNotes(notes: noteTitles)
-                    return showError(error: result.error!,
-                                     reason: "Failed to delete notebook",
-                                     model: model,
-                                     additionalEffect: additionalEffect)
-                }
-
-//                let indexOfDeletedNote = model.notes.index(of: note)!
-//                let updatedNotes = model.notes.removeWithoutMutation(at: indexOfDeletedNote)
-//                let noteTitles = updatedNotes.map { $0.title }
-//                effects = [.deleteNote(index: indexOfDeletedNote, notes: noteTitles)]
-//                newModel = Model(notebook: model.notebook, notes: updatedNotes)
             case let .didUpdateNotebook(result):
                 guard case let .success(notebook) = result else {
                     let additionalEffect: ViewControllerEffect = .updateTitle(title: model.notebook.name)
