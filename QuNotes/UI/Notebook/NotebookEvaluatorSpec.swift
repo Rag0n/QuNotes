@@ -21,6 +21,170 @@ class NotebookEvaluatorSpec: QuickSpec {
             e = UI.Notebook.Evaluator(notebook: notebook)
         }
 
+        describe("-evaluate:ViewControllerEvent") {
+            var event: UI.Notebook.ViewControllerEvent!
+
+            context("when receiving didLoad event") {
+                beforeEach {
+                    event = .didLoad
+                    e = e.evaluate(event: event)
+                }
+
+                it("has updateTitle effect") {
+                    expect(e.effects).to(equalDiff([
+                        .updateTitle(title: "name")
+                    ]))
+                }
+            }
+
+            context("when receiving addNote event") {
+                beforeEach {
+                    event = .addNote
+                    e = e.evaluate(event: event)
+                }
+
+                it("has addNote action") {
+                    expect(e.actions).to(equalDiff([
+                        .addNote
+                    ]))
+                }
+            }
+
+            context("when receiving selectNote event") {
+                let note = Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+
+                beforeEach {
+                    event = .selectNote(index: 0)
+                    e = e.evaluate(event: .didLoadNotes(notes: [note]))
+                        .evaluate(event: event)
+                }
+
+                it("has showNote action") {
+                    expect(e.actions).to(equalDiff([
+                        .showNote(note: note, isNewNote: false)
+                    ]))
+                }
+            }
+
+            context("when receiving deleteNote event") {
+                let note = Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+
+                beforeEach {
+                    event = .deleteNote(index: 0)
+                    e = e.evaluate(event: .didLoadNotes(notes: [note]))
+                        .evaluate(event: event)
+                }
+
+                it("has deleteNote action") {
+                    expect(e.actions).to(equalDiff([
+                        .deleteNote(note: note)
+                    ]))
+                }
+            }
+
+            context("when receiving deleteNotebook event") {
+                beforeEach {
+                    event = .deleteNotebook
+                    e = e.evaluate(event: event)
+                }
+
+                it("has deleteNotebook action") {
+                    expect(e.actions).to(equalDiff([
+                        .deleteNotebook(notebook: notebook)
+                    ]))
+                }
+            }
+
+            context("when receiving filterNotes event") {
+                let firstNote = Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+                let secondNote = Note.Meta(uuid: "sU", title: "ab", tags: ["t"], updated_at: 2, created_at: 2)
+                let thirdNote = Note.Meta(uuid: "tU", title: "g", tags: ["t"], updated_at: 3, created_at: 3)
+
+                beforeEach {
+                    e = e.evaluate(event: .didLoadNotes(notes: [firstNote, secondNote, thirdNote]))
+                }
+
+                context("when filter is not passed") {
+                    beforeEach {
+                        event = .filterNotes(filter: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateAllNotes effect with all note's titles") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotes(notes: ["AB", "ab", "g"])
+                        ]))
+                    }
+                }
+
+                context("when filter is passed") {
+                    beforeEach {
+                        event = .filterNotes(filter: "aB")
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateAllNotes effect with only titles that contains filter in any register") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotes(notes: ["AB", "ab"])
+                        ]))
+                    }
+                }
+            }
+
+            context("when receiving didStartToEditTitle event") {
+                beforeEach {
+                    event = .didStartToEditTitle
+                    e = e.evaluate(event: event)
+                }
+
+                it("has hideBackButton effect") {
+                    expect(e.effects).to(equalDiff([
+                        .hideBackButton
+                    ]))
+                }
+            }
+
+            context("when receiving didFinishToEditTitle event") {
+                context("when title is passed") {
+                    beforeEach {
+                        event = .didFinishToEditTitle(newTitle: "new title")
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateNotebook action with passed title") {
+                        expect(e.actions).to(equalDiff([
+                            .updateNotebook(notebook: notebook, title: "new title")
+                        ]))
+                    }
+
+                    it("has showBackButton effect") {
+                        expect(e.effects).to(equalDiff([
+                            .showBackButton
+                        ]))
+                    }
+                }
+
+                context("when title is not passed") {
+                    beforeEach {
+                        event = .didFinishToEditTitle(newTitle: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateNotebook action with empty title") {
+                        expect(e.actions).to(equalDiff([
+                            .updateNotebook(notebook: notebook, title: "")
+                        ]))
+                    }
+
+                    it("has showBackButton effect") {
+                        expect(e.effects).to(equalDiff([
+                            .showBackButton
+                        ]))
+                    }
+                }
+            }
+        }
+
         describe("-evaluate:CoordinatorEvent") {
             var event: UI.Notebook.CoordinatorEvent!
 
@@ -69,144 +233,6 @@ class NotebookEvaluatorSpec: QuickSpec {
     }
 }
 
-//        describe("-evaluate:ViewControllerEvent") {
-//            var event: UI.Notebook.ViewControllerEvent!
-//
-//            context("when receiving didLoad event") {
-//                beforeEach {
-//                    event = .didLoad
-//                }
-//
-//                it("has updateTitle effect") {
-//                    expect(e.evaluate(event: event).effects[0])
-//                        .to(equal(.updateTitle(title: "name")))
-//                }
-//            }
-//
-//            context("when receiving addNote event") {
-//                beforeEach {
-//                    event = .addNote
-//                }
-//
-//                it("has addNote action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(UI.Notebook.Action.addNote))
-//                }
-//            }
-//
-//            context("when receiving selectNote event") {
-//                let note = UseCase.Note.noteDummy()
-//
-//                beforeEach {
-//                    event = .selectNote(index: 0)
-//                    e = e.evaluate(event: .didUpdateNotes(notes: [note]))
-//                }
-//
-//                it("has showNote action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.showNote(note: note, isNewNote: false)))
-//                }
-//            }
-//
-//            context("when receiving deleteNote event") {
-//                let note = UseCase.Note.noteDummy()
-//
-//                beforeEach {
-//                    event = .deleteNote(index: 0)
-//                    e = e.evaluate(event: .didUpdateNotes(notes: [note]))
-//                }
-//
-//                it("has deleteNote action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.deleteNote(note: note)))
-//                }
-//            }
-//
-//            context("when receiving deleteNotebook event") {
-//                beforeEach {
-//                    event = .deleteNotebook
-//                }
-//
-//                it("has deleteNotebook action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.deleteNotebook(notebook: notebook)))
-//                }
-//            }
-//
-//            context("when receiving filterNotes event") {
-//                let firstNote = UseCase.Note.noteDummy(withTitle: "AB")
-//                let secondNote = UseCase.Note.noteDummy(withTitle: "ab")
-//                let thirdNote = UseCase.Note.noteDummy(withTitle: "g")
-//
-//                beforeEach {
-//                    e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote, thirdNote]))
-//                }
-//
-//                context("when filter is nil") {
-//                    beforeEach {
-//                        event = .filterNotes(filter: nil)
-//                    }
-//
-//                    it("has updateAllNotes effect with all note's titles") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateAllNotes(notes: ["AB", "ab", "g"])))
-//                    }
-//                }
-//
-//                context("when filter is not nil") {
-//                    beforeEach {
-//                        event = .filterNotes(filter: "aB")
-//                    }
-//
-//                    it("has updateAllNotes effect with only titles containing filter in any register") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateAllNotes(notes: ["AB", "ab"])))
-//                    }
-//                }
-//            }
-//
-//            context("when receiving didStartToEditTitle event") {
-//                beforeEach {
-//                    event = .didStartToEditTitle
-//                }
-//
-//                it("has hideBackButton effect") {
-//                    expect(e.evaluate(event: event).effects[0])
-//                        .to(equal(UI.Notebook.ViewControllerEffect.hideBackButton))
-//                }
-//            }
-//
-//            context("when receiving didFinishToEditTitle event") {
-//                beforeEach {
-//                    event = .didFinishToEditTitle(newTitle: nil)
-//                }
-//
-//                it("has showBackButton effect") {
-//                    expect(e.evaluate(event: event).effects[0])
-//                        .to(equal(UI.Notebook.ViewControllerEffect.showBackButton))
-//                }
-//
-//                context("when title is nil") {
-//                    it("has updateNotebook action with empty title") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.updateNotebook(notebook: notebook, title: "")))
-//                    }
-//                }
-//
-//                context("when title is not nil") {
-//                    beforeEach {
-//                        event = .didFinishToEditTitle(newTitle: "new title")
-//                    }
-//
-//                    it("has updateNotebook action with title from event") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.updateNotebook(notebook: notebook, title: "new title")))
-//                    }
-//                }
-//            }
-//        }
-
-//
 //            context("when receiving didUpdateNotes event") {
 //                let firstNote = UseCase.Note.noteDummy(withTitle: "Bcd")
 //                let secondNote = UseCase.Note.noteDummy(withTitle: "abc")

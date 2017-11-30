@@ -21,8 +21,8 @@ extension UI.Notebook {
 
     enum Action: AutoEquatable {
         case addNote
-        case showNote(note: UseCase.Note, isNewNote: Bool)
-        case deleteNote(note: UseCase.Note)
+        case showNote(note: Note.Meta, isNewNote: Bool)
+        case deleteNote(note: Note.Meta)
         case deleteNotebook(notebook: Notebook.Meta)
         case updateNotebook(notebook: Notebook.Meta, title: String)
         case finish
@@ -87,26 +87,24 @@ extension UI.Notebook {
                 actions = [.addNote]
             case .selectNote(let index):
                 let note = model.notes[index]
-//                actions = [.showNote(note: note, isNewNote: false)]
+                actions = [.showNote(note: note, isNewNote: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
-//                actions = [.deleteNote(note: note)]
+                actions = [.deleteNote(note: note)]
             case .deleteNotebook:
-                break
-//                actions = [.deleteNotebook(notebook: model.notebook)]
-            case .filterNotes(let filter):
+                actions = [.deleteNotebook(notebook: model.notebook)]
+            case let .filterNotes(filter):
                 let lowercasedFilter = filter?.lowercased()
                 var filteredNotes = model.notes
                 if let filter = lowercasedFilter {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
-                let noteTitles = filteredNotes.map { $0.title }
-                effects = [.updateAllNotes(notes: noteTitles)]
+                effects = [.updateAllNotes(notes: noteTitles(from: filteredNotes))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
                 effects = [.showBackButton]
-//                actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
+                actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
             }
 
             return Evaluator(effects: effects, actions: actions, model: model)
@@ -172,7 +170,7 @@ extension UI.Notebook {
             case let .didLoadNotes(notes):
                 let sortedNotes = notes.sorted(by: title)
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
-                effects = [.updateAllNotes(notes: noteTitles(fromNotes: sortedNotes))]
+                effects = [.updateAllNotes(notes: noteTitles(from: sortedNotes))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -203,7 +201,7 @@ private extension UI.Notebook {
                          model: model)
     }
 
-    static func noteTitles(fromNotes notes: [Note.Meta]) -> [String] {
+    static func noteTitles(from notes: [Note.Meta]) -> [String] {
         return notes.map { $0.title }
     }
 }
