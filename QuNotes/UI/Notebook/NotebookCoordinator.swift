@@ -42,6 +42,7 @@ extension UI.Notebook {
             self.navigationController = navigationController
             self.dependencies = dependencies
             self.fileExecuter = dependencies.fileExecuter
+            self.evaluator = Evaluator(notebook: notebook)
             self.notebookEvaluator = Notebook.Evaluator(model: Notebook.Model(meta: notebook, notes: []))
         }
 
