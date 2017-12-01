@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Result
 
 class FailingFileExecuter: FileExecuter {
     // MARK: - API
@@ -21,6 +22,18 @@ class FailingFileExecuter: FileExecuter {
 
     override func deleteFile(at url: URL) -> Error? {
         return error
+    }
+
+    override func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
+        return Result(error: error)
+    }
+
+    override func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
+        return Result(error: error)
+    }
+
+    override func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
+        return Result(error: AnyError(error))
     }
 
     // MARL: - Private
