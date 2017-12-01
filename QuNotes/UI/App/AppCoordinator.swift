@@ -13,10 +13,8 @@ class AppCoordinator: Coordinator {
         showLibrary()
     }
 
-    var rootViewController: UIViewController {
-        get {
-            return navigationController
-        }
+    var viewController: UIViewController {
+        return navigationController
     }
 
     // MARK: - Life cycle
@@ -42,7 +40,7 @@ class AppCoordinator: Coordinator {
     }()
 
     private func configureWindow() {
-        window.rootViewController = rootViewController
+        window.rootViewController = viewController
         window.makeKeyAndVisible()
     }
 

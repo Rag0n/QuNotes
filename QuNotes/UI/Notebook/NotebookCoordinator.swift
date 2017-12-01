@@ -17,10 +17,8 @@ extension UI.Notebook {
             .loadNotes |> dispatchToNotebook
         }
 
-        var rootViewController: UIViewController {
-            get {
-                return notebookViewController
-            }
+        var viewController: UIViewController {
+            return notebookViewController
         }
 
         // MARK: - Life cycle
@@ -94,7 +92,7 @@ extension UI.Notebook {
 //                navigationController.popViewController(animated: true)
                 break
             case let .showError(title, message):
-                showError(title: title, message: message, controller: notebookViewController)
+                showError(title: title, message: message)
             case let .showNote(note, isNewNote):
 //                let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
 //                                                             dependencies: dependencies,
@@ -117,7 +115,7 @@ extension UI.Notebook {
                 let result = urls.map { fileExecuter.readFile(at: $0, contentType: Note.Meta.self) }
                 dispatchToNotebook <| .didReadNotes(notes: result)
             case let .handleError(title, message):
-                showError(title: title, message: message, controller: notebookViewController)
+                showError(title: title, message: message)
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes: notes)
             default:

@@ -9,9 +9,9 @@
 import UIKit
 
 protocol Coordinator {
-    var rootViewController: UIViewController { get }
+    var viewController: UIViewController { get }
     func onStart()
-    func showError(title: String, message: String, controller: UIViewController)
+    func showError(title: String, message: String)
 }
 
 extension Coordinator {
@@ -19,10 +19,10 @@ extension Coordinator {
         // No op
     }
 
-    func showError(title: String, message: String, controller: UIViewController) {
+    func showError(title: String, message: String) {
         let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(cancelAction)
-        controller.present(alertController, animated: true, completion: nil)
+        viewController.present(alertController, animated: true, completion: nil)
     }
 }

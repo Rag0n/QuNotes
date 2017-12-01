@@ -12,10 +12,8 @@ extension UI.Note {
     class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
         
-        var rootViewController: UIViewController {
-            get {
-                return noteViewController
-            }
+        var viewController: UIViewController {
+            return noteViewController
         }
 
         // MARK: - Life cycle
@@ -67,7 +65,7 @@ extension UI.Note {
             case .finish:
                 navigationController.popViewController(animated: true)
             case let .showError(title, message):
-                showError(title: title, message: message, controller: noteViewController)
+                showError(title: title, message: message)
             }
         }
     }

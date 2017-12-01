@@ -17,10 +17,8 @@ extension UI.Library {
             dispatchToLibrary <| .loadNotebooks
         }
 
-        var rootViewController: UIViewController {
-            get {
-                return libraryViewController
-            }
+        var viewController: UIViewController {
+            return libraryViewController
         }
 
         // MARK: - Life cycle
@@ -48,7 +46,7 @@ extension UI.Library {
             case let .reloadNotebook(notebook):
                 return
             case let .showError(title, message):
-                showError(title: title, message: message, controller: libraryViewController)
+                showError(title: title, message: message)
             case let .showNotebook(notebook):
                 let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
                                                                      dependencies: dependencies,
@@ -76,7 +74,7 @@ extension UI.Library {
                 let results = urls.map { fileExecuter.readFile(at: $0, contentType: Notebook.Meta.self) }
                 dispatchToLibrary <| .didReadNotebooks(notebooks: results)
             case let .handleError(title, message):
-                showError(title: title, message: message, controller: libraryViewController)
+                showError(title: title, message: message)
             case .didLoadNotebooks(let notebooks):
                 dispatch <| .didLoadNotebooks(notebooks: notebooks)
             }

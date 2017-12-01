@@ -14,10 +14,10 @@ final class NavigationController: UIViewController {
     // MARK: - API
 
     func pushCoordinator(coordinator: Coordinator, animated: Bool, onDispose: CoordinatorDisposeBlock? = nil) {
-        viewControllerToCoordinatorMap[coordinator.rootViewController] = coordinator
-        viewControllerToDisposeBlockMap[coordinator.rootViewController] = onDispose
+        viewControllerToCoordinatorMap[coordinator.viewController] = coordinator
+        viewControllerToDisposeBlockMap[coordinator.viewController] = onDispose
         coordinator.onStart()
-        pushViewController(viewController: coordinator.rootViewController, animated: animated)
+        pushViewController(viewController: coordinator.viewController, animated: animated)
     }
 
     func pushViewController(viewController: UIViewController, animated: Bool) {
