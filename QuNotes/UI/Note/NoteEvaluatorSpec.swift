@@ -21,7 +21,7 @@ class NoteEvaluatorSpec: QuickSpec {
 //            e = UI.Note.Evaluator(withNote: note, isNew: false)
 //        }
 //
-//        describe("-evaluate:ViewControllerEvent") {
+//        describe("-evaluate:ViewEvent") {
 //            var event: UI.Note.ViewControllerEvent!
 //
 //            context("when receiving didLoad event") {
@@ -51,7 +51,7 @@ class NoteEvaluatorSpec: QuickSpec {
 //
 //                    it("has focusOnTitle effect") {
 //                        expect(e.evaluate(event: event).effects[3])
-//                            .to(equal(UI.Note.ViewControllerEffect.focusOnTitle))
+//                            .to(equal(UI.Note.ViewEffect.focusOnTitle))
 //                    }
 //                }
 //            }

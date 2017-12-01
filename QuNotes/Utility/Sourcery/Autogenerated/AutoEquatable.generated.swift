@@ -136,9 +136,9 @@ internal func == (lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {
     default: return false
     }
 }
-// MARK: - UI.Library.ViewControllerEffect AutoEquatable
-extension UI.Library.ViewControllerEffect: Equatable {}
-internal func == (lhs: UI.Library.ViewControllerEffect, rhs: UI.Library.ViewControllerEffect) -> Bool {
+// MARK: - UI.Library.ViewEffect AutoEquatable
+extension UI.Library.ViewEffect: Equatable {}
+internal func == (lhs: UI.Library.ViewEffect, rhs: UI.Library.ViewEffect) -> Bool {
     switch (lhs, rhs) {
     case (.updateAllNotebooks(let lhs), .updateAllNotebooks(let rhs)):
         return lhs == rhs

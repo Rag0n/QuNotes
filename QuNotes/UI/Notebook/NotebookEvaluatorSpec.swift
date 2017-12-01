@@ -21,7 +21,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             e = UI.Notebook.Evaluator(notebook: notebook)
         }
 
-        describe("-evaluate:ViewControllerEvent") {
+        describe("-evaluate:ViewEvent") {
             var event: UI.Notebook.ViewControllerEvent!
 
             context("when receiving didLoad event") {

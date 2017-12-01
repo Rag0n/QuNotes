@@ -11,7 +11,7 @@ import UIKit
 class LibraryViewController: UIViewController {
     // MARK: - API
 
-    func perform(effect: UI.Library.ViewControllerEffect) {
+    func perform(effect: UI.Library.ViewEffect) {
         switch effect {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
@@ -33,7 +33,7 @@ class LibraryViewController: UIViewController {
 
     // MARK: - Life cycle
 
-    init(withDispatch dispatch: @escaping UI.Library.ViewControllerDispacher) {
+    init(withDispatch dispatch: @escaping UI.Library.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
     }
@@ -52,7 +52,7 @@ class LibraryViewController: UIViewController {
 
     @IBOutlet private weak var tableView: UITableView!
     fileprivate var notebooks: [UI.Library.NotebookViewModel]!
-    fileprivate var dispatch: UI.Library.ViewControllerDispacher!
+    fileprivate var dispatch: UI.Library.ViewDispacher!
 
     fileprivate enum Constants {
         static let title = "Library"

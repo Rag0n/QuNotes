@@ -96,7 +96,7 @@ extension UI.Library {
 
         // MARK: Utility
 
-        fileprivate func dispatch(event: ViewControllerEvent) {
+        fileprivate func dispatch(event: ViewEvent) {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
@@ -120,5 +120,5 @@ extension UI.Library {
         }
     }
 
-    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
+    typealias ViewDispacher = (_ event: ViewEvent) -> ()
 }

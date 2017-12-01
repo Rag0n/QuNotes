@@ -20,8 +20,8 @@ class LibraryEvaluatorSpec: QuickSpec {
             e = UI.Library.Evaluator()
         }
 
-        describe("-evaluate:ViewControllerEvent") {
-            var event: UI.Library.ViewControllerEvent!
+        describe("-evaluate:ViewEvent") {
+            var event: UI.Library.ViewEvent!
 
             context("when receiving addNotebook event") {
                 let notebookModel = Notebook.Model(uuid: "newUUID", name: "", notes: [])
@@ -47,13 +47,13 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
 
                 it("updates model by adding notebook meta and sorting notebooks") {
-                    e.uuidGenerator = { "newUUID" }
+                    e.generateUUID = { "newUUID" }
                     expect(e.evaluate(event: event).model.notebooks)
                         .to(equal([notebookMeta, firstNotebookMeta, secondNotebookMeta]))
                 }
 
                 it("has addNotebook action with notebook model") {
-                    e.uuidGenerator = { "newUUID" }
+                    e.generateUUID = { "newUUID" }
                     expect(e.evaluate(event: event).actions[0])
                         .to(equal(.addNotebook(notebook: notebookModel)))
                 }

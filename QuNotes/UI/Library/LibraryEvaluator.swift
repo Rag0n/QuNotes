@@ -28,7 +28,7 @@ extension UI.Library {
         case showError(title: String, message: String)
     }
 
-    enum ViewControllerEffect: AutoEquatable {
+    enum ViewEffect: AutoEquatable {
         case updateAllNotebooks(notebooks: [NotebookViewModel])
         case addNotebook(index: Int, notebooks: [NotebookViewModel])
         case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
@@ -42,7 +42,7 @@ extension UI.Library {
         case didFinishShowing(notebook: Notebook.Meta)
     }
 
-    enum ViewControllerEvent {
+    enum ViewEvent {
         case addNotebook
         case selectNotebook(index: Int)
         case deleteNotebook(index: Int)
@@ -57,10 +57,10 @@ extension UI.Library {
     // MARK: - Evaluator
 
     struct Evaluator {
-        let effects: [ViewControllerEffect]
+        let effects: [ViewEffect]
         let actions: [Action]
         let model: Model
-        var uuidGenerator: () -> String = { UUID().uuidString }
+        var generateUUID: () -> String = { UUID().uuidString }
 
         init(notebooks: [Notebook.Meta] = []) {
             effects = []
@@ -68,14 +68,14 @@ extension UI.Library {
             model = Model(notebooks: notebooks)
         }
 
-        func evaluate(event: ViewControllerEvent) -> Evaluator {
+        func evaluate(event: ViewEvent) -> Evaluator {
             var actions: [Action] = []
-            var effects: [ViewControllerEffect] = []
+            var effects: [ViewEffect] = []
             var newModel = model
 
             switch event {
             case .addNotebook:
-                let notebook = Notebook.Model(uuid: uuidGenerator(), name: "", notes: [])
+                let notebook = Notebook.Model(uuid: generateUUID(), name: "", notes: [])
                 let updatedNotebooks = model.notebooks + [notebook.meta]
                 let sortedNotebooks = updatedNotebooks.sorted(by: name)
                 let indexOfNewNotebook = sortedNotebooks.index(of: notebook.meta)!
@@ -108,7 +108,7 @@ extension UI.Library {
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
             var actions: [Action] = []
-            var effects: [ViewControllerEffect] = []
+            var effects: [ViewEffect] = []
             var newModel = model
 
             switch event {
@@ -140,7 +140,7 @@ extension UI.Library {
             return Evaluator(effects: effects, actions: actions, model: newModel)
         }
 
-        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
