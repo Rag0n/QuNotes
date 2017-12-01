@@ -311,8 +311,8 @@
 			isa = PBXGroup;
 			children = (
 				115332791FACFCD3008FEC2A /* Library */,
-				11A1FE641FA7B405006BAF4C /* Note */,
 				11A1FE601FA7B335006BAF4C /* Notebook */,
+				11A1FE641FA7B405006BAF4C /* Note */,
 			);
 			path = Business;
 			sourceTree = "<group>";
@@ -356,9 +356,9 @@
 		11B7057D1EEB42570039A863 /* QuNotes */ = {
 			isa = PBXGroup;
 			children = (
-				117D151A1FB61A7E00410F6F /* Executers */,
 				11A1FE5F1FA7B2FE006BAF4C /* Business */,
 				B2125E1507F73CB41C346C5D /* UI */,
+				117D151A1FB61A7E00410F6F /* Executers */,
 				113504271F16B9C2001938FD /* Utility */,
 				11B705A61EEBCD600039A863 /* Resources */,
 			);
