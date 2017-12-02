@@ -13,7 +13,7 @@ import WSTagsField
 class NoteViewController: UIViewController {
     // MARK: - API
 
-    func perform(effect: UI.Note.ViewControllerEffect) {
+    func perform(effect: UI.Note.ViewEffect) {
         switch effect {
         case let .updateTitle(title):
             titleTextField?.text = title
@@ -32,7 +32,7 @@ class NoteViewController: UIViewController {
 
     // MARK: - Life cycle
 
-    init(withDispatch dispatch: @escaping UI.Note.ViewControllerDispacher) {
+    init(withDispatch dispatch: @escaping UI.Note.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
     }
@@ -51,7 +51,7 @@ class NoteViewController: UIViewController {
 
     // MARK: - Private
 
-    fileprivate var dispatch: UI.Note.ViewControllerDispacher!
+    fileprivate var dispatch: UI.Note.ViewDispacher
 
     private enum Constants {
         static let themeName = "one-dark"

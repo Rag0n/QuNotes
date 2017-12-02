@@ -181,8 +181,8 @@ internal func == (lhs: UI.Note.Action, rhs: UI.Note.Action) -> Bool {
     }
 }
 // MARK: - UI.Note.ViewControllerEffect AutoEquatable
-extension UI.Note.ViewControllerEffect: Equatable {}
-internal func == (lhs: UI.Note.ViewControllerEffect, rhs: UI.Note.ViewControllerEffect) -> Bool {
+extension UI.Note.ViewEffect: Equatable {}
+internal func == (lhs: UI.Note.ViewEffect, rhs: UI.Note.ViewEffect) -> Bool {
     switch (lhs, rhs) {
     case (.updateTitle(let lhs), .updateTitle(let rhs)):
         return lhs == rhs

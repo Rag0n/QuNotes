@@ -7,7 +7,7 @@ import UIKit
 import Result
 
 extension UI.Note {
-    typealias ViewControllerDispacher = (_ event: ViewControllerEvent) -> ()
+    typealias ViewDispacher = (_ event: ViewEvent) -> ()
 
     class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
@@ -36,7 +36,7 @@ extension UI.Note {
 
         // MARK: - Private
 
-        fileprivate func dispatch(event: ViewControllerEvent) {
+        fileprivate func dispatch(event: ViewEvent) {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 

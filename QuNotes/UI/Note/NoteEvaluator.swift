@@ -26,7 +26,7 @@ extension UI.Note {
         case showError(title: String, message: String)
     }
 
-    enum ViewControllerEffect: AutoEquatable {
+    enum ViewEffect: AutoEquatable {
         case updateTitle(title: String)
         case focusOnTitle
         case updateContent(content: String)
@@ -39,7 +39,7 @@ extension UI.Note {
         case didDeleteNote(error: AnyError?)
     }
 
-    enum ViewControllerEvent {
+    enum ViewEvent {
         case didLoad
         case changeContent(newContent: String)
         case changeTitle(newTitle: String)
@@ -51,7 +51,7 @@ extension UI.Note {
     // MARK: - Evaluator
 
     struct Evaluator {
-        let effects: [ViewControllerEffect]
+        let effects: [ViewEffect]
         let actions: [Action]
         let model: Model
 
@@ -61,15 +61,15 @@ extension UI.Note {
             model = Model(note: note, isNew: isNew)
         }
 
-        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
         }
 
-        func evaluate(event: ViewControllerEvent) -> Evaluator {
+        func evaluate(event: ViewEvent) -> Evaluator {
             var actions: [Action] = []
-            var effects: [ViewControllerEffect] = []
+            var effects: [ViewEffect] = []
 
             switch event {
             case .didLoad:
@@ -98,7 +98,7 @@ extension UI.Note {
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
             var actions: [Action] = []
-            var effects: [ViewControllerEffect] = []
+            var effects: [ViewEffect] = []
             var newModel = model
 
             switch event {
@@ -123,10 +123,10 @@ private extension UI.Note {
     static func showError(error: AnyError,
                           reason: String,
                           model: Model,
-                          additionalEffect: ViewControllerEffect? = nil) -> Evaluator {
+                          additionalEffect: ViewEffect? = nil) -> Evaluator {
         let errorMessage = error.error.localizedDescription
         let actions: [Action] = [.showError(title: reason, message: errorMessage)]
-        var effects: [ViewControllerEffect] = []
+        var effects: [ViewEffect] = []
         if let additionalEffect = additionalEffect {
             effects.append(additionalEffect)
         }

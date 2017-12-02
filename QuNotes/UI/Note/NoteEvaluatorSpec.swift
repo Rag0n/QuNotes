@@ -22,7 +22,7 @@ class NoteEvaluatorSpec: QuickSpec {
 //        }
 //
 //        describe("-evaluate:ViewEvent") {
-//            var event: UI.Note.ViewControllerEvent!
+//            var event: UI.Note.ViewEvent!
 //
 //            context("when receiving didLoad event") {
 //                beforeEach {
