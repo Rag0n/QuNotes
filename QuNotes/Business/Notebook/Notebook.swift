@@ -36,8 +36,7 @@ enum Notebook {
         let name: String
     }
 
-    // TODO: didLoadNotes is not an action name
-    enum Action {
+    enum Effect {
         case updateFile(url: URL, content: Codable)
         case createFile(url: URL, content: Codable)
         case deleteFile(url: URL)
@@ -47,7 +46,7 @@ enum Notebook {
         case didLoadNotes(notes: [Note.Meta])
     }
 
-    enum InputEvent {
+    enum Event {
         case loadNotes
         case changeName(newName: String)
         case addNote(note: Note.Model)
@@ -57,25 +56,25 @@ enum Notebook {
     }
 
     struct Evaluator {
-        let actions: [Action]
+        let effects: [Effect]
         let model: Model
 
         init(model: Model) {
             self.model = model
-            actions = []
+            effects = []
         }
 
-        func evaluate(event: InputEvent) -> Evaluator {
-            var actions: [Action] = []
+        func evaluate(event: Event) -> Evaluator {
+            var effects: [Effect] = []
             var newModel = model
 
             switch event {
             case .loadNotes:
-                actions = [.readDirectory(atURL: model.notebookURL())]
+                effects = [.readDirectory(atURL: model.notebookURL())]
             case let .changeName(newName):
                 newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
                 let url = newModel.noteBookMetaURL()
-                actions = [.updateFile(url: url, content: newModel.meta)]
+                effects = [.updateFile(url: url, content: newModel.meta)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 let notes = model.notes + [noteToAdd]
@@ -83,7 +82,7 @@ enum Notebook {
                 let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
                 let contentURL = newModel.noteContentURL(forNote: noteToAdd)
                 let noteContent = Note.Content(content: noteToAdd.content)
-                actions = [
+                effects = [
                     .createFile(url: metaURL, content: noteToAdd.meta),
                     .createFile(url: contentURL, content: noteContent),
                 ]
@@ -92,34 +91,34 @@ enum Notebook {
                 let notes = model.notes.removeWithoutMutation(at: indexOfRemovedNote)
                 newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
                 let url = newModel.noteURL(forNote: noteToRemove)
-                actions = [.deleteFile(url: url)]
+                effects = [.deleteFile(url: url)]
             case let .didReadDirectory(result):
                 guard let urls = result.value else {
-                    actions = [.handleError(title: "Failed to load notes",
+                    effects = [.handleError(title: "Failed to load notes",
                                             message: result.error!.localizedDescription)]
                     break
                 }
                 let notesURL = urls
                     .filter { $0.pathExtension == "qvnote" }
                     .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
-                actions = [.readNotes(urls: notesURL)]
+                effects = [.readNotes(urls: notesURL)]
             case let .didReadNotes(result):
                 let errors = result.filter { $0.error != nil }
                 guard errors.count == 0 else {
                     var errorMessage = errors.reduce("") { $0 + $1.error!.localizedDescription + "\n" }
                     errorMessage = String(errorMessage.dropLast(1))
-                    actions = [.handleError(title: "Unable to load notes", message: errorMessage)]
+                    effects = [.handleError(title: "Unable to load notes", message: errorMessage)]
                     break
                 }
                 let notes = result.map { $0.value! }
-                actions = [.didLoadNotes(notes: notes)]
+                effects = [.didLoadNotes(notes: notes)]
             }
 
-            return Evaluator(actions: actions, model: newModel)
+            return Evaluator(effects: effects, model: newModel)
         }
 
-        fileprivate init(actions: [Action], model: Model) {
-            self.actions = actions
+        fileprivate init(effects: [Effect], model: Model) {
+            self.effects = effects
             self.model = model
         }
     }
@@ -176,10 +175,10 @@ private extension Notebook.Model {
     }
 }
 
-// MARK: - Action Equtable
+// MARK: - Effect Equtable
 // TODO: Fix action type(similar to library) and replace this extension by autoequatable
-extension Notebook.Action: Equatable {
-    static func ==(lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
+extension Notebook.Effect: Equatable {
+    static func ==(lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
         switch (lhs, rhs) {
         case (.updateFile(let lURL, let lContent as Notebook.Meta),
               .updateFile(let rURL, let rContent as Notebook.Meta)):

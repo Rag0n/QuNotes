@@ -54,7 +54,7 @@ extension UI.Notebook {
             event |> evaluator.evaluate |> updateEvaluator
         }
 
-        fileprivate func dispatchToNotebook(event: Notebook.InputEvent) {
+        fileprivate func dispatchToNotebook(event: Notebook.Event) {
             event |> notebookEvaluator.evaluate |> updateNotebook
         }
 
@@ -66,7 +66,7 @@ extension UI.Notebook {
 
         fileprivate func updateNotebook(notebook: Notebook.Evaluator) {
             self.notebookEvaluator = notebook
-            notebook.actions.forEach(perform)
+            notebook.effects.forEach(perform)
         }
 
         fileprivate func perform(action: Action) {
@@ -106,7 +106,7 @@ extension UI.Notebook {
             }
         }
 
-        fileprivate func perform(action: Notebook.Action) {
+        fileprivate func perform(action: Notebook.Effect) {
             switch action {
             case let .readDirectory(url):
                 let urls = fileExecuter.contentOfFolder(at: url)

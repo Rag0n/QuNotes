@@ -10,7 +10,7 @@ import Quick
 import Nimble
 import Result
 
-class NotebookExperimantalSpec: QuickSpec {
+class NotebookSpec: QuickSpec {
     override func spec() {
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let note = Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil,
@@ -24,8 +24,8 @@ class NotebookExperimantalSpec: QuickSpec {
         }
 
         context("when initialized") {
-            it("has zero actions") {
-                expect(e.actions).to(beEmpty())
+            it("has zero effects") {
+                expect(e.effects).to(beEmpty())
             }
 
             it("has passed model") {
@@ -34,7 +34,7 @@ class NotebookExperimantalSpec: QuickSpec {
         }
 
         describe("-evaluate:") {
-            var event: Notebook.InputEvent!
+            var event: Notebook.Event!
 
             context("when receiving loadNotes event") {
                 beforeEach {
@@ -46,9 +46,9 @@ class NotebookExperimantalSpec: QuickSpec {
                     expect(e.model).to(equalDiff(model))
                 }
 
-                it("has readDirectory action") {
-                    expect(e.actions).to(equalDiff([
-                        Notebook.Action.readDirectory(atURL: URL(string: "uuid.qvnotebook")!)
+                it("has readDirectory effect") {
+                    expect(e.effects).to(equalDiff([
+                        .readDirectory(atURL: URL(string: "uuid.qvnotebook")!)
                     ]))
                 }
             }
@@ -59,8 +59,8 @@ class NotebookExperimantalSpec: QuickSpec {
                     e = e.evaluate(event: event)
                 }
 
-                it("has updateFile action with notebook & notebook URL") {
-                    expect(e.actions).to(equalDiff([
+                it("has updateFile effect with notebook & notebook URL") {
+                    expect(e.effects).to(equalDiff([
                         .updateFile(url: URL(string: "uuid.qvnotebook/meta.json")!,
                                     content: Notebook.Meta(uuid: "uuid", name: "new name"))
                     ]))
@@ -83,8 +83,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has createFile actions with URL of new meta and content") {
-                        expect(e.actions).to(equalDiff([
+                    it("has createFile effects with URL of new meta and content") {
+                        expect(e.effects).to(equalDiff([
                             .createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
                                         content: Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
                                                            updated_at: 12, created_at: 12)),
@@ -106,8 +106,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
 
                     it("doesnt update model") {
@@ -123,8 +123,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has deleteFile action with URL of deleted note") {
-                        expect(e.actions).to(equalDiff([
+                    it("has deleteFile effect with URL of deleted note") {
+                        expect(e.effects).to(equalDiff([
                             .deleteFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
                         ]))
                     }
@@ -144,8 +144,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
 
                     it("doesnt update model") {
@@ -166,8 +166,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has readNotes action with notes urls") {
-                        expect(e.actions).to(equalDiff([
+                    it("has readNotes effect with notes urls") {
+                        expect(e.effects).to(equalDiff([
                             .readNotes(urls: [URL(string: "/uuid/firstNote.qvnote/meta.json")!,
                                               URL(string: "/uuid/secondNote.qvnote/meta.json")!])
                         ]))
@@ -180,8 +180,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has handleError action") {
-                        expect(e.actions).to(equalDiff([
+                    it("has handleError effect") {
+                        expect(e.effects).to(equalDiff([
                             .handleError(title: "Failed to load notes", message: "message")
                         ]))
                     }
@@ -195,8 +195,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has didLoadNotes action with empty list") {
-                        expect(e.actions).to(equalDiff([
+                    it("has didLoadNotes effect with empty list") {
+                        expect(e.effects).to(equalDiff([
                             .didLoadNotes(notes: [])
                         ]))
                     }
@@ -209,8 +209,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has didLoadNotes action with 1 note") {
-                        expect(e.actions).to(equalDiff([
+                    it("has didLoadNotes effect with 1 note") {
+                        expect(e.effects).to(equalDiff([
                             .didLoadNotes(notes: [Note.Meta(uuid: "u", title: "t", tags: ["t"],
                                                             updated_at: 2, created_at: 2)])
                         ]))
@@ -223,8 +223,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has handleError action with message from error") {
-                        expect(e.actions).to(equalDiff([
+                    it("has handleError effect with message from error") {
+                        expect(e.effects).to(equalDiff([
                             .handleError(title: "Unable to load notes", message: "message")
                         ]))
                     }
@@ -241,8 +241,8 @@ class NotebookExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has handleError action with combined message from errors") {
-                        expect(e.actions).to(equalDiff([
+                    it("has handleError effect with combined message from errors") {
+                        expect(e.effects).to(equalDiff([
                             .handleError(title: "Unable to load notes", message: "message\nsecondMessage")
                         ]))
                     }
