@@ -46,7 +46,7 @@ extension UI.Notebook {
 
         // MARK: - Private
 
-        fileprivate func dispatch(event: ViewControllerEvent) {
+        fileprivate func dispatch(event: ViewEvent) {
             event |> evaluator.evaluate |> updateEvaluator
         }
 
@@ -124,5 +124,5 @@ extension UI.Notebook {
         }
     }
 
-    typealias ViewControllerDispacher = (_ event: UI.Notebook.ViewControllerEvent) -> ()
+    typealias ViewDispacher = (_ event: UI.Notebook.ViewEvent) -> ()
 }

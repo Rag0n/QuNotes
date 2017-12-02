@@ -52,7 +52,7 @@ class LibraryViewController: UIViewController {
 
     @IBOutlet private weak var tableView: UITableView!
     fileprivate var notebooks: [UI.Library.NotebookViewModel]!
-    fileprivate var dispatch: UI.Library.ViewDispacher!
+    fileprivate var dispatch: UI.Library.ViewDispacher
 
     fileprivate enum Constants {
         static let title = "Library"

@@ -29,7 +29,7 @@ extension UI.Notebook {
         case showError(title: String, message: String)
     }
 
-    enum ViewControllerEffect: AutoEquatable {
+    enum ViewEffect: AutoEquatable {
         case updateAllNotes(notes: [String])
         case hideBackButton
         case showBackButton
@@ -43,7 +43,7 @@ extension UI.Notebook {
         case didLoadNotes(notes: [Note.Meta])
     }
 
-    enum ViewControllerEvent {
+    enum ViewEvent {
         case didLoad
         case addNote
         case selectNote(index: Int)
@@ -57,10 +57,10 @@ extension UI.Notebook {
     // MARK: - Evaluator
 
     struct Evaluator {
-        let effects: [ViewControllerEffect]
+        let effects: [ViewEffect]
         let actions: [Action]
         let model: Model
-        var uuidGenerator: () -> String = { UUID().uuidString }
+        var generateUUID: () -> String = { UUID().uuidString }
         var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
         init(notebook: Notebook.Meta) {
@@ -69,22 +69,22 @@ extension UI.Notebook {
             model = Model(notebook: notebook, notes: [])
         }
 
-        fileprivate init(effects: [ViewControllerEffect], actions: [Action], model: Model) {
+        fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
             self.effects = effects
             self.actions = actions
             self.model = model
         }
 
-        func evaluate(event: ViewControllerEvent) -> Evaluator {
+        func evaluate(event: ViewEvent) -> Evaluator {
             var actions: [Action] = []
-            var effects: [ViewControllerEffect] = []
+            var effects: [ViewEffect] = []
             var newModel = model
 
             switch event {
             case .didLoad:
                 effects = [.updateTitle(title: model.notebook.name)]
             case .addNote:
-                let note = Note.Model(uuid: uuidGenerator(), title: "", content: "", tags: [], notebook: nil,
+                let note = Note.Model(uuid: generateUUID(), title: "", content: "", tags: [], notebook: nil,
                                       updatedDate: currentTimestamp(), createdDate: currentTimestamp())
                 let sortedNotes = (model.notes + [note.meta]).sorted(by: title)
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
@@ -106,7 +106,7 @@ extension UI.Notebook {
                 if let filter = lowercasedFilter {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
-                effects = [.updateAllNotes(notes: noteTitles(from: filteredNotes))]
+                effects = [.updateAllNotes(notes: titles(from: filteredNotes))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
@@ -119,13 +119,13 @@ extension UI.Notebook {
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
             var actions: [Action] = []
-            var effects: [ViewControllerEffect] = []
+            var effects: [ViewEffect] = []
             var newModel = model
 
             switch event {
             case let .didUpdateNotebook(result):
                 guard case let .success(notebook) = result else {
-                    let additionalEffect: ViewControllerEffect = .updateTitle(title: model.notebook.name)
+                    let additionalEffect: ViewEffect = .updateTitle(title: model.notebook.name)
                     return showError(error: result.error!,
                                      reason: "Failed to update notebook's title",
                                      model: model,
@@ -145,7 +145,7 @@ extension UI.Notebook {
             case let .didLoadNotes(notes):
                 let sortedNotes = notes.sorted(by: title)
                 newModel = Model(notebook: model.notebook, notes: sortedNotes)
-                effects = [.updateAllNotes(notes: noteTitles(from: sortedNotes))]
+                effects = [.updateAllNotes(notes: titles(from: sortedNotes))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -163,10 +163,10 @@ private extension UI.Notebook {
     static func showError(error: AnyError,
                           reason: String,
                           model: Model,
-                          additionalEffect: ViewControllerEffect? = nil) -> Evaluator {
+                          additionalEffect: ViewEffect? = nil) -> Evaluator {
         let errorMessage = error.error.localizedDescription
         let actions: [Action] = [.showError(title: reason, message: errorMessage)]
-        var effects: [ViewControllerEffect] = []
+        var effects: [ViewEffect] = []
         if let additionalEffect = additionalEffect {
             effects.append(additionalEffect)
         }
@@ -176,7 +176,7 @@ private extension UI.Notebook {
                          model: model)
     }
 
-    static func noteTitles(from notes: [Note.Meta]) -> [String] {
+    static func titles(from notes: [Note.Meta]) -> [String] {
         return notes.map { $0.title }
     }
 }

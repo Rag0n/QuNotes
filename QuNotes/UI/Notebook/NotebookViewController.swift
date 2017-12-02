@@ -11,7 +11,7 @@ import UIKit
 class NotebookViewController: UIViewController {
     // MARK: - API
 
-    func perform(effect: UI.Notebook.ViewControllerEffect) {
+    func perform(effect: UI.Notebook.ViewEffect) {
         switch effect {
         case let .updateAllNotes(notes):
             self.notes = notes
@@ -31,7 +31,7 @@ class NotebookViewController: UIViewController {
 
     // MARK: - Life cycle
 
-    init(withDispatch dispatch: @escaping UI.Notebook.ViewControllerDispacher) {
+    init(withDispatch dispatch: @escaping UI.Notebook.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
     }
@@ -50,7 +50,7 @@ class NotebookViewController: UIViewController {
 
     // MARK: - Private
 
-    fileprivate var dispatch: UI.Notebook.ViewControllerDispacher!
+    fileprivate var dispatch: UI.Notebook.ViewDispacher
     fileprivate var notes: [String]!
 
     @IBOutlet private weak var tableView: UITableView!
