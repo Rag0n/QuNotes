@@ -22,7 +22,7 @@ class NotebookEvaluatorSpec: QuickSpec {
         }
 
         describe("-evaluate:ViewEvent") {
-            var event: UI.Notebook.ViewControllerEvent!
+            var event: UI.Notebook.ViewEvent!
 
             context("when receiving didLoad event") {
                 beforeEach {
@@ -46,7 +46,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     event = .addNote
                     e = e.evaluate(event: .didLoadNotes(notes: [anotherNote]))
                     e.currentTimestamp = { 66 }
-                    e.uuidGenerator = { "nUUID" }
+                    e.generateUUID = { "nUUID" }
                     e = e.evaluate(event: event)
                 }
 

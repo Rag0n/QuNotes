@@ -57,7 +57,7 @@ extension UI.Library {
             }
         }
 
-        fileprivate func perform(action: Library.Action) {
+        fileprivate func perform(action: Library.Effect) {
             switch action {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
@@ -102,7 +102,7 @@ extension UI.Library {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func dispatchToLibrary(event: Library.InputEvent) {
+        fileprivate func dispatchToLibrary(event: Library.Event) {
             updateLibrary <| libraryEvaluator.evaluate(event: event)
         }
 
@@ -114,7 +114,7 @@ extension UI.Library {
 
         fileprivate func updateLibrary(library: Library.Evaluator) {
             self.libraryEvaluator = library
-            library.actions.forEach(perform)
+            library.effects.forEach(perform)
         }
     }
 

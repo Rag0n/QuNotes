@@ -90,9 +90,9 @@ internal func == (lhs: UI.Notebook.Model, rhs: UI.Notebook.Model) -> Bool {
 }
 
 // MARK: - AutoEquatable for Enums
-// MARK: - Library.Action AutoEquatable
-extension Library.Action: Equatable {}
-internal func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
+// MARK: - Library.Effect AutoEquatable
+extension Library.Effect: Equatable {}
+internal func == (lhs: Library.Effect, rhs: Library.Effect) -> Bool {
     switch (lhs, rhs) {
     case (.createNotebook(let lhs), .createNotebook(let rhs)):
         if lhs.notebook != rhs.notebook { return false }
@@ -180,7 +180,7 @@ internal func == (lhs: UI.Note.Action, rhs: UI.Note.Action) -> Bool {
     default: return false
     }
 }
-// MARK: - UI.Note.ViewControllerEffect AutoEquatable
+// MARK: - UI.Note.ViewEffect AutoEquatable
 extension UI.Note.ViewEffect: Equatable {}
 internal func == (lhs: UI.Note.ViewEffect, rhs: UI.Note.ViewEffect) -> Bool {
     switch (lhs, rhs) {

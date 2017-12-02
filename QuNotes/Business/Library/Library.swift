@@ -14,8 +14,7 @@ enum Library {
         let notebooks: [Notebook.Model]
     }
 
-    // TODO: didLoadNotebook is not an action name
-    enum Action: AutoEquatable {
+    enum Effect: AutoEquatable {
         case createNotebook(notebook: Notebook.Model, url: URL)
         case deleteNotebook(notebook: Notebook.Model, url: URL)
         case readBaseDirectory
@@ -24,7 +23,7 @@ enum Library {
         case didLoadNotebooks(notebooks: [Notebook.Meta])
     }
 
-    enum InputEvent {
+    enum Event {
         case loadNotebooks
         case addNotebook(notebook: Notebook.Model)
         case removeNotebook(notebook: Notebook.Meta)
@@ -35,32 +34,32 @@ enum Library {
     }
 
     struct Evaluator {
-        let actions: [Action]
+        let effects: [Effect]
         let model: Model
 
         init(model: Model) {
             self.model = model
-            actions = []
+            effects = []
         }
 
-        func evaluate(event: InputEvent) -> Evaluator {
-            var actions: [Action] = []
+        func evaluate(event: Event) -> Evaluator {
+            var effects: [Effect] = []
             var newModel = model
 
             switch (event) {
             case .loadNotebooks:
-                actions = [.readBaseDirectory]
+                effects = [.readBaseDirectory]
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = Model(notebooks: model.notebooks + [notebook])
-                actions = [.createNotebook(notebook: notebook, url: notebook.noteBookMetaURL())]
+                effects = [.createNotebook(notebook: notebook, url: notebook.noteBookMetaURL())]
             case let .removeNotebook(notebookMeta):
                 guard let notebookToRemove = model.notebooks.filter({$0.uuid == notebookMeta.uuid}).first else {
                     break
                 }
                 let newNotebooks = model.notebooks.removeWithoutMutation(object: notebookToRemove)
                 newModel = Model(notebooks: newNotebooks)
-                actions = [.deleteNotebook(notebook: notebookToRemove, url: notebookToRemove.notebookURL())]
+                effects = [.deleteNotebook(notebook: notebookToRemove, url: notebookToRemove.notebookURL())]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
                 let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
@@ -71,32 +70,32 @@ enum Library {
                 newModel = Model(notebooks: updatedNotebooks)
             case let .didReadBaseDirectory(result):
                 guard let urls = result.value else {
-                    actions = [.handleError(title: "Failed to load notebooks",
+                    effects = [.handleError(title: "Failed to load notebooks",
                                             message: result.error!.localizedDescription)]
                     break
                 }
                 let metaURLs = urls
                     .filter { $0.pathExtension == "qvnotebook" }
                     .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
-                actions = [.readNotebooks(urls: metaURLs)]
+                effects = [.readNotebooks(urls: metaURLs)]
             case let .didReadNotebooks(results):
                 let errors = results.filter { $0.error != nil }
                 if errors.count > 0 {
                     var errorMessage = errors.reduce("") { $0 + $1.error!.localizedDescription + "\n" }
                     errorMessage = String(errorMessage.dropLast(1))
-                    actions = [.handleError(title: "Unable to load notebooks", message: errorMessage)]
+                    effects = [.handleError(title: "Unable to load notebooks", message: errorMessage)]
                     break
                 }
                 let notebooks = results.map { $0.value! }
-                actions = [.didLoadNotebooks(notebooks: notebooks)]
+                effects = [.didLoadNotebooks(notebooks: notebooks)]
             }
 
-            return Evaluator(actions: actions, model: newModel)
+            return Evaluator(effects: effects, model: newModel)
         }
 
-        private init(actions: [Action], model: Model) {
+        private init(effects: [Effect], model: Model) {
             self.model = model
-            self.actions = actions
+            self.effects = effects
         }
     }
 }

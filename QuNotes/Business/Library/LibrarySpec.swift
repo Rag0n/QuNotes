@@ -10,7 +10,7 @@ import Quick
 import Nimble
 import Result
 
-class LibraryExperimantalSpec: QuickSpec {
+class LibrarySpec: QuickSpec {
     override func spec() {
         let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
         let model = Library.Model(notebooks: [notebook])
@@ -22,8 +22,8 @@ class LibraryExperimantalSpec: QuickSpec {
         }
 
         context("when initialized") {
-            it("has zero actions") {
-                expect(e.actions).to(beEmpty())
+            it("has zero effects") {
+                expect(e.effects).to(beEmpty())
             }
 
             it("has passed model") {
@@ -32,7 +32,7 @@ class LibraryExperimantalSpec: QuickSpec {
         }
 
         describe("-evaluate:") {
-            var event: Library.InputEvent!
+            var event: Library.Event!
 
             context("when receiving addNotebook event") {
                 context("when notebook with that uuid is not added yet") {
@@ -43,8 +43,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has createNotebook action with notebook & meta url") {
-                        expect(e.actions).to(equalDiff([
+                    it("has createNotebook effect with notebook & meta url") {
+                        expect(e.effects).to(equalDiff([
                             .createNotebook(notebook: newNotebook,
                                              url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!)
                         ]))
@@ -63,8 +63,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
 
                     it("doesnt update model") {
@@ -86,8 +86,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         ))
                     }
 
-                    it("has deleteNotebook action with notebook url") {
-                        expect(e.actions).to(equalDiff([
+                    it("has deleteNotebook effect with notebook url") {
+                        expect(e.effects).to(equalDiff([
                             .deleteNotebook(notebook: notebook,
                                             url: URL(string: "notebookUUID.qvnotebook")!)
                         ]))
@@ -105,8 +105,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         expect(e.model).to(equalDiff(model))
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
                 }
             }
@@ -121,9 +121,9 @@ class LibraryExperimantalSpec: QuickSpec {
                     expect(e.model).to(equalDiff(model))
                 }
 
-                it("has readBaseDirectory action") {
-                    expect(e.actions).to(equalDiff([
-                        Library.Action.readBaseDirectory
+                it("has readBaseDirectory effect") {
+                    expect(e.effects).to(equalDiff([
+                        .readBaseDirectory
                     ]))
                 }
             }
@@ -140,8 +140,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         expect(e.model).to(equalDiff(model))
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
                 }
 
@@ -168,7 +168,7 @@ class LibraryExperimantalSpec: QuickSpec {
 
                         it("does nothing") {
                             expect(e.model).to(equal(model))
-                            expect(e.actions).to(equal([]))
+                            expect(e.effects).to(equal([]))
                         }
                     }
                 }
@@ -187,8 +187,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         expect(e.model).to(equalDiff(model))
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
                 }
 
@@ -218,8 +218,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has readNotebooks action with notebook urls & notebook meta type") {
-                        expect(e.actions).to(equalDiff([
+                    it("has readNotebooks effect with notebook urls & notebook meta type") {
+                        expect(e.effects).to(equalDiff([
                             .readNotebooks(urls: [URL(string: "/firstNotebookURL.qvnotebook/meta.json")!,
                                                   URL(string: "/secondNotebookURL.qvnotebook/meta.json")!])
                         ]))
@@ -232,8 +232,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has handleError action") {
-                        expect(e.actions).to(equalDiff([
+                    it("has handleError effect") {
+                        expect(e.effects).to(equalDiff([
                             .handleError(title: "Failed to load notebooks", message: "message")
                         ]))
                     }
@@ -247,8 +247,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has didLoadNotebooks action with empty list") {
-                        expect(e.actions).to(equalDiff([
+                    it("has didLoadNotebooks effect with empty list") {
+                        expect(e.effects).to(equalDiff([
                             .didLoadNotebooks(notebooks: [])
                         ]))
                     }
@@ -261,8 +261,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has didLoadNotebooks action with 1 notebook") {
-                        expect(e.actions).to(equalDiff([
+                    it("has didLoadNotebooks effect with 1 notebook") {
+                        expect(e.effects).to(equalDiff([
                             .didLoadNotebooks(notebooks: [Notebook.Meta(uuid: "uuid", name: "name")])
                         ]))
                     }
@@ -274,8 +274,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has handleError action with message from error") {
-                        expect(e.actions).to(equalDiff([
+                    it("has handleError effect with message from error") {
+                        expect(e.effects).to(equalDiff([
                             .handleError(title: "Unable to load notebooks", message: "message")
                         ]))
                     }
@@ -292,8 +292,8 @@ class LibraryExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has handleError action with combined message from errors") {
-                        expect(e.actions).to(equalDiff([
+                    it("has handleError effect with combined message from errors") {
+                        expect(e.effects).to(equalDiff([
                             .handleError(title: "Unable to load notebooks", message: "message\nsecondMessage")
                             ]))
                     }
