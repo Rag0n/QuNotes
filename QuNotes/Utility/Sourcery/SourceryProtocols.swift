@@ -7,3 +7,4 @@
 //
 
 protocol AutoEquatable {}
+protocol AutoLens {}

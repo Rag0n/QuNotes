@@ -1,0 +1,27 @@
+// MARK: - Lens
+{% for type in types.implementing.AutoLens|struct %}
+extension {{ type.name }} {
+    enum lens {
+        {% for variable in type.variables|!static|!computed %}
+        static let {{ variable.name }} = Lens<{{ type.name }}, {% if variable.type %}{{ variable.type.name }}{% else %}{{ variable.typeName }}{% endif %}>(
+            get: { $0.{{ variable.name }} },
+            set: { {{ variable.name }}, {{ type.localName|lowercase }} in
+                {{ type.name }}({% for argument in type.variables|!static|!computed %}{{ argument.name }}: {% if variable.name == argument.name %}{{ variable.name }}{% else %}{{ type.localName|lowercase }}.{{ argument.name }}{% endif %}{% if not forloop.last %}, {% endif %}{% endfor %})
+            }
+        ){% endfor %}
+    }
+}
+{% endfor %}
+
+// MARK: - Lens composition
+{% for type in types.implementing.AutoLens|struct %}
+    {% for variable in type.variables where variable.type.implements.AutoLens %}
+extension Lens where Whole == {{ type.name }}, Part == {{ variable.type.name }} {
+        {% for subVariable in variable.type.variables %}
+    var {{ subVariable.name }}: Lens<{{ type.name }}, {{ subVariable.typeName }}> {
+        return {{ type.name }}.lens.{{ variable.name }}..{{ variable.type.name }}.lens.{{ subVariable.name }}
+    }
+        {% endfor %}
+}
+    {% endfor %}
+{% endfor %}
