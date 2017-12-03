@@ -57,6 +57,8 @@
 		11A1FE671FA7B41D006BAF4C /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11A1FE651FA7B41D006BAF4C /* Note.swift */; };
 		11AD36AE1F1D4AC200D9E0A9 /* WSTagsField.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
+		11B2F2131FD3343800760ED9 /* Lens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2F2121FD3343800760ED9 /* Lens.swift */; };
+		11B2F2141FD3343800760ED9 /* Lens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11B2F2121FD3343800760ED9 /* Lens.swift */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
 		11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11B705871EEB42570039A863 /* LaunchScreen.storyboard */; };
 		11B705A11EEBCB0E0039A863 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; };
@@ -151,6 +153,7 @@
 		11A1FE611FA7B3C1006BAF4C /* Notebook.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notebook.swift; sourceTree = "<group>"; };
 		11A1FE651FA7B41D006BAF4C /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		11AE3C721F194E1700A13A74 /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = Carthage/Build/iOS/WSTagsField.framework; sourceTree = "<group>"; };
+		11B2F2121FD3343800760ED9 /* Lens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lens.swift; sourceTree = "<group>"; };
 		11B7057B1EEB42570039A863 /* QuNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QuNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		11B705851EEB42570039A863 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		11B705881EEB42570039A863 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -238,6 +241,7 @@
 				11096D291F59EF4F00E1623C /* Operators.swift */,
 				113504281F16B9D8001938FD /* Extensions */,
 				11E39D751FC4C10500D9232D /* Nimble */,
+				11B2F2111FD3341E00760ED9 /* Prelude */,
 				1190D5A11FC1CCAE0064D569 /* Sourcery */,
 			);
 			path = Utility;
@@ -333,6 +337,14 @@
 				111161E21FA7B61100023B27 /* NoteSpec.swift */,
 			);
 			path = Note;
+			sourceTree = "<group>";
+		};
+		11B2F2111FD3341E00760ED9 /* Prelude */ = {
+			isa = PBXGroup;
+			children = (
+				11B2F2121FD3343800760ED9 /* Lens.swift */,
+			);
+			path = Prelude;
 			sourceTree = "<group>";
 		};
 		11B705721EEB42560039A863 = {
@@ -648,6 +660,7 @@
 				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */,
+				11B2F2131FD3343800760ED9 /* Lens.swift in Sources */,
 				118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */,
 				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
@@ -690,6 +703,7 @@
 				1153327E1FACFD02008FEC2A /* LibrarySpec.swift in Sources */,
 				1153327C1FACFCF3008FEC2A /* Library.swift in Sources */,
 				1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */,
+				11B2F2141FD3343800760ED9 /* Lens.swift in Sources */,
 				1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */,
 				1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
