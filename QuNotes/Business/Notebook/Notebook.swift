@@ -72,13 +72,13 @@ enum Notebook {
             case .loadNotes:
                 effects = [.readDirectory(atURL: model.notebookURL())]
             case let .changeName(newName):
-                newModel = Model(uuid: model.uuid, name: newName, notes: model.notes)
+                newModel = model |> Model.lens.meta.name .~ newName
                 let url = newModel.noteBookMetaURL()
                 effects = [.updateFile(url: url, content: newModel.meta)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 let notes = model.notes + [noteToAdd]
-                newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
+                newModel = model |> Model.lens.notes .~ notes
                 let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
                 let contentURL = newModel.noteContentURL(forNote: noteToAdd)
                 let noteContent = Note.Content(content: noteToAdd.content)
@@ -89,7 +89,7 @@ enum Notebook {
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removeWithoutMutation(at: indexOfRemovedNote)
-                newModel = Model(uuid: model.uuid, name: model.name, notes: notes)
+                newModel = model |> Model.lens.notes .~ notes
                 let url = newModel.noteURL(forNote: noteToRemove)
                 effects = [.deleteFile(url: url)]
             case let .didReadDirectory(result):
@@ -201,5 +201,45 @@ extension Notebook.Effect: Equatable {
             return lNotes == rNotes
         default: return false
         }
+    }
+}
+
+extension Notebook.Model {
+    enum lens {
+        static let meta = Lens<Notebook.Model, Notebook.Meta>(
+            get: { $0.meta },
+            set: { meta, notebook in
+                Notebook.Model(meta: meta, notes: notebook.notes)
+        }
+        )
+        static let notes = Lens<Notebook.Model, [Note.Model]>(
+            get: { $0.notes },
+            set: { notes, notebook in
+                Notebook.Model(meta: notebook.meta, notes: notes)
+        }
+        )
+    }
+}
+
+extension Notebook.Meta {
+    enum lens {
+        static let uuid = Lens<Notebook.Meta, String>(
+            get: { $0.uuid },
+            set: { uuid, meta in
+                Notebook.Meta(uuid: uuid, name: meta.name)
+        }
+        )
+        static let name = Lens<Notebook.Meta, String>(
+            get: { $0.name },
+            set: { name, meta in
+                Notebook.Meta(uuid: meta.uuid, name: name)
+        }
+        )
+    }
+}
+
+extension Lens where Whole == Notebook.Model, Part == Notebook.Meta {
+    var name: Lens<Notebook.Model, String> {
+        return Notebook.Model.lens.meta..Notebook.Meta.lens.name
     }
 }
