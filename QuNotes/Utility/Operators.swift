@@ -6,8 +6,6 @@
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
-// MARK: Pipe
-
 precedencegroup RightApplyPrecedence {
     associativity: right
     higherThan: AssignmentPrecedence
@@ -19,6 +17,23 @@ precedencegroup LeftApplyPrecedence {
     higherThan: AssignmentPrecedence
     lowerThan: TernaryPrecedence
 }
+
+precedencegroup CompositionPrecedence {
+    associativity: right
+    higherThan: LeftApplyPrecedence
+}
+
+precedencegroup LensCompositionPrecedence {
+    associativity: left
+    higherThan: LensSetPrecedence
+}
+
+precedencegroup LensSetPrecedence {
+    associativity: left
+    higherThan: CompositionPrecedence
+}
+
+// MARK: Pipe
 
 /// Pipe Backward | Applies the function to its left to an argument on its right.
 infix operator <| : RightApplyPrecedence
@@ -36,11 +51,6 @@ func |> <T, U>(value: T, function: ((T) -> U)) -> U {
 
 // MARK: Composition
 
-precedencegroup CompositionPrecedence {
-    associativity: right
-    higherThan: DefaultPrecedence
-}
-
 /// Right-to-Left Composition
 infix operator <<< : CompositionPrecedence
 
@@ -54,3 +64,11 @@ infix operator >>> : CompositionPrecedence
 func >>> <T1, T2, T3> (left: @escaping (T1)->T2, right: @escaping (T2)->T3) -> (T1)->T3 {
     return { (t1: T1) -> T3 in return right(left(t1)) }
 }
+
+// MARK: Lens
+/// Lens composition
+infix operator .. : LensCompositionPrecedence
+/// Lens get
+infix operator ^* : LeftApplyPrecedence
+/// Lens set
+infix operator .~ : LensSetPrecedence
