@@ -10,7 +10,7 @@ import Foundation
 import Result
 
 enum Library {
-    struct Model: AutoEquatable {
+    struct Model: AutoEquatable, AutoLens {
         let notebooks: [Notebook.Model]
     }
 
@@ -44,30 +44,25 @@ enum Library {
 
         func evaluate(event: Event) -> Evaluator {
             var effects: [Effect] = []
-            var newModel = model
+            var modelUpdate = { (oldModel: Library.Model) in return self.model }
 
             switch (event) {
             case .loadNotebooks:
                 effects = [.readBaseDirectory]
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
-                newModel = Model(notebooks: model.notebooks + [notebook])
+                modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
                 effects = [.createNotebook(notebook: notebook, url: notebook.noteBookMetaURL())]
             case let .removeNotebook(notebookMeta):
-                guard let notebookToRemove = model.notebooks.filter({$0.uuid == notebookMeta.uuid}).first else {
-                    break
-                }
-                let newNotebooks = model.notebooks.removeWithoutMutation(object: notebookToRemove)
-                newModel = Model(notebooks: newNotebooks)
-                effects = [.deleteNotebook(notebook: notebookToRemove, url: notebookToRemove.notebookURL())]
+                guard let notebook = model.notebooks.filter({$0.uuid == notebookMeta.uuid}).first else { break }
+                modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
+                effects = [.deleteNotebook(notebook: notebook, url: notebook.notebookURL())]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
-                let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
-                newModel = Model(notebooks: updatedNotebooks)
+                modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
             case let .didRemoveNotebook(notebook, error):
                 guard error != nil else { break }
-                let updatedNotebooks = model.notebooks + [notebook]
-                newModel = Model(notebooks: updatedNotebooks)
+                modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
             case let .didReadBaseDirectory(result):
                 guard let urls = result.value else {
                     effects = [.handleError(title: "Failed to load notebooks",
@@ -90,7 +85,7 @@ enum Library {
                 effects = [.didLoadNotebooks(notebooks: notebooks)]
             }
 
-            return Evaluator(effects: effects, model: newModel)
+            return Evaluator(effects: effects, model: modelUpdate(model))
         }
 
         private init(effects: [Effect], model: Model) {

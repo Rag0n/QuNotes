@@ -2,6 +2,16 @@
 // DO NOT EDIT
 
 // MARK: - Lens
+extension Library.Model {
+    enum lens {
+        static let notebooks = Lens<Library.Model, [Notebook.Model]>(
+            get: { $0.notebooks },
+            set: { notebooks, model in
+                Library.Model(notebooks: notebooks)
+            }
+        )
+    }
+}
 extension Notebook.Meta {
     enum lens {
         static let uuid = Lens<Notebook.Meta, String>(
