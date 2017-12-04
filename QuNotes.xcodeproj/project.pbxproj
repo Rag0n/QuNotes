@@ -22,6 +22,7 @@
 		1135042A1F16BA01001938FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
 		1135042B1F16BA01001938FD /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
 		11429F7F1FD4227A00A537E2 /* AutoLens.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */; };
+		11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */; };
 		1153327B1FACFCF3008FEC2A /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1153327A1FACFCF3008FEC2A /* Library.swift */; };
 		1153327C1FACFCF3008FEC2A /* Library.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1153327A1FACFCF3008FEC2A /* Library.swift */; };
 		1153327E1FACFD02008FEC2A /* LibrarySpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1153327D1FACFD02008FEC2A /* LibrarySpec.swift */; };
@@ -694,6 +695,7 @@
 				11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */,
 				1190D5B31FC1D4AF0064D569 /* SourceryProtocols.swift in Sources */,
 				117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
+				11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */,
 				1160CCE01F954C140033E9E2 /* NavigationController.swift in Sources */,
 				1160CCDF1F954C0B0033E9E2 /* Coordinator.swift in Sources */,
 				117D15201FB63F4500410F6F /* URL+Extensions.swift in Sources */,

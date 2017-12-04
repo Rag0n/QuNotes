@@ -10,7 +10,7 @@ import Foundation
 import Result
 
 enum Notebook {
-    struct Model: AutoEquatable {
+    struct Model: AutoEquatable, AutoLens {
         let meta: Meta
         let notes: [Note.Model]
         var uuid: String {
@@ -31,7 +31,7 @@ enum Notebook {
         }
     }
 
-    struct Meta: Codable, AutoEquatable {
+    struct Meta: Codable, AutoEquatable, AutoLens {
         let uuid: String
         let name: String
     }
@@ -201,45 +201,5 @@ extension Notebook.Effect: Equatable {
             return lNotes == rNotes
         default: return false
         }
-    }
-}
-
-extension Notebook.Model {
-    enum lens {
-        static let meta = Lens<Notebook.Model, Notebook.Meta>(
-            get: { $0.meta },
-            set: { meta, notebook in
-                Notebook.Model(meta: meta, notes: notebook.notes)
-        }
-        )
-        static let notes = Lens<Notebook.Model, [Note.Model]>(
-            get: { $0.notes },
-            set: { notes, notebook in
-                Notebook.Model(meta: notebook.meta, notes: notes)
-        }
-        )
-    }
-}
-
-extension Notebook.Meta {
-    enum lens {
-        static let uuid = Lens<Notebook.Meta, String>(
-            get: { $0.uuid },
-            set: { uuid, meta in
-                Notebook.Meta(uuid: uuid, name: meta.name)
-        }
-        )
-        static let name = Lens<Notebook.Meta, String>(
-            get: { $0.name },
-            set: { name, meta in
-                Notebook.Meta(uuid: meta.uuid, name: name)
-        }
-        )
-    }
-}
-
-extension Lens where Whole == Notebook.Model, Part == Notebook.Meta {
-    var name: Lens<Notebook.Model, String> {
-        return Notebook.Model.lens.meta..Notebook.Meta.lens.name
     }
 }
