@@ -19,9 +19,22 @@ extension Array where Element: Equatable {
         return updatedArray
     }
 
+    @available(*, deprecated)
     func removeWithoutMutation(object: Element) -> [Element] {
         var updatedArray = self
         updatedArray.remove(object: object)
+        return updatedArray
+    }
+
+    func appending(_ newElement: Element) -> [Element] {
+        var updatedArray = self
+        updatedArray.append(newElement)
+        return updatedArray
+    }
+
+    func removing(_ element: Element) -> [Element] {
+        var updatedArray = self
+        updatedArray.remove(object: element)
         return updatedArray
     }
 }
