@@ -15,7 +15,7 @@ extension UI {
 extension UI.Library {
     // MARK: - Data types
 
-    struct Model: AutoEquatable {
+    struct Model: AutoEquatable, AutoLens {
         let notebooks: [Notebook.Meta]
     }
     
@@ -76,18 +76,16 @@ extension UI.Library {
             switch event {
             case .addNotebook:
                 let notebook = Notebook.Model(uuid: generateUUID(), name: "", notes: [])
-                let updatedNotebooks = model.notebooks + [notebook.meta]
-                let sortedNotebooks = updatedNotebooks.sorted(by: name)
-                let indexOfNewNotebook = sortedNotebooks.index(of: notebook.meta)!
-                newModel = Model(notebooks: sortedNotebooks)
-                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: viewModels(from: sortedNotebooks))]
+                newModel = model |> Model.lens.notebooks
+                    .~ model.notebooks.appending(notebook.meta).sorted(by: name)
+                let indexOfNewNotebook = newModel.notebooks.index(of: notebook.meta)!
+                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: viewModels(from: newModel))]
                 actions = [.addNotebook(notebook: notebook)]
             case let .deleteNotebook(index):
                 guard index < model.notebooks.count else { break }
                 let notebook = model.notebooks[index]
-                let updatedNotebooks = model.notebooks.removeWithoutMutation(at: index)
-                effects = [.deleteNotebook(index: 0, notebooks: viewModels(from: updatedNotebooks))]
-                newModel = Model(notebooks: updatedNotebooks)
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(at: index)
+                effects = [.deleteNotebook(index: 0, notebooks: viewModels(from: newModel))]
                 actions = [.deleteNotebook(notebook: notebook)]
             case let .selectNotebook(index):
                 actions = [.showNotebook(notebook: model.notebooks[index])]
@@ -95,11 +93,9 @@ extension UI.Library {
                 guard index < model.notebooks.count else { break }
                 let oldNotebook = model.notebooks[index]
                 let updatedNotebook = Notebook.Meta(uuid: oldNotebook.uuid, name: title)
-                var notebooks = model.notebooks
-                notebooks[index] = updatedNotebook
-                notebooks = notebooks.sorted(by: name)
-                newModel = Model(notebooks: notebooks)
-                effects = [.updateNotebook(index: index, notebooks: viewModels(from: notebooks))]
+                newModel = model |> Model.lens.notebooks
+                    .~ model.notebooks.replacing(at: index, new: updatedNotebook).sorted(by: name)
+                effects = [.updateNotebook(index: index, notebooks: viewModels(from: newModel))]
                 actions = [.updateNotebook(notebook: updatedNotebook)]
             }
 
@@ -113,25 +109,22 @@ extension UI.Library {
 
             switch event {
             case let .didLoadNotebooks(notebooks):
-                let sortedNotebooks = notebooks.sorted(by: name)
-                effects = [.updateAllNotebooks(notebooks: viewModels(from: sortedNotebooks))]
-                newModel = Model(notebooks: sortedNotebooks)
+                newModel = model |> Model.lens.notebooks .~ notebooks.sorted(by: name)
+                effects = [.updateAllNotebooks(notebooks: viewModels(from: newModel))]
             case let .didAddNotebook(notebook, error):
                 guard let error = error else { break }
                 // TODO: check if that notebook is still exist in model
                 // If not - should do nothing
                 // Also check if we are not select that notebook; If that notebook is selected,
                 // then we need somehow to go back
-                let updatedNotebooks = model.notebooks.removeWithoutMutation(object: notebook)
-                newModel = Model(notebooks: updatedNotebooks)
-                effects = [.updateAllNotebooks(notebooks: viewModels(from: updatedNotebooks))]
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
+                effects = [.updateAllNotebooks(notebooks: viewModels(from: newModel))]
                 actions = [.showError(title: "Failed to add notebook", message: error.localizedDescription)]
             case let .didDeleteNotebook(notebook, error):
                 guard let error = error else { break }
-                let updatedNotebookMetas = model.notebooks + [notebook]
-                let sortedNotebookMetas = updatedNotebookMetas.sorted(by: name)
-                newModel = Model(notebooks: sortedNotebookMetas)
-                effects = [.updateAllNotebooks(notebooks: viewModels(from: sortedNotebookMetas))]
+                newModel = model |> Model.lens.notebooks
+                    .~ model.notebooks.appending(notebook).sorted(by: name)
+                effects = [.updateAllNotebooks(notebooks: viewModels(from: newModel))]
                 actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
             case let .didFinishShowing(notebook):
                 actions = [.reloadNotebook(notebook: notebook)]
@@ -151,8 +144,8 @@ extension UI.Library {
 // MARK: - Private
 
 private extension UI.Library {
-    static func viewModels(from: [Notebook.Meta]) -> [NotebookViewModel] {
-        return from.map {
+    static func viewModels(from model: Model) -> [NotebookViewModel] {
+        return model.notebooks.map {
             NotebookViewModel(title: $0.name, isEditable: false)
         }
     }

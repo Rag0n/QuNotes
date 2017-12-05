@@ -44,6 +44,32 @@ extension Notebook.Model {
         )
     }
 }
+extension UI.Library.Model {
+    enum lens {
+        static let notebooks = Lens<UI.Library.Model, [Notebook.Meta]>(
+            get: { $0.notebooks },
+            set: { notebooks, model in
+                UI.Library.Model(notebooks: notebooks)
+            }
+        )
+    }
+}
+extension UI.Notebook.Model {
+    enum lens {
+        static let notebook = Lens<UI.Notebook.Model, Notebook.Meta>(
+            get: { $0.notebook },
+            set: { notebook, model in
+                UI.Notebook.Model(notebook: notebook, notes: model.notes)
+            }
+        )
+        static let notes = Lens<UI.Notebook.Model, [Note.Meta]>(
+            get: { $0.notes },
+            set: { notes, model in
+                UI.Notebook.Model(notebook: model.notebook, notes: notes)
+            }
+        )
+    }
+}
 
 // MARK: - Lens composition
 extension Lens where Whole == Notebook.Model, Part == Notebook.Meta {
