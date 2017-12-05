@@ -15,6 +15,7 @@
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
+		11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		112A9D911F5AF3B5003DF85D /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112A9D901F5AF3B5003DF85D /* Curry.swift */; };
 		112A9D921F5AF3B5003DF85D /* Curry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112A9D901F5AF3B5003DF85D /* Curry.swift */; };
@@ -73,7 +74,6 @@
 		11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */; };
 		11CDB3E41F969BE20014C58F /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */; };
 		11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
-		11CDB3E81F969C150014C58F /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		11E39D741FC494C500D9232D /* Difference.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11E39D731FC494C500D9232D /* Difference.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11E39D771FC4C12900D9232D /* EqualDiffMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E39D761FC4C12900D9232D /* EqualDiffMatcher.swift */; };
 		11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
@@ -648,7 +648,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				11429F7F1FD4227A00A537E2 /* AutoLens.generated.swift in Sources */,
 				1180E54E1F92A76C00B835BF /* UI.swift in Sources */,
 				B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */,
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
@@ -681,6 +680,7 @@
 				11A1FE661FA7B41D006BAF4C /* Note.swift in Sources */,
 				B212560DBEB110ABCFB85CAB /* NoteCoordinator.swift in Sources */,
 				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
+				11429F7F1FD4227A00A537E2 /* AutoLens.generated.swift in Sources */,
 				1190D5AF1FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -691,11 +691,9 @@
 			files = (
 				1160CCDB1F954A380033E9E2 /* UI.swift in Sources */,
 				B2125985206C842279B2FDB5 /* NoteEvaluator.swift in Sources */,
-				11CDB3E81F969C150014C58F /* NotebookEvaluator.swift in Sources */,
 				11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */,
 				1190D5B31FC1D4AF0064D569 /* SourceryProtocols.swift in Sources */,
 				117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
-				11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */,
 				1160CCE01F954C140033E9E2 /* NavigationController.swift in Sources */,
 				1160CCDF1F954C0B0033E9E2 /* Coordinator.swift in Sources */,
 				117D15201FB63F4500410F6F /* URL+Extensions.swift in Sources */,
@@ -712,9 +710,11 @@
 				11E39D771FC4C12900D9232D /* EqualDiffMatcher.swift in Sources */,
 				1153327E1FACFD02008FEC2A /* LibrarySpec.swift in Sources */,
 				1153327C1FACFCF3008FEC2A /* Library.swift in Sources */,
+				11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */,
 				1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */,
 				11B2F2141FD3343800760ED9 /* Lens.swift in Sources */,
 				1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */,
+				11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */,
 				1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
