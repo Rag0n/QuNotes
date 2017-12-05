@@ -1,3 +1,5 @@
+import Foundation
+
 // MARK: - Lens
 {% for type in types.implementing.AutoLens|struct %}
 extension {{ type.name }} {
