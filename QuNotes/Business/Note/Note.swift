@@ -90,7 +90,7 @@ enum Note {
                 actions = [.updateFile(url: url, content: newModel.meta)]
             case let .removeTag(tag):
                 guard let indexOfTag = model.tags.index(of: tag) else { break }
-                let newTags = model.tags.removeWithoutMutation(at: indexOfTag)
+                let newTags = model.tags.removing(at: indexOfTag)
                 newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
                                  tags: newTags,
                                  notebook: model.notebook,

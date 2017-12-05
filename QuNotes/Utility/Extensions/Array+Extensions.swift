@@ -7,25 +7,6 @@
 //
 
 extension Array where Element: Equatable {
-    mutating func remove(object: Element) {
-        if let index = index(of: object) {
-            remove(at: index)
-        }
-    }
-
-    func removeWithoutMutation(at position: Int) -> [Element] {
-        var updatedArray = self
-        updatedArray.remove(at: position)
-        return updatedArray
-    }
-
-    @available(*, deprecated)
-    func removeWithoutMutation(object: Element) -> [Element] {
-        var updatedArray = self
-        updatedArray.remove(object: object)
-        return updatedArray
-    }
-
     func appending(_ newElement: Element) -> [Element] {
         var updatedArray = self
         updatedArray.append(newElement)
@@ -33,8 +14,21 @@ extension Array where Element: Equatable {
     }
 
     func removing(_ element: Element) -> [Element] {
+        guard let index = index(of: element) else { return self }
         var updatedArray = self
-        updatedArray.remove(object: element)
+        updatedArray.remove(at: index)
+        return updatedArray
+    }
+
+    func removing(at index: Int) -> [Element] {
+        var updatedArray = self
+        updatedArray.remove(at: index)
+        return updatedArray
+    }
+
+    func replacing(at index: Int, new element: Element) -> [Element] {
+        var updatedArray = self
+        updatedArray[index] = element
         return updatedArray
     }
 }

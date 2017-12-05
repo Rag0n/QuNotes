@@ -88,7 +88,7 @@ enum Notebook {
                 ]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
-                let notes = model.notes.removeWithoutMutation(at: indexOfRemovedNote)
+                let notes = model.notes.removing(at: indexOfRemovedNote)
                 newModel = model |> Model.lens.notes .~ notes
                 let url = newModel.noteURL(forNote: noteToRemove)
                 effects = [.deleteFile(url: url)]
