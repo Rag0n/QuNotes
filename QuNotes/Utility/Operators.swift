@@ -52,20 +52,17 @@ func |> <T, U>(value: T, function: ((T) -> U)) -> U {
 // MARK: Composition
 
 /// Right-to-Left Composition
-infix operator <<< : CompositionPrecedence
-
-func <<< <T1, T2, T3> (left: @escaping (T2)->T3, right: @escaping (T1)->T2) -> (T1)->T3 {
+func <| <T1, T2, T3> (left: @escaping (T2)->T3, right: @escaping (T1)->T2) -> (T1)->T3 {
     return { (t1: T1) -> T3 in return left(right(t1)) }
 }
 
 /// Left-to-Right Composition
-infix operator >>> : CompositionPrecedence
-
-func >>> <T1, T2, T3> (left: @escaping (T1)->T2, right: @escaping (T2)->T3) -> (T1)->T3 {
+func |>  <T1, T2, T3> (left: @escaping (T1)->T2, right: @escaping (T2)->T3) -> (T1)->T3 {
     return { (t1: T1) -> T3 in return right(left(t1)) }
 }
 
 // MARK: Lens
+
 /// Lens composition
 infix operator .. : LensCompositionPrecedence
 /// Lens get
