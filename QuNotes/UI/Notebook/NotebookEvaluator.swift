@@ -84,8 +84,11 @@ extension UI.Notebook {
             case .didLoad:
                 effects = [.updateTitle(title: model.notebook.name)]
             case .addNote:
-                let note = Note.Model(uuid: generateUUID(), title: "", content: "", tags: [], notebook: nil,
-                                      updatedDate: currentTimestamp(), createdDate: currentTimestamp())
+                let noteMeta = Note.Meta(uuid: generateUUID(), title: "",
+                                         tags: [], updated_at: currentTimestamp(),
+                                         created_at: currentTimestamp())
+                let note = Note.Model(meta: noteMeta, content: "",
+                                      notebook: Notebook.Meta.Unspecified)
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note.meta).sorted(by: title)
                 actions = [

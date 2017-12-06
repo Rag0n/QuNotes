@@ -13,8 +13,8 @@ import Result
 class NotebookSpec: QuickSpec {
     override func spec() {
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
-        let note = Note.Model(uuid: "noteUUID", title: "title", content: "content", tags: [], notebook: nil,
-                              updatedDate: 0, createdDate: 123)
+        let note = Note.Model(meta: Note.Meta(uuid: "noteUUID", title: "title", tags: [],
+                              updated_at: 0, created_at: 123), content: "content")
         let meta = Notebook.Meta(uuid: "uuid", name: "name")
         let model = Notebook.Model(meta: meta, notes: [note])
         var e: Notebook.Evaluator!
@@ -75,8 +75,9 @@ class NotebookSpec: QuickSpec {
 
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
-                    let newNote = Note.Model(uuid: "newNoteUUID", title: "title", content: "content", tags: ["tag"],
-                                             notebook: nil, updatedDate: 12, createdDate: 12)
+                    let newNote = Note.Model(meta: Note.Meta(uuid: "newNoteUUID", title: "title",
+                                                             tags: ["tag"], updated_at: 12, created_at: 12),
+                                             content: "content")
 
                     beforeEach {
                         event = .addNote(note: newNote)
@@ -138,8 +139,8 @@ class NotebookSpec: QuickSpec {
 
                 context("when passed note is not exist") {
                     beforeEach {
-                        let notAddedNote = Note.Model(uuid: "nAUUID", title: "t", content: "c", tags: [],
-                                                      notebook: nil, updatedDate: 14, createdDate: 14)
+                        let notAddedNote = Note.Model(meta: Note.Meta(uuid: "nAUUID", title: "t", tags: [],
+                                                                      updated_at: 14, created_at: 14), content: "c")
                         event = .removeNote(note: notAddedNote)
                         e = e.evaluate(event: event)
                     }

@@ -9,12 +9,12 @@
 import Foundation
 
 enum Note {
-    struct Model: AutoEquatable {
+    struct Model: AutoEquatable, AutoLens {
         let meta: Meta
         let content: String
-        let notebook: Notebook.Model?
+        let notebook: Notebook.Meta
 
-        init(meta: Meta, content: String, notebook: Notebook.Model?) {
+        init(meta: Meta, content: String, notebook: Notebook.Meta = Notebook.Meta.Unspecified) {
             self.meta = meta
             self.content = content
             self.notebook = notebook
@@ -60,44 +60,31 @@ enum Note {
 
             switch event {
             case let .changeTitle(newTitle):
-                newModel = Model(uuid: model.uuid, title: newTitle, content: model.content,
-                                 tags: model.tags, notebook: model.notebook,
-                                 updatedDate: currentTimestamp(),
-                                 createdDate: model.createdDate)
-                guard let notebook = model.notebook else { break }
-                let url = notebook.noteMetaURL(forNote: newModel)
+                newModel = model |> Model.lens.meta.title .~ newTitle
+                            |> Model.lens.meta.updated_at .~ currentTimestamp()
+                guard model.notebook != Notebook.Meta.Unspecified else { break }
+                let url = model.notebook.noteMetaURL(for: newModel.meta)
                 actions = [.updateFile(url: url, content: newModel.meta)]
             case let .changeContent(newContent):
-                newModel = Model(uuid: model.uuid, title: model.title, content: newContent,
-                                 tags: model.tags,
-                                 notebook: model.notebook,
-                                 updatedDate: currentTimestamp(),
-                                 createdDate: model.createdDate)
-                guard let notebook = model.notebook else { break }
+                newModel = model |> Model.lens.content .~ newContent
+                            |> Model.lens.meta.updated_at .~ currentTimestamp()
+                guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let fileContent = Content(content: newContent);
-                let url = notebook.noteContentURL(forNote: newModel)
+                let url = model.notebook.noteContentURL(for: newModel.meta)
                 actions = [.updateFile(url: url, content: fileContent)]
             case let .addTag(tag):
                 guard !model.hasTag(tag) else { break }
-                let newTags = model.tags + [tag]
-                newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags,
-                                 notebook: model.notebook,
-                                 updatedDate: currentTimestamp(),
-                                 createdDate: model.createdDate)
-                guard let notebook = model.notebook else { break }
-                let url = notebook.noteMetaURL(forNote: newModel)
+                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
+                            |> Model.lens.meta.updated_at .~ currentTimestamp()
+                guard model.notebook != Notebook.Meta.Unspecified else { break }
+                let url = model.notebook.noteMetaURL(for: newModel.meta)
                 actions = [.updateFile(url: url, content: newModel.meta)]
             case let .removeTag(tag):
-                guard let indexOfTag = model.tags.index(of: tag) else { break }
-                let newTags = model.tags.removing(at: indexOfTag)
-                newModel = Model(uuid: model.uuid, title: model.title, content: model.content,
-                                 tags: newTags,
-                                 notebook: model.notebook,
-                                 updatedDate: currentTimestamp(),
-                                 createdDate: model.createdDate)
-                guard let notebook = model.notebook else { break }
-                let url = notebook.noteMetaURL(forNote: newModel)
+                guard let indexOfTag = model.meta.tags.index(of: tag) else { break }
+                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(at: indexOfTag)
+                            |> Model.lens.meta.updated_at .~ currentTimestamp()
+                guard model.notebook != Notebook.Meta.Unspecified else { break }
+                let url = model.notebook.noteMetaURL(for: newModel.meta)
                 actions = [.updateFile(url: url, content: newModel.meta)]
             }
 
@@ -111,42 +98,11 @@ enum Note {
     }
 }
 
-// MARK: Model API
-
-extension Note.Model {
-    var uuid: String {
-        return meta.uuid
-    }
-    var title: String {
-        return meta.title
-    }
-    var tags: [String] {
-        return meta.tags
-    }
-    var createdDate: TimeInterval {
-        return meta.created_at
-    }
-    var updatedDate: TimeInterval {
-        return meta.updated_at
-    }
-
-    init(uuid: String,
-         title: String,
-         content: String,
-         tags: [String],
-         notebook: Notebook.Model?,
-         updatedDate: TimeInterval,
-         createdDate: TimeInterval) {
-        let meta = Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: updatedDate, created_at: createdDate)
-        self.init(meta: meta, content: content, notebook: notebook)
-    }
-}
-
 // MARK: - Private
 
 private extension Note.Model {
     func hasTag(_ tag: String) -> Bool {
-        return tags.index(of: tag) != nil
+        return meta.tags.index(of: tag) != nil
     }
 }
 

@@ -74,9 +74,9 @@ extension UI.Note {
             switch event {
             case .didLoad:
                 effects = [
-                    .updateTitle(title: model.note.title),
+                    .updateTitle(title: model.note.meta.title),
                     .updateContent(content: model.note.content),
-                    .showTags(tags: model.note.tags)
+                    .showTags(tags: model.note.meta.tags)
                 ]
                 if model.isNew {
                     effects += [.focusOnTitle]

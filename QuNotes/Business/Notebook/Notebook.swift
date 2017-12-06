@@ -34,6 +34,7 @@ enum Notebook {
     struct Meta: Codable, AutoEquatable, AutoLens {
         let uuid: String
         let name: String
+        static let Unspecified = Meta(uuid: "unspecified", name: "")
     }
 
     enum Effect {
@@ -76,7 +77,7 @@ enum Notebook {
                 let url = newModel.noteBookMetaURL()
                 effects = [.updateFile(url: url, content: newModel.meta)]
             case let .addNote(noteToAdd):
-                guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
+                guard !model.hasNote(withUUID: noteToAdd.meta.uuid) else { break }
                 let notes = model.notes + [noteToAdd]
                 newModel = model |> Model.lens.notes .~ notes
                 let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
@@ -139,7 +140,7 @@ extension Notebook.Model {
 
     func noteURL(forNote note: Note.Model) -> URL {
         return notebookURL()
-            .appendingPathComponent(note.uuid)
+            .appendingPathComponent(note.meta.uuid)
             .appendingPathExtension(Extension.note)
     }
 
@@ -156,11 +157,35 @@ extension Notebook.Model {
     }
 }
 
+extension Notebook.Meta {
+    func notebookURL() -> URL {
+        return URL(string: uuid)!.appendingPathExtension(Notebook.Model.Extension.notebook)
+    }
+
+    func noteURL(for note: Note.Meta) -> URL {
+        return notebookURL()
+            .appendingPathComponent(note.uuid)
+            .appendingPathExtension(Notebook.Model.Extension.note)
+    }
+
+    func noteMetaURL(for note: Note.Meta) -> URL {
+        return noteURL(for: note)
+            .appendingPathComponent(Notebook.Model.Component.meta)
+            .appendingPathExtension(Notebook.Model.Extension.json)
+    }
+
+    func noteContentURL(for note: Note.Meta) -> URL {
+        return noteURL(for: note)
+            .appendingPathComponent(Notebook.Model.Component.content)
+            .appendingPathExtension(Notebook.Model.Extension.json)
+    }
+}
+
 // MARK: - Private
 
 private extension Notebook.Model {
     func hasNote(withUUID noteUUID: String) -> Bool {
-        return notes.filter({ $0.uuid == noteUUID }).count > 0
+        return notes.filter({ $0.meta.uuid == noteUUID }).count > 0
     }
 
     enum Extension {

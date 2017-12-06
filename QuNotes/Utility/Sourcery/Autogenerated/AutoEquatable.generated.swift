@@ -51,7 +51,7 @@ extension Note.Model: Equatable {}
 internal func == (lhs: Note.Model, rhs: Note.Model) -> Bool {
     guard lhs.meta == rhs.meta else { return false }
     guard lhs.content == rhs.content else { return false }
-    guard compareOptionals(lhs: lhs.notebook, rhs: rhs.notebook, compare: ==) else { return false }
+    guard lhs.notebook == rhs.notebook else { return false }
     return true
 }
 // MARK: - Notebook.Meta AutoEquatable

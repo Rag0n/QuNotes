@@ -48,6 +48,28 @@ extension Note.Meta {
         )
     }
 }
+extension Note.Model {
+    enum lens {
+        static let meta = Lens<Note.Model, Note.Meta>(
+            get: { $0.meta },
+            set: { meta, model in
+                Note.Model(meta: meta, content: model.content, notebook: model.notebook)
+            }
+        )
+        static let content = Lens<Note.Model, String>(
+            get: { $0.content },
+            set: { content, model in
+                Note.Model(meta: model.meta, content: content, notebook: model.notebook)
+            }
+        )
+        static let notebook = Lens<Note.Model, Notebook.Meta>(
+            get: { $0.notebook },
+            set: { notebook, model in
+                Note.Model(meta: model.meta, content: model.content, notebook: notebook)
+            }
+        )
+    }
+}
 extension Notebook.Meta {
     enum lens {
         static let uuid = Lens<Notebook.Meta, String>(
@@ -108,6 +130,31 @@ extension UI.Notebook.Model {
 }
 
 // MARK: - Lens composition
+extension Lens where Whole == Note.Model, Part == Note.Meta {
+    var uuid: Lens<Note.Model, String> {
+        return Note.Model.lens.meta..Note.Meta.lens.uuid
+    }
+    var title: Lens<Note.Model, String> {
+        return Note.Model.lens.meta..Note.Meta.lens.title
+    }
+    var tags: Lens<Note.Model, [String]> {
+        return Note.Model.lens.meta..Note.Meta.lens.tags
+    }
+    var updated_at: Lens<Note.Model, TimeInterval> {
+        return Note.Model.lens.meta..Note.Meta.lens.updated_at
+    }
+    var created_at: Lens<Note.Model, TimeInterval> {
+        return Note.Model.lens.meta..Note.Meta.lens.created_at
+    }
+}
+extension Lens where Whole == Note.Model, Part == Notebook.Meta {
+    var uuid: Lens<Note.Model, String> {
+        return Note.Model.lens.notebook..Notebook.Meta.lens.uuid
+    }
+    var name: Lens<Note.Model, String> {
+        return Note.Model.lens.notebook..Notebook.Meta.lens.name
+    }
+}
 extension Lens where Whole == Notebook.Model, Part == Notebook.Meta {
     var uuid: Lens<Notebook.Model, String> {
         return Notebook.Model.lens.meta..Notebook.Meta.lens.uuid

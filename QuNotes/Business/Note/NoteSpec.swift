@@ -12,7 +12,7 @@ import Nimble
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
         let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
-        let model = Note.Model(meta: meta, content: "content", notebook: nil)
+        let model = Note.Model(meta: meta, content: "content")
         var e: Note.Evaluator!
 
         beforeEach {
@@ -41,14 +41,18 @@ class NoteExperimantalSpec: QuickSpec {
 
                 it("updates model by changing title and updatedDate") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(uuid: "uuid", title: "new title", content: "content", tags: ["tag"],
-                                   notebook: nil, updatedDate: 15, createdDate: 12)
+                        Note.Model(meta: Note.Meta(uuid: "uuid", title: "new title", tags: ["tag"],
+                                                   updated_at: 15, created_at: 12), content: "content")
                     ))
+                }
+
+                it("doesnt have any actions") {
+                    expect(e.actions).to(beEmpty())
                 }
 
                 context("when note is added to notebook") {
                     beforeEach {
-                        let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
                         let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                         e = Note.Evaluator(model: model)
                         e.currentTimestamp = { 15 }
@@ -74,14 +78,18 @@ class NoteExperimantalSpec: QuickSpec {
 
                 it("updates model by changing content and updatedDate") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(uuid: "uuid", title: "title", content: "new content", tags: ["tag"],
-                                   notebook: nil, updatedDate: 16, createdDate: 12)
+                        Note.Model(meta: Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
+                                                   updated_at: 16, created_at: 12), content: "new content")
                     ))
+                }
+
+                it("doesnt have any actions") {
+                    expect(e.actions).to(beEmpty())
                 }
 
                 context("when note is added to notebook") {
                     beforeEach {
-                        let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                        let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
                         let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                         e = Note.Evaluator(model: model)
                         e = e.evaluate(event: event)
@@ -121,14 +129,18 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by appending tag and updating updateDate") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(uuid: "uuid", title: "title", content: "content", tags: ["tag", "new tag"],
-                                       notebook: nil, updatedDate: 18, createdDate: 12)
+                            Note.Model(meta: Note.Meta(uuid: "uuid", title: "title", tags: ["tag", "new tag"],
+                                                       updated_at: 18, created_at: 12), content: "content")
                         ))
+                    }
+
+                    it("doesnt have any actions") {
+                        expect(e.actions).to(beEmpty())
                     }
 
                     context("when note is added to notebook") {
                         beforeEach {
-                            let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                            let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
                             let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 20 }
@@ -138,8 +150,9 @@ class NoteExperimantalSpec: QuickSpec {
                         it("has updateFile action with meta & meta URL") {
                             expect(e.actions).to(equalDiff([
                                 .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                            content: Note.Meta(uuid: "uuid", title: "title", tags: ["tag", "new tag"],
-                                                               updated_at: 20, created_at: 12))
+                                            content: Note.Meta(uuid: "uuid", title: "title",
+                                                               tags: ["tag", "new tag"], updated_at: 20,
+                                                               created_at: 12))
                             ]))
                         }
                     }
@@ -156,14 +169,18 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by removing tag and updating updatedDate") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(uuid: "uuid", title: "title", content: "content", tags: [],
-                                       notebook: nil, updatedDate: 20, createdDate: 12)
+                            Note.Model(meta: Note.Meta(uuid: "uuid", title: "title", tags: [],
+                                                       updated_at: 20, created_at: 12), content: "content")
                         ))
+                    }
+
+                    it("doesnt have any actions") {
+                        expect(e.actions).to(beEmpty())
                     }
 
                     context("when note is added to notebook") {
                         beforeEach {
-                            let notebook = Notebook.Model(uuid: "notebookUUID", name: "name", notes: [])
+                            let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
                             let model = Note.Model(meta: meta, content: "content", notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 22 }
