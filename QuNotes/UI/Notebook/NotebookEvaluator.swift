@@ -14,7 +14,7 @@ extension UI {
 }
 
 extension UI.Notebook {
-    struct Model: AutoEquatable {
+    struct Model: AutoEquatable, AutoLens {
         let notebook: Notebook.Meta
         let notes: [Note.Meta]
     }
@@ -86,8 +86,8 @@ extension UI.Notebook {
             case .addNote:
                 let note = Note.Model(uuid: generateUUID(), title: "", content: "", tags: [], notebook: nil,
                                       updatedDate: currentTimestamp(), createdDate: currentTimestamp())
-                let sortedNotes = (model.notes + [note.meta]).sorted(by: title)
-                newModel = Model(notebook: model.notebook, notes: sortedNotes)
+                newModel = model |> Model.lens.notes
+                    .~ model.notes.appending(note.meta).sorted(by: title)
                 actions = [
                     .addNote(note: note),
                     .showNote(note: note.meta, isNew: true)
@@ -143,9 +143,8 @@ extension UI.Notebook {
 
                 actions = [.finish]
             case let .didLoadNotes(notes):
-                let sortedNotes = notes.sorted(by: title)
-                newModel = Model(notebook: model.notebook, notes: sortedNotes)
-                effects = [.updateAllNotes(notes: titles(from: sortedNotes))]
+                newModel = model |> Model.lens.notes .~ notes.sorted(by: title)
+                effects = [.updateAllNotes(notes: titles(from: newModel))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -174,6 +173,10 @@ private extension UI.Notebook {
         return Evaluator(effects: effects,
                          actions: actions,
                          model: model)
+    }
+
+    static func titles(from model: Model) -> [String] {
+        return titles(from: model.notes)
     }
 
     static func titles(from notes: [Note.Meta]) -> [String] {

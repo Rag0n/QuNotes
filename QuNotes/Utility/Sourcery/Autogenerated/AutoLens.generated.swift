@@ -1,6 +1,8 @@
 // Generated using Sourcery 0.9.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+import Foundation
+
 // MARK: - Lens
 extension Library.Model {
     enum lens {
@@ -8,6 +10,40 @@ extension Library.Model {
             get: { $0.notebooks },
             set: { notebooks, model in
                 Library.Model(notebooks: notebooks)
+            }
+        )
+    }
+}
+extension Note.Meta {
+    enum lens {
+        static let uuid = Lens<Note.Meta, String>(
+            get: { $0.uuid },
+            set: { uuid, meta in
+                Note.Meta(uuid: uuid, title: meta.title, tags: meta.tags, updated_at: meta.updated_at, created_at: meta.created_at)
+            }
+        )
+        static let title = Lens<Note.Meta, String>(
+            get: { $0.title },
+            set: { title, meta in
+                Note.Meta(uuid: meta.uuid, title: title, tags: meta.tags, updated_at: meta.updated_at, created_at: meta.created_at)
+            }
+        )
+        static let tags = Lens<Note.Meta, [String]>(
+            get: { $0.tags },
+            set: { tags, meta in
+                Note.Meta(uuid: meta.uuid, title: meta.title, tags: tags, updated_at: meta.updated_at, created_at: meta.created_at)
+            }
+        )
+        static let updated_at = Lens<Note.Meta, TimeInterval>(
+            get: { $0.updated_at },
+            set: { updated_at, meta in
+                Note.Meta(uuid: meta.uuid, title: meta.title, tags: meta.tags, updated_at: updated_at, created_at: meta.created_at)
+            }
+        )
+        static let created_at = Lens<Note.Meta, TimeInterval>(
+            get: { $0.created_at },
+            set: { created_at, meta in
+                Note.Meta(uuid: meta.uuid, title: meta.title, tags: meta.tags, updated_at: meta.updated_at, created_at: created_at)
             }
         )
     }
@@ -78,5 +114,13 @@ extension Lens where Whole == Notebook.Model, Part == Notebook.Meta {
     }
     var name: Lens<Notebook.Model, String> {
         return Notebook.Model.lens.meta..Notebook.Meta.lens.name
+    }
+}
+extension Lens where Whole == UI.Notebook.Model, Part == Notebook.Meta {
+    var uuid: Lens<UI.Notebook.Model, String> {
+        return UI.Notebook.Model.lens.notebook..Notebook.Meta.lens.uuid
+    }
+    var name: Lens<UI.Notebook.Model, String> {
+        return UI.Notebook.Model.lens.notebook..Notebook.Meta.lens.name
     }
 }

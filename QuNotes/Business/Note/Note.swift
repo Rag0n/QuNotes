@@ -21,7 +21,7 @@ enum Note {
         }
     }
 
-    struct Meta: Codable, AutoEquatable {
+    struct Meta: Codable, AutoEquatable, AutoLens {
         let uuid: String
         let title: String
         let tags: [String]
