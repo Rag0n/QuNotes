@@ -52,7 +52,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has addNote and showNote actions") {
                     expect(e.actions).to(equalDiff([
-                        .addNote(note: Note.Model(meta: expectedNote, content: "", notebook: Notebook.Meta.Unspecified)),
+                        .addNote(note: Note.Model(meta: expectedNote, content: "", notebook: notebook)),
                         .showNote(note: expectedNote, isNew: true)
                     ]))
                 }
