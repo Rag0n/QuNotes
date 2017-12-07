@@ -94,7 +94,7 @@ extension Notebook.Model {
                 Notebook.Model(meta: meta, notes: model.notes)
             }
         )
-        static let notes = Lens<Notebook.Model, [Note.Model]>(
+        static let notes = Lens<Notebook.Model, [Note.Meta]>(
             get: { $0.notes },
             set: { notes, model in
                 Notebook.Model(meta: model.meta, notes: notes)

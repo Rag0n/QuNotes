@@ -12,7 +12,7 @@ import Result
 enum Notebook {
     struct Model: AutoEquatable, AutoLens {
         let meta: Meta
-        let notes: [Note.Model]
+        let notes: [Note.Meta]
     }
 
     struct Meta: Codable, AutoEquatable, AutoLens {
@@ -34,8 +34,8 @@ enum Notebook {
     enum Event {
         case loadNotes
         case changeName(newName: String)
-        case addNote(note: Note.Model)
-        case removeNote(note: Note.Model)
+        case addNote(note: Note.Meta)
+        case removeNote(note: Note.Meta)
         case didReadDirectory(urls: Result<[URL], NSError>)
         case didReadNotes(notes: [Result<Note.Meta, AnyError>])
     }
@@ -61,21 +61,15 @@ enum Notebook {
                 let url = newModel.noteBookMetaURL()
                 effects = [.updateFile(url: url, content: newModel.meta)]
             case let .addNote(noteToAdd):
-                guard !model.hasNote(withUUID: noteToAdd.meta.uuid) else { break }
-                let notes = model.notes + [noteToAdd]
-                newModel = model |> Model.lens.notes .~ notes
-                let metaURL = newModel.noteMetaURL(forNote: noteToAdd)
-                let contentURL = newModel.noteContentURL(forNote: noteToAdd)
-                let noteContent = Note.Content(content: noteToAdd.content)
-                effects = [
-                    .createFile(url: metaURL, content: noteToAdd.meta),
-                    .createFile(url: contentURL, content: noteContent),
-                ]
+                guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
+                newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
+                let url = newModel.meta.noteMetaURL(for: noteToAdd)
+                effects = [.createFile(url: url, content: noteToAdd)]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removing(at: indexOfRemovedNote)
                 newModel = model |> Model.lens.notes .~ notes
-                let url = newModel.noteURL(forNote: noteToRemove)
+                let url = newModel.meta.noteURL(for: noteToRemove)
                 effects = [.deleteFile(url: url)]
             case let .didReadDirectory(result):
                 guard let urls = result.value else {
@@ -169,7 +163,7 @@ extension Notebook.Meta {
 
 private extension Notebook.Model {
     func hasNote(withUUID noteUUID: String) -> Bool {
-        return notes.filter({ $0.meta.uuid == noteUUID }).count > 0
+        return notes.filter({ $0.uuid == noteUUID }).count > 0
     }
 
     enum Extension {

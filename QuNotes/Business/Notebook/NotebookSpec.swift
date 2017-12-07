@@ -13,8 +13,7 @@ import Result
 class NotebookSpec: QuickSpec {
     override func spec() {
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
-        let note = Note.Model(meta: Note.Meta(uuid: "noteUUID", title: "title", tags: [],
-                              updated_at: 0, created_at: 123), content: "content")
+        let note = Note.Meta(uuid: "noteUUID", title: "title", tags: [], updated_at: 0, created_at: 123)
         let meta = Notebook.Meta(uuid: "uuid", name: "name")
         let model = Notebook.Model(meta: meta, notes: [note])
         var e: Notebook.Evaluator!
@@ -75,9 +74,8 @@ class NotebookSpec: QuickSpec {
 
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
-                    let newNote = Note.Model(meta: Note.Meta(uuid: "newNoteUUID", title: "title",
-                                                             tags: ["tag"], updated_at: 12, created_at: 12),
-                                             content: "content")
+                    let newNote = Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
+                                            updated_at: 12, created_at: 12)
 
                     beforeEach {
                         event = .addNote(note: newNote)
@@ -88,9 +86,7 @@ class NotebookSpec: QuickSpec {
                         expect(e.effects).to(equalDiff([
                             .createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
                                         content: Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
-                                                           updated_at: 12, created_at: 12)),
-                            .createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!,
-                                        content: Note.Content(content: "content"))
+                                                           updated_at: 12, created_at: 12))
                         ]))
                     }
 
@@ -139,8 +135,8 @@ class NotebookSpec: QuickSpec {
 
                 context("when passed note is not exist") {
                     beforeEach {
-                        let notAddedNote = Note.Model(meta: Note.Meta(uuid: "nAUUID", title: "t", tags: [],
-                                                                      updated_at: 14, created_at: 14), content: "c")
+                        let notAddedNote = Note.Meta(uuid: "nAUUID", title: "t", tags: [],
+                                                     updated_at: 14, created_at: 14)
                         event = .removeNote(note: notAddedNote)
                         e = e.evaluate(event: event)
                     }
