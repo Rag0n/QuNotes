@@ -75,7 +75,7 @@ extension UI.Library {
 
             switch event {
             case .addNotebook:
-                let notebook = Notebook.Model(uuid: generateUUID(), name: "", notes: [])
+                let notebook = Notebook.Model(meta: Notebook.Meta(uuid: generateUUID(), name: ""), notes: [])
                 newModel = model |> Model.lens.notebooks
                     .~ model.notebooks.appending(notebook.meta).sorted(by: name)
                 let indexOfNewNotebook = newModel.notebooks.index(of: notebook.meta)!

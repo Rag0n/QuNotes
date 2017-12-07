@@ -68,7 +68,7 @@ class NotebookSpec: QuickSpec {
 
                 it("updates model by changing name") {
                     expect(e.model).to(equalDiff(
-                        Notebook.Model(uuid: "uuid", name: "new name", notes: [note])
+                        Notebook.Model(meta: Notebook.Meta(uuid: "uuid", name: "new name"), notes: [note])
                     ))
                 }
             }

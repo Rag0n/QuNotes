@@ -13,22 +13,6 @@ enum Notebook {
     struct Model: AutoEquatable, AutoLens {
         let meta: Meta
         let notes: [Note.Model]
-        var uuid: String {
-            return meta.uuid
-        }
-        var name: String {
-            return meta.name
-        }
-
-        init(meta: Meta, notes: [Note.Model]) {
-            self.meta = meta
-            self.notes = notes
-        }
-
-        init(uuid: String, name: String, notes: [Note.Model]) {
-            let meta = Meta(uuid: uuid, name: name)
-            self.init(meta: meta, notes: notes)
-        }
     }
 
     struct Meta: Codable, AutoEquatable, AutoLens {
@@ -129,7 +113,7 @@ enum Notebook {
 
 extension Notebook.Model {
     func notebookURL() -> URL {
-        return URL(string: uuid)!.appendingPathExtension(Extension.notebook)
+        return URL(string: meta.uuid)!.appendingPathExtension(Extension.notebook)
     }
 
     func noteBookMetaURL() -> URL {

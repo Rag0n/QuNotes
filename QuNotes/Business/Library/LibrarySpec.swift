@@ -12,7 +12,8 @@ import Result
 
 class LibrarySpec: QuickSpec {
     override func spec() {
-        let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
+        let notebook = Notebook.Model(meta: Notebook.Meta(uuid: "notebookUUID", name: "notebookName"),
+                                      notes: [])
         let model = Library.Model(notebooks: [notebook])
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         var e: Library.Evaluator!
@@ -36,7 +37,7 @@ class LibrarySpec: QuickSpec {
 
             context("when receiving addNotebook event") {
                 context("when notebook with that uuid is not added yet") {
-                    let newNotebook = Notebook.Model(uuid: "newNotebookUUID", name: "newNotebookName", notes: [])
+                    let newNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "newNotebookUUID", name: "newNotebookName"), notes: [])
 
                     beforeEach {
                         event = .addNotebook(notebook: newNotebook)
@@ -96,7 +97,7 @@ class LibrarySpec: QuickSpec {
 
                 context("when notebook with that uuid was not added") {
                     beforeEach {
-                        let notAddedNotebook = Notebook.Model(uuid: "nAUUID", name: "nAName", notes: [])
+                        let notAddedNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "nAUUID", name: "nAName"), notes: [])
                         event = .removeNotebook(notebook: notAddedNotebook.meta)
                         e = e.evaluate(event: event)
                     }
@@ -131,7 +132,7 @@ class LibrarySpec: QuickSpec {
             context("when receiving didAddNotebook event") {
                 context("when successfully adds notebook") {
                     beforeEach {
-                        let notebook = Notebook.Model(uuid: "notebookUUID", name: "notebookName", notes: [])
+                        let notebook = Notebook.Model(meta: Notebook.Meta(uuid: "notebookUUID", name: "notebookName"), notes: [])
                         event = .didAddNotebook(notebook: notebook, error: nil)
                         e = e.evaluate(event: event)
                     }
@@ -161,7 +162,7 @@ class LibrarySpec: QuickSpec {
 
                     context("when notebook is not in model") {
                         beforeEach {
-                            let anotherNotebook = Notebook.Model(uuid: "aUUID", name: "aName", notes: [])
+                            let anotherNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "aUUID", name: "aName"), notes: [])
                             event = .didAddNotebook(notebook: anotherNotebook, error: error)
                             e = e.evaluate(event: event)
                         }
@@ -175,7 +176,7 @@ class LibrarySpec: QuickSpec {
             }
 
             context("when receiving didRemoveNotebook event") {
-                let removedNotebook = Notebook.Model(uuid: "removedUUID", name: "removeName", notes: [])
+                let removedNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "removedUUID", name: "removeName"), notes: [])
 
                 context("when successfully removes notebook") {
                     beforeEach {

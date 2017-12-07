@@ -50,11 +50,11 @@ enum Library {
             case .loadNotebooks:
                 effects = [.readBaseDirectory]
             case let .addNotebook(notebook):
-                guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
+                guard !model.hasNotebook(withUUID: notebook.meta.uuid) else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
                 effects = [.createNotebook(notebook: notebook, url: notebook.noteBookMetaURL())]
             case let .removeNotebook(notebookMeta):
-                guard let notebook = model.notebooks.filter({$0.uuid == notebookMeta.uuid}).first else { break }
+                guard let notebook = model.notebooks.filter({$0.meta.uuid == notebookMeta.uuid}).first else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
                 effects = [.deleteNotebook(notebook: notebook, url: notebook.notebookURL())]
             case let .didAddNotebook(notebook, error):
@@ -99,6 +99,6 @@ enum Library {
 
 private extension Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
-        return notebooks.filter({ $0.uuid == notebookUUID }).count > 0
+        return notebooks.filter({ $0.meta.uuid == notebookUUID }).count > 0
     }
 }

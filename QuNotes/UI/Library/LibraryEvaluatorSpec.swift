@@ -24,7 +24,7 @@ class LibraryEvaluatorSpec: QuickSpec {
             var event: UI.Library.ViewEvent!
 
             context("when receiving addNotebook event") {
-                let notebookModel = Notebook.Model(uuid: "newUUID", name: "", notes: [])
+                let notebookModel = Notebook.Model(meta: Notebook.Meta(uuid: "newUUID", name: ""), notes: [])
                 let notebookMeta = Notebook.Meta(uuid: "newUUID", name: "")
 
                 let firstNotebookMeta = Notebook.Meta(uuid: "firstUUID", name: "abc")
