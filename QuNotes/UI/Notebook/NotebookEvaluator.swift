@@ -20,7 +20,7 @@ extension UI.Notebook {
     }
 
     enum Action: AutoEquatable {
-        case addNote(note: Note.Model)
+        case addNote(note: Note.Meta)
         case showNote(note: Note.Meta, isNew: Bool)
         case deleteNote(note: Note.Meta)
         case deleteNotebook(notebook: Notebook.Meta)
@@ -84,14 +84,13 @@ extension UI.Notebook {
             case .didLoad:
                 effects = [.updateTitle(title: model.notebook.name)]
             case .addNote:
-                let meta = Note.Meta(uuid: generateUUID(), title: "", tags: [],
+                let note = Note.Meta(uuid: generateUUID(), title: "", tags: [],
                                      updated_at: currentTimestamp(), created_at: currentTimestamp())
-                let note = Note.Model(meta: meta, content: "", notebook: model.notebook)
                 newModel = model |> Model.lens.notes
-                    .~ model.notes.appending(note.meta).sorted(by: title)
+                    .~ model.notes.appending(note).sorted(by: title)
                 actions = [
                     .addNote(note: note),
-                    .showNote(note: note.meta, isNew: true)
+                    .showNote(note: note, isNew: true)
                 ]
             case .selectNote(let index):
                 let note = model.notes[index]

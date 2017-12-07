@@ -71,11 +71,8 @@ extension UI.Notebook {
 
         fileprivate func perform(action: Action) {
             switch action {
-            case .addNote:
-//                dispatch <| .addNote(note: note)
-//                let result = noteUseCase.add(withTitle: "")
-//                dispatch <| .didAddNote(result: result)
-                break;
+            case let .addNote(note):
+                .addNote(note: note) |> dispatchToNotebook
             case .deleteNote(let note):
 //                let result = noteUseCase.delete(note)
 //                dispatch <| .didDeleteNote(result: result)
