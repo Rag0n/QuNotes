@@ -97,13 +97,13 @@ extension UI.Notebook {
                 actions = [.showNote(note: note, isNew: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
+                newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.deleteNote(note: note)]
             case .deleteNotebook:
                 actions = [.deleteNotebook(notebook: model.notebook)]
             case let .filterNotes(filter):
-                let lowercasedFilter = filter?.lowercased()
                 var filteredNotes = model.notes
-                if let filter = lowercasedFilter {
+                if let filter = filter?.lowercased() {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
                 effects = [.updateAllNotes(notes: titles(from: filteredNotes))]

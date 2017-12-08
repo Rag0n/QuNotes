@@ -57,7 +57,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     ]))
                 }
 
-                it("updates model by adding new note meta") {
+                it("updates model by adding new note") {
                     expect(e.model).to(equalDiff(
                         UI.Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote])
                     ))
@@ -95,6 +95,12 @@ class NotebookEvaluatorSpec: QuickSpec {
                     expect(e.actions).to(equalDiff([
                         .deleteNote(note: note)
                     ]))
+                }
+
+                it("updates model by removing note") {
+                    expect(e.model).to(equalDiff(
+                        UI.Notebook.Model(notebook: notebook, notes: [])
+                    ))
                 }
             }
 
