@@ -260,17 +260,43 @@ class NotebookSpec: QuickSpec {
                 }
 
                 context("when fails to add note") {
-                    context("when note is in model") {
-                        beforeEach {
-                            event = .didAddNote(note: note, error: error)
-                            e = e.evaluate(event: event)
-                        }
+                    beforeEach {
+                        event = .didAddNote(note: note, error: error)
+                        e = e.evaluate(event: event)
+                    }
 
-                        it("removes note from model") {
-                            expect(e.model).to(equalDiff(
-                                Notebook.Model(meta: model.meta, notes: [])
-                            ))
-                        }
+                    it("removes note from model") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: model.meta, notes: [])
+                        ))
+                    }
+                }
+            }
+
+            context("when receiving didDeleteNote event") {
+                context("when successfully deletes note") {
+                    beforeEach {
+                        event = .didDeleteNote(note: note, error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+                }
+
+                context("when fails to delete note") {
+                    let deletedNote = Note.Meta(uuid: "c", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
+
+                    beforeEach {
+                        event = .didDeleteNote(note: deletedNote, error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("adds note back to model") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: model.meta, notes: [note, deletedNote])
+                        ))
                     }
                 }
             }

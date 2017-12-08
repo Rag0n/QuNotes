@@ -39,6 +39,7 @@ enum Notebook {
         case didReadDirectory(urls: Result<[URL], NSError>)
         case didReadNotes(notes: [Result<Note.Meta, AnyError>])
         case didAddNote(note: Note.Meta, error: Error?)
+        case didDeleteNote(note: Note.Meta, error: Error?)
     }
 
     struct Evaluator {
@@ -95,6 +96,9 @@ enum Notebook {
             case let .didAddNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
+            case let .didDeleteNote(note, error):
+                guard error != nil else { break }
+                newModel = model |> Model.lens.notes .~ model.notes.appending(note)
             }
 
             return Evaluator(effects: effects, model: newModel)
