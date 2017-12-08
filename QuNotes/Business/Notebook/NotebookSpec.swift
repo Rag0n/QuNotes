@@ -60,8 +60,8 @@ class NotebookSpec: QuickSpec {
 
                 it("has updateFile effect with notebook & notebook URL") {
                     expect(e.effects).to(equalDiff([
-                        .updateFile(url: URL(string: "uuid.qvnotebook/meta.json")!,
-                                    content: Notebook.Meta(uuid: "uuid", name: "new name"))
+                        .updateNotebook(notebook: Notebook.Meta(uuid: "uuid", name: "new name"),
+                                        url: URL(string: "uuid.qvnotebook/meta.json")!)
                     ]))
                 }
 
@@ -82,11 +82,11 @@ class NotebookSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has createFile effects with URL of new meta and content") {
+                    it("has createNote effect") {
                         expect(e.effects).to(equalDiff([
-                            .createFile(url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
-                                        content: Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
-                                                           updated_at: 12, created_at: 12))
+                            .createNote(note: Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
+                                                        updated_at: 12, created_at: 12),
+                                        url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!)
                         ]))
                     }
 
@@ -122,7 +122,7 @@ class NotebookSpec: QuickSpec {
 
                     it("has deleteFile effect with URL of deleted note") {
                         expect(e.effects).to(equalDiff([
-                            .deleteFile(url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
+                            .deleteNote(note: note, url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
                         ]))
                     }
 

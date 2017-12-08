@@ -115,6 +115,35 @@ internal func == (lhs: Library.Effect, rhs: Library.Effect) -> Bool {
     default: return false
     }
 }
+// MARK: - Notebook.Effect AutoEquatable
+extension Notebook.Effect: Equatable {}
+internal func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
+    switch (lhs, rhs) {
+    case (.createNote(let lhs), .createNote(let rhs)):
+        if lhs.note != rhs.note { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
+        if lhs.notebook != rhs.notebook { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    case (.deleteNote(let lhs), .deleteNote(let rhs)):
+        if lhs.note != rhs.note { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    case (.readDirectory(let lhs), .readDirectory(let rhs)):
+        return lhs == rhs
+    case (.readNotes(let lhs), .readNotes(let rhs)):
+        return lhs == rhs
+    case (.handleError(let lhs), .handleError(let rhs)):
+        if lhs.title != rhs.title { return false }
+        if lhs.message != rhs.message { return false }
+        return true
+    case (.didLoadNotes(let lhs), .didLoadNotes(let rhs)):
+        return lhs == rhs
+    default: return false
+    }
+}
 // MARK: - UI.Library.Action AutoEquatable
 extension UI.Library.Action: Equatable {}
 internal func == (lhs: UI.Library.Action, rhs: UI.Library.Action) -> Bool {

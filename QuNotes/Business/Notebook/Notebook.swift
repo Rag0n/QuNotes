@@ -21,10 +21,10 @@ enum Notebook {
         static let Unspecified = Meta(uuid: "unspecified", name: "")
     }
 
-    enum Effect {
-        case updateFile(url: URL, content: Codable)
-        case createFile(url: URL, content: Codable)
-        case deleteFile(url: URL)
+    enum Effect: AutoEquatable {
+        case createNote(note: Note.Meta, url: URL)
+        case updateNotebook(notebook: Meta, url: URL)
+        case deleteNote(note: Note.Meta, url: URL)
         case readDirectory(atURL: URL)
         case readNotes(urls: [URL])
         case handleError(title: String, message: String)
@@ -59,18 +59,18 @@ enum Notebook {
             case let .changeName(newName):
                 newModel = model |> Model.lens.meta.name .~ newName
                 let url = newModel.noteBookMetaURL()
-                effects = [.updateFile(url: url, content: newModel.meta)]
+                effects = [.updateNotebook(notebook: newModel.meta, url: url)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
                 let url = newModel.meta.noteMetaURL(for: noteToAdd)
-                effects = [.createFile(url: url, content: noteToAdd)]
+                effects = [.createNote(note: noteToAdd, url: url)]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removing(at: indexOfRemovedNote)
                 newModel = model |> Model.lens.notes .~ notes
                 let url = newModel.meta.noteURL(for: noteToRemove)
-                effects = [.deleteFile(url: url)]
+                effects = [.deleteNote(note: noteToRemove, url: url)]
             case let .didReadDirectory(result):
                 guard let urls = result.value else {
                     effects = [.handleError(title: "Failed to load notes",
@@ -175,34 +175,5 @@ private extension Notebook.Model {
     enum Component {
         static let meta = "meta"
         static let content = "content"
-    }
-}
-
-// MARK: - Effect Equtable
-// TODO: Fix action type(similar to library) and replace this extension by autoequatable
-extension Notebook.Effect: Equatable {
-    static func ==(lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
-        switch (lhs, rhs) {
-        case (.updateFile(let lURL, let lContent as Notebook.Meta),
-              .updateFile(let rURL, let rContent as Notebook.Meta)):
-            return (lURL == rURL) && (lContent == rContent)
-        case (.createFile(let lURL, let lContent as Note.Meta),
-              .createFile(let rURL, let rContent as Note.Meta)):
-            return (lURL == rURL) && (lContent == rContent)
-        case (.createFile(let lURL, let lContent as Note.Content),
-              .createFile(let rURL, let rContent as Note.Content)):
-            return (lURL == rURL) && (lContent == rContent)
-        case (.deleteFile(let lURL), .deleteFile(let rURL)):
-            return lURL == rURL
-        case (.readDirectory(let lURL), .readDirectory(let rURL)):
-            return lURL == rURL
-        case (.readNotes(let lURL), .readNotes(let rURL)):
-            return lURL == rURL
-        case let (.handleError(lTitle, lMessage), .handleError(rTitle, rMessage)):
-            return (lTitle == rTitle) && (lMessage == rMessage)
-        case let (.didLoadNotes(lNotes), .didLoadNotes(rNotes)):
-            return lNotes == rNotes
-        default: return false
-        }
     }
 }
