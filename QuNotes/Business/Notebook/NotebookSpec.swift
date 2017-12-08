@@ -245,6 +245,35 @@ class NotebookSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didAddNote event") {
+                context("when successfully adds note") {
+                    beforeEach {
+                        let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
+                        event = .didAddNote(note: note, error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+                }
+
+                context("when fails to add note") {
+                    context("when note is in model") {
+                        beforeEach {
+                            event = .didAddNote(note: note, error: error)
+                            e = e.evaluate(event: event)
+                        }
+
+                        it("removes note from model") {
+                            expect(e.model).to(equalDiff(
+                                Notebook.Model(meta: model.meta, notes: [])
+                            ))
+                        }
+                    }
+                }
+            }
         }
     }
 }
