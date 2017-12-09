@@ -302,6 +302,35 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didDeleteNotebook event") {
+                context("when successfuly deletes notebook") {
+                    beforeEach {
+                        event = .didDeleteNotebook(error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has finish action") {
+                        expect(e.actions).to(equalDiff([
+                            .finish
+                        ]))
+                    }
+                }
+
+                context("when fails to delete notebook") {
+                    beforeEach {
+                        event = .didDeleteNotebook(error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to delete notebook",
+                                       message: error.localizedDescription)
+                        ]))
+                    }
+                }
+            }
         }
     }
 }
@@ -400,30 +429,6 @@ class NotebookEvaluatorSpec: QuickSpec {
 //                    it("has updateAllNotes effect") {
 //                        expect(e.evaluate(event: event).effects[0])
 //                            .to(equal(.updateAllNotes(notes: ["abc", "cde"])))
-//                    }
-//                }
-//            }
-//
-//            context("when receiving didDeleteNotebook event") {
-//                context("when successfully deletes notebook") {
-//                    beforeEach {
-//                        event = .didDeleteNotebook(error: nil)
-//                    }
-//
-//                    it("has finish action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(UI.Notebook.Action.finish))
-//                    }
-//                }
-//
-//                context("when fails to delete notebook") {
-//                    beforeEach {
-//                        event = .didDeleteNotebook(error: error)
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
 //                    }
 //                }
 //            }

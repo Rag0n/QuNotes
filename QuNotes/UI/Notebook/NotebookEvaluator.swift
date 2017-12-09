@@ -39,7 +39,7 @@ extension UI.Notebook {
 
     enum CoordinatorEvent {
         case didUpdateNotebook(notebook: Notebook.Meta, error: Error?)
-        case didDeleteNotebook(error: AnyError?)
+        case didDeleteNotebook(error: Error?)
         case didLoadNotes(notes: [Note.Meta])
     }
 
@@ -130,12 +130,10 @@ extension UI.Notebook {
                 actions = [.showError(title: "Failed to update notebook's title",
                                       message: error.localizedDescription)]
             case let .didDeleteNotebook(error):
-                guard error == nil else {
-                    return showError(error: error!,
-                                     reason: "Failed to delete notebook",
-                                     model: model)
+                if let error = error {
+                    actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
+                    break
                 }
-
                 actions = [.finish]
             case let .didLoadNotes(notes):
                 newModel = model |> Model.lens.notes .~ notes.sorted(by: title)
