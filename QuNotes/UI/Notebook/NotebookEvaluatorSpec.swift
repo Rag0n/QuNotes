@@ -50,10 +50,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     e = e.evaluate(event: event)
                 }
 
-                it("has addNote and showNote actions") {
+                it("has addNote actions") {
                     expect(e.actions).to(equalDiff([
-                        .addNote(note: expectedNote),
-                        .showNote(note: expectedNote, isNew: true)
+                        .addNote(note: expectedNote)
                     ]))
                 }
 
@@ -63,7 +62,11 @@ class NotebookEvaluatorSpec: QuickSpec {
                     ))
                 }
 
-                // TODO: Add addNote effect
+                it("has addNote effect") {
+                    expect(e.effects).to(equalDiff([
+                        .addNote(index: 0, notes: ["", "aT"])
+                    ]))
+                }
             }
 
             context("when receiving selectNote event") {

@@ -26,6 +26,10 @@ class NotebookViewController: UIViewController {
             self.notes = notes
             let indexPath = IndexPath(row: index, section: 0)
             tableView?.deleteRows(at: [indexPath], with: .automatic)
+        case let .addNote(index, notes):
+            self.notes = notes
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView?.insertRows(at: [indexPath], with: .automatic)
         }
     }
 

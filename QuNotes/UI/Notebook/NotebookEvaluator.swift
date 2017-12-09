@@ -35,6 +35,7 @@ extension UI.Notebook {
         case showBackButton
         case updateTitle(title: String)
         case deleteNote(index: Int, notes: [String])
+        case addNote(index: Int, notes: [String])
     }
 
     enum CoordinatorEvent {
@@ -88,10 +89,9 @@ extension UI.Notebook {
                                      updated_at: currentTimestamp(), created_at: currentTimestamp())
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
-                actions = [
-                    .addNote(note: note),
-                    .showNote(note: note, isNew: true)
-                ]
+                let indexOfNote = newModel.notes.index(of: note)!
+                actions = [.addNote(note: note)]
+                effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
             case .selectNote(let index):
                 let note = model.notes[index]
                 actions = [.showNote(note: note, isNew: false)]

@@ -271,6 +271,10 @@ internal func == (lhs: UI.Notebook.ViewEffect, rhs: UI.Notebook.ViewEffect) -> B
         if lhs.index != rhs.index { return false }
         if lhs.notes != rhs.notes { return false }
         return true
+    case (.addNote(let lhs), .addNote(let rhs)):
+        if lhs.index != rhs.index { return false }
+        if lhs.notes != rhs.notes { return false }
+        return true
     default: return false
     }
 }
