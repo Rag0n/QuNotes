@@ -300,6 +300,34 @@ class NotebookSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didUpdateNotebook event") {
+                let oldNotebook = Notebook.Meta(uuid: meta.uuid, name: "old name")
+
+                context("when successfilly updated notebook") {
+                    beforeEach {
+                        event = .didUpdateNotebook(notebook: oldNotebook, error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+                }
+
+                context("when fails to update notebook") {
+                    beforeEach {
+                        event = .didUpdateNotebook(notebook: oldNotebook, error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("updates model by setting the old name") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: oldNotebook, notes: model.notes)
+                        ))
+                    }
+                }
+            }
         }
     }
 }
