@@ -251,6 +251,57 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didUpdateNotebook event") {
+                let oldNotebook = Notebook.Meta(uuid: notebook.uuid, name: "old name")
+
+                context("when successfuly updates notebook") {
+                    beforeEach {
+                        event = .didUpdateNotebook(notebook: oldNotebook, error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: notebook, notes: [])
+                        ))
+                    }
+                }
+
+                context("when fails to update notebook") {
+                    beforeEach {
+                        event = .didUpdateNotebook(notebook: oldNotebook, error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateTitle effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateTitle(title: "old name")
+                        ]))
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to update notebook's title",
+                                       message: error.localizedDescription)
+                        ]))
+                    }
+
+                    it("updates model by setting notebook to the old") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: oldNotebook, notes: [])
+                        ))
+                    }
+                }
+            }
         }
     }
 }
@@ -349,42 +400,6 @@ class NotebookEvaluatorSpec: QuickSpec {
 //                    it("has updateAllNotes effect") {
 //                        expect(e.evaluate(event: event).effects[0])
 //                            .to(equal(.updateAllNotes(notes: ["abc", "cde"])))
-//                    }
-//                }
-//            }
-//
-//            context("when receiving didUpdateNotebook event") {
-//                let notebook = UseCase.Notebook.notebookDummy(withUUID: "uuid", name: "new name")
-//
-//                context("when successfully updates notebook") {
-//                    beforeEach {
-//                        event = .didUpdateNotebook(result: Result(notebook))
-//                    }
-//
-//                    it("has model with updated notebook") {
-//                        expect(e.evaluate(event: event).model.notebook)
-//                            .to(equal(notebook))
-//                    }
-//
-//                    it("has updateTitle effect with updated notebook name") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateTitle(title: "new name")))
-//                    }
-//                }
-//
-//                context("when fails to update notebook") {
-//                    beforeEach {
-//                        event = .didUpdateNotebook(result: Result(error: error))
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to update notebook's title", message: "message")))
-//                    }
-//
-//                    it("has updateTitle effect with old notebook name") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateTitle(title: "name")))
 //                    }
 //                }
 //            }
