@@ -334,6 +334,64 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didAddNote event") {
+
+                let note = Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
+                let addedNote = Note.Meta(uuid: "fU", title: "sN", tags: [], updated_at: 6, created_at: 6)
+
+                beforeEach {
+                    e = e.evaluate(event: .didLoadNotes(notes: [note, addedNote]))
+                }
+
+                context("when successfully adds note") {
+                    beforeEach {
+                        event = .didAddNote(note: addedNote, error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has showNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .showNote(note: addedNote, isNew: true)
+                        ]))
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: notebook, notes: [note, addedNote])
+                        ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
+
+                context("when fails to add note") {
+                    beforeEach {
+                        event = .didAddNote(note: addedNote, error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("removes note from model") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: notebook, notes: [note])
+                        ))
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to add note", message: error.localizedDescription)
+                        ]))
+                    }
+
+                    it(("has deleteNote effect")) {
+                        expect(e.effects).to(equalDiff([
+                            .deleteNote(index: 1, notes: ["aT"])
+                        ]))
+                    }
+                }
+            }
         }
     }
 }
@@ -360,40 +418,6 @@ class NotebookEvaluatorSpec: QuickSpec {
 //                it("has updateAllNotes effect with correct order of ViewModels") {
 //                    expect(e.evaluate(event: event).effects[0])
 //                        .to(equal(.updateAllNotes(notes: expectedViewModels)))
-//                }
-//            }
-//
-//            context("when receiving didAddNote event") {
-//                context("when successfully adds note") {
-//                    let firstNote = UseCase.Note.noteDummy(withTitle: "abc")
-//                    let secondNote = UseCase.Note.noteDummy(withTitle: "cde")
-//                    let addedNote = UseCase.Note.noteDummy(withTitle: "bcd")
-//
-//                    beforeEach {
-//                        e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
-//                        event = .didAddNote(result: Result(addedNote))
-//                    }
-//
-//                    it("has model with appended note and correct sorting") {
-//                        expect(e.evaluate(event: event).model.notes)
-//                            .to(equal([firstNote, addedNote, secondNote]))
-//                    }
-//
-//                    it("has showNote action with added note") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showNote(note: addedNote, isNewNote: true)))
-//                    }
-//                }
-//
-//                context("when fails to add note") {
-//                    beforeEach {
-//                        event = .didAddNote(result: Result(error: error))
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to add note", message: "message")))
-//                    }
 //                }
 //            }
 //
