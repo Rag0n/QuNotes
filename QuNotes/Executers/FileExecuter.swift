@@ -30,7 +30,7 @@ class FileExecuter {
     }
 
     func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
-        return Result(try contentOfFolder(at: url))
+        return Result(try contentOfFolder(at: url.appendedToDocumentsURL()))
     }
 
     func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
