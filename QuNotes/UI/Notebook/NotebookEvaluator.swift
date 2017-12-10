@@ -43,6 +43,7 @@ extension UI.Notebook {
         case didDeleteNotebook(error: Error?)
         case didLoadNotes(notes: [Note.Meta])
         case didAddNote(note: Note.Meta, error: Error?)
+        case didDeleteNote(note: Note.Meta, error: Error?)
     }
 
     enum ViewEvent {
@@ -148,6 +149,13 @@ extension UI.Notebook {
                 actions = [.showError(title: "Failed to add note", message: error.localizedDescription)]
                 let indexOfNote = model.notes.index(of: note)!
                 effects = [.deleteNote(index: indexOfNote, notes: titles(from: newModel))]
+            case let .didDeleteNote(note, error):
+                guard let error = error else { break }
+                newModel = model |> Model.lens.notes
+                    .~ model.notes.appending(note).sorted(by: title)
+                actions = [.showError(title: "Failed to delete note", message: error.localizedDescription)]
+                let indexOfNote = newModel.notes.index(of: note)!
+                effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

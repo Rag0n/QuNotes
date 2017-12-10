@@ -392,6 +392,62 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didDeleteNote event") {
+
+                let note = Note.Meta(uuid: "bU", title: "bT", tags: ["t"], updated_at: 1, created_at: 1)
+                let deletedNote = Note.Meta(uuid: "aU", title: "aN", tags: [], updated_at: 6, created_at: 6)
+
+                beforeEach {
+                    e = e.evaluate(event: .didLoadNotes(notes: [note]))
+                }
+
+                context("when successfully deletes note") {
+                    beforeEach {
+                        event = .didDeleteNote(note: deletedNote, error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: notebook, notes: [note])
+                        ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+                }
+
+                context("when fails to delete note") {
+                    beforeEach {
+                        event = .didDeleteNote(note: deletedNote, error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("adds deleted note back to model") {
+                        expect(e.model).to(equalDiff(
+                            UI.Notebook.Model(notebook: notebook, notes: [deletedNote, note])
+                        ))
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to delete note", message: error.localizedDescription)
+                        ]))
+                    }
+
+                    it("has addNote effect") {
+                        expect(e.effects).to(equalDiff([
+                            .addNote(index: 0, notes: ["aN", "bT"])
+                        ]))
+                    }
+                }
+            }
         }
     }
 }
@@ -418,45 +474,6 @@ class NotebookEvaluatorSpec: QuickSpec {
 //                it("has updateAllNotes effect with correct order of ViewModels") {
 //                    expect(e.evaluate(event: event).effects[0])
 //                        .to(equal(.updateAllNotes(notes: expectedViewModels)))
-//                }
-//            }
-//
-//            context("when receiving didDeleteNote event") {
-//                let firstNote = UseCase.Note.noteDummy(withTitle: "abc")
-//                let secondNote = UseCase.Note.noteDummy(withTitle: "cde")
-//
-//                context("when successfuly deletes note") {
-//                    beforeEach {
-//                        e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
-//                        event = .didDeleteNote(result: Result(secondNote))
-//                    }
-//
-//                    it("has model without removed note") {
-//                        expect(e.evaluate(event: event).model.notes)
-//                            .to(equal([firstNote]))
-//                    }
-//
-//                    it("has deleteNote effect with correct index and viewModels") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.deleteNote(index: 1, notes: ["abc"])))
-//                    }
-//                }
-//
-//                context("when fails to delete note") {
-//                    beforeEach {
-//                        e = e.evaluate(event: .didUpdateNotes(notes: [firstNote, secondNote]))
-//                        event = .didDeleteNote(result: Result(error: error))
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
-//                    }
-//
-//                    it("has updateAllNotes effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateAllNotes(notes: ["abc", "cde"])))
-//                    }
 //                }
 //            }
 //        }
