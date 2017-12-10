@@ -72,39 +72,41 @@ extension UI.Notebook {
         fileprivate func perform(action: Action) {
             switch action {
             case let .addNote(note):
-                .addNote(note: note) |> dispatchToNotebook
-            case .deleteNote(let note):
-//                let result = noteUseCase.delete(note)
-//                dispatch <| .didDeleteNote(result: result)
-                break
-            case .updateNotebook(let notebook, let title):
-//                let result = notebookUseCase.update(notebook, name: title)
-//                dispatch <| .didUpdateNotebook(result: result)
-                break
-            case .deleteNotebook(let notebook):
-//                let result = notebookUseCase.delete(notebook)
-//                dispatch <| .didDeleteNotebook(error: result.error)
+                dispatchToNotebook <| .addNote(note: note)
+            case let .deleteNote(note):
+                dispatchToNotebook <| .removeNote(note: note)
+            case let .updateNotebook(notebook, title):
+                dispatchToNotebook <| .changeName(newName: title)
+            case let .deleteNotebook(notebook):
+                // TODO: Interesting case. Should use library evaluator? Or not..
                 break
             case .finish:
-//                navigationController.popViewController(animated: true)
-                break
+                navigationController.popViewController(animated: true)
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNote(note, isNewNote):
-//                let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
-//                                                             dependencies: dependencies,
-//                                                             note: note,
-//                                                             isNewNote: isNewNote)
-//                navigationController.pushCoordinator(coordinator: noteCoordinator,
-//                                                     animated: true) { [unowned self] in
-//                                                        self.onStart()
-//                }
-                break
+                let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
+                                                             dependencies: dependencies,
+                                                             note: note,
+                                                             isNewNote: isNewNote)
+                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true)
             }
         }
 
         fileprivate func perform(action: Notebook.Effect) {
             switch action {
+            case let .createNote(note, url):
+                let error = fileExecuter.createFile(atURL: url, content: note)
+                dispatchToNotebook <| .didAddNote(note: note, error: error)
+                dispatch <| .didAddNote(note: note, error: error)
+            case let .updateNotebook(notebook, url):
+                let error = fileExecuter.createFile(atURL: url, content: notebook)
+                dispatchToNotebook <| .didUpdateNotebook(notebook: notebook, error: error)
+                dispatch <| .didUpdateNotebook(notebook: notebook, error: error)
+            case let .deleteNote(note, url):
+                let error = fileExecuter.deleteFile(at: url)
+                dispatchToNotebook <| .didDeleteNote(note: note, error: error)
+                dispatch <| .didDeleteNote(note: note, error: error)
             case let .readDirectory(url):
                 let urls = fileExecuter.contentOfFolder(at: url)
                  dispatchToNotebook <| .didReadDirectory(urls: urls)
@@ -112,11 +114,10 @@ extension UI.Notebook {
                 let result = urls.map { fileExecuter.readFile(at: $0, contentType: Note.Meta.self) }
                 dispatchToNotebook <| .didReadNotes(notes: result)
             case let .handleError(title, message):
+                // TODO: When UI is not loaded error will not be shown
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes: notes)
-            default:
-                return
             }
         }
     }
