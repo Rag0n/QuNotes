@@ -54,7 +54,7 @@ extension UI.Note {
         let effects: [ViewEffect]
         let actions: [Action]
         let model: Model
-        
+
         init(note: Note.Meta, isNew: Bool) {
             effects = []
             actions = []
@@ -75,7 +75,6 @@ extension UI.Note {
             case .didLoad:
                 effects = [
                     .updateTitle(title: model.note.meta.title),
-                    .updateContent(content: model.note.content),
                     .showTags(tags: model.note.meta.tags)
                 ]
                 if model.isNew {

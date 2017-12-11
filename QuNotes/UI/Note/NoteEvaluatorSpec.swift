@@ -12,105 +12,118 @@ import Result
 
 class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
-//        var e: UI.Note.Evaluator!
-//        let note = UseCase.Note(createdDate: 1, updatedDate: 2, content: "content", title: "title", uuid: "uuid", tags: ["tag"])
-//        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
-//        let error = AnyError(underlyingError)
-//
-//        beforeEach {
-//            e = UI.Note.Evaluator(withNote: note, isNew: false)
-//        }
-//
-//        describe("-evaluate:ViewEvent") {
-//            var event: UI.Note.ViewEvent!
-//
-//            context("when receiving didLoad event") {
-//                beforeEach {
-//                    event = .didLoad
-//                }
-//
-//                it("has updateTitle effect") {
-//                    expect(e.evaluate(event: event).effects[0])
-//                        .to(equal(.updateTitle(title: "title")))
-//                }
-//
-//                it("has updateContent effect") {
-//                    expect(e.evaluate(event: event).effects[1])
-//                        .to(equal(.updateContent(content: "content")))
-//                }
-//
-//                it("has showTags effect") {
-//                    expect(e.evaluate(event: event).effects[2])
-//                        .to(equal(.showTags(tags: ["tag"])))
-//                }
-//
-//                context("when note is new") {
-//                    beforeEach {
-//                        e = UI.Note.Evaluator(withNote: note, isNew: true)
-//                    }
-//
-//                    it("has focusOnTitle effect") {
-//                        expect(e.evaluate(event: event).effects[3])
-//                            .to(equal(UI.Note.ViewEffect.focusOnTitle))
-//                    }
-//                }
-//            }
-//
-//            context("when receiving changeContent event") {
-//                beforeEach {
-//                    event = .changeContent(newContent: "newContent")
-//                }
-//
-//                it("has updateContent action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.updateContent(content: "newContent")))
-//                }
-//            }
-//
-//            context("when receiving changeTitle event") {
-//                beforeEach {
-//                    event = .changeTitle(newTitle: "newTitle")
-//                }
-//
-//                it("has updateTitle action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.updateTitle(title: "newTitle")))
-//                }
-//            }
-//
-//            context("when receiving delete event") {
-//                beforeEach {
-//                    event = .delete
-//                }
-//
-//                it("has delete action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(UI.Note.Action.deleteNote))
-//                }
-//            }
-//
-//            context("when receiving addTag event") {
-//                beforeEach {
-//                    event = .addTag(tag: "new tag")
-//                }
-//
-//                it("has addTag action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.addTag(tag: "new tag")))
-//                }
-//            }
-//
-//            context("when receiving removeTag event") {
-//                beforeEach {
-//                    event = .removeTag(tag: "tag")
-//                }
-//
-//                it("has removeTag action") {
-//                    expect(e.evaluate(event: event).actions[0])
-//                        .to(equal(.removeTag(tag: "tag")))
-//                }
-//            }
-//        }
+        var e: UI.Note.Evaluator!
+        let note = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
+        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
+        let error = AnyError(underlyingError)
+
+        beforeEach {
+            e = UI.Note.Evaluator(note: note, isNew: false)
+        }
+
+        describe("-evaluate:ViewEvent") {
+            var event: UI.Note.ViewEvent!
+
+            context("when receiving didLoad event") {
+                beforeEach {
+                    event = .didLoad
+                }
+
+                context("when note is new") {
+                    beforeEach {
+                        e = UI.Note.Evaluator(note: note, isNew: true)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateTitle, showTags and focusOnTitle effects") {
+                        expect(e.effects).to(equalDiff([
+                            .updateTitle(title: "title"),
+                            .showTags(tags: ["tag"]),
+                            .focusOnTitle
+                        ]))
+                    }
+                }
+
+                context("when note is not new") {
+                    beforeEach {
+                        e = UI.Note.Evaluator(note: note, isNew: false)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateTitle and showTags effects") {
+                        expect(e.effects).to(equalDiff([
+                            .updateTitle(title: "title"),
+                            .showTags(tags: ["tag"])
+                        ]))
+                    }
+                }
+            }
+
+            context("when receiving changeContent event") {
+                beforeEach {
+                    event = .changeContent(newContent: "newContent")
+                    e = e.evaluate(event: event)
+                }
+
+                it("has updateContent action") {
+                    expect(e.actions).to(equalDiff([
+                        .updateContent(content: "newContent")
+                    ]))
+                }
+            }
+
+            context("when receiving changeTitle event") {
+                beforeEach {
+                    event = .changeTitle(newTitle: "newTitle")
+                    e = e.evaluate(event: event)
+                }
+
+                it("has updateTitle action") {
+                    expect(e.actions).to(equalDiff([
+                        .updateTitle(title: "newTitle")
+                    ]))
+                }
+            }
+
+            context("when receiving delete event") {
+                beforeEach {
+                    event = .delete
+                    e = e.evaluate(event: event)
+                }
+
+                it("has delete action") {
+                    expect(e.actions).to(equalDiff([
+                        .deleteNote
+                    ]))
+                }
+            }
+
+            context("when receiving addTag event") {
+                beforeEach {
+                    event = .addTag(tag: "new tag")
+                    e = e.evaluate(event: event)
+                }
+
+                it("has addTag action") {
+                    expect(e.actions).to(equalDiff([
+                        .addTag(tag: "new tag")
+                    ]))
+                }
+            }
+
+            context("when receiving removeTag event") {
+                beforeEach {
+                    event = .removeTag(tag: "tag")
+                    e = e.evaluate(event: event)
+                }
+
+                it("has removeTag action") {
+                    expect(e.actions).to(equalDiff([
+                        .removeTag(tag: "tag")
+                    ]))
+                }
+            }
+        }
 
 //        describe("-evaluate:CoordinatorEvent") {
 //            var event: UI.Note.CoordinatorEvent!
