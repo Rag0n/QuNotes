@@ -54,11 +54,11 @@ extension UI.Note {
         let effects: [ViewEffect]
         let actions: [Action]
         let model: Model
-
-        init(withNote note: Note.Model, isNew: Bool) {
+        
+        init(note: Note.Meta, isNew: Bool) {
             effects = []
             actions = []
-            model = Model(note: note, isNew: isNew)
+            model = Model(note: Note.Model(meta: note, content: ""), isNew: isNew)
         }
 
         fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
