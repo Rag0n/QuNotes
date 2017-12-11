@@ -20,32 +20,6 @@ struct Lens<Whole, Part> {
             }
         )
     }
-
-    static func zip<Part1, Part2>(
-        _ a: Lens<Whole, Part1>,
-        _ b: Lens<Whole, Part2>)
-        -> Lens<Whole, (Part1, Part2)> where Part == (Part1, Part2) {
-        return Lens<Whole, (Part1, Part2)>(
-            get: { (a.get($0), b.get($0)) },
-            set: { parts, whole in
-                let step1 = a.set(parts.0, whole)
-                return b.set(parts.1, step1)
-            }
-        )
-    }
-
-    static func zip<A, B, C>(_ a: Lens<Whole, A>,
-                             _ b: Lens<Whole, B>,
-                             _ c: Lens<Whole, C>) -> Lens<Whole, (A, B, C)> where Part == (A, B, C) {
-        return Lens<Whole, (A, B, C)>(
-            get: { (a.get($0), b.get($0), c.get($0)) },
-            set: { parts, whole in
-                let step1 = a.set(parts.0, whole)
-                let step2 = b.set(parts.1, step1)
-                return c.set(parts.2, step2)
-            }
-        )
-    }
 }
 
 /**
