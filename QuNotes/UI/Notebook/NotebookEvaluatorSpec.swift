@@ -451,32 +451,3 @@ class NotebookEvaluatorSpec: QuickSpec {
         }
     }
 }
-
-//            context("when receiving didUpdateNotes event") {
-//                let firstNote = UseCase.Note.noteDummy(withTitle: "Bcd")
-//                let secondNote = UseCase.Note.noteDummy(withTitle: "abc")
-//                let thirdNote = UseCase.Note.noteDummy(withTitle: "cde")
-//                let expectedViewModels = [
-//                    "abc",
-//                    "Bcd",
-//                    "cde"
-//                ]
-//
-//                beforeEach {
-//                    event = .didUpdateNotes(notes: [firstNote, secondNote, thirdNote])
-//                }
-//
-//                it("has model with sorted by name notes") {
-//                    expect(e.evaluate(event: event).model.notes)
-//                        .to(equal([secondNote, firstNote, thirdNote]))
-//                }
-//
-//                it("has updateAllNotes effect with correct order of ViewModels") {
-//                    expect(e.evaluate(event: event).effects[0])
-//                        .to(equal(.updateAllNotes(notes: expectedViewModels)))
-//                }
-//            }
-//        }
-//    }
-//}
-

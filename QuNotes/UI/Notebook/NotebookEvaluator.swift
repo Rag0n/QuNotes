@@ -93,6 +93,7 @@ extension UI.Notebook {
                     .~ model.notes.appending(note).sorted(by: title)
                 let indexOfNote = newModel.notes.index(of: note)!
                 actions = [.addNote(note: note)]
+                // TODO: What if we have filter?
                 effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
             case .selectNote(let index):
                 let note = model.notes[index]
@@ -108,6 +109,7 @@ extension UI.Notebook {
                 if let filter = filter?.lowercased() {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
+                // TODO: This event is not working correctly. Eg: filter notes, then select note. Indexes will differ because here we store all notes and in UI we pass only filtered notes
                 effects = [.updateAllNotes(notes: titles(from: filteredNotes))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
@@ -139,6 +141,7 @@ extension UI.Notebook {
                 actions = [.finish]
             case let .didLoadNotes(notes):
                 newModel = model |> Model.lens.notes .~ notes.sorted(by: title)
+                // TODO: what if we have filter
                 effects = [.updateAllNotes(notes: titles(from: newModel))]
             case let .didAddNote(note, error):
                 guard let error = error else {
@@ -168,22 +171,6 @@ extension UI.Notebook {
 private extension UI.Notebook {
     static func title(lhs: Note.Meta, rhs: Note.Meta) -> Bool {
         return lhs.title.lowercased() < rhs.title.lowercased()
-    }
-
-    static func showError(error: AnyError,
-                          reason: String,
-                          model: Model,
-                          additionalEffect: ViewEffect? = nil) -> Evaluator {
-        let errorMessage = error.error.localizedDescription
-        let actions: [Action] = [.showError(title: reason, message: errorMessage)]
-        var effects: [ViewEffect] = []
-        if let additionalEffect = additionalEffect {
-            effects.append(additionalEffect)
-        }
-
-        return Evaluator(effects: effects,
-                         actions: actions,
-                         model: model)
     }
 
     static func titles(from model: Model) -> [String] {
