@@ -71,6 +71,7 @@ extension UI.Note {
         func evaluate(event: ViewEvent) -> Evaluator {
             var actions: [Action] = []
             var effects: [ViewEffect] = []
+            var newModel = model
 
             switch event {
             case .didLoad:
@@ -82,7 +83,9 @@ extension UI.Note {
                     effects += [.focusOnTitle]
                 }
             case let .changeContent(newContent):
+                newModel = model |> Model.lens.content .~ newContent
                 actions = [.updateContent(content: newContent)]
+                effects = [.updateContent(content: newContent)]
             case let .changeTitle(newTitle):
                 actions = [.updateTitle(title: newTitle)]
             case .delete:
@@ -93,7 +96,7 @@ extension UI.Note {
                 actions = [.removeTag(tag: tag)]
             }
 
-            return Evaluator(effects: effects, actions: actions, model: model)
+            return Evaluator(effects: effects, actions: actions, model: newModel)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {

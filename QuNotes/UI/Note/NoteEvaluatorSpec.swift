@@ -70,6 +70,18 @@ class NoteEvaluatorSpec: QuickSpec {
                         .updateContent(content: "newContent")
                     ]))
                 }
+
+                it("has updateContent effect") {
+                    expect(e.effects).to(equalDiff([
+                        .updateContent(content: "newContent")
+                    ]))
+                }
+
+                it("updates content in model") {
+                    expect(e.model).to(equalDiff(
+                        UI.Note.Model(meta: note, content: "newContent", isNew: false)
+                    ))
+                }
             }
 
             context("when receiving changeTitle event") {
