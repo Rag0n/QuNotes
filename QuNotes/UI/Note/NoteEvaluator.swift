@@ -93,9 +93,13 @@ extension UI.Note {
             case .delete:
                 actions = [.deleteNote]
             case let .addTag(tag):
+                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
                 actions = [.addTag(tag: tag)]
+                effects = [.addTag(tag: tag)]
             case let .removeTag(tag):
+                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(tag)
                 actions = [.removeTag(tag: tag)]
+                effects = [.removeTag(tag: tag)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

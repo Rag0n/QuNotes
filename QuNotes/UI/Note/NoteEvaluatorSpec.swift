@@ -135,6 +135,20 @@ class NoteEvaluatorSpec: QuickSpec {
                         .addTag(tag: "new tag")
                     ]))
                 }
+
+                it("has addTag effect") {
+                    expect(e.effects).to(equalDiff([
+                        .addTag(tag: "new tag")
+                    ]))
+                }
+
+                it("adds tag to model") {
+                    expect(e.model).to(equalDiff(
+                        UI.Note.Model(meta: Note.Meta(uuid: note.uuid, title: note.title, tags: ["tag", "new tag"],
+                                                      updated_at: note.updated_at, created_at: note.created_at),
+                                      content: "", isNew: false)
+                    ))
+                }
             }
 
             context("when receiving removeTag event") {
@@ -147,6 +161,20 @@ class NoteEvaluatorSpec: QuickSpec {
                     expect(e.actions).to(equalDiff([
                         .removeTag(tag: "tag")
                     ]))
+                }
+
+                it("has removeTag effect") {
+                    expect(e.effects).to(equalDiff([
+                        .removeTag(tag: "tag")
+                    ]))
+                }
+
+                it("removes tag from model") {
+                    expect(e.model).to(equalDiff(
+                        UI.Note.Model(meta: Note.Meta(uuid: note.uuid, title: note.title, tags: [],
+                                                      updated_at: note.updated_at, created_at: note.created_at),
+                                      content: "", isNew: false)
+                    ))
                 }
             }
         }
