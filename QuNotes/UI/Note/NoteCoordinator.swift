@@ -29,7 +29,7 @@ extension UI.Note {
         init(withNavigationController navigationController: NavigationController,
              dependencies: Dependencies, note: Note.Meta, isNewNote: Bool) {
             self.navigationController = navigationController
-            evaluator = Evaluator(note: note, isNew: isNewNote)
+            evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
         }
 
         // MARK: - Private

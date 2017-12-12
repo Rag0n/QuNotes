@@ -81,6 +81,14 @@ internal func == (lhs: UI.Library.NotebookViewModel, rhs: UI.Library.NotebookVie
     guard lhs.isEditable == rhs.isEditable else { return false }
     return true
 }
+// MARK: - UI.Note.Model AutoEquatable
+extension UI.Note.Model: Equatable {}
+internal func == (lhs: UI.Note.Model, rhs: UI.Note.Model) -> Bool {
+    guard lhs.meta == rhs.meta else { return false }
+    guard lhs.content == rhs.content else { return false }
+    guard lhs.isNew == rhs.isNew else { return false }
+    return true
+}
 // MARK: - UI.Notebook.Model AutoEquatable
 extension UI.Notebook.Model: Equatable {}
 internal func == (lhs: UI.Notebook.Model, rhs: UI.Notebook.Model) -> Bool {

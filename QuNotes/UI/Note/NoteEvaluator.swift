@@ -11,8 +11,9 @@ extension UI {
 }
 
 extension UI.Note {
-    struct Model {
-        let note: Note.Model
+    struct Model: AutoEquatable, AutoLens {
+        let meta: Note.Meta
+        let content: String
         let isNew: Bool
     }
 
@@ -55,10 +56,10 @@ extension UI.Note {
         let actions: [Action]
         let model: Model
 
-        init(note: Note.Meta, isNew: Bool) {
+        init(note: Note.Meta, content: String, isNew: Bool) {
             effects = []
             actions = []
-            model = Model(note: Note.Model(meta: note, content: ""), isNew: isNew)
+            model = Model(meta: note, content: content, isNew: isNew)
         }
 
         fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
@@ -74,8 +75,8 @@ extension UI.Note {
             switch event {
             case .didLoad:
                 effects = [
-                    .updateTitle(title: model.note.meta.title),
-                    .showTags(tags: model.note.meta.tags)
+                    .updateTitle(title: model.meta.title),
+                    .showTags(tags: model.meta.tags)
                 ]
                 if model.isNew {
                     effects += [.focusOnTitle]

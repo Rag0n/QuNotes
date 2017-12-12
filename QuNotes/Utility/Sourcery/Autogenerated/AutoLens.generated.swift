@@ -112,6 +112,28 @@ extension UI.Library.Model {
         )
     }
 }
+extension UI.Note.Model {
+    enum lens {
+        static let meta = Lens<UI.Note.Model, Note.Meta>(
+            get: { $0.meta },
+            set: { meta, model in
+                UI.Note.Model(meta: meta, content: model.content, isNew: model.isNew)
+            }
+        )
+        static let content = Lens<UI.Note.Model, String>(
+            get: { $0.content },
+            set: { content, model in
+                UI.Note.Model(meta: model.meta, content: content, isNew: model.isNew)
+            }
+        )
+        static let isNew = Lens<UI.Note.Model, Bool>(
+            get: { $0.isNew },
+            set: { isNew, model in
+                UI.Note.Model(meta: model.meta, content: model.content, isNew: isNew)
+            }
+        )
+    }
+}
 extension UI.Notebook.Model {
     enum lens {
         static let notebook = Lens<UI.Notebook.Model, Notebook.Meta>(
@@ -161,6 +183,23 @@ extension Lens where Whole == Notebook.Model, Part == Notebook.Meta {
     }
     var name: Lens<Notebook.Model, String> {
         return Notebook.Model.lens.meta..Notebook.Meta.lens.name
+    }
+}
+extension Lens where Whole == UI.Note.Model, Part == Note.Meta {
+    var uuid: Lens<UI.Note.Model, String> {
+        return UI.Note.Model.lens.meta..Note.Meta.lens.uuid
+    }
+    var title: Lens<UI.Note.Model, String> {
+        return UI.Note.Model.lens.meta..Note.Meta.lens.title
+    }
+    var tags: Lens<UI.Note.Model, [String]> {
+        return UI.Note.Model.lens.meta..Note.Meta.lens.tags
+    }
+    var updated_at: Lens<UI.Note.Model, TimeInterval> {
+        return UI.Note.Model.lens.meta..Note.Meta.lens.updated_at
+    }
+    var created_at: Lens<UI.Note.Model, TimeInterval> {
+        return UI.Note.Model.lens.meta..Note.Meta.lens.created_at
     }
 }
 extension Lens where Whole == UI.Notebook.Model, Part == Notebook.Meta {

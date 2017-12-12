@@ -18,7 +18,7 @@ class NoteEvaluatorSpec: QuickSpec {
         let error = AnyError(underlyingError)
 
         beforeEach {
-            e = UI.Note.Evaluator(note: note, isNew: false)
+            e = UI.Note.Evaluator(note: note, content: "", isNew: false)
         }
 
         describe("-evaluate:ViewEvent") {
@@ -31,7 +31,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is new") {
                     beforeEach {
-                        e = UI.Note.Evaluator(note: note, isNew: true)
+                        e = UI.Note.Evaluator(note: note, content: "", isNew: true)
                         e = e.evaluate(event: event)
                     }
 
@@ -46,7 +46,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is not new") {
                     beforeEach {
-                        e = UI.Note.Evaluator(note: note, isNew: false)
+                        e = UI.Note.Evaluator(note: note, content: "", isNew: false)
                         e = e.evaluate(event: event)
                     }
 
