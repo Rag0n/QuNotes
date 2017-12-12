@@ -87,7 +87,9 @@ extension UI.Note {
                 actions = [.updateContent(content: newContent)]
                 effects = [.updateContent(content: newContent)]
             case let .changeTitle(newTitle):
+                newModel = model |> Model.lens.meta.title .~ newTitle
                 actions = [.updateTitle(title: newTitle)]
+                effects = [.updateTitle(title: newTitle)]
             case .delete:
                 actions = [.deleteNote]
             case let .addTag(tag):

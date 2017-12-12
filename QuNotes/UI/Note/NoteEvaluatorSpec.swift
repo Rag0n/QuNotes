@@ -95,6 +95,20 @@ class NoteEvaluatorSpec: QuickSpec {
                         .updateTitle(title: "newTitle")
                     ]))
                 }
+
+                it("has updateTitle effect") {
+                    expect(e.effects).to(equalDiff([
+                        .updateTitle(title: "newTitle")
+                    ]))
+                }
+
+                it("updates title in model") {
+                    expect(e.model).to(equalDiff(
+                        UI.Note.Model(meta: Note.Meta(uuid: note.uuid, title: "newTitle", tags: note.tags,
+                                                      updated_at: note.updated_at, created_at: note.created_at),
+                                      content: "", isNew: false)
+                    ))
+                }
             }
 
             context("when receiving delete event") {
