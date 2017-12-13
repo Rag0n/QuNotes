@@ -17,16 +17,16 @@ class FileExecuter {
     // MARK: - API
 
     func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
-        let writeData = writeToURL <| url.appendedToDocumentsURL()
-        return writeData <| dataFromContent <| content
+        let write = content |> dataFromContent |> writeData
+        return url.appendedToDocumentsURL() |> write
     }
 
     func deleteDirectory(at url: URL) -> Error? {
-        return removeItemAtURL <| url
+        return url |> removeItem
     }
 
     func deleteFile(at url: URL) -> Error? {
-        return removeItemAtURL <| url
+        return url |> removeItem
     }
 
     func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
@@ -62,8 +62,8 @@ fileprivate extension FileExecuter {
         return Result(try encoder.encode(content))
     }
 
-    func writeToURL(_ url: URL) -> (Result<Data, AnyError>) -> Error? {
-        return { result in
+    func writeData(data result: Result<Data, AnyError>) -> (URL) -> Error? {
+        return { url in
             guard let data = result.value else { return result.error?.error }
             do {
                 try FileManager.default.createDirectory(atPath: url.deletingLastPathComponent().path, withIntermediateDirectories: true, attributes: nil)
@@ -75,7 +75,7 @@ fileprivate extension FileExecuter {
         }
     }
 
-    func removeItemAtURL(_ url: URL) -> Error? {
+    func removeItem(at url: URL) -> Error? {
         do {
             try FileManager.default.removeItem(at: url.appendedToDocumentsURL())
             return nil
