@@ -20,8 +20,8 @@ class NoteExperimantalSpec: QuickSpec {
         }
 
         context("when initialized") {
-            it("has zero actions") {
-                expect(e.actions).to(beEmpty())
+            it("has zero effects") {
+                expect(e.effects).to(beEmpty())
             }
 
             it("has passed model") {
@@ -30,7 +30,7 @@ class NoteExperimantalSpec: QuickSpec {
         }
 
         describe("-evaluate:") {
-            var event: Note.InputEvent!
+            var event: Note.Event!
 
             context("when receiving changeTitle event") {
                 beforeEach {
@@ -46,8 +46,8 @@ class NoteExperimantalSpec: QuickSpec {
                     ))
                 }
 
-                it("doesnt have any actions") {
-                    expect(e.actions).to(beEmpty())
+                it("doesnt have any effects") {
+                    expect(e.effects).to(beEmpty())
                 }
 
                 context("when note is added to notebook") {
@@ -60,7 +60,7 @@ class NoteExperimantalSpec: QuickSpec {
                     }
 
                     it("has updateFile action with meta & meta URL") {
-                        expect(e.actions).to(equalDiff([
+                        expect(e.effects).to(equalDiff([
                             .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
                                         content: Note.Meta(uuid: "uuid", title: "new title", tags: ["tag"],
                                                            updated_at: 15, created_at: 12))
@@ -83,8 +83,8 @@ class NoteExperimantalSpec: QuickSpec {
                     ))
                 }
 
-                it("doesnt have any actions") {
-                    expect(e.actions).to(beEmpty())
+                it("doesnt have any effects") {
+                    expect(e.effects).to(beEmpty())
                 }
 
                 context("when note is added to notebook") {
@@ -96,7 +96,7 @@ class NoteExperimantalSpec: QuickSpec {
                     }
 
                     it("has updateFile action with content & content URL") {
-                        expect(e.actions).to(equalDiff([
+                        expect(e.effects).to(equalDiff([
                             .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
                                         content: Note.Content(content: "new content"))
                         ]))
@@ -115,8 +115,8 @@ class NoteExperimantalSpec: QuickSpec {
                         expect(e.model).to(equalDiff(model))
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
                 }
 
@@ -134,8 +134,8 @@ class NoteExperimantalSpec: QuickSpec {
                         ))
                     }
 
-                    it("doesnt have any actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have any effects") {
+                        expect(e.effects).to(beEmpty())
                     }
 
                     context("when note is added to notebook") {
@@ -148,7 +148,7 @@ class NoteExperimantalSpec: QuickSpec {
                         }
 
                         it("has updateFile action with meta & meta URL") {
-                            expect(e.actions).to(equalDiff([
+                            expect(e.effects).to(equalDiff([
                                 .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
                                             content: Note.Meta(uuid: "uuid", title: "title",
                                                                tags: ["tag", "new tag"], updated_at: 20,
@@ -174,8 +174,8 @@ class NoteExperimantalSpec: QuickSpec {
                         ))
                     }
 
-                    it("doesnt have any actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have any effects") {
+                        expect(e.effects).to(beEmpty())
                     }
 
                     context("when note is added to notebook") {
@@ -188,7 +188,7 @@ class NoteExperimantalSpec: QuickSpec {
                         }
 
                         it("has updateFile action with meta & meta URL") {
-                            expect(e.actions).to(equalDiff([
+                            expect(e.effects).to(equalDiff([
                                 .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
                                             content: Note.Meta(uuid: "uuid", title: "title", tags: [],
                                                                updated_at: 22, created_at: 12))
@@ -207,8 +207,8 @@ class NoteExperimantalSpec: QuickSpec {
                         expect(e.model).to(equalDiff(model))
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
                     }
                 }
             }

@@ -33,11 +33,11 @@ enum Note {
         let content: String
     }
 
-    enum Action {
+    enum Effect {
         case updateFile(url: URL, content: Codable)
     }
 
-    enum InputEvent {
+    enum Event {
         case changeTitle(newTitle: String)
         case changeContent(newContent: String)
         case addTag(tag: String)
@@ -45,17 +45,17 @@ enum Note {
     }
 
     struct Evaluator {
-        let actions: [Action]
+        let effects: [Effect]
         let model: Model
         var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
         init(model: Model) {
             self.model = model
-            actions = []
+            effects = []
         }
 
-        func evaluate(event: InputEvent) -> Evaluator {
-            var actions: [Action] = []
+        func evaluate(event: Event) -> Evaluator {
+            var actions: [Effect] = []
             var newModel = model
 
             switch event {
@@ -91,8 +91,8 @@ enum Note {
             return Evaluator(actions: actions, model: newModel)
         }
 
-        fileprivate init(actions: [Action], model: Model) {
-            self.actions = actions
+        fileprivate init(actions: [Effect], model: Model) {
+            self.effects = actions
             self.model = model
         }
     }
@@ -108,8 +108,8 @@ private extension Note.Model {
 
 // MARK: - Action Equtable
 // TODO: Fix action type(similar to library) and replace this extension by autoequatable
-extension Note.Action: Equatable {
-    static func ==(lhs: Note.Action, rhs: Note.Action) -> Bool {
+extension Note.Effect: Equatable {
+    static func ==(lhs: Note.Effect, rhs: Note.Effect) -> Bool {
         switch (lhs, rhs) {
         case (.updateFile(let lURL, let lContent as Note.Meta),
               .updateFile(let rURL, let rContent as Note.Meta)):
