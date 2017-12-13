@@ -21,6 +21,7 @@ extension UI.Note {
         typealias Dependencies = HasFileExecuter
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
+        fileprivate var noteEvaluator: Note.Evaluator
 
         fileprivate lazy var noteViewController: NoteViewController = {
             return NoteViewController(withDispatch: dispatch)
@@ -30,16 +31,21 @@ extension UI.Note {
              dependencies: Dependencies, note: Note.Meta, isNewNote: Bool) {
             self.navigationController = navigationController
             evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
+            noteEvaluator = Note.Evaluator(model: Note.Model(meta: note, content: ""))
         }
 
         // MARK: - Private
 
         fileprivate func dispatch(event: ViewEvent) {
-            updateEvaluator <| evaluator.evaluate(event: event)
+            event |> evaluator.evaluate |> updateEvaluator
         }
 
         fileprivate func dispatch(event: CoordinatorEvent) {
-            updateEvaluator <| evaluator.evaluate(event: event)
+            event |> evaluator.evaluate |> updateEvaluator
+        }
+
+        fileprivate func dispatchToNote(event: Note.Event) {
+            event |> noteEvaluator.evaluate |> updateNote
         }
 
         fileprivate func updateEvaluator(evaluator: Evaluator) {
@@ -48,22 +54,35 @@ extension UI.Note {
             evaluator.effects.forEach(noteViewController.perform)
         }
 
+        fileprivate func updateNote(note: Note.Evaluator) {
+            self.noteEvaluator = note
+            note.effects.forEach(perform)
+        }
+
         fileprivate func perform(action: Action) {
             switch action {
             case let .updateTitle(title):
-                break
+                dispatchToNote <| .changeTitle(newTitle: title)
             case let .updateContent(content):
-                break
+                dispatchToNote <| .changeContent(newContent: content)
             case let .addTag(tag):
-                break
+                dispatchToNote <| .addTag(tag: tag)
             case let .removeTag(tag):
-                break
+                dispatchToNote <| .removeTag(tag: tag)
             case .deleteNote:
+                // TODO: who is responsible for that action?
                 break
             case .finish:
                 navigationController.popViewController(animated: true)
             case let .showError(title, message):
                 showError(title: title, message: message)
+            }
+        }
+
+        fileprivate func perform(effect: Note.Effect) {
+            switch effect {
+            default:
+                break
             }
         }
     }
