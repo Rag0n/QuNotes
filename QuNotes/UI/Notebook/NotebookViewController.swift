@@ -8,7 +8,7 @@
 
 import UIKit
 
-class NotebookViewController: UIViewController {
+final class NotebookViewController: UIViewController {
     // MARK: - API
 
     func perform(effect: UI.Notebook.ViewEffect) {

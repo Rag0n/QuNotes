@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LibraryViewController: UIViewController {
+final class LibraryViewController: UIViewController {
     // MARK: - API
 
     func perform(effect: UI.Library.ViewEffect) {

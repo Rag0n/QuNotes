@@ -5,7 +5,7 @@
 
 import UIKit
 
-class AppCoordinator: Coordinator {
+final class AppCoordinator: Coordinator {
     // MARK: - Coordinator
 
     func onStart() {

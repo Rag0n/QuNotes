@@ -10,7 +10,7 @@ import UIKit
 import Result
 
 extension UI.Notebook {
-    class CoordinatorImp: Coordinator {
+    final class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
 
         func onStart() {
@@ -27,7 +27,7 @@ extension UI.Notebook {
         fileprivate let dependencies: Dependencies
         fileprivate let fileExecuter: FileExecuter
         fileprivate let navigationController: NavigationController
-        fileprivate var evaluator: Evaluator!
+        fileprivate var evaluator: Evaluator
         fileprivate var notebookEvaluator: Notebook.Evaluator
 
         fileprivate lazy var notebookViewController: NotebookViewController = {

@@ -10,7 +10,7 @@ import UIKit
 import Result
 
 extension UI.Library {
-    class CoordinatorImp: Coordinator {
+    final class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
 
         func onStart() {

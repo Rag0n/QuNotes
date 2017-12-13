@@ -9,7 +9,7 @@ import Result
 extension UI.Note {
     typealias ViewDispacher = (_ event: ViewEvent) -> ()
 
-    class CoordinatorImp: Coordinator {
+    final class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
         
         var viewController: UIViewController {

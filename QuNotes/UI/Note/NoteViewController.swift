@@ -10,7 +10,7 @@ import UIKit
 import Notepad
 import WSTagsField
 
-class NoteViewController: UIViewController {
+final class NoteViewController: UIViewController {
     // MARK: - API
 
     func perform(effect: UI.Note.ViewEffect) {

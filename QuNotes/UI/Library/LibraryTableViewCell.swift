@@ -10,7 +10,7 @@ import UIKit
 
 typealias DidChangeTitleBlock = (_ title: String?) -> Void
 
-class LibraryTableViewCell: UITableViewCell {
+final class LibraryTableViewCell: UITableViewCell {
     // MARK: - API
 
     func render(viewModel: UI.Library.NotebookViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
