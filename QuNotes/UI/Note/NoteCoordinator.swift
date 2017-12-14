@@ -28,10 +28,10 @@ extension UI.Note {
         }()
 
         init(withNavigationController navigationController: NavigationController,
-             dependencies: Dependencies, note: Note.Meta, isNewNote: Bool) {
+             dependencies: Dependencies, note: Note.Meta, isNewNote: Bool, notebook: Notebook.Meta) {
             self.navigationController = navigationController
             evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
-            noteEvaluator = Note.Evaluator(model: Note.Model(meta: note, content: ""))
+            noteEvaluator = Note.Evaluator(model: Note.Model(meta: note, content: "", notebook: notebook))
         }
 
         // MARK: - Private

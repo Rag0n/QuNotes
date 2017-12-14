@@ -29,6 +29,7 @@ extension UI.Notebook {
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
         fileprivate var notebookEvaluator: Notebook.Evaluator
+        fileprivate let notebook: Notebook.Meta
 
         fileprivate lazy var notebookViewController: NotebookViewController = {
             let vc = NotebookViewController(withDispatch: dispatch)
@@ -42,6 +43,7 @@ extension UI.Notebook {
             self.fileExecuter = dependencies.fileExecuter
             self.evaluator = Evaluator(notebook: notebook)
             self.notebookEvaluator = Notebook.Evaluator(model: Notebook.Model(meta: notebook, notes: []))
+            self.notebook = notebook
         }
 
         // MARK: - Private
@@ -86,9 +88,8 @@ extension UI.Notebook {
                 showError(title: title, message: message)
             case let .showNote(note, isNewNote):
                 let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
-                                                             dependencies: dependencies,
-                                                             note: note,
-                                                             isNewNote: isNewNote)
+                                                             dependencies: dependencies, note: note,
+                                                             isNewNote: isNewNote, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true)
             }
         }
