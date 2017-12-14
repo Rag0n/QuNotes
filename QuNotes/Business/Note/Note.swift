@@ -29,10 +29,6 @@ enum Note {
         let created_at: TimeInterval
     }
 
-    struct Content: Codable, AutoEquatable {
-        let content: String
-    }
-
     enum Effect: AutoEquatable {
         case updateTitle(note: Meta, url: URL)
         case updateContent(content: String, url: URL)

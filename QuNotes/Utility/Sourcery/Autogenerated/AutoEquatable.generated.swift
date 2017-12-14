@@ -30,12 +30,6 @@ internal func == (lhs: Library.Model, rhs: Library.Model) -> Bool {
     guard lhs.notebooks == rhs.notebooks else { return false }
     return true
 }
-// MARK: - Note.Content AutoEquatable
-extension Note.Content: Equatable {}
-internal func == (lhs: Note.Content, rhs: Note.Content) -> Bool {
-    guard lhs.content == rhs.content else { return false }
-    return true
-}
 // MARK: - Note.Meta AutoEquatable
 extension Note.Meta: Equatable {}
 internal func == (lhs: Note.Meta, rhs: Note.Meta) -> Bool {
