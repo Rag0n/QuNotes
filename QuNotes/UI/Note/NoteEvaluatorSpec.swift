@@ -179,8 +179,37 @@ class NoteEvaluatorSpec: QuickSpec {
             }
         }
 
-//        describe("-evaluate:CoordinatorEvent") {
-//            var event: UI.Note.CoordinatorEvent!
+        describe("-evaluate:CoordinatorEvent") {
+            var event: UI.Note.CoordinatorEvent!
+
+            context("when receiving didDeleteNote event") {
+                context("when successfuly deletes note") {
+                    beforeEach {
+                        event = .didDeleteNote(error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has finish action") {
+                        expect(e.actions).to(equalDiff([
+                            .finish
+                        ]))
+                    }
+                }
+
+                context("when fails to delete note") {
+                    beforeEach {
+                        event = .didDeleteNote(error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to delete note", message: error.localizedDescription)
+                        ]))
+                    }
+                }
+            }
+        }
 //            let updatedNote = UseCase.Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
 //
 //            context("when receiving didUpdateTitle event") {
@@ -343,5 +372,6 @@ class NoteEvaluatorSpec: QuickSpec {
 //                }
 //            }
 //        }
+//    }
     }
 }

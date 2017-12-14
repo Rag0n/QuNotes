@@ -112,36 +112,14 @@ extension UI.Note {
 
             switch event {
             case let .didDeleteNote(error):
-                guard error == nil else {
-                    return showError(error: error!,
-                                     reason:  "Failed to delete note",
-                                     model: model)
+                if let error = error {
+                    actions = [.showError(title: "Failed to delete note", message: error.localizedDescription)]
+                } else {
+                    actions = [.finish]
                 }
-
-                actions = [.finish]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
         }
-    }
-}
-
-// MARK: - Private
-
-private extension UI.Note {
-    static func showError(error: AnyError,
-                          reason: String,
-                          model: Model,
-                          additionalEffect: ViewEffect? = nil) -> Evaluator {
-        let errorMessage = error.error.localizedDescription
-        let actions: [Action] = [.showError(title: reason, message: errorMessage)]
-        var effects: [ViewEffect] = []
-        if let additionalEffect = additionalEffect {
-            effects.append(additionalEffect)
-        }
-
-        return Evaluator(effects: effects,
-                         actions: actions,
-                         model: model)
     }
 }
