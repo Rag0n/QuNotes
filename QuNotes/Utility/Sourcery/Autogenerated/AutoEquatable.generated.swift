@@ -123,6 +123,29 @@ internal func == (lhs: Library.Effect, rhs: Library.Effect) -> Bool {
     default: return false
     }
 }
+// MARK: - Note.Effect AutoEquatable
+extension Note.Effect: Equatable {}
+internal func == (lhs: Note.Effect, rhs: Note.Effect) -> Bool {
+    switch (lhs, rhs) {
+    case (.updateTitle(let lhs), .updateTitle(let rhs)):
+        if lhs.note != rhs.note { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    case (.updateContent(let lhs), .updateContent(let rhs)):
+        if lhs.content != rhs.content { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    case (.addTag(let lhs), .addTag(let rhs)):
+        if lhs.note != rhs.note { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    case (.removeTag(let lhs), .removeTag(let rhs)):
+        if lhs.note != rhs.note { return false }
+        if lhs.url != rhs.url { return false }
+        return true
+    default: return false
+    }
+}
 // MARK: - Notebook.Effect AutoEquatable
 extension Notebook.Effect: Equatable {}
 internal func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {

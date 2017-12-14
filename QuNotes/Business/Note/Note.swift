@@ -33,8 +33,11 @@ enum Note {
         let content: String
     }
 
-    enum Effect {
-        case updateFile(url: URL, content: Codable)
+    enum Effect: AutoEquatable {
+        case updateTitle(note: Meta, url: URL)
+        case updateContent(content: String, url: URL)
+        case addTag(note: Meta, url: URL)
+        case removeTag(note: Meta, url: URL)
     }
 
     enum Event {
@@ -55,7 +58,7 @@ enum Note {
         }
 
         func evaluate(event: Event) -> Evaluator {
-            var actions: [Effect] = []
+            var effects: [Effect] = []
             var newModel = model
 
             switch event {
@@ -64,35 +67,34 @@ enum Note {
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                actions = [.updateFile(url: url, content: newModel.meta)]
+                effects = [.updateTitle(note: newModel.meta, url: url)]
             case let .changeContent(newContent):
                 newModel = model |> Model.lens.content .~ newContent
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let fileContent = Content(content: newContent);
                 let url = model.notebook.noteContentURL(for: newModel.meta)
-                actions = [.updateFile(url: url, content: fileContent)]
+                effects = [.updateContent(content: newContent, url: url)]
             case let .addTag(tag):
                 guard !model.hasTag(tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                actions = [.updateFile(url: url, content: newModel.meta)]
+                effects = [.addTag(note: newModel.meta, url: url)]
             case let .removeTag(tag):
                 guard let indexOfTag = model.meta.tags.index(of: tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(at: indexOfTag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                actions = [.updateFile(url: url, content: newModel.meta)]
+                effects = [.removeTag(note: newModel.meta, url: url)]
             }
 
-            return Evaluator(actions: actions, model: newModel)
+            return Evaluator(effects: effects, model: newModel)
         }
 
-        fileprivate init(actions: [Effect], model: Model) {
-            self.effects = actions
+        fileprivate init(effects: [Effect], model: Model) {
+            self.effects = effects
             self.model = model
         }
     }
@@ -103,21 +105,5 @@ enum Note {
 private extension Note.Model {
     func hasTag(_ tag: String) -> Bool {
         return meta.tags.index(of: tag) != nil
-    }
-}
-
-// MARK: - Action Equtable
-// TODO: Fix action type(similar to library) and replace this extension by autoequatable
-extension Note.Effect: Equatable {
-    static func ==(lhs: Note.Effect, rhs: Note.Effect) -> Bool {
-        switch (lhs, rhs) {
-        case (.updateFile(let lURL, let lContent as Note.Meta),
-              .updateFile(let rURL, let rContent as Note.Meta)):
-            return (lURL == rURL) && (lContent == rContent)
-        case (.updateFile(let lURL, let lContent as Note.Content),
-              .updateFile(let rURL, let rContent as Note.Content)):
-            return (lURL == rURL) && (lContent == rContent)
-        default: return false
-        }
     }
 }

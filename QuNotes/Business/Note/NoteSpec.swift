@@ -59,11 +59,11 @@ class NoteExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has updateFile action with meta & meta URL") {
+                    it("has updateTitle effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                        content: Note.Meta(uuid: "uuid", title: "new title", tags: ["tag"],
-                                                           updated_at: 15, created_at: 12))
+                            .updateTitle(note: Note.Meta(uuid: meta.uuid, title: "new title", tags: meta.tags,
+                                                         updated_at: 15, created_at: meta.created_at),
+                                         url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                         ]))
                     }
                 }
@@ -95,10 +95,10 @@ class NoteExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has updateFile action with content & content URL") {
+                    it("has updateContent effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
-                                        content: Note.Content(content: "new content"))
+                            .updateContent(content: "new content",
+                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!)
                         ]))
                     }
                 }
@@ -147,12 +147,12 @@ class NoteExperimantalSpec: QuickSpec {
                             e = e.evaluate(event: event)
                         }
 
-                        it("has updateFile action with meta & meta URL") {
+                        it("has addTag effect") {
                             expect(e.effects).to(equalDiff([
-                                .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                            content: Note.Meta(uuid: "uuid", title: "title",
-                                                               tags: ["tag", "new tag"], updated_at: 20,
-                                                               created_at: 12))
+                                .addTag(note: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                                        tags: ["tag", "new tag"], updated_at: 20,
+                                                        created_at: meta.created_at),
+                                        url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                             ]))
                         }
                     }
@@ -187,11 +187,11 @@ class NoteExperimantalSpec: QuickSpec {
                             e = e.evaluate(event: event)
                         }
 
-                        it("has updateFile action with meta & meta URL") {
+                        it("has removeTag effect") {
                             expect(e.effects).to(equalDiff([
-                                .updateFile(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                            content: Note.Meta(uuid: "uuid", title: "title", tags: [],
-                                                               updated_at: 22, created_at: 12))
+                                .removeTag(note: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                                        tags: [], updated_at: 22, created_at: meta.created_at),
+                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                             ]))
                         }
                     }
