@@ -10,23 +10,21 @@ import Foundation
 import Prelude
 import Core
 
-extension UI {
-    enum Library {}
-}
+enum Library {}
 
-extension UI.Library {
+extension Library {
     // MARK: - Data types
 
     struct Model: AutoEquatable, AutoLens {
-        let notebooks: [Notebook.Meta]
+        let notebooks: [Core.Notebook.Meta]
     }
     
     enum Action: AutoEquatable {
-        case addNotebook(notebook: Notebook.Model)
-        case deleteNotebook(notebook: Notebook.Meta)
-        case updateNotebook(notebook: Notebook.Meta)
-        case showNotebook(notebook: Notebook.Meta)
-        case reloadNotebook(notebook: Notebook.Meta)
+        case addNotebook(notebook: Core.Notebook.Model)
+        case deleteNotebook(notebook: Core.Notebook.Meta)
+        case updateNotebook(notebook: Core.Notebook.Meta)
+        case showNotebook(notebook: Core.Notebook.Meta)
+        case reloadNotebook(notebook: Core.Notebook.Meta)
         case showError(title: String, message: String)
     }
 
@@ -38,10 +36,10 @@ extension UI.Library {
     }
 
     enum CoordinatorEvent {
-        case didLoadNotebooks(notebooks: [Notebook.Meta])
-        case didAddNotebook(notebook: Notebook.Meta, error: Error?)
-        case didDeleteNotebook(notebook: Notebook.Meta, error: Error?)
-        case didFinishShowing(notebook: Notebook.Meta)
+        case didLoadNotebooks(notebooks: [Core.Notebook.Meta])
+        case didAddNotebook(notebook: Core.Notebook.Meta, error: Error?)
+        case didDeleteNotebook(notebook: Core.Notebook.Meta, error: Error?)
+        case didFinishShowing(notebook: Core.Notebook.Meta)
     }
 
     enum ViewEvent {
@@ -64,7 +62,7 @@ extension UI.Library {
         let model: Model
         var generateUUID: () -> String = { UUID().uuidString }
 
-        init(notebooks: [Notebook.Meta] = []) {
+        init(notebooks: [Core.Notebook.Meta] = []) {
             effects = []
             actions = []
             model = Model(notebooks: notebooks)
@@ -77,7 +75,7 @@ extension UI.Library {
 
             switch event {
             case .addNotebook:
-                let notebook = Notebook.Model(meta: Notebook.Meta(uuid: generateUUID(), name: ""), notes: [])
+                let notebook = Core.Notebook.Model(meta: Core.Notebook.Meta(uuid: generateUUID(), name: ""), notes: [])
                 newModel = model |> Model.lens.notebooks
                     .~ model.notebooks.appending(notebook.meta).sorted(by: name)
                 let indexOfNewNotebook = newModel.notebooks.index(of: notebook.meta)!
@@ -94,7 +92,7 @@ extension UI.Library {
             case let .updateNotebook(index, title):
                 guard index < model.notebooks.count else { break }
                 let oldNotebook = model.notebooks[index]
-                let updatedNotebook = Notebook.Meta(uuid: oldNotebook.uuid, name: title)
+                let updatedNotebook = Core.Notebook.Meta(uuid: oldNotebook.uuid, name: title)
                 newModel = model |> Model.lens.notebooks
                     .~ model.notebooks.replacing(at: index, new: updatedNotebook).sorted(by: name)
                 effects = [.updateNotebook(index: index, notebooks: viewModels(from: newModel))]
@@ -145,14 +143,14 @@ extension UI.Library {
 
 // MARK: - Private
 
-private extension UI.Library {
+private extension Library {
     static func viewModels(from model: Model) -> [NotebookViewModel] {
         return model.notebooks.map {
             NotebookViewModel(title: $0.name, isEditable: false)
         }
     }
 
-    static func name(lhs: Notebook.Meta, rhs: Notebook.Meta) -> Bool {
+    static func name(lhs: Core.Notebook.Meta, rhs: Core.Notebook.Meta) -> Bool {
         return lhs.name.lowercased() < rhs.name.lowercased()
     }
 }

@@ -13,7 +13,7 @@ typealias DidChangeTitleBlock = (_ title: String?) -> Void
 final class LibraryTableViewCell: UITableViewCell {
     // MARK: - API
 
-    func render(viewModel: UI.Library.NotebookViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
+    func render(viewModel: Library.NotebookViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
         self.onDidChangeTitle = onDidChangeTitle
         titleTextField.text = viewModel.title
         titleTextField.isEnabled = viewModel.isEditable

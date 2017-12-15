@@ -10,7 +10,7 @@ import UIKit
 import Result
 import Core
 
-extension UI.Library {
+extension Library {
     final class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
 
@@ -24,14 +24,14 @@ extension UI.Library {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasFileExecuter & UI.Notebook.CoordinatorImp.Dependencies
+        typealias Dependencies = HasFileExecuter & Notebook.CoordinatorImp.Dependencies
 
         init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
             self.navigationController = navigationController
             self.fileExecuter = dependencies.fileExecuter
             self.dependencies = dependencies
             evaluator = Evaluator()
-            libraryEvaluator = Library.Evaluator(model: Library.Model(notebooks: []))
+            libraryEvaluator = Core.Library.Evaluator(model: Core.Library.Model(notebooks: []))
         }
 
         // MARK: - Private
@@ -49,7 +49,7 @@ extension UI.Library {
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNotebook(notebook):
-                let notebookCoordinator = UI.Notebook.CoordinatorImp(withNavigationController: navigationController,
+                let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController,
                                                                      dependencies: dependencies,
                                                                      notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
@@ -58,7 +58,7 @@ extension UI.Library {
             }
         }
 
-        fileprivate func perform(action: Library.Effect) {
+        fileprivate func perform(action: Core.Library.Effect) {
             switch action {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
@@ -72,7 +72,7 @@ extension UI.Library {
                 let result = fileExecuter.contentOfDocumentsFolder()
                 dispatchToLibrary <| .didReadBaseDirectory(urls: result)
             case let .readNotebooks(urls):
-                let results = urls.map { fileExecuter.readFile(at: $0, contentType: Notebook.Meta.self) }
+                let results = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Notebook.Meta.self) }
                 dispatchToLibrary <| .didReadNotebooks(notebooks: results)
             case let .handleError(title, message):
                 showError(title: title, message: message)
@@ -87,7 +87,7 @@ extension UI.Library {
         fileprivate let dependencies: Dependencies
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
-        fileprivate var libraryEvaluator: Library.Evaluator
+        fileprivate var libraryEvaluator: Core.Library.Evaluator
 
         fileprivate lazy var libraryViewController: LibraryViewController = {
             return LibraryViewController(withDispatch: dispatch)
@@ -103,7 +103,7 @@ extension UI.Library {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func dispatchToLibrary(event: Library.Event) {
+        fileprivate func dispatchToLibrary(event: Core.Library.Event) {
             updateLibrary <| libraryEvaluator.evaluate(event: event)
         }
 
@@ -113,7 +113,7 @@ extension UI.Library {
             evaluator.effects.forEach(libraryViewController.perform)
         }
 
-        fileprivate func updateLibrary(library: Library.Evaluator) {
+        fileprivate func updateLibrary(library: Core.Library.Evaluator) {
             self.libraryEvaluator = library
             library.effects.forEach(perform)
         }

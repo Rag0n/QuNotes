@@ -11,22 +11,20 @@ import Result
 import Prelude
 import Core
 
-extension UI {
-    enum Notebook {}
-}
+enum Notebook {}
 
-extension UI.Notebook {
+extension Notebook {
     struct Model: AutoEquatable, AutoLens {
-        let notebook: Notebook.Meta
-        let notes: [Note.Meta]
+        let notebook: Core.Notebook.Meta
+        let notes: [Core.Note.Meta]
     }
 
     enum Action: AutoEquatable {
-        case addNote(note: Note.Meta)
-        case showNote(note: Note.Meta, isNew: Bool)
-        case deleteNote(note: Note.Meta)
-        case deleteNotebook(notebook: Notebook.Meta)
-        case updateNotebook(notebook: Notebook.Meta, title: String)
+        case addNote(note: Core.Note.Meta)
+        case showNote(note: Core.Note.Meta, isNew: Bool)
+        case deleteNote(note: Core.Note.Meta)
+        case deleteNotebook(notebook: Core.Notebook.Meta)
+        case updateNotebook(notebook: Core.Notebook.Meta, title: String)
         case finish
         case showError(title: String, message: String)
     }
@@ -41,11 +39,11 @@ extension UI.Notebook {
     }
 
     enum CoordinatorEvent {
-        case didUpdateNotebook(notebook: Notebook.Meta, error: Error?)
+        case didUpdateNotebook(notebook: Core.Notebook.Meta, error: Error?)
         case didDeleteNotebook(error: Error?)
-        case didLoadNotes(notes: [Note.Meta])
-        case didAddNote(note: Note.Meta, error: Error?)
-        case didDeleteNote(note: Note.Meta, error: Error?)
+        case didLoadNotes(notes: [Core.Note.Meta])
+        case didAddNote(note: Core.Note.Meta, error: Error?)
+        case didDeleteNote(note: Core.Note.Meta, error: Error?)
     }
 
     enum ViewEvent {
@@ -68,7 +66,7 @@ extension UI.Notebook {
         var generateUUID: () -> String = { UUID().uuidString }
         var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
-        init(notebook: Notebook.Meta) {
+        init(notebook: Core.Notebook.Meta) {
             effects = []
             actions = []
             model = Model(notebook: notebook, notes: [])
@@ -89,7 +87,7 @@ extension UI.Notebook {
             case .didLoad:
                 effects = [.updateTitle(title: model.notebook.name)]
             case .addNote:
-                let note = Note.Meta(uuid: generateUUID(), title: "", tags: [],
+                let note = Core.Note.Meta(uuid: generateUUID(), title: "", tags: [],
                                      updated_at: currentTimestamp(), created_at: currentTimestamp())
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
@@ -170,8 +168,8 @@ extension UI.Notebook {
 
 // MARK: - Private
 
-private extension UI.Notebook {
-    static func title(lhs: Note.Meta, rhs: Note.Meta) -> Bool {
+private extension Notebook {
+    static func title(lhs: Core.Note.Meta, rhs: Core.Note.Meta) -> Bool {
         return lhs.title.lowercased() < rhs.title.lowercased()
     }
 
@@ -179,7 +177,7 @@ private extension UI.Notebook {
         return titles(from: model.notes)
     }
 
-    static func titles(from notes: [Note.Meta]) -> [String] {
+    static func titles(from notes: [Core.Note.Meta]) -> [String] {
         return notes.map { $0.title }
     }
 }

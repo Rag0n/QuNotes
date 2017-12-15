@@ -13,17 +13,17 @@ import Core
 
 class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {
-        let notebook = Notebook.Meta(uuid: "uuid", name: "name")
-        var e: UI.Notebook.Evaluator!
+        let notebook = Core.Notebook.Meta(uuid: "uuid", name: "name")
+        var e:Notebook.Evaluator!
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
         beforeEach {
-            e = UI.Notebook.Evaluator(notebook: notebook)
+            e = Notebook.Evaluator(notebook: notebook)
         }
 
         describe("-evaluate:ViewEvent") {
-            var event: UI.Notebook.ViewEvent!
+            var event: Notebook.ViewEvent!
 
             context("when receiving didLoad event") {
                 beforeEach {
@@ -40,8 +40,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving addNote event") {
 
-                let anotherNote = Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
-                let expectedNote = Note.Meta(uuid: "nUUID", title: "", tags: [], updated_at: 66, created_at: 66)
+                let anotherNote = Core.Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
+                let expectedNote = Core.Note.Meta(uuid: "nUUID", title: "", tags: [], updated_at: 66, created_at: 66)
 
                 beforeEach {
                     event = .addNote
@@ -59,7 +59,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("updates model by adding new note") {
                     expect(e.model).to(equalDiff(
-                        UI.Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote])
+                        Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote])
                     ))
                 }
 
@@ -71,7 +71,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving selectNote event") {
-                let note = Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+                let note = Core.Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
 
                 beforeEach {
                     event = .selectNote(index: 0)
@@ -87,7 +87,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNote event") {
-                let note = Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+                let note = Core.Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
 
                 beforeEach {
                     event = .deleteNote(index: 0)
@@ -103,7 +103,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("updates model by removing note") {
                     expect(e.model).to(equalDiff(
-                        UI.Notebook.Model(notebook: notebook, notes: [])
+                        Notebook.Model(notebook: notebook, notes: [])
                     ))
                 }
             }
@@ -122,9 +122,9 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving filterNotes event") {
-                let firstNote = Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
-                let secondNote = Note.Meta(uuid: "sU", title: "ab", tags: ["t"], updated_at: 2, created_at: 2)
-                let thirdNote = Note.Meta(uuid: "tU", title: "g", tags: ["t"], updated_at: 3, created_at: 3)
+                let firstNote = Core.Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+                let secondNote = Core.Note.Meta(uuid: "sU", title: "ab", tags: ["t"], updated_at: 2, created_at: 2)
+                let thirdNote = Core.Note.Meta(uuid: "tU", title: "g", tags: ["t"], updated_at: 3, created_at: 3)
 
                 beforeEach {
                     e = e.evaluate(event: .didLoadNotes(notes: [firstNote, secondNote, thirdNote]))
@@ -212,7 +212,7 @@ class NotebookEvaluatorSpec: QuickSpec {
         }
 
         describe("-evaluate:CoordinatorEvent") {
-            var event: UI.Notebook.CoordinatorEvent!
+            var event: Notebook.CoordinatorEvent!
 
             context("when receiving didLoadNotes") {
                 context("when note list is empty") {
@@ -222,7 +222,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("has model with empty notebooks") {
-                        expect(e.model).to(equalDiff(UI.Notebook.Model(notebook: notebook, notes: [])))
+                        expect(e.model).to(equalDiff(Notebook.Model(notebook: notebook, notes: [])))
                     }
 
                     it("has updateAllNotebooks effect with empty viewModels") {
@@ -233,9 +233,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                 }
 
                 context("when notebook list is not empty") {
-                    let firstNote = Note.Meta(uuid: "fU", title: "b", tags: ["t"], updated_at: 1, created_at: 1)
-                    let secondNote = Note.Meta(uuid: "sU", title: "a", tags: ["t"], updated_at: 2, created_at: 2)
-                    let thirdNote = Note.Meta(uuid: "tU", title: "C", tags: ["t"], updated_at: 3, created_at: 3)
+                    let firstNote = Core.Note.Meta(uuid: "fU", title: "b", tags: ["t"], updated_at: 1, created_at: 1)
+                    let secondNote = Core.Note.Meta(uuid: "sU", title: "a", tags: ["t"], updated_at: 2, created_at: 2)
+                    let thirdNote = Core.Note.Meta(uuid: "tU", title: "C", tags: ["t"], updated_at: 3, created_at: 3)
 
                     beforeEach {
                         event = .didLoadNotes(notes: [firstNote, secondNote, thirdNote])
@@ -244,7 +244,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has model with sorted by name notebooks") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote])
+                            Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote])
                         ))
                     }
 
@@ -257,7 +257,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didUpdateNotebook event") {
-                let oldNotebook = Notebook.Meta(uuid: notebook.uuid, name: "old name")
+                let oldNotebook = Core.Notebook.Meta(uuid: notebook.uuid, name: "old name")
 
                 context("when successfuly updates notebook") {
                     beforeEach {
@@ -275,7 +275,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: notebook, notes: [])
+                            Notebook.Model(notebook: notebook, notes: [])
                         ))
                     }
                 }
@@ -301,7 +301,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("updates model by setting notebook to the old") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: oldNotebook, notes: [])
+                            Notebook.Model(notebook: oldNotebook, notes: [])
                         ))
                     }
                 }
@@ -338,8 +338,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving didAddNote event") {
 
-                let note = Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
-                let addedNote = Note.Meta(uuid: "fU", title: "sN", tags: [], updated_at: 6, created_at: 6)
+                let note = Core.Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
+                let addedNote = Core.Note.Meta(uuid: "fU", title: "sN", tags: [], updated_at: 6, created_at: 6)
 
                 beforeEach {
                     e = e.evaluate(event: .didLoadNotes(notes: [note, addedNote]))
@@ -359,7 +359,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: notebook, notes: [note, addedNote])
+                            Notebook.Model(notebook: notebook, notes: [note, addedNote])
                         ))
                     }
 
@@ -376,7 +376,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("removes note from model") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: notebook, notes: [note])
+                            Notebook.Model(notebook: notebook, notes: [note])
                         ))
                     }
 
@@ -396,8 +396,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving didDeleteNote event") {
 
-                let note = Note.Meta(uuid: "bU", title: "bT", tags: ["t"], updated_at: 1, created_at: 1)
-                let deletedNote = Note.Meta(uuid: "aU", title: "aN", tags: [], updated_at: 6, created_at: 6)
+                let note = Core.Note.Meta(uuid: "bU", title: "bT", tags: ["t"], updated_at: 1, created_at: 1)
+                let deletedNote = Core.Note.Meta(uuid: "aU", title: "aN", tags: [], updated_at: 6, created_at: 6)
 
                 beforeEach {
                     e = e.evaluate(event: .didLoadNotes(notes: [note]))
@@ -411,7 +411,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: notebook, notes: [note])
+                            Notebook.Model(notebook: notebook, notes: [note])
                         ))
                     }
 
@@ -432,7 +432,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("adds deleted note back to model") {
                         expect(e.model).to(equalDiff(
-                            UI.Notebook.Model(notebook: notebook, notes: [deletedNote, note])
+                            Notebook.Model(notebook: notebook, notes: [deletedNote, note])
                         ))
                     }
 

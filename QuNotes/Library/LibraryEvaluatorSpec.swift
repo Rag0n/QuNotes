@@ -13,31 +13,31 @@ import Core
 
 class LibraryEvaluatorSpec: QuickSpec {
     override func spec() {
-        var e: UI.Library.Evaluator!
+        var e: Library.Evaluator!
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
         beforeEach {
-            e = UI.Library.Evaluator()
+            e = Library.Evaluator()
         }
 
         describe("-evaluate:ViewEvent") {
-            var event: UI.Library.ViewEvent!
+            var event: Library.ViewEvent!
 
             context("when receiving addNotebook event") {
-                let notebookModel = Notebook.Model(meta: Notebook.Meta(uuid: "newUUID", name: ""), notes: [])
-                let notebookMeta = Notebook.Meta(uuid: "newUUID", name: "")
+                let notebookModel = Core.Notebook.Model(meta: Core.Notebook.Meta(uuid: "newUUID", name: ""), notes: [])
+                let notebookMeta = Core.Notebook.Meta(uuid: "newUUID", name: "")
 
-                let firstNotebookMeta = Notebook.Meta(uuid: "firstUUID", name: "abc")
-                let secondNotebookMeta = Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let firstNotebookMeta = Core.Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebookMeta = Core.Notebook.Meta(uuid: "secondUUID", name: "cde")
                 let expectedViewModels = [
-                    UI.Library.NotebookViewModel(title: "", isEditable: false), // TODO: replace by true
-                    UI.Library.NotebookViewModel(title: "abc", isEditable: false),
-                    UI.Library.NotebookViewModel(title: "cde", isEditable: false),
+                    Library.NotebookViewModel(title: "", isEditable: false), // TODO: replace by true
+                    Library.NotebookViewModel(title: "abc", isEditable: false),
+                    Library.NotebookViewModel(title: "cde", isEditable: false),
                 ]
 
                 beforeEach {
-                    e = UI.Library.Evaluator(notebooks:  [firstNotebookMeta, secondNotebookMeta])
+                    e = Library.Evaluator(notebooks:  [firstNotebookMeta, secondNotebookMeta])
                     event = .addNotebook
                 }
 
@@ -66,13 +66,13 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNotebook event") {
-                let firstNotebookMeta = Notebook.Meta(uuid: "firstUUID", name: "abc")
-                let secondNotebookMeta = Notebook.Meta(uuid: "secondUUID", name: "cde")
-                let expectedViewModels = [UI.Library.NotebookViewModel(title: "cde", isEditable: false)]
-                let model = UI.Library.Model(notebooks: [firstNotebookMeta, secondNotebookMeta])
+                let firstNotebookMeta = Core.Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebookMeta = Core.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let expectedViewModels = [Library.NotebookViewModel(title: "cde", isEditable: false)]
+                let model = Library.Model(notebooks: [firstNotebookMeta, secondNotebookMeta])
 
                 beforeEach {
-                    e = UI.Library.Evaluator(notebooks: [firstNotebookMeta, secondNotebookMeta])
+                    e = Library.Evaluator(notebooks: [firstNotebookMeta, secondNotebookMeta])
                     event = .deleteNotebook(index: 0)
                 }
 
@@ -122,24 +122,24 @@ class LibraryEvaluatorSpec: QuickSpec {
             context("when receiving selectNotebook event") {
                 beforeEach {
                     event = .selectNotebook(index: 0)
-                    e = UI.Library.Evaluator(notebooks: [Notebook.Meta(uuid: "uuid", name: "name")])
+                    e = Library.Evaluator(notebooks: [Core.Notebook.Meta(uuid: "uuid", name: "name")])
                     e = e.evaluate(event: event)
                 }
 
                 it("has showNotebook action") {
                     expect(e.actions).to(equalDiff([
-                        .showNotebook(notebook: Notebook.Meta(uuid: "uuid", name: "name"))
+                        .showNotebook(notebook: Core.Notebook.Meta(uuid: "uuid", name: "name"))
                     ]))
                 }
             }
 
             context("when receiving updateNotebook event") {
                 context("when library has specified notebook") {
-                    let firstNotebook = Notebook.Meta(uuid: "fUUID", name: "fName")
+                    let firstNotebook = Core.Notebook.Meta(uuid: "fUUID", name: "fName")
 
                     beforeEach {
-                        let secondNotebook = Notebook.Meta(uuid: "sUUID", name: "sName")
-                        e = UI.Library.Evaluator(notebooks: [firstNotebook, secondNotebook])
+                        let secondNotebook = Core.Notebook.Meta(uuid: "sUUID", name: "sName")
+                        e = Library.Evaluator(notebooks: [firstNotebook, secondNotebook])
                     }
 
                     beforeEach {
@@ -149,7 +149,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("updates model by changing notebook name") {
                         expect(e.model).to(equalDiff(
-                            UI.Library.Model(notebooks: [Notebook.Meta(uuid: "sUUID", name: "a new name"),
+                            Library.Model(notebooks: [Core.Notebook.Meta(uuid: "sUUID", name: "a new name"),
                                                          firstNotebook])
                         ))
                     }
@@ -157,15 +157,15 @@ class LibraryEvaluatorSpec: QuickSpec {
                     it("has updateNotebook effect with updated title") {
                         expect(e.effects).to(equalDiff([
                             .updateNotebook(index: 1, notebooks: [
-                                UI.Library.NotebookViewModel(title: "a new name", isEditable: false),
-                                UI.Library.NotebookViewModel(title: "fName", isEditable: false)
+                                Library.NotebookViewModel(title: "a new name", isEditable: false),
+                                Library.NotebookViewModel(title: "fName", isEditable: false)
                                 ])
                             ]))
                     }
 
                     it("has updateNotebook action with updated notebook") {
                         expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook: Notebook.Meta(uuid: "sUUID", name: "a new name"))
+                            .updateNotebook(notebook: Core.Notebook.Meta(uuid: "sUUID", name: "a new name"))
                             ]))
                     }
                 }
@@ -177,7 +177,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
 
                     it("does nothing") {
-                        expect(e.model).to(equalDiff(UI.Library.Model(notebooks: [])))
+                        expect(e.model).to(equalDiff(Library.Model(notebooks: [])))
                         expect(e.actions).to(beEmpty())
                         expect(e.effects).to(beEmpty())
                     }
@@ -186,7 +186,7 @@ class LibraryEvaluatorSpec: QuickSpec {
         }
 
         describe("-evaluate:CoordinatorEvent") {
-            var event: UI.Library.CoordinatorEvent!
+            var event: Library.CoordinatorEvent!
 
             context("when receiving didLoadNotebooks") {
                 context("when notebook list is empty") {
@@ -196,7 +196,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
 
                     it("has model with empty notebooks") {
-                        expect(e.model).to(equalDiff(UI.Library.Model(notebooks: [])))
+                        expect(e.model).to(equalDiff(Library.Model(notebooks: [])))
                     }
 
                     it("has updateAllNotebooks effect with empty viewModels") {
@@ -207,9 +207,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
 
                 context("when notebook list is not empty") {
-                    let firstNotebook = Notebook.Meta(uuid: "uuid1", name: "bcd")
-                    let secondNotebook = Notebook.Meta(uuid: "uuid2", name: "abc")
-                    let thirdNotebook = Notebook.Meta(uuid: "uuid3", name: "Cde")
+                    let firstNotebook = Core.Notebook.Meta(uuid: "uuid1", name: "bcd")
+                    let secondNotebook = Core.Notebook.Meta(uuid: "uuid2", name: "abc")
+                    let thirdNotebook = Core.Notebook.Meta(uuid: "uuid3", name: "Cde")
 
                     beforeEach {
                         event = .didLoadNotebooks(notebooks: [firstNotebook, secondNotebook, thirdNotebook])
@@ -218,16 +218,16 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has model with sorted by name notebooks") {
                         expect(e.model).to(equalDiff(
-                            UI.Library.Model(notebooks: [secondNotebook, firstNotebook, thirdNotebook])
+                            Library.Model(notebooks: [secondNotebook, firstNotebook, thirdNotebook])
                         ))
                     }
 
                     it("has updateAllNotebooks effect with sorted viewModels") {
                         expect(e.effects).to(equalDiff([
                             .updateAllNotebooks(notebooks: [
-                                UI.Library.NotebookViewModel(title: "abc", isEditable: false),
-                                UI.Library.NotebookViewModel(title: "bcd", isEditable: false),
-                                UI.Library.NotebookViewModel(title: "Cde", isEditable: false),
+                                Library.NotebookViewModel(title: "abc", isEditable: false),
+                                Library.NotebookViewModel(title: "bcd", isEditable: false),
+                                Library.NotebookViewModel(title: "Cde", isEditable: false),
                             ])
                         ]))
                     }
@@ -235,13 +235,13 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didAddNotebook event") {
-                let notebook = Notebook.Meta(uuid: "uuid", name: "name")
-                let anotherNotebook = Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
-                let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
-                let model = UI.Library.Model(notebooks: [notebook, anotherNotebook])
+                let notebook = Core.Notebook.Meta(uuid: "uuid", name: "name")
+                let anotherNotebook = Core.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
+                let anotherNotebookViewModel = Library.NotebookViewModel(title: "anotherName", isEditable: false)
+                let model = Library.Model(notebooks: [notebook, anotherNotebook])
 
                 beforeEach {
-                    e = UI.Library.Evaluator(notebooks: [notebook, anotherNotebook])
+                    e = Library.Evaluator(notebooks: [notebook, anotherNotebook])
                 }
 
                 context("when successfully adds notebook") {
@@ -288,14 +288,14 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didDeleteNotebook event") {
-                let notebook = Notebook.Meta(uuid: "uuid", name: "name")
-                let notebookViewModel = UI.Library.NotebookViewModel(title: "name", isEditable: false)
-                let anotherNotebook = Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
-                let anotherNotebookViewModel = UI.Library.NotebookViewModel(title: "anotherName", isEditable: false)
-                let model = UI.Library.Model(notebooks: [anotherNotebook])
+                let notebook = Core.Notebook.Meta(uuid: "uuid", name: "name")
+                let notebookViewModel = Library.NotebookViewModel(title: "name", isEditable: false)
+                let anotherNotebook = Core.Notebook.Meta(uuid: "anotherUUID", name: "anotherName")
+                let anotherNotebookViewModel = Library.NotebookViewModel(title: "anotherName", isEditable: false)
+                let model = Library.Model(notebooks: [anotherNotebook])
 
                 beforeEach {
-                    e = UI.Library.Evaluator(notebooks: [anotherNotebook])
+                    e = Library.Evaluator(notebooks: [anotherNotebook])
                 }
 
                 context("when successfully deletes notebook") {
@@ -343,11 +343,11 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didFinishShowing event") {
-                let notebook = Notebook.Meta(uuid: "sUUID", name: "sName")
+                let notebook = Core.Notebook.Meta(uuid: "sUUID", name: "sName")
 
                 beforeEach {
                     event = .didFinishShowing(notebook: notebook)
-                    e = UI.Library.Evaluator(notebooks: [Notebook.Meta(uuid: "fUUID", name: "fName"),
+                    e = Library.Evaluator(notebooks: [Core.Notebook.Meta(uuid: "fUUID", name: "fName"),
                                                         notebook])
                     e = e.evaluate(event: event)
                 }

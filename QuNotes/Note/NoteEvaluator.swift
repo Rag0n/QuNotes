@@ -8,13 +8,11 @@ import Result
 import Prelude
 import Core
 
-extension UI {
-    enum Note {}
-}
+enum Note {}
 
-extension UI.Note {
+extension Note {
     struct Model: AutoEquatable, AutoLens {
-        let meta: Note.Meta
+        let meta: Core.Note.Meta
         let content: String
         let isNew: Bool
     }
@@ -58,7 +56,7 @@ extension UI.Note {
         let actions: [Action]
         let model: Model
 
-        init(note: Note.Meta, content: String, isNew: Bool) {
+        init(note: Core.Note.Meta, content: String, isNew: Bool) {
             effects = []
             actions = []
             model = Model(meta: note, content: content, isNew: isNew)
@@ -90,7 +88,7 @@ extension UI.Note {
                 effects = [.updateContent(content: newContent)]
             case let .changeTitle(newTitle):
                 // TODO: Fix lens composition
-                newModel = Model(meta: Note.Meta(uuid: model.meta.uuid, title: newTitle, tags: model.meta.tags, updated_at: model.meta.updated_at,
+                newModel = Model(meta: Core.Note.Meta(uuid: model.meta.uuid, title: newTitle, tags: model.meta.tags, updated_at: model.meta.updated_at,
                                                  created_at: model.meta.created_at), content: model.content, isNew: model.isNew)
                 actions = [.updateTitle(title: newTitle)]
                 effects = [.updateTitle(title: newTitle)]
@@ -98,14 +96,14 @@ extension UI.Note {
                 actions = [.deleteNote]
             case let .addTag(tag):
                 // TODO: Fix lens composition
-                newModel = Model(meta: Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.appending(tag),
+                newModel = Model(meta: Core.Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.appending(tag),
                                                  updated_at: model.meta.updated_at, created_at: model.meta.created_at),
                                  content: model.content, isNew: model.isNew)
                 actions = [.addTag(tag: tag)]
                 effects = [.addTag(tag: tag)]
             case let .removeTag(tag):
                 // TODO: Fix lens composition
-                newModel = Model(meta: Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.removing(tag),
+                newModel = Model(meta: Core.Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.removing(tag),
                                                  updated_at: model.meta.updated_at, created_at: model.meta.created_at),
                                  content: model.content, isNew: model.isNew)
                 actions = [.removeTag(tag: tag)]

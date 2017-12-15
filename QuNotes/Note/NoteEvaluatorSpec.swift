@@ -13,17 +13,17 @@ import Core
 
 class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
-        var e: UI.Note.Evaluator!
-        let note = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
+        var e: Note.Evaluator!
+        let note = Core.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
         beforeEach {
-            e = UI.Note.Evaluator(note: note, content: "", isNew: false)
+            e = Note.Evaluator(note: note, content: "", isNew: false)
         }
 
         describe("-evaluate:ViewEvent") {
-            var event: UI.Note.ViewEvent!
+            var event: Note.ViewEvent!
 
             context("when receiving didLoad event") {
                 beforeEach {
@@ -32,7 +32,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is new") {
                     beforeEach {
-                        e = UI.Note.Evaluator(note: note, content: "", isNew: true)
+                        e = Note.Evaluator(note: note, content: "", isNew: true)
                         e = e.evaluate(event: event)
                     }
 
@@ -47,7 +47,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is not new") {
                     beforeEach {
-                        e = UI.Note.Evaluator(note: note, content: "", isNew: false)
+                        e = Note.Evaluator(note: note, content: "", isNew: false)
                         e = e.evaluate(event: event)
                     }
 
@@ -80,7 +80,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates content in model") {
                     expect(e.model).to(equalDiff(
-                        UI.Note.Model(meta: note, content: "newContent", isNew: false)
+                        Note.Model(meta: note, content: "newContent", isNew: false)
                     ))
                 }
             }
@@ -105,7 +105,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates title in model") {
                     expect(e.model).to(equalDiff(
-                        UI.Note.Model(meta: Note.Meta(uuid: note.uuid, title: "newTitle", tags: note.tags,
+                        Note.Model(meta: Core.Note.Meta(uuid: note.uuid, title: "newTitle", tags: note.tags,
                                                       updated_at: note.updated_at, created_at: note.created_at),
                                       content: "", isNew: false)
                     ))
@@ -145,7 +145,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("adds tag to model") {
                     expect(e.model).to(equalDiff(
-                        UI.Note.Model(meta: Note.Meta(uuid: note.uuid, title: note.title, tags: ["tag", "new tag"],
+                        Note.Model(meta: Core.Note.Meta(uuid: note.uuid, title: note.title, tags: ["tag", "new tag"],
                                                       updated_at: note.updated_at, created_at: note.created_at),
                                       content: "", isNew: false)
                     ))
@@ -172,7 +172,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("removes tag from model") {
                     expect(e.model).to(equalDiff(
-                        UI.Note.Model(meta: Note.Meta(uuid: note.uuid, title: note.title, tags: [],
+                        Note.Model(meta: Core.Note.Meta(uuid: note.uuid, title: note.title, tags: [],
                                                       updated_at: note.updated_at, created_at: note.created_at),
                                       content: "", isNew: false)
                     ))
@@ -181,7 +181,7 @@ class NoteEvaluatorSpec: QuickSpec {
         }
 
         describe("-evaluate:CoordinatorEvent") {
-            var event: UI.Note.CoordinatorEvent!
+            var event: Note.CoordinatorEvent!
 
             context("when receiving didDeleteNote event") {
                 context("when successfuly deletes note") {

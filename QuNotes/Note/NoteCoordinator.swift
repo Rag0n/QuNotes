@@ -7,7 +7,7 @@ import UIKit
 import Result
 import Core
 
-extension UI.Note {
+extension Note {
     typealias ViewDispacher = (_ event: ViewEvent) -> ()
 
     final class CoordinatorImp: Coordinator {
@@ -22,17 +22,17 @@ extension UI.Note {
         typealias Dependencies = HasFileExecuter
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
-        fileprivate var noteEvaluator: Note.Evaluator
+        fileprivate var noteEvaluator: Core.Note.Evaluator
 
         fileprivate lazy var noteViewController: NoteViewController = {
             return NoteViewController(withDispatch: dispatch)
         }()
 
         init(withNavigationController navigationController: NavigationController,
-             dependencies: Dependencies, note: Note.Meta, isNewNote: Bool, notebook: Notebook.Meta) {
+             dependencies: Dependencies, note: Core.Note.Meta, isNewNote: Bool, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
             evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
-            noteEvaluator = Note.Evaluator(model: Note.Model(meta: note, content: "", notebook: notebook))
+            noteEvaluator = Core.Note.Evaluator(model: Core.Note.Model(meta: note, content: "", notebook: notebook))
         }
 
         // MARK: - Private
@@ -45,7 +45,7 @@ extension UI.Note {
             event |> evaluator.evaluate |> updateEvaluator
         }
 
-        fileprivate func dispatchToNote(event: Note.Event) {
+        fileprivate func dispatchToNote(event: Core.Note.Event) {
             event |> noteEvaluator.evaluate |> updateNote
         }
 
@@ -55,7 +55,7 @@ extension UI.Note {
             evaluator.effects.forEach(noteViewController.perform)
         }
 
-        fileprivate func updateNote(note: Note.Evaluator) {
+        fileprivate func updateNote(note: Core.Note.Evaluator) {
             self.noteEvaluator = note
             note.effects.forEach(perform)
         }
@@ -80,7 +80,7 @@ extension UI.Note {
             }
         }
 
-        fileprivate func perform(effect: Note.Effect) {
+        fileprivate func perform(effect: Core.Note.Effect) {
             switch effect {
             default:
                 break

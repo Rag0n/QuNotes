@@ -10,7 +10,7 @@ import UIKit
 import Result
 import Core
 
-extension UI.Notebook {
+extension Notebook {
     final class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
 
@@ -29,8 +29,8 @@ extension UI.Notebook {
         fileprivate let fileExecuter: FileExecuter
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
-        fileprivate var notebookEvaluator: Notebook.Evaluator
-        fileprivate let notebook: Notebook.Meta
+        fileprivate var notebookEvaluator: Core.Notebook.Evaluator
+        fileprivate let notebook: Core.Notebook.Meta
 
         fileprivate lazy var notebookViewController: NotebookViewController = {
             let vc = NotebookViewController(withDispatch: dispatch)
@@ -38,12 +38,12 @@ extension UI.Notebook {
             return vc
         }()
 
-        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Notebook.Meta) {
+        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
             self.dependencies = dependencies
             self.fileExecuter = dependencies.fileExecuter
             self.evaluator = Evaluator(notebook: notebook)
-            self.notebookEvaluator = Notebook.Evaluator(model: Notebook.Model(meta: notebook, notes: []))
+            self.notebookEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
             self.notebook = notebook
         }
 
@@ -57,7 +57,7 @@ extension UI.Notebook {
             event |> evaluator.evaluate |> updateEvaluator
         }
 
-        fileprivate func dispatchToNotebook(event: Notebook.Event) {
+        fileprivate func dispatchToNotebook(event: Core.Notebook.Event) {
             event |> notebookEvaluator.evaluate |> updateNotebook
         }
 
@@ -67,7 +67,7 @@ extension UI.Notebook {
             evaluator.effects.forEach(notebookViewController.perform)
         }
 
-        fileprivate func updateNotebook(notebook: Notebook.Evaluator) {
+        fileprivate func updateNotebook(notebook: Core.Notebook.Evaluator) {
             self.notebookEvaluator = notebook
             notebook.effects.forEach(perform)
         }
@@ -88,14 +88,14 @@ extension UI.Notebook {
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNote(note, isNewNote):
-                let noteCoordinator = UI.Note.CoordinatorImp(withNavigationController: navigationController,
+                let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController,
                                                              dependencies: dependencies, note: note,
                                                              isNewNote: isNewNote, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true)
             }
         }
 
-        fileprivate func perform(action: Notebook.Effect) {
+        fileprivate func perform(action: Core.Notebook.Effect) {
             switch action {
             case let .createNote(note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
@@ -113,7 +113,7 @@ extension UI.Notebook {
                 let urls = fileExecuter.contentOfFolder(at: url)
                  dispatchToNotebook <| .didReadDirectory(urls: urls)
             case let .readNotes(urls):
-                let result = urls.map { fileExecuter.readFile(at: $0, contentType: Note.Meta.self) }
+                let result = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Note.Meta.self) }
                 dispatchToNotebook <| .didReadNotes(notes: result)
             case let .handleError(title, message):
                 // TODO: When UI is not loaded error will not be shown
@@ -124,5 +124,5 @@ extension UI.Notebook {
         }
     }
 
-    typealias ViewDispacher = (_ event: UI.Notebook.ViewEvent) -> ()
+    typealias ViewDispacher = (_ event: Notebook.ViewEvent) -> ()
 }
