@@ -10,19 +10,29 @@ import Foundation
 import Result
 import Prelude
 
-enum Notebook {
-    struct Model: AutoEquatable, AutoLens {
-        let meta: Meta
-        let notes: [Note.Meta]
+public enum Notebook {
+    public struct Model: AutoEquatable, AutoLens {
+        public let meta: Meta
+        public let notes: [Note.Meta]
+
+        public init(meta: Meta, notes: [Note.Meta]) {
+            self.meta = meta
+            self.notes = notes
+        }
     }
 
-    struct Meta: Codable, AutoEquatable, AutoLens {
-        let uuid: String
-        let name: String
-        static let Unspecified = Meta(uuid: "unspecified", name: "")
+    public struct Meta: Codable, AutoEquatable, AutoLens {
+        public let uuid: String
+        public let name: String
+        public static let Unspecified = Meta(uuid: "unspecified", name: "")
+
+        public init(uuid: String, name: String) {
+            self.uuid = uuid
+            self.name = name
+        }
     }
 
-    enum Effect: AutoEquatable {
+    public enum Effect: AutoEquatable {
         case createNote(note: Note.Meta, url: URL)
         case updateNotebook(notebook: Meta, url: URL)
         case deleteNote(note: Note.Meta, url: URL)
@@ -32,7 +42,7 @@ enum Notebook {
         case didLoadNotes(notes: [Note.Meta])
     }
 
-    enum Event {
+    public enum Event {
         case loadNotes
         case changeName(newName: String)
         case addNote(note: Note.Meta)
@@ -44,16 +54,16 @@ enum Notebook {
         case didUpdateNotebook(notebook: Meta, error: Error?)
     }
 
-    struct Evaluator {
-        let effects: [Effect]
-        let model: Model
+    public struct Evaluator {
+        public let effects: [Effect]
+        public let model: Model
 
-        init(model: Model) {
+        public init(model: Model) {
             self.model = model
             effects = []
         }
 
-        func evaluate(event: Event) -> Evaluator {
+        public func evaluate(event: Event) -> Evaluator {
             var effects: [Effect] = []
             var newModel = model
 

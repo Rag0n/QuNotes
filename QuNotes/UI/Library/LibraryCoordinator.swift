@@ -8,6 +8,7 @@
 
 import UIKit
 import Result
+import Core
 
 extension UI.Library {
     final class CoordinatorImp: Coordinator {

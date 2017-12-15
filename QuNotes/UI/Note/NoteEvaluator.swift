@@ -6,6 +6,7 @@
 import Foundation
 import Result
 import Prelude
+import Core
 
 extension UI {
     enum Note {}
@@ -88,17 +89,25 @@ extension UI.Note {
                 actions = [.updateContent(content: newContent)]
                 effects = [.updateContent(content: newContent)]
             case let .changeTitle(newTitle):
-                newModel = model |> Model.lens.meta.title .~ newTitle
+                // TODO: Fix lens composition
+                newModel = Model(meta: Note.Meta(uuid: model.meta.uuid, title: newTitle, tags: model.meta.tags, updated_at: model.meta.updated_at,
+                                                 created_at: model.meta.created_at), content: model.content, isNew: model.isNew)
                 actions = [.updateTitle(title: newTitle)]
                 effects = [.updateTitle(title: newTitle)]
             case .delete:
                 actions = [.deleteNote]
             case let .addTag(tag):
-                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
+                // TODO: Fix lens composition
+                newModel = Model(meta: Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.appending(tag),
+                                                 updated_at: model.meta.updated_at, created_at: model.meta.created_at),
+                                 content: model.content, isNew: model.isNew)
                 actions = [.addTag(tag: tag)]
                 effects = [.addTag(tag: tag)]
             case let .removeTag(tag):
-                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(tag)
+                // TODO: Fix lens composition
+                newModel = Model(meta: Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.removing(tag),
+                                                 updated_at: model.meta.updated_at, created_at: model.meta.created_at),
+                                 content: model.content, isNew: model.isNew)
                 actions = [.removeTag(tag: tag)]
                 effects = [.removeTag(tag: tag)]
             }

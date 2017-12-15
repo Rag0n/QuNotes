@@ -9,6 +9,7 @@
 import Quick
 import Nimble
 import Result
+import Core
 
 class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {

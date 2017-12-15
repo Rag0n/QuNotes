@@ -5,6 +5,7 @@
 
 import UIKit
 import Result
+import Core
 
 extension UI.Note {
     typealias ViewDispacher = (_ event: ViewEvent) -> ()

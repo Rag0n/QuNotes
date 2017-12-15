@@ -1,4 +1,5 @@
 import Prelude
+import Core
 
 // MARK: - Lens
 {% for type in types.implementing.AutoLens|struct %}

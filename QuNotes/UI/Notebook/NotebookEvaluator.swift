@@ -9,6 +9,7 @@
 import Foundation
 import Result
 import Prelude
+import Core
 
 extension UI {
     enum Notebook {}

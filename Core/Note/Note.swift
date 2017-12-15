@@ -9,52 +9,60 @@
 import Foundation
 import Prelude
 
-enum Note {
-    struct Model: AutoEquatable, AutoLens {
-        let meta: Meta
-        let content: String
-        let notebook: Notebook.Meta
+public enum Note {
+    public struct Model: AutoEquatable, AutoLens {
+        public let meta: Meta
+        public let content: String
+        public let notebook: Notebook.Meta
 
-        init(meta: Meta, content: String, notebook: Notebook.Meta = Notebook.Meta.Unspecified) {
+        public init(meta: Meta, content: String, notebook: Notebook.Meta = Notebook.Meta.Unspecified) {
             self.meta = meta
             self.content = content
             self.notebook = notebook
         }
     }
 
-    struct Meta: Codable, AutoEquatable, AutoLens {
-        let uuid: String
-        let title: String
-        let tags: [String]
-        let updated_at: TimeInterval
-        let created_at: TimeInterval
+    public struct Meta: Codable, AutoEquatable, AutoLens {
+        public let uuid: String
+        public let title: String
+        public let tags: [String]
+        public let updated_at: TimeInterval
+        public let created_at: TimeInterval
+
+        public init(uuid: String, title: String, tags: [String], updated_at: TimeInterval, created_at: TimeInterval) {
+            self.uuid = uuid
+            self.title = title
+            self.tags = tags
+            self.updated_at = updated_at
+            self.created_at = created_at
+        }
     }
 
-    enum Effect: AutoEquatable {
+    public enum Effect: AutoEquatable {
         case updateTitle(note: Meta, url: URL)
         case updateContent(content: String, url: URL)
         case addTag(note: Meta, url: URL)
         case removeTag(note: Meta, url: URL)
     }
 
-    enum Event {
+    public enum Event {
         case changeTitle(newTitle: String)
         case changeContent(newContent: String)
         case addTag(tag: String)
         case removeTag(tag: String)
     }
 
-    struct Evaluator {
-        let effects: [Effect]
-        let model: Model
+    public struct Evaluator {
+        public let effects: [Effect]
+        public let model: Model
         var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
-        init(model: Model) {
+        public init(model: Model) {
             self.model = model
             effects = []
         }
 
-        func evaluate(event: Event) -> Evaluator {
+        public func evaluate(event: Event) -> Evaluator {
             var effects: [Effect] = []
             var newModel = model
 

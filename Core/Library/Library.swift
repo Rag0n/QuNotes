@@ -10,12 +10,16 @@ import Foundation
 import Result
 import Prelude
 
-enum Library {
-    struct Model: AutoEquatable, AutoLens {
-        let notebooks: [Notebook.Model]
+public enum Library {
+    public struct Model: AutoEquatable, AutoLens {
+        public let notebooks: [Notebook.Model]
+
+        public init(notebooks: [Notebook.Model]) {
+            self.notebooks = notebooks
+        }
     }
 
-    enum Effect: AutoEquatable {
+    public enum Effect: AutoEquatable {
         case createNotebook(notebook: Notebook.Model, url: URL)
         case deleteNotebook(notebook: Notebook.Model, url: URL)
         case readBaseDirectory
@@ -24,7 +28,7 @@ enum Library {
         case didLoadNotebooks(notebooks: [Notebook.Meta])
     }
 
-    enum Event {
+    public enum Event {
         case loadNotebooks
         case addNotebook(notebook: Notebook.Model)
         case removeNotebook(notebook: Notebook.Meta)
@@ -34,16 +38,16 @@ enum Library {
         case didReadNotebooks(notebooks: [Result<Notebook.Meta, AnyError>])
     }
 
-    struct Evaluator {
-        let effects: [Effect]
-        let model: Model
+    public struct Evaluator {
+        public let effects: [Effect]
+        public let model: Model
 
-        init(model: Model) {
+        public init(model: Model) {
             self.model = model
             effects = []
         }
 
-        func evaluate(event: Event) -> Evaluator {
+        public func evaluate(event: Event) -> Evaluator {
             var effects: [Effect] = []
             var modelUpdate = { (oldModel: Library.Model) in return self.model }
 
