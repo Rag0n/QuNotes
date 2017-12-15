@@ -2,6 +2,7 @@
 // DO NOT EDIT
 
 import Foundation
+import Prelude
 
 // MARK: - Lens
 extension Library.Model {

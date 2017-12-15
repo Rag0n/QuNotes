@@ -4,6 +4,7 @@
 //
 
 import UIKit
+import Prelude
 
 final class AppCoordinator: Coordinator {
     // MARK: - Coordinator

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Prelude
 
 extension UI {
     enum Library {}

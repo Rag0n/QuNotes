@@ -8,6 +8,7 @@
 
 import Foundation
 import Result
+import Prelude
 
 enum Library {
     struct Model: AutoEquatable, AutoLens {

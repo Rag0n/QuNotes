@@ -5,6 +5,7 @@
 
 import Foundation
 import Result
+import Prelude
 
 extension UI {
     enum Note {}

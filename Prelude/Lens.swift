@@ -1,16 +1,21 @@
 //
 //  Lens.swift
-//  QuNotes
+//  QuNotesPrelude
 //
-//  Created by Alexander Guschin on 02.12.2017.
+//  Created by Alexander Guschin on 14.12.2017.
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
-struct Lens<Whole, Part> {
-    let get: (Whole) -> Part
-    let set: (Part, Whole) -> Whole
+public struct Lens<Whole, Part> {
+    public let get: (Whole) -> Part
+    public let set: (Part, Whole) -> Whole
 
-    func compose<Subpart>(_ rhs: Lens<Part, Subpart>) -> Lens<Whole, Subpart> {
+    public init(get: @escaping (Whole) -> Part, set: @escaping (Part, Whole) -> Whole) {
+        self.get = get
+        self.set = set
+    }
+
+    public func compose<Subpart>(_ rhs: Lens<Part, Subpart>) -> Lens<Whole, Subpart> {
         return Lens<Whole, Subpart>(
             get: { rhs.get(self.get($0)) },
             set: { subPart, whole in
@@ -28,7 +33,7 @@ struct Lens<Whole, Part> {
  - parameter part: A part.
  - returns: A function that transforms a whole into a new whole with a part replaced.
  */
-func .~ <Whole, Part> (lens: Lens<Whole, Part>, part: Part) -> ((Whole) -> Whole) {
+public func .~ <Whole, Part> (lens: Lens<Whole, Part>, part: Part) -> ((Whole) -> Whole) {
     return { whole in lens.set(part, whole) }
 }
 
@@ -38,7 +43,7 @@ func .~ <Whole, Part> (lens: Lens<Whole, Part>, part: Part) -> ((Whole) -> Whole
  - parameter lens:  A lens.
  - returns: A part of a whole when viewed through the lens provided.
  */
-func ^* <Whole, Part> (whole: Whole, lens: Lens<Whole, Part>) -> Part {
+public func ^* <Whole, Part> (whole: Whole, lens: Lens<Whole, Part>) -> Part {
     return lens.get(whole)
 }
 
@@ -48,6 +53,6 @@ func ^* <Whole, Part> (whole: Whole, lens: Lens<Whole, Part>) -> Part {
  - parameter rhs: A lens.
  - returns: The composed lens.
  */
-func .. <A, B, C> (lhs: Lens<A, B>, rhs: Lens<B, C>) -> Lens<A, C> {
+public func .. <A, B, C> (lhs: Lens<A, B>, rhs: Lens<B, C>) -> Lens<A, C> {
     return lhs.compose(rhs)
 }

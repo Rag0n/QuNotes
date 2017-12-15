@@ -8,6 +8,7 @@
 
 import Foundation
 import Result
+import Prelude
 
 enum Notebook {
     struct Model: AutoEquatable, AutoLens {

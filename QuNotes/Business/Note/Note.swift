@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Prelude
 
 enum Note {
     struct Model: AutoEquatable, AutoLens {
