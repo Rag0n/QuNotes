@@ -8,49 +8,7 @@ import Result
 import Prelude
 import Core
 
-enum Note {}
-
 extension Note {
-    struct Model: AutoEquatable, AutoLens {
-        let meta: Core.Note.Meta
-        let content: String
-        let isNew: Bool
-    }
-
-    enum Action: AutoEquatable {
-        case updateTitle(title: String)
-        case updateContent(content: String)
-        case addTag(tag: String)
-        case removeTag(tag: String)
-        case deleteNote
-        case finish
-        case showError(title: String, message: String)
-    }
-
-    enum ViewEffect: AutoEquatable {
-        case updateTitle(title: String)
-        case focusOnTitle
-        case updateContent(content: String)
-        case showTags(tags: [String])
-        case addTag(tag: String)
-        case removeTag(tag: String)
-    }
-
-    enum CoordinatorEvent {
-        case didDeleteNote(error: AnyError?)
-    }
-
-    enum ViewEvent {
-        case didLoad
-        case changeContent(newContent: String)
-        case changeTitle(newTitle: String)
-        case delete
-        case addTag(tag: String)
-        case removeTag(tag: String)
-    }
-
-    // MARK: - Evaluator
-
     struct Evaluator {
         let effects: [ViewEffect]
         let actions: [Action]

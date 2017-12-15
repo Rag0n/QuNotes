@@ -8,8 +8,6 @@ import Result
 import Core
 
 extension Note {
-    typealias ViewDispacher = (_ event: ViewEvent) -> ()
-
     final class CoordinatorImp: Coordinator {
         // MARK: - Coordinator
         

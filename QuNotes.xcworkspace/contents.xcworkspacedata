@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:iOS-UI.playground">
+   </FileRef>
+   <FileRef
       location = "container:QuNotes.xcodeproj">
    </FileRef>
 </Workspace>

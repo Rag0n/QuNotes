@@ -57,6 +57,17 @@
 		1150D3481FE43F5200AC1427 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		1150D3491FE441AF00AC1427 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
 		1150D34A1FE441AF00AC1427 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 113504291F16BA01001938FD /* Array+Extensions.swift */; };
+		1150D3541FE4532400AC1427 /* QuNotesUI.h in Headers */ = {isa = PBXBuildFile; fileRef = 1150D3521FE4532400AC1427 /* QuNotesUI.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1150D3591FE4535A00AC1427 /* NoteDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */; };
+		1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212509F1CE5CE5D33073575 /* NoteViewController.swift */; };
+		1150D35C1FE4541900AC1427 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
+		1150D35D1FE4541900AC1427 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
+		1150D35E1FE4541900AC1427 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
+		1150D3601FE4542B00AC1427 /* WSTagsField.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1150D3611FE4542B00AC1427 /* Notepad.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1150D3621FE4542B00AC1427 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */; };
+		1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1190D5B11FC1D4AF0064D569 /* SourceryProtocols.swift */; };
 		115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
 		115818A71F6B06F4009C9BB2 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 115818A51F6B06F4009C9BB2 /* NoteTableViewCell.xib */; };
 		1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */; };
@@ -161,6 +172,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1150D35F1FE4541F00AC1427 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				1150D3601FE4542B00AC1427 /* WSTagsField.framework in CopyFiles */,
+				1150D3611FE4542B00AC1427 /* Notepad.framework in CopyFiles */,
+				1150D3621FE4542B00AC1427 /* Result.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		11B705A31EEBCB1D0039A863 /* Copy Files */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -210,6 +233,10 @@
 		1150D2FC1FE433C000AC1427 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1150D3011FE433C000AC1427 /* CoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1150D30A1FE433C000AC1427 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1150D3501FE4532400AC1427 /* QuNotesUI.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = QuNotesUI.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1150D3521FE4532400AC1427 /* QuNotesUI.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = QuNotesUI.h; sourceTree = "<group>"; };
+		1150D3531FE4532400AC1427 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDatatypes.swift; sourceTree = "<group>"; };
 		1153327A1FACFCF3008FEC2A /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		1153327D1FACFD02008FEC2A /* LibrarySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
 		115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
@@ -293,6 +320,16 @@
 				1150D3301FE4385C00AC1427 /* Quick.framework in Frameworks */,
 				1150D3311FE4385C00AC1427 /* Nimble.framework in Frameworks */,
 				1150D3321FE4385C00AC1427 /* Difference.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1150D34C1FE4532400AC1427 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1150D35C1FE4541900AC1427 /* WSTagsField.framework in Frameworks */,
+				1150D35D1FE4541900AC1427 /* Result.framework in Frameworks */,
+				1150D35E1FE4541900AC1427 /* Notepad.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,6 +457,15 @@
 			path = Utility;
 			sourceTree = "<group>";
 		};
+		1150D3511FE4532400AC1427 /* QuNotesUI */ = {
+			isa = PBXGroup;
+			children = (
+				1150D3521FE4532400AC1427 /* QuNotesUI.h */,
+				1150D3531FE4532400AC1427 /* Info.plist */,
+			);
+			path = QuNotesUI;
+			sourceTree = "<group>";
+		};
 		115332791FACFCD3008FEC2A /* Library */ = {
 			isa = PBXGroup;
 			children = (
@@ -500,6 +546,7 @@
 				1150D2FA1FE433C000AC1427 /* Core */,
 				1150D2D81FE4339800AC1427 /* Prelude */,
 				1150D3071FE433C000AC1427 /* CoreTests */,
+				1150D3511FE4532400AC1427 /* QuNotesUI */,
 				11B7057C1EEB42570039A863 /* Products */,
 				11B7059E1EEBCB0E0039A863 /* Frameworks */,
 			);
@@ -513,6 +560,7 @@
 				1150D2D71FE4339800AC1427 /* Prelude.framework */,
 				1150D2F91FE433C000AC1427 /* Core.framework */,
 				1150D3011FE433C000AC1427 /* CoreTests.xctest */,
+				1150D3501FE4532400AC1427 /* QuNotesUI.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -624,6 +672,7 @@
 		B2125CAB00D3F9B57E4B4DD4 /* Note */ = {
 			isa = PBXGroup;
 			children = (
+				1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */,
 				B21251BE0B642526ED62C276 /* NoteCoordinator.swift */,
 				B212579A3ECACA82786D76AC /* NoteEvaluator.swift */,
 				1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */,
@@ -659,6 +708,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				1150D30B1FE433C000AC1427 /* Core.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1150D34D1FE4532400AC1427 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1150D3541FE4532400AC1427 /* QuNotesUI.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -720,6 +777,25 @@
 			productName = CoreTests;
 			productReference = 1150D3011FE433C000AC1427 /* CoreTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1150D34F1FE4532400AC1427 /* QuNotesUI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1150D3551FE4532400AC1427 /* Build configuration list for PBXNativeTarget "QuNotesUI" */;
+			buildPhases = (
+				1150D34B1FE4532400AC1427 /* Sources */,
+				1150D34C1FE4532400AC1427 /* Frameworks */,
+				1150D34D1FE4532400AC1427 /* Headers */,
+				1150D34E1FE4532400AC1427 /* Resources */,
+				1150D35F1FE4541F00AC1427 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuNotesUI;
+			productName = QuNotesUI;
+			productReference = 1150D3501FE4532400AC1427 /* QuNotesUI.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 		11B7057A1EEB42570039A863 /* QuNotes */ = {
 			isa = PBXNativeTarget;
@@ -787,6 +863,12 @@
 						DevelopmentTeam = LB83DKTVND;
 						ProvisioningStyle = Automatic;
 					};
+					1150D34F1FE4532400AC1427 = {
+						CreatedOnToolsVersion = 9.2;
+						DevelopmentTeam = LB83DKTVND;
+						LastSwiftMigration = 0920;
+						ProvisioningStyle = Automatic;
+					};
 					11B7057A1EEB42570039A863 = {
 						CreatedOnToolsVersion = 8.3.2;
 						DevelopmentTeam = LB83DKTVND;
@@ -819,6 +901,7 @@
 				1150D2D61FE4339800AC1427 /* Prelude */,
 				1150D2F81FE433C000AC1427 /* Core */,
 				1150D3001FE433C000AC1427 /* CoreTests */,
+				1150D34F1FE4532400AC1427 /* QuNotesUI */,
 			);
 		};
 /* End PBXProject section */
@@ -839,6 +922,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		1150D2FF1FE433C000AC1427 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1150D34E1FE4532400AC1427 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -965,10 +1055,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1150D34B1FE4532400AC1427 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */,
+				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
+				1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		11B705771EEB42570039A863 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
+				1150D3591FE4535A00AC1427 /* NoteDatatypes.swift in Sources */,
 				B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */,
 				1150D3491FE441AF00AC1427 /* Array+Extensions.swift in Sources */,
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
@@ -994,7 +1096,6 @@
 				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				117E1BE51F54A4990046DC52 /* DefaultTheme.swift in Sources */,
 				B212560DBEB110ABCFB85CAB /* NoteCoordinator.swift in Sources */,
-				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
 				11429F7F1FD4227A00A537E2 /* AutoLens.generated.swift in Sources */,
 				1190D5AF1FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
 			);
@@ -1230,6 +1331,73 @@
 			};
 			name = Release;
 		};
+		1150D3561FE4532400AC1427 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LB83DKTVND;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = QuNotesUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		1150D3571FE4532400AC1427 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = LB83DKTVND;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = QuNotesUI/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = io.ragon.github.QuNotesUI;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		11B705961EEB42570039A863 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1451,6 +1619,15 @@
 			buildConfigurations = (
 				1150D3141FE433C000AC1427 /* Debug */,
 				1150D3151FE433C000AC1427 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1150D3551FE4532400AC1427 /* Build configuration list for PBXNativeTarget "QuNotesUI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1150D3561FE4532400AC1427 /* Debug */,
+				1150D3571FE4532400AC1427 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

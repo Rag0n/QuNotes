@@ -10,10 +10,10 @@ import UIKit
 import Notepad
 import WSTagsField
 
-final class NoteViewController: UIViewController {
+public final class NoteViewController: UIViewController {
     // MARK: - API
 
-    func perform(effect: Note.ViewEffect) {
+    public func perform(effect: Note.ViewEffect) {
         switch effect {
         case let .updateTitle(title):
             titleTextField?.text = title
@@ -32,20 +32,33 @@ final class NoteViewController: UIViewController {
 
     // MARK: - Life cycle
 
-    init(withDispatch dispatch: @escaping Note.ViewDispacher) {
+    public init(withDispatch dispatch: @escaping Note.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
+    override public func loadView() {
+        let view = UIView()
+        view.backgroundColor = .white
+
+        let label = UILabel()
+        label.frame = CGRect(x: 150, y: 200, width: 200, height: 20)
+        label.text = "Hello World!"
+        label.textColor = .black
+
+        view.addSubview(label)
+        self.view = view
+    }
+
+    override public func viewDidLoad() {
         super.viewDidLoad()
-        setupTagView()
-        setupEditorTextView()
-        setupNavigationBar()
+//        setupTagView()
+//        setupEditorTextView()
+//        setupNavigationBar()
         dispatch(.didLoad)
     }
 
@@ -62,18 +75,18 @@ final class NoteViewController: UIViewController {
     private var tagView: WSTagsField!
     @IBOutlet private var stackView: UIStackView! {
         didSet {
-            stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+//            stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
         }
     }
     @IBOutlet private var titleTextField: UITextField! {
         didSet {
-            let theme = ThemeManager.defaultTheme()
-            titleTextField.backgroundColor = theme.ligherDarkColor
-            titleTextField.textColor = theme.textColor
-            let attributes = [
-                NSAttributedStringKey.foregroundColor: theme.textColor
-            ]
-            titleTextField.attributedPlaceholder = NSAttributedString(string: titleTextField.placeholder!, attributes: attributes)
+//            let theme = ThemeManager.defaultTheme()
+//            titleTextField.backgroundColor = theme.ligherDarkColor
+//            titleTextField.textColor = theme.textColor
+//            let attributes = [
+//                NSAttributedStringKey.foregroundColor: theme.textColor
+//            ]
+//            titleTextField.attributedPlaceholder = NSAttributedString(string: titleTextField.placeholder!, attributes: attributes)
             titleTextField.addTarget(self,
                                      action: #selector(NoteViewController.onTitleTextFieldChange),
                                      for: .editingChanged)
@@ -93,12 +106,12 @@ final class NoteViewController: UIViewController {
         tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
-        let theme = ThemeManager.defaultTheme()
-        tagView.textColor = theme.textColor
-        tagView.fieldTextColor = theme.textColor
-        tagView.selectedColor = theme.ligherDarkColor
-        tagView.selectedTextColor = theme.textColor
-        tagView.backgroundColor = theme.ligherDarkColor
+//        let theme = ThemeManager.defaultTheme()
+//        tagView.textColor = theme.textColor
+//        tagView.fieldTextColor = theme.textColor
+//        tagView.selectedColor = theme.ligherDarkColor
+//        tagView.selectedTextColor = theme.textColor
+//        tagView.backgroundColor = theme.ligherDarkColor
 
         stackView.addArrangedSubview(tagView)
         subscribeOnChangeTagEvents()
