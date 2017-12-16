@@ -103,6 +103,14 @@
 		1190D5B31FC1D4AF0064D569 /* SourceryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1190D5B11FC1D4AF0064D569 /* SourceryProtocols.swift */; };
 		11AD36AE1F1D4AC200D9E0A9 /* WSTagsField.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
+		11B704CC1FE5031A0044D54D /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */; };
+		11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
+		11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
+		11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */; };
+		11B704D01FE503310044D54D /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE21F54A43A0046DC52 /* ThemeManager.swift */; };
+		11B704D11FE503350044D54D /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
+		11B704D21FE503B10044D54D /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FA13211F6B0B6500B09A92 /* TableViewCell+Extensions.swift */; };
+		11B704D31FE503F50044D54D /* Prelude.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1150D2D71FE4339800AC1427 /* Prelude.framework */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
 		11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11B705871EEB42570039A863 /* LaunchScreen.storyboard */; };
 		11B705A11EEBCB0E0039A863 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; };
@@ -334,6 +342,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11B704D31FE503F50044D54D /* Prelude.framework in Frameworks */,
 				1150D35C1FE4541900AC1427 /* WSTagsField.framework in Frameworks */,
 				1150D35D1FE4541900AC1427 /* Result.framework in Frameworks */,
 				1150D35E1FE4541900AC1427 /* Notepad.framework in Frameworks */,
@@ -1067,9 +1076,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */,
+				11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */,
+				11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */,
+				11B704D21FE503B10044D54D /* TableViewCell+Extensions.swift in Sources */,
+				11B704D11FE503350044D54D /* DefaultTheme.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
+				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
 				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
 				11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
+				11B704D01FE503310044D54D /* ThemeManager.swift in Sources */,
+				11B704CC1FE5031A0044D54D /* LibraryViewController.swift in Sources */,
 				1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
