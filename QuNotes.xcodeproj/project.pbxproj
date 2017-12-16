@@ -9,12 +9,10 @@
 /* Begin PBXBuildFile section */
 		1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */; };
 		1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */; };
-		11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
 		11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
-		112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
 		11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
@@ -231,7 +229,6 @@
 /* Begin PBXFileReference section */
 		1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluatorSpec.swift; sourceTree = "<group>"; };
 		1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluatorSpec.swift; sourceTree = "<group>"; };
-		11096D291F59EF4F00E1623C /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		111161E01FA7B5B600023B27 /* NotebookSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
 		111161E21FA7B61100023B27 /* NoteSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSpec.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
@@ -404,9 +401,7 @@
 		113504271F16B9C2001938FD /* Utility */ = {
 			isa = PBXGroup;
 			children = (
-				11096D291F59EF4F00E1623C /* Operators.swift */,
 				113504281F16B9D8001938FD /* Extensions */,
-				11E39D751FC4C10500D9232D /* Nimble */,
 				1190D5A11FC1CCAE0064D569 /* Sourcery */,
 			);
 			path = Utility;
@@ -663,13 +658,6 @@
 				116879891F798EC2009461D6 /* LibraryTableViewCell.xib */,
 			);
 			path = Library;
-			sourceTree = "<group>";
-		};
-		11E39D751FC4C10500D9232D /* Nimble */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Nimble;
 			sourceTree = "<group>";
 		};
 		B212595A5823D77A45366CC1 /* Notebook */ = {
@@ -1115,7 +1103,6 @@
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
-				11096D2A1F59EF4F00E1623C /* Operators.swift in Sources */,
 				118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */,
 				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
@@ -1143,7 +1130,6 @@
 				117D15201FB63F4500410F6F /* URL+Extensions.swift in Sources */,
 				1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */,
 				11CDB3E41F969BE20014C58F /* TableViewCell+Extensions.swift in Sources */,
-				112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */,
 				117D15221FB63F5E00410F6F /* URL+ExtensionsSpec.swift in Sources */,
 				11E39D771FC4C12900D9232D /* EqualDiffMatcher.swift in Sources */,
 				11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */,

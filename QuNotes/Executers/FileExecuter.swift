@@ -8,6 +8,7 @@
 
 import Foundation
 import Result
+import Prelude
 
 protocol HasFileExecuter {
     var fileExecuter: FileExecuter { get }

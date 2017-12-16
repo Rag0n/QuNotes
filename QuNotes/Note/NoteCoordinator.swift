@@ -6,6 +6,7 @@
 import UIKit
 import Result
 import Core
+import Prelude
 
 extension Note {
     final class CoordinatorImp: Coordinator {

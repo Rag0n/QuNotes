@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Prelude
 
 final class LibraryViewController: UIViewController {
     // MARK: - API

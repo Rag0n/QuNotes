@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Prelude
 
 final class NotebookViewController: UIViewController {
     // MARK: - API
