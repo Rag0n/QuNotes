@@ -11,18 +11,16 @@ import Notepad
 import WSTagsField
 
 public final class NoteViewController: UIViewController {
-    // MARK: - API
-
     public func perform(effect: Note.ViewEffect) {
         switch effect {
         case let .updateTitle(title):
-            titleTextField?.text = title
+            titleTextField.text = title
         case .focusOnTitle:
-            titleTextField?.becomeFirstResponder()
+            titleTextField.becomeFirstResponder()
         case let .updateContent(content):
-            editor?.text = content
+            editor.text = content
         case let .showTags(tags):
-            tagView?.addTags(tags)
+            tagView.addTags(tags)
         case let .addTag(tag):
             tagView.addTag(tag)
         case let .removeTag(tag):
@@ -45,79 +43,65 @@ public final class NoteViewController: UIViewController {
         let view = UIView()
         view.backgroundColor = .white
 
-        let label = UILabel()
-        label.frame = CGRect(x: 150, y: 200, width: 200, height: 20)
-        label.text = "Hello World!"
-        label.textColor = .black
+        addStackView(view)
+        addTilteTextField()
+        addTagView()
+        addEditorTextView()
 
-        view.addSubview(label)
         self.view = view
     }
 
     override public func viewDidLoad() {
         super.viewDidLoad()
-//        setupTagView()
-//        setupEditorTextView()
-//        setupNavigationBar()
+        setupNavigationBar()
         dispatch(.didLoad)
     }
 
     // MARK: - Private
 
-    fileprivate var dispatch: Note.ViewDispacher
-
-    private enum Constants {
-        static let themeName = "one-dark"
-        static let backButtonIconName = "backIcon"
+    private func addStackView(_ view: UIView) {
+        stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        view.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            stackView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stackView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
-    private var editor: Notepad!
-    private var tagView: WSTagsField!
-    @IBOutlet private var stackView: UIStackView! {
-        didSet {
-//            stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
-        }
-    }
-    @IBOutlet private var titleTextField: UITextField! {
-        didSet {
-//            let theme = ThemeManager.defaultTheme()
-//            titleTextField.backgroundColor = theme.ligherDarkColor
-//            titleTextField.textColor = theme.textColor
-//            let attributes = [
-//                NSAttributedStringKey.foregroundColor: theme.textColor
-//            ]
-//            titleTextField.attributedPlaceholder = NSAttributedString(string: titleTextField.placeholder!, attributes: attributes)
-            titleTextField.addTarget(self,
-                                     action: #selector(NoteViewController.onTitleTextFieldChange),
-                                     for: .editingChanged)
-        }
+    private func addTilteTextField() {
+        titleTextField = UITextField()
+        titleTextField.placeholder = "Placeholder"
+        let theme = ThemeManager.defaultTheme()
+        titleTextField.backgroundColor = theme.ligherDarkColor
+        titleTextField.textColor = theme.textColor
+        let attributes = [
+            NSAttributedStringKey.foregroundColor: theme.textColor
+        ]
+        titleTextField.attributedPlaceholder = NSAttributedString(string: titleTextField.placeholder!, attributes: attributes)
+        titleTextField.addTarget(self, action: #selector(NoteViewController.onTitleTextFieldChange), for: .editingChanged)
+        titleTextField.translatesAutoresizingMaskIntoConstraints = false
+        titleTextField.widthAnchor.constraint(equalToConstant: 20).isActive = true
+        stackView.addArrangedSubview(titleTextField)
     }
 
-    @objc private func onDeleteButtonClick() {
-        dispatch(.delete)
-    }
-
-    @objc private func onTitleTextFieldChange() {
-        dispatch(.changeTitle(newTitle: titleTextField.text ?? ""))
-    }
-
-    private func setupTagView() {
+    private func addTagView() {
         tagView = WSTagsField()
         tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
-//        let theme = ThemeManager.defaultTheme()
-//        tagView.textColor = theme.textColor
-//        tagView.fieldTextColor = theme.textColor
-//        tagView.selectedColor = theme.ligherDarkColor
-//        tagView.selectedTextColor = theme.textColor
-//        tagView.backgroundColor = theme.ligherDarkColor
+        let theme = ThemeManager.defaultTheme()
+        tagView.textColor = theme.textColor
+        tagView.fieldTextColor = theme.textColor
+        tagView.selectedColor = theme.ligherDarkColor
+        tagView.selectedTextColor = theme.textColor
+        tagView.backgroundColor = theme.ligherDarkColor
 
         stackView.addArrangedSubview(tagView)
-        subscribeOnChangeTagEvents()
-    }
-
-    private func subscribeOnChangeTagEvents() {
         tagView.onDidAddTag = { [unowned self] _, tag in
             self.dispatch(.addTag(tag: tag.text))
         }
@@ -126,8 +110,8 @@ public final class NoteViewController: UIViewController {
         }
     }
 
-    private func setupEditorTextView() {
-        editor = Notepad(frame: view.bounds, themeFile: Constants.themeName)
+    private func addEditorTextView() {
+        editor = Notepad(frame: CGRect.zero, themeFile: Constants.themeName)
         editor.delegate = self
         editor.keyboardAppearance = .dark
         editor.returnKeyType = .done
@@ -140,6 +124,29 @@ public final class NoteViewController: UIViewController {
                                            action: #selector(NoteViewController.onDeleteButtonClick))
         navigationItem.rightBarButtonItem = deleteButton
     }
+
+    // MARK: Actions
+
+    @objc private func onDeleteButtonClick() {
+        dispatch(.delete)
+    }
+
+    @objc private func onTitleTextFieldChange() {
+        dispatch(.changeTitle(newTitle: titleTextField.text ?? ""))
+    }
+
+    // MARK: Data
+
+    private enum Constants {
+        static let themeName = "one-dark"
+        static let backButtonIconName = "backIcon"
+    }
+
+    fileprivate var dispatch: Note.ViewDispacher
+    private var editor: Notepad!
+    private var tagView: WSTagsField!
+    private var stackView: UIStackView!
+    private var titleTextField: UITextField!
 }
 
 // MARK: - UITextViewDelegate
