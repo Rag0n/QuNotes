@@ -118,6 +118,4 @@ extension Library {
             library.effects.forEach(perform)
         }
     }
-
-    typealias ViewDispacher = (_ event: ViewEvent) -> ()
 }

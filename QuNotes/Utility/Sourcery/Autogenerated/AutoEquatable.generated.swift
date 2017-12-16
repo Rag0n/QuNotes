@@ -28,13 +28,13 @@ fileprivate func compareArrays<T>(lhs: [T], rhs: [T], compare: (_ lhs: T, _ rhs:
 // MARK: - AutoEquatable for classes, protocols, structs
 // MARK: - Library.Model AutoEquatable
 extension Library.Model: Equatable {}
-internal func == (lhs: Library.Model, rhs: Library.Model) -> Bool {
+public func == (lhs: Library.Model, rhs: Library.Model) -> Bool {
     guard lhs.notebooks == rhs.notebooks else { return false }
     return true
 }
 // MARK: - Library.NotebookViewModel AutoEquatable
 extension Library.NotebookViewModel: Equatable {}
-internal func == (lhs: Library.NotebookViewModel, rhs: Library.NotebookViewModel) -> Bool {
+public func == (lhs: Library.NotebookViewModel, rhs: Library.NotebookViewModel) -> Bool {
     guard lhs.title == rhs.title else { return false }
     guard lhs.isEditable == rhs.isEditable else { return false }
     return true
@@ -49,7 +49,7 @@ internal func == (lhs: Note.Model, rhs: Note.Model) -> Bool {
 }
 // MARK: - Notebook.Model AutoEquatable
 extension Notebook.Model: Equatable {}
-internal func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
+public func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
     guard lhs.notebook == rhs.notebook else { return false }
     guard lhs.notes == rhs.notes else { return false }
     return true
@@ -58,7 +58,7 @@ internal func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
 // MARK: - AutoEquatable for Enums
 // MARK: - Library.Action AutoEquatable
 extension Library.Action: Equatable {}
-internal func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
+public func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
     switch (lhs, rhs) {
     case (.addNotebook(let lhs), .addNotebook(let rhs)):
         return lhs == rhs
@@ -79,7 +79,7 @@ internal func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
 }
 // MARK: - Library.ViewEffect AutoEquatable
 extension Library.ViewEffect: Equatable {}
-internal func == (lhs: Library.ViewEffect, rhs: Library.ViewEffect) -> Bool {
+public func == (lhs: Library.ViewEffect, rhs: Library.ViewEffect) -> Bool {
     switch (lhs, rhs) {
     case (.updateAllNotebooks(let lhs), .updateAllNotebooks(let rhs)):
         return lhs == rhs
@@ -100,7 +100,7 @@ internal func == (lhs: Library.ViewEffect, rhs: Library.ViewEffect) -> Bool {
 }
 // MARK: - Note.Action AutoEquatable
 extension Note.Action: Equatable {}
-internal func == (lhs: Note.Action, rhs: Note.Action) -> Bool {
+public func == (lhs: Note.Action, rhs: Note.Action) -> Bool {
     switch (lhs, rhs) {
     case (.updateTitle(let lhs), .updateTitle(let rhs)):
         return lhs == rhs
@@ -123,7 +123,7 @@ internal func == (lhs: Note.Action, rhs: Note.Action) -> Bool {
 }
 // MARK: - Note.ViewEffect AutoEquatable
 extension Note.ViewEffect: Equatable {}
-internal func == (lhs: Note.ViewEffect, rhs: Note.ViewEffect) -> Bool {
+public func == (lhs: Note.ViewEffect, rhs: Note.ViewEffect) -> Bool {
     switch (lhs, rhs) {
     case (.updateTitle(let lhs), .updateTitle(let rhs)):
         return lhs == rhs
@@ -142,7 +142,7 @@ internal func == (lhs: Note.ViewEffect, rhs: Note.ViewEffect) -> Bool {
 }
 // MARK: - Notebook.Action AutoEquatable
 extension Notebook.Action: Equatable {}
-internal func == (lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
+public func == (lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
     switch (lhs, rhs) {
     case (.addNote(let lhs), .addNote(let rhs)):
         return lhs == rhs
@@ -169,7 +169,7 @@ internal func == (lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
 }
 // MARK: - Notebook.ViewEffect AutoEquatable
 extension Notebook.ViewEffect: Equatable {}
-internal func == (lhs: Notebook.ViewEffect, rhs: Notebook.ViewEffect) -> Bool {
+public func == (lhs: Notebook.ViewEffect, rhs: Notebook.ViewEffect) -> Bool {
     switch (lhs, rhs) {
     case (.updateAllNotes(let lhs), .updateAllNotes(let rhs)):
         return lhs == rhs

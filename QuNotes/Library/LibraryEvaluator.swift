@@ -10,52 +10,7 @@ import Foundation
 import Prelude
 import Core
 
-enum Library {}
-
 extension Library {
-    // MARK: - Data types
-
-    struct Model: AutoEquatable, AutoLens {
-        let notebooks: [Core.Notebook.Meta]
-    }
-    
-    enum Action: AutoEquatable {
-        case addNotebook(notebook: Core.Notebook.Model)
-        case deleteNotebook(notebook: Core.Notebook.Meta)
-        case updateNotebook(notebook: Core.Notebook.Meta)
-        case showNotebook(notebook: Core.Notebook.Meta)
-        case reloadNotebook(notebook: Core.Notebook.Meta)
-        case showError(title: String, message: String)
-    }
-
-    enum ViewEffect: AutoEquatable {
-        case updateAllNotebooks(notebooks: [NotebookViewModel])
-        case addNotebook(index: Int, notebooks: [NotebookViewModel])
-        case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
-        case deleteNotebook(index: Int, notebooks: [NotebookViewModel])
-    }
-
-    enum CoordinatorEvent {
-        case didLoadNotebooks(notebooks: [Core.Notebook.Meta])
-        case didAddNotebook(notebook: Core.Notebook.Meta, error: Error?)
-        case didDeleteNotebook(notebook: Core.Notebook.Meta, error: Error?)
-        case didFinishShowing(notebook: Core.Notebook.Meta)
-    }
-
-    enum ViewEvent {
-        case addNotebook
-        case selectNotebook(index: Int)
-        case deleteNotebook(index: Int)
-        case updateNotebook(index: Int, title: String)
-    }
-
-    struct NotebookViewModel: AutoEquatable {
-        let title: String
-        let isEditable: Bool
-    }
-
-    // MARK: - Evaluator
-
     struct Evaluator {
         let effects: [ViewEffect]
         let actions: [Action]

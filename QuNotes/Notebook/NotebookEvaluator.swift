@@ -11,54 +11,7 @@ import Result
 import Prelude
 import Core
 
-enum Notebook {}
-
 extension Notebook {
-    struct Model: AutoEquatable, AutoLens {
-        let notebook: Core.Notebook.Meta
-        let notes: [Core.Note.Meta]
-    }
-
-    enum Action: AutoEquatable {
-        case addNote(note: Core.Note.Meta)
-        case showNote(note: Core.Note.Meta, isNew: Bool)
-        case deleteNote(note: Core.Note.Meta)
-        case deleteNotebook(notebook: Core.Notebook.Meta)
-        case updateNotebook(notebook: Core.Notebook.Meta, title: String)
-        case finish
-        case showError(title: String, message: String)
-    }
-
-    enum ViewEffect: AutoEquatable {
-        case updateAllNotes(notes: [String])
-        case hideBackButton
-        case showBackButton
-        case updateTitle(title: String)
-        case deleteNote(index: Int, notes: [String])
-        case addNote(index: Int, notes: [String])
-    }
-
-    enum CoordinatorEvent {
-        case didUpdateNotebook(notebook: Core.Notebook.Meta, error: Error?)
-        case didDeleteNotebook(error: Error?)
-        case didLoadNotes(notes: [Core.Note.Meta])
-        case didAddNote(note: Core.Note.Meta, error: Error?)
-        case didDeleteNote(note: Core.Note.Meta, error: Error?)
-    }
-
-    enum ViewEvent {
-        case didLoad
-        case addNote
-        case selectNote(index: Int)
-        case deleteNote(index: Int)
-        case deleteNotebook
-        case filterNotes(filter: String?)
-        case didStartToEditTitle
-        case didFinishToEditTitle(newTitle: String?)
-    }
-
-    // MARK: - Evaluator
-
     struct Evaluator {
         let effects: [ViewEffect]
         let actions: [Action]

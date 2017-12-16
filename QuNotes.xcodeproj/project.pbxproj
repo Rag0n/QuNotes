@@ -16,6 +16,13 @@
 		11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		112A9D8F1F59F07C003DF85D /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11096D291F59EF4F00E1623C /* Operators.swift */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
+		11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
+		11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
+		11406FA81FE4583600BEF81F /* LibraryDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */; };
+		11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */; };
+		11406FAA1FE4595C00BEF81F /* LibraryDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */; };
+		11406FAB1FE4595F00BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
+		11406FAC1FE4596100BEF81F /* NoteDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */; };
 		11429F7F1FD4227A00A537E2 /* AutoLens.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */; };
 		11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */; };
 		1150D2DB1FE4339800AC1427 /* Prelude.h in Headers */ = {isa = PBXBuildFile; fileRef = 1150D2D91FE4339800AC1427 /* Prelude.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -122,7 +129,6 @@
 		B2125985206C842279B2FDB5 /* NoteEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212579A3ECACA82786D76AC /* NoteEvaluator.swift */; };
 		B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212509F1CE5CE5D33073575 /* NoteViewController.swift */; };
 		B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125128CF1F8E978F890901 /* AppDelegate.swift */; };
-		B2125BF2988035A626C6ACD6 /* NoteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B212582D32BF29A7535DA4AD /* NoteViewController.xib */; };
 		B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21257910994F34B22D87954 /* AppDependency.swift */; };
 		B2125F8B11D14C44265086F1 /* NotebookViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = B212595097B91381FC124A0F /* NotebookViewController.xib */; };
 /* End PBXBuildFile section */
@@ -224,6 +230,8 @@
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookDatatypes.swift; sourceTree = "<group>"; };
+		11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryDatatypes.swift; sourceTree = "<group>"; };
 		11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLens.generated.swift; sourceTree = "<group>"; };
 		1150D2D71FE4339800AC1427 /* Prelude.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Prelude.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1150D2D91FE4339800AC1427 /* Prelude.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Prelude.h; sourceTree = "<group>"; };
@@ -290,7 +298,6 @@
 		B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookCoordinator.swift; sourceTree = "<group>"; };
 		B21257910994F34B22D87954 /* AppDependency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDependency.swift; sourceTree = "<group>"; };
 		B212579A3ECACA82786D76AC /* NoteEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteEvaluator.swift; sourceTree = "<group>"; };
-		B212582D32BF29A7535DA4AD /* NoteViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteViewController.xib; sourceTree = "<group>"; };
 		B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookViewController.swift; sourceTree = "<group>"; };
 		B212595097B91381FC124A0F /* NotebookViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NotebookViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -637,6 +644,7 @@
 		11C41FEB1F7444AF00397DD9 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */,
 				11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */,
 				11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */,
 				1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */,
@@ -658,6 +666,7 @@
 		B212595A5823D77A45366CC1 /* Notebook */ = {
 			isa = PBXGroup;
 			children = (
+				11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */,
 				B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */,
 				118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */,
 				1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */,
@@ -677,7 +686,6 @@
 				B212579A3ECACA82786D76AC /* NoteEvaluator.swift */,
 				1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */,
 				B212509F1CE5CE5D33073575 /* NoteViewController.swift */,
-				B212582D32BF29A7535DA4AD /* NoteViewController.xib */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -947,7 +955,6 @@
 				11B705861EEB42570039A863 /* Assets.xcassets in Resources */,
 				115818A71F6B06F4009C9BB2 /* NoteTableViewCell.xib in Resources */,
 				B2125F8B11D14C44265086F1 /* NotebookViewController.xib in Resources */,
-				B2125BF2988035A626C6ACD6 /* NoteViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1061,6 +1068,8 @@
 			files = (
 				1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
+				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
+				11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
 				1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1069,8 +1078,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
+				11406FA81FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
+				11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
 				1150D3591FE4535A00AC1427 /* NoteDatatypes.swift in Sources */,
+				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
 				B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */,
 				1150D3491FE441AF00AC1427 /* Array+Extensions.swift in Sources */,
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
@@ -1111,6 +1122,8 @@
 				117D151D1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				1160CCE01F954C140033E9E2 /* NavigationController.swift in Sources */,
 				1160CCDF1F954C0B0033E9E2 /* Coordinator.swift in Sources */,
+				11406FAB1FE4595F00BEF81F /* NotebookDatatypes.swift in Sources */,
+				11406FAA1FE4595C00BEF81F /* LibraryDatatypes.swift in Sources */,
 				117D15201FB63F4500410F6F /* URL+Extensions.swift in Sources */,
 				1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */,
 				11CDB3E41F969BE20014C58F /* TableViewCell+Extensions.swift in Sources */,
@@ -1119,6 +1132,7 @@
 				11E39D771FC4C12900D9232D /* EqualDiffMatcher.swift in Sources */,
 				11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */,
 				1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */,
+				11406FAC1FE4596100BEF81F /* NoteDatatypes.swift in Sources */,
 				1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */,
 				11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */,
 				1150D34A1FE441AF00AC1427 /* Array+Extensions.swift in Sources */,

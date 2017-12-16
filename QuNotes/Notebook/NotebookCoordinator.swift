@@ -123,6 +123,4 @@ extension Notebook {
             }
         }
     }
-
-    typealias ViewDispacher = (_ event: Notebook.ViewEvent) -> ()
 }
