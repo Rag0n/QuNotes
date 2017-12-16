@@ -11,7 +11,7 @@ import UIKit
 // For reference:
 /* https://color.adobe.com/ru/Quiet-Cry-color-theme-9310965/edit/?copy=true&base=3&rule=Custom&selected=1&name=%D0%9A%D0%BE%D0%BF%D0%B8%D1%8F%20Quiet%20Cry&mode=rgb&rgbvalues=0.109804,0.113725,0.129412,0.192157,0.207843,0.239216,0.266667,0.345098,0.470588,0.572549,0.803922,0.811765,0.933333,0.937255,0.968627&swatchOrder=0,1,2,3,4
 */
-struct DefaultTheme {
+public struct DefaultTheme {
     var darkColor: UIColor {
         return UIColor(red: 28/255, green: 29/255, blue: 33/255, alpha: 1)
     }

@@ -8,11 +8,11 @@
 
 import UIKit
 
-struct ThemeManager {
+public struct ThemeManager {
     // MARK: - API
 
-    static func applyThemeForWindow(window: UIWindow) {
-        window.tintColor = theme.mainColor
+    public static func applyTheme(forView view: UIView) {
+        view.tintColor = theme.mainColor
         applyThemeForTextFields()
         applyThemeForNavigationBar()
         applyThemeForNotebookView()
@@ -21,7 +21,7 @@ struct ThemeManager {
         applyThemeForLibraryCellView()
     }
 
-    static func defaultTheme() -> DefaultTheme {
+    public static func defaultTheme() -> DefaultTheme {
         return DefaultTheme()
     }
 

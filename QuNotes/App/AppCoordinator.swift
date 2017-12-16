@@ -22,7 +22,7 @@ final class AppCoordinator: Coordinator {
 
     init(withWindow window: UIWindow) {
         self.window = window
-        ThemeManager.applyThemeForWindow(window: window)
+        ThemeManager.applyTheme(forView: window)
     }
 
     // MARK: - Private
