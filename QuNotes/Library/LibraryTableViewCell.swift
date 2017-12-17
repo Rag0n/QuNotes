@@ -13,6 +13,11 @@ typealias DidChangeTitleBlock = (_ title: String?) -> Void
 final class LibraryTableViewCell: UITableViewCell {
     // MARK: - API
 
+    static func registerFor(tableView: UITableView, reuseIdentifier: String) {
+        let nib = UINib(nibName: String(describing: self), bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: reuseIdentifier)
+    }
+
     func render(viewModel: Library.NotebookViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
         self.onDidChangeTitle = onDidChangeTitle
         titleTextField.text = viewModel.title
