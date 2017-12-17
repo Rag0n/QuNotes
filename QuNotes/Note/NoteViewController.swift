@@ -40,15 +40,12 @@ public final class NoteViewController: UIViewController {
     }
 
     override public func loadView() {
-        let view = UIView()
+        view = UIView()
         view.backgroundColor = .white
-
-        addStackView(view)
+        addStackView()
         addTilteTextField()
         addTagView()
         addEditorTextView()
-
-        self.view = view
     }
 
     override public func viewDidLoad() {
@@ -59,7 +56,7 @@ public final class NoteViewController: UIViewController {
 
     // MARK: - Private
 
-    private func addStackView(_ view: UIView) {
+    private func addStackView() {
         stackView = UIStackView()
         stackView.axis = .vertical
         stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
