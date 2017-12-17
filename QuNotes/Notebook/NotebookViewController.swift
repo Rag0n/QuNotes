@@ -9,10 +9,10 @@
 import UIKit
 import Prelude
 
-final class NotebookViewController: UIViewController {
+final public class NotebookViewController: UIViewController {
     // MARK: - API
 
-    func perform(effect: Notebook.ViewEffect) {
+    public func perform(effect: Notebook.ViewEffect) {
         switch effect {
         case let .updateAllNotes(notes):
             self.notes = notes
@@ -26,31 +26,36 @@ final class NotebookViewController: UIViewController {
         case let .deleteNote(index, notes):
             self.notes = notes
             let indexPath = IndexPath(row: index, section: 0)
-            tableView?.deleteRows(at: [indexPath], with: .automatic)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
         case let .addNote(index, notes):
             self.notes = notes
             let indexPath = IndexPath(row: index, section: 0)
-            tableView?.insertRows(at: [indexPath], with: .automatic)
+            tableView.insertRows(at: [indexPath], with: .automatic)
         }
     }
 
     // MARK: - Life cycle
 
-    init(withDispatch dispatch: @escaping Notebook.ViewDispacher) {
+    public init(withDispatch dispatch: @escaping Notebook.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    override public func loadView() {
+        view = UIView()
+        addTableView()
+        addAddNoteButton()
+    }
     
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
         setupNavigationBar()
-        setupTableView()
-        setupSearchController()
         dispatch <| .didLoad
+        tableView.reloadData()
     }
 
     // MARK: - Private
@@ -58,10 +63,17 @@ final class NotebookViewController: UIViewController {
     fileprivate var dispatch: Notebook.ViewDispacher
     fileprivate var notes: [String]!
 
-    @IBOutlet private weak var tableView: UITableView!
-    @IBOutlet private weak var addButton: UIButton!
+    private var tableView: UITableView!
+    private var addButton: UIButton!
     private var titleTextField: UITextField!
-    private let searchController = UISearchController(searchResultsController: nil)
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.searchResultsUpdater = self
+        controller.dimsBackgroundDuringPresentation = false
+        self.definesPresentationContext = true
+        self.navigationItem.searchController = controller
+        return controller
+    }()
 
     fileprivate enum Constants {
         static let title = "Notes"
@@ -83,20 +95,37 @@ final class NotebookViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = deleteButton
     }
 
-    private func setupTableView() {
+    private func addTableView() {
+        tableView = UITableView()
         NoteTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.noteCellReuseIdentifier)
         tableView.estimatedRowHeight = 0
         tableView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        tableView.rowHeight = 44
+        tableView.dataSource = self
+        tableView.delegate = self
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
-    private func setupSearchController() {
-        searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        navigationItem.searchController = searchController
+    private func addAddNoteButton() {
+        addButton = UIButton(type: .system)
+        addButton.setTitle("Add", for: .normal)
+        addButton.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
+        view.addSubview(addButton)
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+        ])
     }
 
-    @IBAction private func addNote() {
+    @objc private func addNote() {
         dispatch <| .addNote
     }
 
@@ -127,7 +156,7 @@ extension NotebookViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = deleteContextualAction(forIndexPath: indexPath)
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
@@ -146,7 +175,7 @@ extension NotebookViewController: UITableViewDelegate {
 // MARK: - UISearchResultsUpdating
 
 extension NotebookViewController: UISearchResultsUpdating {
-    func updateSearchResults(for searchController: UISearchController) {
+    public func updateSearchResults(for searchController: UISearchController) {
         dispatch <| .filterNotes(filter: searchController.searchBar.text)
     }
 }
@@ -154,15 +183,15 @@ extension NotebookViewController: UISearchResultsUpdating {
 // MARK: - UITextField
 
 extension NotebookViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
         dispatch <| .didStartToEditTitle
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
         dispatch <| .didFinishToEditTitle(newTitle: textField.text)
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
     }

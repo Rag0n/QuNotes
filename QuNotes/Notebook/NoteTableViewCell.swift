@@ -9,10 +9,29 @@
 import UIKit
 
 final class NoteTableViewCell: UITableViewCell {
+    static func registerFor(tableView: UITableView, reuseIdentifier: String) {
+        tableView.register(self, forCellReuseIdentifier: reuseIdentifier)
+    }
 
-    @IBOutlet private weak var titleLabel: UILabel!
+    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.addSubview(titleLabel)
+        titleLabel.textColor = ThemeManager.defaultTheme().textColor
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     func set(title: String) {
         titleLabel.text = title
     }
+
+    private let titleLabel = UILabel()
 }
