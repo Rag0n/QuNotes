@@ -79,7 +79,6 @@
 		1160CCE01F954C140033E9E2 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		116857A61FE50A1B007E4278 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE21F54A43A0046DC52 /* ThemeManager.swift */; };
 		1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
-		1168798B1F798EC2009461D6 /* LibraryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 116879891F798EC2009461D6 /* LibraryTableViewCell.xib */; };
 		116E40B81FC0BE570096BC6C /* FailingFileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */; };
 		117636371F07FA4B000A5CFC /* Notepad.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117D151B1FB61CCA00410F6F /* FileExecuter.swift */; };
@@ -114,7 +113,6 @@
 		11B705A41EEBCB3E0039A863 /* Nimble.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11B7059F1EEBCB0E0039A863 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11B705A51EEBCB3E0039A863 /* Quick.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11B705A01EEBCB0E0039A863 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11C41FEE1F7444EC00397DD9 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */; };
-		11C41FEF1F7444EC00397DD9 /* LibraryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */; };
 		11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */; };
 		11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
 		11E39D741FC494C500D9232D /* Difference.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11E39D731FC494C500D9232D /* Difference.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -250,7 +248,6 @@
 		115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEvaluatorSpec.swift; sourceTree = "<group>"; };
 		116879881F798EC2009461D6 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
-		116879891F798EC2009461D6 /* LibraryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryTableViewCell.xib; sourceTree = "<group>"; };
 		116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailingFileExecuter.swift; sourceTree = "<group>"; };
 		117D151B1FB61CCA00410F6F /* FileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExecuter.swift; sourceTree = "<group>"; };
 		117D151E1FB63F4500410F6F /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
@@ -282,7 +279,6 @@
 		11C1B7CB1FE31D7B009B1D3A /* AutoLensCore.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLensCore.generated.swift; sourceTree = "<group>"; };
 		11C1B7CC1FE31D7B009B1D3A /* AutoEquatableCore.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoEquatableCore.generated.swift; sourceTree = "<group>"; };
 		11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
-		11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LibraryViewController.xib; sourceTree = "<group>"; };
 		11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCoordinator.swift; sourceTree = "<group>"; };
 		11E39D731FC494C500D9232D /* Difference.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Difference.framework; path = Carthage/Build/iOS/Difference.framework; sourceTree = "<group>"; };
 		11E39D761FC4C12900D9232D /* EqualDiffMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualDiffMatcher.swift; sourceTree = "<group>"; };
@@ -644,9 +640,7 @@
 				11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */,
 				1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */,
 				11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */,
-				11C41FED1F7444EC00397DD9 /* LibraryViewController.xib */,
 				116879881F798EC2009461D6 /* LibraryTableViewCell.swift */,
-				116879891F798EC2009461D6 /* LibraryTableViewCell.xib */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -934,10 +928,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */,
-				1168798B1F798EC2009461D6 /* LibraryTableViewCell.xib in Resources */,
 				1190D5AC1FC1CEA90064D569 /* AutoEquatable.stencil in Resources */,
 				11815AA61FD40A24005E4E56 /* AutoLens.stencil in Resources */,
-				11C41FEF1F7444EC00397DD9 /* LibraryViewController.xib in Resources */,
 				11B705861EEB42570039A863 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

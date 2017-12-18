@@ -9,10 +9,10 @@
 import UIKit
 import Prelude
 
-final class LibraryViewController: UIViewController {
+final public class LibraryViewController: UIViewController {
     // MARK: - API
 
-    func perform(effect: Library.ViewEffect) {
+    public func perform(effect: Library.ViewEffect) {
         switch effect {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
@@ -34,24 +34,27 @@ final class LibraryViewController: UIViewController {
 
     // MARK: - Life cycle
 
-    init(withDispatch dispatch: @escaping Library.ViewDispacher) {
+    public init(withDispatch dispatch: @escaping Library.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override public func loadView() {
+        view = UIView()
+        addTableView()
+        addAddNoteButton()
         navigationItem.title = Constants.title
-        setupTableView()
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(LibraryViewController.dismissKeyboard)))
     }
 
     // MARK: - Private
 
-    @IBOutlet private weak var tableView: UITableView!
+    private var tableView: UITableView!
+    private var addButton: UIButton!
     fileprivate var notebooks: [Library.NotebookViewModel]!
     fileprivate var dispatch: Library.ViewDispacher
 
@@ -61,18 +64,41 @@ final class LibraryViewController: UIViewController {
         static let deleteActionTitle = "Delete"
     }
 
-    @IBAction private func addNotebookButtonDidTap() {
+    @objc private func addNotebookButtonDidTap() {
         dispatch <| .addNotebook
     }
 
-    @IBAction private func dismissKeyboard() {
+    @objc private func dismissKeyboard() {
         view.endEditing(true)
     }
 
-    private func setupTableView() {
+    private func addTableView() {
+        tableView = UITableView()
         LibraryTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.libraryCellReuseIdentifier)
-        tableView.estimatedRowHeight = 0
         tableView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        tableView.rowHeight = 44
+        tableView.dataSource = self
+        tableView.delegate = self
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+
+    private func addAddNoteButton() {
+        addButton = UIButton(type: .system)
+        addButton.setTitle("Add", for: .normal)
+        addButton.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
+        view.addSubview(addButton)
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
+        ])
     }
 }
 
@@ -100,7 +126,7 @@ extension LibraryViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = deleteContextualAction(forIndexPath: indexPath)
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
