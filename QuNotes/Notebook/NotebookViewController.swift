@@ -99,7 +99,7 @@ final public class NotebookViewController: UIViewController {
         tableView = UITableView()
         NoteTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.noteCellReuseIdentifier)
         tableView.estimatedRowHeight = 0
-        tableView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        tableView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
         tableView.rowHeight = 44
         tableView.dataSource = self
         tableView.delegate = self

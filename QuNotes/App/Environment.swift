@@ -8,6 +8,7 @@
 
 import Foundation
 
+/// A collection of all singletons and global state that the app wants access to
 public struct Environment {
     public let theme: Theme
 

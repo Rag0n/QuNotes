@@ -12,7 +12,9 @@ public struct ThemeManager {
     // MARK: - API
 
     public static func applyTheme(forView view: UIView) {
-        view.tintColor = theme.mainColor
+        view.tintColor = AppEnvironment.current.theme.mainColor
+        // TODO: Remove all view controllers & view adjustments.
+        // Only global components(such as navigation bar) should apply theme here
         applyThemeForTextFields()
         applyThemeForNavigationBar()
         applyThemeForNotebookView()
@@ -21,13 +23,7 @@ public struct ThemeManager {
         applyThemeForLibraryCellView()
     }
 
-    public static func defaultTheme() -> DefaultTheme {
-        return DefaultTheme()
-    }
-
     // MARK: - Private
-
-    private static let theme = ThemeManager.defaultTheme()
 
     private static func applyThemeForTextFields() {
         let textField = UITextField.appearance()
@@ -35,6 +31,7 @@ public struct ThemeManager {
     }
 
     private static func applyThemeForNavigationBar() {
+        let theme = AppEnvironment.current.theme
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).defaultTextAttributes = [NSAttributedStringKey.foregroundColor.rawValue: theme.textColor]
         let navigationBar = UINavigationBar.appearance()
         navigationBar.barTintColor = theme.darkColor
@@ -46,11 +43,13 @@ public struct ThemeManager {
     }
 
     private static func applyThemeForNotebookView() {
+        let theme = AppEnvironment.current.theme
         let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [NotebookViewController.self])
         notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
     }
 
     private static func applyThemeForNoteCellView() {
+        let theme = AppEnvironment.current.theme
         let noteTableViewCellLabel = UILabel.appearance(whenContainedInInstancesOf: [NoteTableViewCell.self])
         noteTableViewCellLabel.textColor = theme.textColor
         noteTableViewCellLabel.backgroundColor = theme.ligherDarkColor
@@ -59,11 +58,13 @@ public struct ThemeManager {
     }
 
     private static func applyThemeForLibraryView() {
+        let theme = AppEnvironment.current.theme
         let notebookTableView = UITableView.appearance(whenContainedInInstancesOf: [LibraryViewController.self])
         notebookTableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
     }
 
     private static func applyThemeForLibraryCellView() {
+        let theme = AppEnvironment.current.theme
         UITextField.appearance(whenContainedInInstancesOf: [LibraryTableViewCell.self]).textColor = theme.textColor
     }
 }

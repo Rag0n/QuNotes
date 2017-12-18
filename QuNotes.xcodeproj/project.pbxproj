@@ -18,6 +18,9 @@
 		1138AFFB1FE82D9D002D28DC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFFA1FE82D9D002D28DC /* Theme.swift */; };
 		1138AFFE1FE82E9E002D28DC /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
 		1138AFFF1FE82EA7002D28DC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFFA1FE82D9D002D28DC /* Theme.swift */; };
+		1138B0011FE8311B002D28DC /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138B0001FE8311B002D28DC /* AppEnvironment.swift */; };
+		1138B0021FE8311B002D28DC /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138B0001FE8311B002D28DC /* AppEnvironment.swift */; };
+		1138B0031FE831B1002D28DC /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFF61FE82D22002D28DC /* Environment.swift */; };
 		11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA81FE4583600BEF81F /* LibraryDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */; };
@@ -233,6 +236,7 @@
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		1138AFF61FE82D22002D28DC /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		1138AFFA1FE82D9D002D28DC /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		1138B0001FE8311B002D28DC /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookDatatypes.swift; sourceTree = "<group>"; };
 		11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryDatatypes.swift; sourceTree = "<group>"; };
 		11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLens.generated.swift; sourceTree = "<group>"; };
@@ -413,6 +417,7 @@
 			isa = PBXGroup;
 			children = (
 				1138AFFA1FE82D9D002D28DC /* Theme.swift */,
+				117E1BE21F54A43A0046DC52 /* ThemeManager.swift */,
 				117E1BE41F54A4990046DC52 /* DefaultTheme.swift */,
 			);
 			path = Theme;
@@ -496,14 +501,6 @@
 			path = Executers;
 			sourceTree = "<group>";
 		};
-		117E1BE11F54A4260046DC52 /* Theme */ = {
-			isa = PBXGroup;
-			children = (
-				117E1BE21F54A43A0046DC52 /* ThemeManager.swift */,
-			);
-			path = Theme;
-			sourceTree = "<group>";
-		};
 		1190D5A11FC1CCAE0064D569 /* Sourcery */ = {
 			isa = PBXGroup;
 			children = (
@@ -584,7 +581,6 @@
 				11C41FEB1F7444AF00397DD9 /* Library */,
 				B212595A5823D77A45366CC1 /* Notebook */,
 				B2125CAB00D3F9B57E4B4DD4 /* Note */,
-				117E1BE11F54A4260046DC52 /* Theme */,
 				117D151A1FB61A7E00410F6F /* Executers */,
 				113504271F16B9C2001938FD /* Utility */,
 				11B705A61EEBCD600039A863 /* Resources */,
@@ -689,6 +685,7 @@
 				B2125128CF1F8E978F890901 /* AppDelegate.swift */,
 				B2125126D56FD2264621CE3E /* AppCoordinator.swift */,
 				B21257910994F34B22D87954 /* AppDependency.swift */,
+				1138B0001FE8311B002D28DC /* AppEnvironment.swift */,
 				1138AFF61FE82D22002D28DC /* Environment.swift */,
 				1138AFFD1FE82DFD002D28DC /* Theme */,
 			);
@@ -1060,11 +1057,13 @@
 				1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */,
 				11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */,
 				11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */,
+				1138B0031FE831B1002D28DC /* Environment.swift in Sources */,
 				1138AFFE1FE82E9E002D28DC /* DefaultTheme.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
 				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
 				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
 				11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
+				1138B0021FE8311B002D28DC /* AppEnvironment.swift in Sources */,
 				11B704CC1FE5031A0044D54D /* LibraryViewController.swift in Sources */,
 				1138AFFF1FE82EA7002D28DC /* Theme.swift in Sources */,
 				1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */,
@@ -1081,6 +1080,7 @@
 				1150D3591FE4535A00AC1427 /* NoteDatatypes.swift in Sources */,
 				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
 				B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */,
+				1138B0011FE8311B002D28DC /* AppEnvironment.swift in Sources */,
 				1150D3491FE441AF00AC1427 /* Array+Extensions.swift in Sources */,
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
 				11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */,

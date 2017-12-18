@@ -75,7 +75,7 @@ final public class LibraryViewController: UIViewController {
     private func addTableView() {
         tableView = UITableView()
         LibraryTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.libraryCellReuseIdentifier)
-        tableView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        tableView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
         tableView.rowHeight = 44
         tableView.dataSource = self
         tableView.delegate = self

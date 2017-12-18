@@ -20,7 +20,7 @@ final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleTextField)
-        let theme = ThemeManager.defaultTheme()
+        let theme = AppEnvironment.current.theme
         backgroundColor = theme.ligherDarkColor
         let attributes = [NSAttributedStringKey.foregroundColor: theme.textColor.withAlphaComponent(0.55)]
         titleTextField.attributedPlaceholder = NSAttributedString(string: "New notebook", attributes: attributes)

@@ -59,7 +59,7 @@ public final class NoteViewController: UIViewController {
     private func addStackView() {
         stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.backgroundColor = ThemeManager.defaultTheme().ligherDarkColor
+        stackView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -73,7 +73,7 @@ public final class NoteViewController: UIViewController {
     private func addTilteTextField() {
         titleTextField = UITextField()
         titleTextField.placeholder = "Placeholder"
-        let theme = ThemeManager.defaultTheme()
+        let theme = AppEnvironment.current.theme
         titleTextField.backgroundColor = theme.ligherDarkColor
         titleTextField.textColor = theme.textColor
         let attributes = [
@@ -91,7 +91,7 @@ public final class NoteViewController: UIViewController {
         tagView.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         tagView.spaceBetweenTags = 10.0
         tagView.font = .systemFont(ofSize: 12.0)
-        let theme = ThemeManager.defaultTheme()
+        let theme = AppEnvironment.current.theme
         tagView.textColor = theme.textColor
         tagView.fieldTextColor = theme.textColor
         tagView.selectedColor = theme.ligherDarkColor
