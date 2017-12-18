@@ -14,6 +14,10 @@
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
 		11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
+		1138AFF71FE82D22002D28DC /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFF61FE82D22002D28DC /* Environment.swift */; };
+		1138AFFB1FE82D9D002D28DC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFFA1FE82D9D002D28DC /* Theme.swift */; };
+		1138AFFE1FE82E9E002D28DC /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
+		1138AFFF1FE82EA7002D28DC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFFA1FE82D9D002D28DC /* Theme.swift */; };
 		11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA81FE4583600BEF81F /* LibraryDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */; };
@@ -104,7 +108,6 @@
 		11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
 		11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
 		11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */; };
-		11B704D11FE503350044D54D /* DefaultTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117E1BE41F54A4990046DC52 /* DefaultTheme.swift */; };
 		11B704D31FE503F50044D54D /* Prelude.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1150D2D71FE4339800AC1427 /* Prelude.framework */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
 		11B705891EEB42570039A863 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11B705871EEB42570039A863 /* LaunchScreen.storyboard */; };
@@ -228,6 +231,8 @@
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		1138AFF61FE82D22002D28DC /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
+		1138AFFA1FE82D9D002D28DC /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookDatatypes.swift; sourceTree = "<group>"; };
 		11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryDatatypes.swift; sourceTree = "<group>"; };
 		11429F7E1FD4227900A537E2 /* AutoLens.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLens.generated.swift; sourceTree = "<group>"; };
@@ -404,6 +409,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		1138AFFD1FE82DFD002D28DC /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				1138AFFA1FE82D9D002D28DC /* Theme.swift */,
+				117E1BE41F54A4990046DC52 /* DefaultTheme.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		1150D2D81FE4339800AC1427 /* Prelude */ = {
 			isa = PBXGroup;
 			children = (
@@ -486,7 +500,6 @@
 			isa = PBXGroup;
 			children = (
 				117E1BE21F54A43A0046DC52 /* ThemeManager.swift */,
-				117E1BE41F54A4990046DC52 /* DefaultTheme.swift */,
 			);
 			path = Theme;
 			sourceTree = "<group>";
@@ -676,6 +689,8 @@
 				B2125128CF1F8E978F890901 /* AppDelegate.swift */,
 				B2125126D56FD2264621CE3E /* AppCoordinator.swift */,
 				B21257910994F34B22D87954 /* AppDependency.swift */,
+				1138AFF61FE82D22002D28DC /* Environment.swift */,
+				1138AFFD1FE82DFD002D28DC /* Theme */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1045,12 +1060,13 @@
 				1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */,
 				11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */,
 				11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */,
-				11B704D11FE503350044D54D /* DefaultTheme.swift in Sources */,
+				1138AFFE1FE82E9E002D28DC /* DefaultTheme.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
 				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
 				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
 				11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
 				11B704CC1FE5031A0044D54D /* LibraryViewController.swift in Sources */,
+				1138AFFF1FE82EA7002D28DC /* Theme.swift in Sources */,
 				1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */,
 				116857A61FE50A1B007E4278 /* ThemeManager.swift in Sources */,
 			);
@@ -1076,9 +1092,11 @@
 				11C41FEE1F7444EC00397DD9 /* LibraryViewController.swift in Sources */,
 				111743751F5216AC006EDA89 /* Coordinator.swift in Sources */,
 				B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */,
+				1138AFFB1FE82D9D002D28DC /* Theme.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
 				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,
+				1138AFF71FE82D22002D28DC /* Environment.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				118D89B31F607C430038EB6A /* ThemeManager.swift in Sources */,
 				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
