@@ -10,9 +10,9 @@ import Foundation
 
 /// A collection of all singletons and global state that the app wants access to
 public struct Environment {
-    public let theme: Theme
+    public let theme: ThemeType
 
-    public init(theme: Theme = DefaultTheme()) {
+    public init(theme: ThemeType = Theme.dark) {
         self.theme = theme
     }
 }
