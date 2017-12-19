@@ -9,30 +9,29 @@
 import Foundation
 import Result
 
-class FailingFileExecuter: FileExecuter {
-    // MARK: - API
-
-    override func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
+// TODO: Create template for sourcery and replace it by generated file
+struct FailingFileExecuter: FileExecuterType {
+    func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
         return error
     }
 
-    override func deleteDirectory(at url: URL) -> Error? {
+    func deleteDirectory(at url: URL) -> Error? {
         return error
     }
 
-    override func deleteFile(at url: URL) -> Error? {
+    func deleteFile(at url: URL) -> Error? {
         return error
     }
 
-    override func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
+    func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
         return Result(error: error)
     }
 
-    override func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
+    func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
         return Result(error: error)
     }
 
-    override func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
+    func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
         return Result(error: AnyError(error))
     }
 

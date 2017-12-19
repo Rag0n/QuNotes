@@ -76,7 +76,7 @@ extension Library {
 
         // MARK: State
 
-        fileprivate var fileExecuter: FileExecuter {
+        fileprivate var fileExecuter: FileExecuterType {
             return AppEnvironment.current.fileExecuter
         }
         fileprivate let navigationController: NavigationController

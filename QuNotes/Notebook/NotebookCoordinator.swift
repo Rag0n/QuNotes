@@ -25,7 +25,7 @@ extension Notebook {
 
         // MARK: - Life cycle
 
-        fileprivate var fileExecuter: FileExecuter {
+        fileprivate var fileExecuter: FileExecuterType {
             return AppEnvironment.current.fileExecuter
         }
         fileprivate let navigationController: NavigationController

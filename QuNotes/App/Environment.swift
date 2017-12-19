@@ -11,9 +11,10 @@ import Foundation
 /// A collection of all singletons and global state that the app wants access to
 public struct Environment {
     public let theme: ThemeType
-    public let fileExecuter: FileExecuter
+    public let fileExecuter: FileExecuterType
 
-    public init(theme: ThemeType = Theme.dark, fileExecuter: FileExecuter = FileExecuter()) {
+    public init(theme: ThemeType = Theme.dark,
+                fileExecuter: FileExecuterType = FileExecuter()) {
         self.theme = theme
         self.fileExecuter = fileExecuter
     }
