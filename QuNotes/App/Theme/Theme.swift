@@ -6,6 +6,8 @@
 //  Copyright © 2017 Alexander Guschin. All rights reserved.
 //
 
+import UIKit
+
 // TODO: Obviosly need to refactor property names
 public protocol ThemeType {
     var darkColor: UIColor { get }
@@ -14,7 +16,7 @@ public protocol ThemeType {
     var mainColor: UIColor { get }
     var textColor: UIColor { get }
     var barStyle: UIBarStyle { get }
-    var keyboardAppearence: UIKeyboardAppearance { get }
+    var keyboardAppearance: UIKeyboardAppearance { get }
 }
 
 public enum Theme: ThemeType {
@@ -58,7 +60,7 @@ public enum Theme: ThemeType {
             return .black
         }
     }
-    public var keyboardAppearence: UIKeyboardAppearance {
+    public var keyboardAppearance: UIKeyboardAppearance {
         switch self {
         case .dark:
             return .dark

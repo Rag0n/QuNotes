@@ -9,7 +9,7 @@ let controller = NotebookViewController { (event) in
 }
 
 let navigationController = UINavigationController(rootViewController: controller)
-ThemeManager.applyTheme(forView: navigationController.view)
+ThemeExecuter.applyTheme(forView: navigationController.view)
 
 let (parent, _) = playgroundControllers(device: .phone4inch, orientation: .portrait, child: navigationController)
 

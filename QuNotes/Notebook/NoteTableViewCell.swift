@@ -16,7 +16,11 @@ final class NoteTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleLabel)
-        titleLabel.textColor = AppEnvironment.current.theme.textColor
+        let theme = AppEnvironment.current.theme
+        titleLabel.textColor = theme.textColor
+        titleLabel.backgroundColor = theme.ligherDarkColor
+        titleLabel.highlightedTextColor = theme.darkColor
+        contentView.backgroundColor = theme.ligherDarkColor
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
