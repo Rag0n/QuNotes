@@ -2,14 +2,12 @@ import UIKit
 import PlaygroundSupport
 import QuNotesUI
 
-let controller = LibraryViewController { (event) in
-    print(event)
-}
-
+let controller = LibraryViewController { (event) in print(event) }
 let navigationController = UINavigationController(rootViewController: controller)
-ThemeExecuter.applyTheme(forView: navigationController.view)
+initialize(withController: navigationController)
 
-let (parent, _) = playgroundControllers(device: .phone4inch, orientation: .portrait, child: navigationController)
+let (parent, _) = playgroundControllers(device: .phone4inch, orientation: .portrait,
+                                        child: navigationController)
 
 let frame = parent.view.frame
 PlaygroundPage.current.liveView = parent
@@ -21,5 +19,3 @@ let thirdNotebook = Library.NotebookViewModel(title: "Third notebook title", isE
 controller.perform(effect: .updateAllNotebooks(notebooks: [firstNotebook,
                                                            secondNotebook,
                                                            thirdNotebook]))
-
-//: [Next](@next)
