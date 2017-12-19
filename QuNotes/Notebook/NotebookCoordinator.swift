@@ -25,9 +25,9 @@ extension Notebook {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasFileExecuter
-        fileprivate let dependencies: Dependencies
-        fileprivate let fileExecuter: FileExecuter
+        fileprivate var fileExecuter: FileExecuter {
+            return AppEnvironment.current.fileExecuter
+        }
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
         fileprivate var notebookEvaluator: Core.Notebook.Evaluator
@@ -39,10 +39,8 @@ extension Notebook {
             return vc
         }()
 
-        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies, notebook: Core.Notebook.Meta) {
+        init(withNavigationController navigationController: NavigationController, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
-            self.dependencies = dependencies
-            self.fileExecuter = dependencies.fileExecuter
             self.evaluator = Evaluator(notebook: notebook)
             self.notebookEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
             self.notebook = notebook
@@ -89,8 +87,7 @@ extension Notebook {
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNote(note, isNewNote):
-                let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController,
-                                                             dependencies: dependencies, note: note,
+                let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController, note: note,
                                                              isNewNote: isNewNote, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true)
             }

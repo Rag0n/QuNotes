@@ -29,11 +29,6 @@ final class AppCoordinator: Coordinator {
 
     private let window: UIWindow
 
-    private lazy var dependency: AppDependency = {
-        let fileExecuter = FileExecuter()
-        return AppDependency(fileExecuter: fileExecuter)
-    }()
-
     private lazy var navigationController: NavigationController = {
         let vc = NavigationController()
         vc.preferLargeTitles()
@@ -46,7 +41,7 @@ final class AppCoordinator: Coordinator {
     }
 
     private func showLibrary() {
-        let libraryCoordinator = Library.CoordinatorImp(withNavigationController: navigationController, dependencies: dependency)
+        let libraryCoordinator = Library.CoordinatorImp(withNavigationController: navigationController)
         navigationController.pushCoordinator(coordinator: libraryCoordinator, animated: true)
     }
 }

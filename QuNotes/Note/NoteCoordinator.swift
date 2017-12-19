@@ -18,7 +18,9 @@ extension Note {
 
         // MARK: - Life cycle
 
-        typealias Dependencies = HasFileExecuter
+        fileprivate var fileExecuter: FileExecuter {
+            return AppEnvironment.current.fileExecuter
+        }
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
         fileprivate var noteEvaluator: Core.Note.Evaluator
@@ -27,8 +29,8 @@ extension Note {
             return NoteViewController(withDispatch: dispatch)
         }()
 
-        init(withNavigationController navigationController: NavigationController,
-             dependencies: Dependencies, note: Core.Note.Meta, isNewNote: Bool, notebook: Core.Notebook.Meta) {
+        init(withNavigationController navigationController: NavigationController, note: Core.Note.Meta,
+             isNewNote: Bool, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
             evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
             noteEvaluator = Core.Note.Evaluator(model: Core.Note.Model(meta: note, content: "", notebook: notebook))

@@ -133,7 +133,6 @@
 		B2125985206C842279B2FDB5 /* NoteEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212579A3ECACA82786D76AC /* NoteEvaluator.swift */; };
 		B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212509F1CE5CE5D33073575 /* NoteViewController.swift */; };
 		B2125A350E9E9A7EB48B860B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2125128CF1F8E978F890901 /* AppDelegate.swift */; };
-		B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21257910994F34B22D87954 /* AppDependency.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,7 +295,6 @@
 		B2125128CF1F8E978F890901 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B21251BE0B642526ED62C276 /* NoteCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteCoordinator.swift; sourceTree = "<group>"; };
 		B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookCoordinator.swift; sourceTree = "<group>"; };
-		B21257910994F34B22D87954 /* AppDependency.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDependency.swift; sourceTree = "<group>"; };
 		B212579A3ECACA82786D76AC /* NoteEvaluator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteEvaluator.swift; sourceTree = "<group>"; };
 		B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotebookViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -680,7 +678,6 @@
 			children = (
 				B2125128CF1F8E978F890901 /* AppDelegate.swift */,
 				B2125126D56FD2264621CE3E /* AppCoordinator.swift */,
-				B21257910994F34B22D87954 /* AppDependency.swift */,
 				1138B0001FE8311B002D28DC /* AppEnvironment.swift */,
 				1138AFF61FE82D22002D28DC /* Environment.swift */,
 				1138AFFD1FE82DFD002D28DC /* Theme */,
@@ -1096,7 +1093,6 @@
 				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
 				B21258D0176F22AE3C4E539F /* AppCoordinator.swift in Sources */,
 				116E40B81FC0BE570096BC6C /* FailingFileExecuter.swift in Sources */,
-				B2125F574C739CB38F732AF9 /* AppDependency.swift in Sources */,
 				B212560DBEB110ABCFB85CAB /* NoteCoordinator.swift in Sources */,
 				11429F7F1FD4227A00A537E2 /* AutoLens.generated.swift in Sources */,
 				1138B0051FE847CC002D28DC /* ThemeExecuter.swift in Sources */,

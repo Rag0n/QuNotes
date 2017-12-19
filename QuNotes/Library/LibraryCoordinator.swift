@@ -23,14 +23,8 @@ extension Library {
             return libraryViewController
         }
 
-        // MARK: - Life cycle
-
-        typealias Dependencies = HasFileExecuter & Notebook.CoordinatorImp.Dependencies
-
-        init(withNavigationController navigationController: NavigationController, dependencies: Dependencies) {
+        init(withNavigationController navigationController: NavigationController) {
             self.navigationController = navigationController
-            self.fileExecuter = dependencies.fileExecuter
-            self.dependencies = dependencies
             evaluator = Evaluator()
             libraryEvaluator = Core.Library.Evaluator(model: Core.Library.Model(notebooks: []))
         }
@@ -50,9 +44,7 @@ extension Library {
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNotebook(notebook):
-                let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController,
-                                                                     dependencies: dependencies,
-                                                                     notebook: notebook)
+                let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
                     self.dispatch <| .didFinishShowing(notebook: notebook)
                 }
@@ -84,8 +76,9 @@ extension Library {
 
         // MARK: State
 
-        fileprivate let fileExecuter: FileExecuter
-        fileprivate let dependencies: Dependencies
+        fileprivate var fileExecuter: FileExecuter {
+            return AppEnvironment.current.fileExecuter
+        }
         fileprivate let navigationController: NavigationController
         fileprivate var evaluator: Evaluator
         fileprivate var libraryEvaluator: Core.Library.Evaluator

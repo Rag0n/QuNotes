@@ -10,35 +10,31 @@ import Foundation
 import Result
 import Prelude
 
-protocol HasFileExecuter {
-    var fileExecuter: FileExecuter { get }
-}
-
-class FileExecuter {
+public class FileExecuter {
     // MARK: - API
 
-    func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
+    public func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
         let write = content |> dataFromContent |> writeData
         return url.appendedToDocumentsURL() |> write
     }
 
-    func deleteDirectory(at url: URL) -> Error? {
+    public func deleteDirectory(at url: URL) -> Error? {
         return url |> removeItem
     }
 
-    func deleteFile(at url: URL) -> Error? {
+    public func deleteFile(at url: URL) -> Error? {
         return url |> removeItem
     }
 
-    func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
+    public func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
         return Result(try contentOfFolder(at: url.appendedToDocumentsURL()))
     }
 
-    func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
+    public func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
         return Result(try contentOfFolder(at: URL.documentsURL()))
     }
 
-    func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
+    public func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
         do {
             let data = try Data(contentsOf: url)
             let content = try decoder.decode(contentType, from: data)
@@ -47,6 +43,8 @@ class FileExecuter {
             return Result.failure(AnyError(error))
         }
     }
+
+    public init() {}
 
     // MARK: - Private
 
