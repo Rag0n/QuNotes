@@ -48,7 +48,9 @@ final public class LibraryViewController: UIViewController {
         addTableView()
         addAddNoteButton()
         navigationItem.title = Constants.title
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(LibraryViewController.dismissKeyboard)))
+        let dismissGesture = UITapGestureRecognizer(target: self, action: #selector(LibraryViewController.dismissKeyboard))
+        dismissGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(dismissGesture)
     }
 
     // MARK: - Private
