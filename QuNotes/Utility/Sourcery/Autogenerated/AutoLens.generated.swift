@@ -17,22 +17,28 @@ extension Library.Model {
 }
 extension Note.Model {
     enum lens {
-        static let meta = Lens<Note.Model, Core.Note.Meta>(
-            get: { $0.meta },
-            set: { meta, model in
-                Note.Model(meta: meta, content: model.content, isNew: model.isNew)
+        static let title = Lens<Note.Model, String>(
+            get: { $0.title },
+            set: { title, model in
+                Note.Model(title: title, tags: model.tags, content: model.content, isNew: model.isNew)
+            }
+        )
+        static let tags = Lens<Note.Model, [String]>(
+            get: { $0.tags },
+            set: { tags, model in
+                Note.Model(title: model.title, tags: tags, content: model.content, isNew: model.isNew)
             }
         )
         static let content = Lens<Note.Model, String>(
             get: { $0.content },
             set: { content, model in
-                Note.Model(meta: model.meta, content: content, isNew: model.isNew)
+                Note.Model(title: model.title, tags: model.tags, content: content, isNew: model.isNew)
             }
         )
         static let isNew = Lens<Note.Model, Bool>(
             get: { $0.isNew },
             set: { isNew, model in
-                Note.Model(meta: model.meta, content: model.content, isNew: isNew)
+                Note.Model(title: model.title, tags: model.tags, content: model.content, isNew: isNew)
             }
         )
     }

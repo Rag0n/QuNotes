@@ -42,7 +42,8 @@ public func == (lhs: Library.NotebookViewModel, rhs: Library.NotebookViewModel) 
 // MARK: - Note.Model AutoEquatable
 extension Note.Model: Equatable {}
 internal func == (lhs: Note.Model, rhs: Note.Model) -> Bool {
-    guard lhs.meta == rhs.meta else { return false }
+    guard lhs.title == rhs.title else { return false }
+    guard lhs.tags == rhs.tags else { return false }
     guard lhs.content == rhs.content else { return false }
     guard lhs.isNew == rhs.isNew else { return false }
     return true

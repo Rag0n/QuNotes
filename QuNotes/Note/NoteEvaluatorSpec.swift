@@ -80,7 +80,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates content in model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(meta: note, content: "newContent", isNew: false)
+                        Note.Model(title: note.title, tags: note.tags, content: "newContent", isNew: false)
                     ))
                 }
             }
@@ -105,9 +105,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates title in model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(meta: Core.Note.Meta(uuid: note.uuid, title: "newTitle", tags: note.tags,
-                                                      updated_at: note.updated_at, created_at: note.created_at),
-                                      content: "", isNew: false)
+                        Note.Model(title: "newTitle", tags: note.tags, content: "", isNew: false)
                     ))
                 }
             }
@@ -145,9 +143,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("adds tag to model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(meta: Core.Note.Meta(uuid: note.uuid, title: note.title, tags: ["tag", "new tag"],
-                                                      updated_at: note.updated_at, created_at: note.created_at),
-                                      content: "", isNew: false)
+                        Note.Model(title: note.title, tags: ["tag", "new tag"], content: "", isNew: false)
                     ))
                 }
             }
@@ -172,9 +168,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("removes tag from model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(meta: Core.Note.Meta(uuid: note.uuid, title: note.title, tags: [],
-                                                      updated_at: note.updated_at, created_at: note.created_at),
-                                      content: "", isNew: false)
+                        Note.Model(title: note.title, tags: [], content: "", isNew: false)
                     ))
                 }
             }

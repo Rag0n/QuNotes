@@ -17,7 +17,7 @@ extension Note {
         init(note: Core.Note.Meta, content: String, isNew: Bool) {
             effects = []
             actions = []
-            model = Model(meta: note, content: content, isNew: isNew)
+            model = Model(title: note.title, tags: note.tags, content: content, isNew: isNew)
         }
 
         fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
@@ -34,8 +34,8 @@ extension Note {
             switch event {
             case .didLoad:
                 effects = [
-                    .updateTitle(title: model.meta.title),
-                    .showTags(tags: model.meta.tags)
+                    .updateTitle(title: model.title),
+                    .showTags(tags: model.tags)
                 ]
                 if model.isNew {
                     effects += [.focusOnTitle]
@@ -45,25 +45,17 @@ extension Note {
                 actions = [.updateContent(content: newContent)]
                 effects = [.updateContent(content: newContent)]
             case let .changeTitle(newTitle):
-                // TODO: Fix lens composition
-                newModel = Model(meta: Core.Note.Meta(uuid: model.meta.uuid, title: newTitle, tags: model.meta.tags, updated_at: model.meta.updated_at,
-                                                 created_at: model.meta.created_at), content: model.content, isNew: model.isNew)
+                newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(title: newTitle)]
                 effects = [.updateTitle(title: newTitle)]
             case .delete:
                 actions = [.deleteNote]
             case let .addTag(tag):
-                // TODO: Fix lens composition
-                newModel = Model(meta: Core.Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.appending(tag),
-                                                 updated_at: model.meta.updated_at, created_at: model.meta.created_at),
-                                 content: model.content, isNew: model.isNew)
+                newModel = model |> Model.lens.tags .~ model.tags.appending(tag)
                 actions = [.addTag(tag: tag)]
                 effects = [.addTag(tag: tag)]
             case let .removeTag(tag):
-                // TODO: Fix lens composition
-                newModel = Model(meta: Core.Note.Meta(uuid: model.meta.uuid, title: model.meta.title, tags: model.meta.tags.removing(tag),
-                                                 updated_at: model.meta.updated_at, created_at: model.meta.created_at),
-                                 content: model.content, isNew: model.isNew)
+                newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
                 actions = [.removeTag(tag: tag)]
                 effects = [.removeTag(tag: tag)]
             }

@@ -12,7 +12,8 @@ import Result
 
 public enum Note {
     struct Model: AutoEquatable, AutoLens {
-        let meta: Core.Note.Meta
+        let title: String
+        let tags: [String]
         let content: String
         let isNew: Bool
     }
