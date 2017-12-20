@@ -15,11 +15,13 @@ class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
         var e: Note.Evaluator!
         let note = Core.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
+        let content = "content"
+        let isNew = false
         let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let error = AnyError(underlyingError)
 
         beforeEach {
-            e = Note.Evaluator(note: note, content: "", isNew: false)
+            e = Note.Evaluator(note: note, content: content, isNew: isNew)
         }
 
         describe("-evaluate:ViewEvent") {
@@ -32,7 +34,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is new") {
                     beforeEach {
-                        e = Note.Evaluator(note: note, content: "", isNew: true)
+                        e = Note.Evaluator(note: note, content: content, isNew: true)
                         e = e.evaluate(event: event)
                     }
 
@@ -47,7 +49,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is not new") {
                     beforeEach {
-                        e = Note.Evaluator(note: note, content: "", isNew: false)
+                        e = Note.Evaluator(note: note, content: content, isNew: false)
                         e = e.evaluate(event: event)
                     }
 
@@ -80,7 +82,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates content in model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(title: note.title, tags: note.tags, content: "newContent", isNew: false)
+                        Note.Model(title: note.title, tags: note.tags, content: "newContent", isNew: isNew)
                     ))
                 }
             }
@@ -105,7 +107,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates title in model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(title: "newTitle", tags: note.tags, content: "", isNew: false)
+                        Note.Model(title: "newTitle", tags: note.tags, content: content, isNew: isNew)
                     ))
                 }
             }
@@ -143,7 +145,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("adds tag to model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(title: note.title, tags: ["tag", "new tag"], content: "", isNew: false)
+                        Note.Model(title: note.title, tags: ["tag", "new tag"], content: content, isNew: isNew)
                     ))
                 }
             }
@@ -168,7 +170,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("removes tag from model") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(title: note.title, tags: [], content: "", isNew: false)
+                        Note.Model(title: note.title, tags: [], content: content, isNew: isNew)
                     ))
                 }
             }
