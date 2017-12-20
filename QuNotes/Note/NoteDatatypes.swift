@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Core
 import Result
 
 public enum Note {
