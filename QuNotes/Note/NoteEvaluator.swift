@@ -75,6 +75,11 @@ extension Note {
                 } else {
                     actions = [.finish]
                 }
+            case let .didAddTag(tag, error):
+                guard let error = error else { break }
+                newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
+                actions = [.showError(title: "Failed to add tag", message: error.localizedDescription)]
+                effects = [.removeTag(tag: tag)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
