@@ -75,6 +75,11 @@ extension Note {
                 } else {
                     actions = [.finish]
                 }
+            case let .didUpdateTitle(oldTitle, error):
+                guard let error = error else { break }
+                newModel = model |> Model.lens.title .~ oldTitle
+                actions = [.showError(title: "Failed to update title", message: error.localizedDescription)]
+                effects = [.updateTitle(title: oldTitle)]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)

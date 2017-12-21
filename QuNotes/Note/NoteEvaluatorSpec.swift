@@ -207,6 +207,54 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
 
+            context("when receiving didUpdateTitle event") {
+                context("when successfully updates title") {
+                    beforeEach {
+                        event = .didUpdateTitle(oldTitle: "old title", error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(title: note.title, tags: note.tags, content: content, isNew: isNew)
+                        ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+                }
+
+                context("when fails to update title") {
+                    beforeEach {
+                        event = .didUpdateTitle(oldTitle: "old title", error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("updates model with old title") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(title: "old title", tags: note.tags, content: content, isNew: isNew)
+                        ))
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to update title", message: error.localizedDescription)
+                        ]))
+                    }
+
+                    it("has updateTitle effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateTitle(title: "old title")
+                        ]))
+                    }
+                }
+            }
+
             context("when receiving didAddTag event") {
                 context("when successfully adds tag") {
                     beforeEach {
