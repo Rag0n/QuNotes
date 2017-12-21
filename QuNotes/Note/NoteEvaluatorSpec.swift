@@ -254,6 +254,54 @@ class NoteEvaluatorSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didRemoveTag event") {
+                context("when successfully removes tag") {
+                    beforeEach {
+                        event = .didRemoveTag(tag: "removed tag", error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(title: note.title, tags: note.tags, content: content, isNew: isNew)
+                        ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+                }
+
+                context("when fails to remove tag") {
+                    beforeEach {
+                        event = .didRemoveTag(tag: "removed tag", error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("adds tag back to model") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(title: note.title, tags: ["tag", "removed tag"], content: content, isNew: isNew)
+                        ))
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to remove tag", message: error.localizedDescription)
+                        ]))
+                    }
+
+                    it("has addTag effect") {
+                        expect(e.effects).to(equalDiff([
+                            .addTag(tag: "removed tag")
+                        ]))
+                    }
+                }
+            }
         }
 //            let updatedNote = UseCase.Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
 //
@@ -321,40 +369,6 @@ class NoteEvaluatorSpec: QuickSpec {
 //                    it("has showError action") {
 //                        expect(e.evaluate(event: event).actions[0])
 //                            .to(equal(.showError(title: "Failed to update note's content", message: "message")))
-//                    }
-//                }
-//            }
-//
-//            context("when receiving didRemoveTag event") {
-//                context("when successfully removes tag") {
-//                    beforeEach {
-//                        event = .didRemoveTag(result: Result(updatedNote), tag: "removed tag")
-//                    }
-//
-//                    it("has removeTag effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.removeTag(tag: "removed tag")))
-//                    }
-//
-//                    it("updates model with updated note") {
-//                        expect(e.evaluate(event: event).model.note.tags)
-//                            .to(equal(["added tag"]))
-//                    }
-//                }
-//
-//                context("when fails to remove tag") {
-//                    beforeEach {
-//                        event = .didRemoveTag(result: Result(error: error), tag: "removed tag")
-//                    }
-//
-//                    it("has showTags effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.showTags(tags: ["tag"])))
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to remove tag", message: "message")))
 //                    }
 //                }
 //            }

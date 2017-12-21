@@ -80,6 +80,11 @@ extension Note {
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
                 actions = [.showError(title: "Failed to add tag", message: error.localizedDescription)]
                 effects = [.removeTag(tag: tag)]
+            case let .didRemoveTag(tag, error):
+                guard let error = error else { break }
+                newModel = model |> Model.lens.tags .~ model.tags.appending(tag)
+                actions = [.showError(title: "Failed to remove tag", message: error.localizedDescription)]
+                effects = [.addTag(tag: tag)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
