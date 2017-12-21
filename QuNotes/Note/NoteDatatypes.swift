@@ -39,6 +39,7 @@ public enum Note {
     public enum CoordinatorEvent {
         case didDeleteNote(error: AnyError?)
         case didUpdateTitle(oldTitle: String, error: Error?)
+        case didUpdateContent(oldContent: String, error: Error?)
         case didAddTag(tag: String, error: Error?)
         case didRemoveTag(tag: String, error: Error?)
     }

@@ -255,6 +255,54 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
 
+            context("when receiving didUpdateContent event") {
+                context("when successfully updates content") {
+                    beforeEach {
+                        event = .didUpdateContent(oldContent: "old content", error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(title: note.title, tags: note.tags, content: content, isNew: isNew)
+                        ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+                }
+
+                context("when fails to update content") {
+                    beforeEach {
+                        event = .didUpdateContent(oldContent: "old content", error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("updates model with old content") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(title: note.title, tags: note.tags, content: "old content", isNew: isNew)
+                        ))
+                    }
+
+                    it("has showError action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to update content", message: error.localizedDescription)
+                            ]))
+                    }
+
+                    it("has updateContent effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateContent(content: "old content")
+                        ]))
+                    }
+                }
+            }
+
             context("when receiving didAddTag event") {
                 context("when successfully adds tag") {
                     beforeEach {
@@ -352,74 +400,6 @@ class NoteEvaluatorSpec: QuickSpec {
             }
         }
 //            let updatedNote = UseCase.Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
-//
-//            context("when receiving didUpdateTitle event") {
-//                context("when successfully updates note's title") {
-//                    beforeEach {
-//                        event = .didUpdateTitle(result: Result(updatedNote))
-//                    }
-//
-//                    it("has updateTitle effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateTitle(title: "new title")))
-//                    }
-//
-//                    it("updates model with updated note") {
-//                        expect(e.evaluate(event: event).model.note.title)
-//                            .to(equal("new title"))
-//                    }
-//                }
-//
-//                context("when fails to update note's title") {
-//                    beforeEach {
-//                        event = .didUpdateTitle(result: Result(error: error))
-//                    }
-//
-//                    it("has updateTitle effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateTitle(title: "title")))
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to update note's title", message: "message")))
-//                    }
-//                }
-//            }
-//
-//            context("when receiving didUpdateContent event") {
-//                context("when successfully updates note's content") {
-//                    beforeEach {
-//                        event = .didUpdateContent(result: Result(updatedNote))
-//                    }
-//
-//                    it("has updateContent effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateContent(content: "new content")))
-//                    }
-//
-//                    it("updates model with updated note") {
-//                        expect(e.evaluate(event: event).model.note.content)
-//                            .to(equal("new content"))
-//                    }
-//                }
-//
-//                context("when fails to update note's content") {
-//                    beforeEach {
-//                        event = .didUpdateContent(result: Result(error: error))
-//                    }
-//
-//                    it("has updateContent effect") {
-//                        expect(e.evaluate(event: event).effects[0])
-//                            .to(equal(.updateContent(content: "content")))
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to update note's content", message: "message")))
-//                    }
-//                }
-//            }
 //
 //            context("when receiving didDeleteNote event") {
 //                context("when successfully deletes note") {

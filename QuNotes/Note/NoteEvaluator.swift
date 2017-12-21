@@ -80,6 +80,11 @@ extension Note {
                 newModel = model |> Model.lens.title .~ oldTitle
                 actions = [.showError(title: "Failed to update title", message: error.localizedDescription)]
                 effects = [.updateTitle(title: oldTitle)]
+            case let .didUpdateContent(oldContent, error):
+                guard let error = error else { break }
+                newModel = model |> Model.lens.content .~ oldContent
+                actions = [.showError(title: "Failed to update content", message: error.localizedDescription)]
+                effects = [.updateContent(content: oldContent)]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
