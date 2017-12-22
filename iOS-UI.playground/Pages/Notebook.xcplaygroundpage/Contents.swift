@@ -4,7 +4,7 @@ import QuNotesUI
 
 let controller = NotebookViewController { (event) in print(event) }
 let navigationController = UINavigationController(rootViewController: controller)
-initialize(withController: navigationController)
+ThemeExecuter.applyTheme(forView: navigationController.view)
 
 let (parent, _) = playgroundControllers(device: .phone4inch, orientation: .portrait,
                                         child: navigationController)
