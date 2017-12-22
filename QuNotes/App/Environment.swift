@@ -12,10 +12,13 @@ import Foundation
 public struct Environment {
     public let theme: ThemeType
     public let fileExecuter: FileExecuterType
+    public let language: Language
 
     public init(theme: ThemeType = Theme.dark,
-                fileExecuter: FileExecuterType = FileExecuter()) {
+                fileExecuter: FileExecuterType = FileExecuter(),
+                language: Language = Language(languageStrings: Locale.preferredLanguages) ?? .en) {
         self.theme = theme
         self.fileExecuter = fileExecuter
+        self.language = language
     }
 }

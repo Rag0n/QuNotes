@@ -131,6 +131,8 @@
 		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAC1EED947700135646 /* Result.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		11FFCB091FED8CA8003908D4 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FFCB081FED8CA8003908D4 /* Language.swift */; };
+		11FFCB0B1FED8CB2003908D4 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FFCB081FED8CA8003908D4 /* Language.swift */; };
 		B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */; };
 		B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21253A25C12346913B6A7E7 /* NotebookCoordinator.swift */; };
 		B21253EDB6147747CE4F0A25 /* NoteEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212579A3ECACA82786D76AC /* NoteEvaluator.swift */; };
@@ -297,6 +299,7 @@
 		11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluator.swift; sourceTree = "<group>"; };
 		11FBDBC41EED987400135646 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		11FBDBC51EED987400135646 /* QuNotesTestsInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = QuNotesTestsInfo.plist; path = Resources/QuNotesTestsInfo.plist; sourceTree = "<group>"; };
+		11FFCB081FED8CA8003908D4 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
 		B212509F1CE5CE5D33073575 /* NoteViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteViewController.swift; sourceTree = "<group>"; };
 		B2125126D56FD2264621CE3E /* AppCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		B2125128CF1F8E978F890901 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -696,6 +699,7 @@
 				B2125126D56FD2264621CE3E /* AppCoordinator.swift */,
 				1138B0001FE8311B002D28DC /* AppEnvironment.swift */,
 				1138AFF61FE82D22002D28DC /* Environment.swift */,
+				11FFCB081FED8CA8003908D4 /* Language.swift */,
 				1138AFFD1FE82DFD002D28DC /* Theme */,
 			);
 			path = App;
@@ -1071,6 +1075,7 @@
 				1138B0031FE831B1002D28DC /* Environment.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
 				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
+				11FFCB0B1FED8CB2003908D4 /* Language.swift in Sources */,
 				119B7A531FE999F000563244 /* FileExecuter.swift in Sources */,
 				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
 				11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
@@ -1099,6 +1104,7 @@
 				117D151F1FB63F4500410F6F /* URL+Extensions.swift in Sources */,
 				1190D5B21FC1D4AF0064D569 /* SourceryProtocols.swift in Sources */,
 				119B7A4E1FE985CB00563244 /* FileExecuterType.swift in Sources */,
+				11FFCB091FED8CA8003908D4 /* Language.swift in Sources */,
 				1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */,
 				112D49831EF5391400C75B6A /* main.swift in Sources */,
 				11C41FEE1F7444EC00397DD9 /* LibraryViewController.swift in Sources */,

@@ -57,6 +57,17 @@ public func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
 }
 
 // MARK: - AutoEquatable for Enums
+// MARK: - Language AutoEquatable
+extension Language: Equatable {}
+public func == (lhs: Language, rhs: Language) -> Bool {
+    switch (lhs, rhs) {
+    case (.en, .en):
+        return true
+    case (.ru, .ru):
+        return true
+    default: return false
+    }
+}
 // MARK: - Library.Action AutoEquatable
 extension Library.Action: Equatable {}
 public func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
