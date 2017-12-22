@@ -39,10 +39,10 @@ public enum Note {
     }
 
     public enum Effect: AutoEquatable {
-        case updateTitle(note: Meta, url: URL)
-        case updateContent(content: String, url: URL)
-        case addTag(note: Meta, url: URL)
-        case removeTag(note: Meta, url: URL)
+        case updateTitle(note: Meta, url: URL, oldTitle: String)
+        case updateContent(content: String, url: URL, oldContent: String)
+        case addTag(note: Meta, url: URL, tag: String)
+        case removeTag(note: Meta, url: URL, tag: String)
     }
 
     public enum Event {
@@ -72,27 +72,27 @@ public enum Note {
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.updateTitle(note: newModel.meta, url: url)]
+                effects = [.updateTitle(note: newModel.meta, url: url, oldTitle: model.meta.title)]
             case let .changeContent(newContent):
                 newModel = model |> Model.lens.content .~ newContent
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteContentURL(for: newModel.meta)
-                effects = [.updateContent(content: newContent, url: url)]
+                effects = [.updateContent(content: newContent, url: url, oldContent: model.content)]
             case let .addTag(tag):
                 guard !model.hasTag(tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.addTag(note: newModel.meta, url: url)]
+                effects = [.addTag(note: newModel.meta, url: url, tag: tag)]
             case let .removeTag(tag):
                 guard let indexOfTag = model.meta.tags.index(of: tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(at: indexOfTag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.removeTag(note: newModel.meta, url: url)]
+                effects = [.removeTag(note: newModel.meta, url: url, tag: tag)]
             }
 
             return Evaluator(effects: effects, model: newModel)

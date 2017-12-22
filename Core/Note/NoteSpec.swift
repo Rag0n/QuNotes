@@ -63,7 +63,8 @@ class NoteExperimantalSpec: QuickSpec {
                         expect(e.effects).to(equalDiff([
                             .updateTitle(note: Note.Meta(uuid: meta.uuid, title: "new title", tags: meta.tags,
                                                          updated_at: 15, created_at: meta.created_at),
-                                         url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
+                                         url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                         oldTitle: "title")
                         ]))
                     }
                 }
@@ -98,7 +99,8 @@ class NoteExperimantalSpec: QuickSpec {
                     it("has updateContent effect") {
                         expect(e.effects).to(equalDiff([
                             .updateContent(content: "new content",
-                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!)
+                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
+                                           oldContent: "content")
                         ]))
                     }
                 }
@@ -152,7 +154,8 @@ class NoteExperimantalSpec: QuickSpec {
                                 .addTag(note: Note.Meta(uuid: meta.uuid, title: meta.title,
                                                         tags: ["tag", "new tag"], updated_at: 20,
                                                         created_at: meta.created_at),
-                                        url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
+                                        url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                        tag: "new tag")
                             ]))
                         }
                     }
@@ -191,7 +194,8 @@ class NoteExperimantalSpec: QuickSpec {
                             expect(e.effects).to(equalDiff([
                                 .removeTag(note: Note.Meta(uuid: meta.uuid, title: meta.title,
                                                         tags: [], updated_at: 22, created_at: meta.created_at),
-                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
+                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                           tag: "tag")
                             ]))
                         }
                     }
