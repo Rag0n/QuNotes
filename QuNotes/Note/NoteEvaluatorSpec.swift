@@ -399,32 +399,5 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
         }
-//            let updatedNote = UseCase.Note(createdDate: 2, updatedDate: 3, content: "new content", title: "new title", uuid: "uuid", tags: ["added tag"])
-//
-//            context("when receiving didDeleteNote event") {
-//                context("when successfully deletes note") {
-//                    beforeEach {
-//                        event = .didDeleteNote(error: nil)
-//                    }
-//
-//                    it("has finish action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(UI.Note.Action.finish))
-//                    }
-//                }
-//
-//                context("when fails to delete note") {
-//                    beforeEach {
-//                        event = .didDeleteNote(error: error)
-//                    }
-//
-//                    it("has showError action") {
-//                        expect(e.evaluate(event: event).actions[0])
-//                            .to(equal(.showError(title: "Failed to delete note", message: "message")))
-//                    }
-//                }
-//            }
-//        }
-//    }
     }
 }

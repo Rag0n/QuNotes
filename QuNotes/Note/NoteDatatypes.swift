@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 
 public enum Note {
     struct Model: AutoEquatable, AutoLens {
@@ -37,7 +36,7 @@ public enum Note {
     }
 
     public enum CoordinatorEvent {
-        case didDeleteNote(error: AnyError?)
+        case didDeleteNote(error: Error?)
         case didUpdateTitle(oldTitle: String, error: Error?)
         case didUpdateContent(oldContent: String, error: Error?)
         case didAddTag(tag: String, error: Error?)

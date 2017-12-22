@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import Result
 import Prelude
 import Core
 
