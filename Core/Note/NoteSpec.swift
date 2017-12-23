@@ -11,6 +11,7 @@ import Nimble
 
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
+        let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
         let model = Note.Model(meta: meta, content: "content")
         var e: Note.Evaluator!
@@ -213,6 +214,35 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("doesnt have effects") {
                         expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
+            context("when receiving didAddTag event") {
+                context("when successfully adds tag") {
+                    beforeEach {
+                        event = .didAddTag(tag: "tag", error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+                }
+
+                context("when fails to add tag") {
+                    beforeEach {
+                        event = .didAddTag(tag: "tag", error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("removes tag from the model") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                                       tags: [], updated_at: meta.updated_at,
+                                                       created_at: meta.created_at),
+                                       content: "content")
+                        ))
                     }
                 }
             }
