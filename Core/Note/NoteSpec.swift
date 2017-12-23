@@ -218,7 +218,7 @@ class NoteExperimantalSpec: QuickSpec {
                 }
             }
 
-            context("when receiving didChangeTitleEvent") {
+            context("when receiving didChangeTitle event") {
                 context("when successfully changes title") {
                     beforeEach {
                         event = .didChangeTitle(oldTitle: "old title", error: nil)
@@ -239,9 +239,38 @@ class NoteExperimantalSpec: QuickSpec {
                     it("updates model by setting title back to the old") {
                         expect(e.model).to(equalDiff(
                             Note.Model(meta: Note.Meta(uuid: meta.uuid, title: "old title",
-                                                       tags: ["tag"], updated_at: meta.updated_at,
+                                                       tags: meta.tags, updated_at: meta.updated_at,
                                                        created_at: meta.created_at),
                                        content: "content")
+                        ))
+                    }
+                }
+            }
+
+            context("when receiving didChangeContent event") {
+                context("when successfully changes content") {
+                    beforeEach {
+                        event = .didChangeContent(oldContent: "old content", error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+                }
+
+                context("when fails to change content") {
+                    beforeEach {
+                        event = .didChangeContent(oldContent: "old content", error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("updates model by setting content back to the old") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                                       tags: meta.tags, updated_at: meta.updated_at,
+                                                       created_at: meta.created_at),
+                                       content: "old content")
                         ))
                     }
                 }

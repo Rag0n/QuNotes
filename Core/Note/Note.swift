@@ -51,6 +51,7 @@ public enum Note {
         case addTag(tag: String)
         case removeTag(tag: String)
         case didChangeTitle(oldTitle: String, error: Error?)
+        case didChangeContent(oldContent: String, error: Error?)
         case didAddTag(tag: String, error: Error?)
         case didRemoveTag(tag: String, error: Error?)
     }
@@ -99,6 +100,9 @@ public enum Note {
             case let .didChangeTitle(oldTitle, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.title .~ oldTitle
+            case let .didChangeContent(oldContent, error):
+                guard error != nil else { break }
+                newModel = model |> Model.lens.content .~ oldContent
             case let .didAddTag(tag, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(tag)
