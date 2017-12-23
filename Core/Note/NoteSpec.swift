@@ -246,6 +246,35 @@ class NoteExperimantalSpec: QuickSpec {
                     }
                 }
             }
+
+            context("when receiving didRemoveTag event") {
+                context("when successfuly removes tag") {
+                    beforeEach {
+                        event = .didRemoveTag(tag: "removed tag", error: nil)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+                }
+
+                context("when fails to remove tag") {
+                    beforeEach {
+                        event = .didRemoveTag(tag: "removed tag", error: error)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("adds removed tag back to model") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                                       tags: ["tag", "removed tag"], updated_at: meta.updated_at,
+                                                       created_at: meta.created_at),
+                                       content: "content")
+                        ))
+                    }
+                }
+            }
         }
     }
 }

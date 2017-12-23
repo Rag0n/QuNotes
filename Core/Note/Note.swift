@@ -51,6 +51,7 @@ public enum Note {
         case addTag(tag: String)
         case removeTag(tag: String)
         case didAddTag(tag: String, error: Error?)
+        case didRemoveTag(tag: String, error: Error?)
     }
 
     public struct Evaluator {
@@ -97,6 +98,9 @@ public enum Note {
             case let .didAddTag(tag, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(tag)
+            case let .didRemoveTag(tag, error):
+                guard error != nil else { break }
+                newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
             }
 
             return Evaluator(effects: effects, model: newModel)
