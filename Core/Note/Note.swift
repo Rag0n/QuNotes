@@ -50,6 +50,7 @@ public enum Note {
         case changeContent(newContent: String)
         case addTag(tag: String)
         case removeTag(tag: String)
+        case didChangeTitle(oldTitle: String, error: Error?)
         case didAddTag(tag: String, error: Error?)
         case didRemoveTag(tag: String, error: Error?)
     }
@@ -95,6 +96,9 @@ public enum Note {
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
                 effects = [.removeTag(note: newModel.meta, url: url, tag: tag)]
+            case let .didChangeTitle(oldTitle, error):
+                guard error != nil else { break }
+                newModel = model |> Model.lens.meta.title .~ oldTitle
             case let .didAddTag(tag, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(tag)
