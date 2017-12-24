@@ -6,4 +6,4 @@
   Copyright © 2017 Alexander Guschin. All rights reserved.
 */
 
-"note-title-textfield-placeholder" = "Заглушка";
+"note_title_placeholder" = "Title";

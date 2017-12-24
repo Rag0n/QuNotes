@@ -72,7 +72,7 @@ public final class NoteViewController: UIViewController {
 
     private func addTilteTextField() {
         titleTextField = UITextField()
-        titleTextField.placeholder = "Placeholder"
+        titleTextField.placeholder = "note_title_placeholder".localized
         let theme = AppEnvironment.current.theme
         titleTextField.backgroundColor = theme.ligherDarkColor
         titleTextField.textColor = theme.textColor
