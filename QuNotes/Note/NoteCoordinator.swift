@@ -68,14 +68,22 @@ extension Note {
 
         private func perform(effect: Core.Note.Effect) {
             switch effect {
-            case let .updateTitle(note, url):
-                break
-            case let .updateContent(content, url):
-                break
-            case let .addTag(note, url):
-                break
-            case let .removeTag(note, url):
-                break
+            case let .updateTitle(note, url, oldTitle):
+                let error = fileExecuter.createFile(atURL: url, content: note)
+                dispatchToNote <| .didChangeTitle(oldTitle: oldTitle, error: error)
+                dispatch <| .didUpdateTitle(oldTitle: oldTitle, error: error)
+            case let .updateContent(content, url, oldContent):
+                    let error = fileExecuter.createFile(atURL: url, content: content)
+                dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
+                dispatch <| .didUpdateContent(oldContent: oldContent, error: error)
+            case let .addTag(note, url, tag):
+                let error = fileExecuter.createFile(atURL: url, content: note)
+                dispatchToNote <| .didAddTag(tag: tag, error: error)
+                dispatch <| .didAddTag(tag: tag, error: error)
+            case let .removeTag(note, url, tag):
+                let error = fileExecuter.createFile(atURL: url, content: note)
+                dispatchToNote <| .didRemoveTag(tag: tag, error: error)
+                dispatch <| .didRemoveTag(tag: tag, error: error)
             }
         }
 
