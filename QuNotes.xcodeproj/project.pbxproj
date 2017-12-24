@@ -129,6 +129,8 @@
 		11E57B1F1FEEF0FA0055FE89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1A1FEEF0FA0055FE89 /* LaunchScreen.storyboard */; };
 		11E57B201FEEF0FA0055FE89 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1C1FEEF0FA0055FE89 /* Localizable.strings */; };
 		11E57B211FEEF2250055FE89 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1C1FEEF0FA0055FE89 /* Localizable.strings */; };
+		11E57B271FEEF6930055FE89 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E57B261FEEF6930055FE89 /* LocalizedString.swift */; };
+		11E57B281FEEF6930055FE89 /* LocalizedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E57B261FEEF6930055FE89 /* LocalizedString.swift */; };
 		11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
 		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
@@ -300,6 +302,7 @@
 		11E57B1B1FEEF0FA0055FE89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		11E57B241FEEF5170055FE89 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		11E57B251FEEF53E0055FE89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		11E57B261FEEF6930055FE89 /* LocalizedString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizedString.swift; sourceTree = "<group>"; };
 		11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluator.swift; sourceTree = "<group>"; };
 		11FBDBC41EED987400135646 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Resources/Info.plist; sourceTree = "<group>"; };
 		11FBDBC51EED987400135646 /* QuNotesTestsInfo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = QuNotesTestsInfo.plist; path = Resources/QuNotesTestsInfo.plist; sourceTree = "<group>"; };
@@ -680,6 +683,15 @@
 			);
 			name = Localizations;
 			path = Resources/Localizations;
+			sourceTree = "<group>";
+		};
+		11E57B291FEEF6970055FE89 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				11E57B261FEEF6930055FE89 /* LocalizedString.swift */,
+			);
+			name = Localization;
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		B212595A5823D77A45366CC1 /* Notebook */ = {
@@ -1093,6 +1105,7 @@
 				1138B0031FE831B1002D28DC /* Environment.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
 				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
+				11E57B281FEEF6930055FE89 /* LocalizedString.swift in Sources */,
 				11FFCB0B1FED8CB2003908D4 /* Language.swift in Sources */,
 				119B7A531FE999F000563244 /* FileExecuter.swift in Sources */,
 				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
