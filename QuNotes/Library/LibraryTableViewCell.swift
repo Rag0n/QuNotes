@@ -24,7 +24,8 @@ final class LibraryTableViewCell: UITableViewCell {
         backgroundColor = theme.ligherDarkColor
         let attributes = [NSAttributedStringKey.foregroundColor: theme.textColor.withAlphaComponent(0.55)]
         titleTextField.textColor = theme.textColor
-        titleTextField.attributedPlaceholder = NSAttributedString(string: "New notebook", attributes: attributes)
+        titleTextField.attributedPlaceholder = NSAttributedString(string: "library_new_notebook_title_placeholder".localized,
+                                                                  attributes: attributes)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),

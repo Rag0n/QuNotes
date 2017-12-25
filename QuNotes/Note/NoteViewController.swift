@@ -136,7 +136,6 @@ public final class NoteViewController: UIViewController {
 
     private enum Constants {
         static let themeName = "one-dark"
-        static let backButtonIconName = "backIcon"
     }
 
     fileprivate var dispatch: Note.ViewDispacher

@@ -7,3 +7,11 @@
 */
 
 "note_title_placeholder" = "Заголовок";
+
+"notebook_add_note_button" = "Создать";
+"notebook_delete_note_button" = "Удалить";
+
+"library_title" = "Библиотека";
+"library_new_notebook_title_placeholder" = "Новый блокнот";
+"library_delete_notebook_button" = "Удалить";
+"library_add_notebook_button" = "Создать";

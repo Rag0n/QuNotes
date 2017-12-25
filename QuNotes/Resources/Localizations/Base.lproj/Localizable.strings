@@ -7,3 +7,11 @@
 */
 
 "note_title_placeholder" = "Title";
+
+"notebook_add_note_button" = "Add";
+"notebook_delete_note_button" = "Delete";
+
+"library_title" = "Library";
+"library_new_notebook_title_placeholder" = "New notebook";
+"library_delete_notebook_button" = "Delete";
+"library_add_notebook_button" = "Add";

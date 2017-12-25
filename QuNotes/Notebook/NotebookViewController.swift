@@ -76,9 +76,7 @@ final public class NotebookViewController: UIViewController {
     }()
 
     fileprivate enum Constants {
-        static let title = "Notes"
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
-        static let deleteActionTitle = "Delete"
     }
 
     private func setupNavigationBar() {
@@ -117,7 +115,7 @@ final public class NotebookViewController: UIViewController {
 
     private func addAddNoteButton() {
         addButton = UIButton(type: .system)
-        addButton.setTitle("Add", for: .normal)
+        addButton.setTitle("notebook_add_note_button".localized, for: .normal)
         addButton.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
         view.addSubview(addButton)
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -165,7 +163,7 @@ extension NotebookViewController: UITableViewDelegate {
     }
 
     private func deleteContextualAction(forIndexPath indexPath: IndexPath) -> UIContextualAction {
-        let action = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
+        let action = UIContextualAction(style: .destructive, title: "notebook_delete_note_button".localized) { [unowned self] (action, view, success) in
             self.dispatch <| .deleteNote(index: indexPath.row)
             success(true)
         }

@@ -47,7 +47,7 @@ final public class LibraryViewController: UIViewController {
         view = UIView()
         addTableView()
         addAddNoteButton()
-        navigationItem.title = Constants.title
+        navigationItem.title = "library_title".localized
         let dismissGesture = UITapGestureRecognizer(target: self, action: #selector(LibraryViewController.dismissKeyboard))
         dismissGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(dismissGesture)
@@ -61,9 +61,7 @@ final public class LibraryViewController: UIViewController {
     fileprivate var dispatch: Library.ViewDispacher
 
     fileprivate enum Constants {
-        static let title = "Library"
         static let libraryCellReuseIdentifier = "libraryCellReuseIdentifier"
-        static let deleteActionTitle = "Delete"
     }
 
     @objc private func addNotebookButtonDidTap() {
@@ -95,7 +93,7 @@ final public class LibraryViewController: UIViewController {
 
     private func addAddNoteButton() {
         addButton = UIButton(type: .system)
-        addButton.setTitle("Add", for: .normal)
+        addButton.setTitle("library_add_notebook_button".localized, for: .normal)
         addButton.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
         view.addSubview(addButton)
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -137,7 +135,7 @@ extension LibraryViewController: UITableViewDelegate {
     }
 
     private func deleteContextualAction(forIndexPath indexPath: IndexPath) -> UIContextualAction {
-        let action = UIContextualAction(style: .destructive, title: Constants.deleteActionTitle) { [unowned self] (action, view, success) in
+        let action = UIContextualAction(style: .destructive, title: "library_delete_notebook_button".localized) { [unowned self] (action, view, success) in
             self.dispatch <| .deleteNotebook(index: indexPath.row)
             success(true)
         }
