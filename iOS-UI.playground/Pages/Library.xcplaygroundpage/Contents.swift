@@ -2,6 +2,7 @@ import UIKit
 import PlaygroundSupport
 import QuNotesUI
 
+AppEnvironment.push(environment: Environment(language: .ru))
 let controller = LibraryViewController { (event) in print(event) }
 let navigationController = UINavigationController(rootViewController: controller)
 ThemeExecuter.applyTheme(forView: navigationController.view)
