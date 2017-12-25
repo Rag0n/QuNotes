@@ -14,7 +14,7 @@ public enum Language: String, AutoEquatable {
     case en
     case ru
 
-    public init?(languageString: String) {
+    public init?(languageString:    String) {
         switch languageString.lowercased() {
         case "en":
             self = .en

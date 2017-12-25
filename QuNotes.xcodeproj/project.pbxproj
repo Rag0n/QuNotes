@@ -128,6 +128,7 @@
 		11C41FEE1F7444EC00397DD9 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */; };
 		11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */; };
 		11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
+		11DD708F1FF18BDF00411E3A /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FFCB081FED8CA8003908D4 /* Language.swift */; };
 		11E39D741FC494C500D9232D /* Difference.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11E39D731FC494C500D9232D /* Difference.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11E39D771FC4C12900D9232D /* EqualDiffMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E39D761FC4C12900D9232D /* EqualDiffMatcher.swift */; };
 		11E57B1F1FEEF0FA0055FE89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1A1FEEF0FA0055FE89 /* LaunchScreen.storyboard */; };
@@ -1188,6 +1189,7 @@
 				11429F801FD4232E00A537E2 /* AutoLens.generated.swift in Sources */,
 				1150D34A1FE441AF00AC1427 /* Array+Extensions.swift in Sources */,
 				1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */,
+				11DD708F1FF18BDF00411E3A /* Language.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
