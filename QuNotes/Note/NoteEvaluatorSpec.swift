@@ -13,14 +13,10 @@ import Core
 class NoteEvaluatorSpec: QuickSpec {
     override func spec() {
         var e: Note.Evaluator!
-        let note = NoteDummy.note
-        let content = NoteDummy.content
-        let isNew = NoteDummy.isNew
-        let model = NoteDummy.model
-        let error = NoteDummy.error
+        let model = Dummy.model
 
         beforeEach {
-            e = Note.Evaluator(note: note, content: content, isNew: isNew)
+            e = Note.Evaluator(note: Dummy.note, content: Dummy.content, isNew: Dummy.isNew)
         }
 
         describe("-evaluate:ViewEvent") {
@@ -33,7 +29,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is new") {
                     beforeEach {
-                        e = Note.Evaluator(note: note, content: content, isNew: true)
+                        e = Note.Evaluator(note: Dummy.note, content: Dummy.content, isNew: true)
                         e = e.evaluate(event: event)
                     }
 
@@ -48,7 +44,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is not new") {
                     beforeEach {
-                        e = Note.Evaluator(note: note, content: content, isNew: false)
+                        e = Note.Evaluator(note: Dummy.note, content: Dummy.content, isNew: false)
                         e = e.evaluate(event: event)
                     }
 
@@ -81,7 +77,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates content in model") {
                     expect(e.model).to(equalDiff(
-                        NoteDummy.model(fromModel: model, content: "newContent")
+                        Dummy.model(fromModel: model, content: "newContent")
                     ))
                 }
             }
@@ -106,7 +102,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("updates title in model") {
                     expect(e.model).to(equalDiff(
-                        NoteDummy.model(fromModel: model, title: "newTitle")
+                        Dummy.model(fromModel: model, title: "newTitle")
                     ))
                 }
             }
@@ -144,7 +140,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("adds tag to model") {
                     expect(e.model).to(equalDiff(
-                        NoteDummy.model(fromModel: model, tags: ["tag", "new tag"])
+                        Dummy.model(fromModel: model, tags: ["tag", "new tag"])
                     ))
                 }
             }
@@ -169,7 +165,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("removes tag from model") {
                     expect(e.model).to(equalDiff(
-                        NoteDummy.model(fromModel: model, tags: [])
+                        Dummy.model(fromModel: model, tags: [])
                     ))
                 }
             }
@@ -194,13 +190,13 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to delete note") {
                     beforeEach {
-                        event = .didDeleteNote(error: error)
+                        event = .didDeleteNote(error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to delete note", message: NoteDummy.errorMessage)
+                            .showError(title: "Failed to delete note", message: Dummy.errorMessage)
                         ]))
                     }
                 }
@@ -228,19 +224,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to update title") {
                     beforeEach {
-                        event = .didUpdateTitle(oldTitle: "old title", error: error)
+                        event = .didUpdateTitle(oldTitle: "old title", error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("updates model with old title") {
                         expect(e.model).to(equalDiff(
-                            NoteDummy.model(fromModel: model, title: "old title")
+                            Dummy.model(fromModel: model, title: "old title")
                         ))
                     }
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to update title", message: NoteDummy.errorMessage)
+                            .showError(title: "Failed to update title", message: Dummy.errorMessage)
                         ]))
                     }
 
@@ -274,19 +270,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to update content") {
                     beforeEach {
-                        event = .didUpdateContent(oldContent: "old content", error: error)
+                        event = .didUpdateContent(oldContent: "old content", error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("updates model with old content") {
                         expect(e.model).to(equalDiff(
-                            NoteDummy.model(fromModel: model, content: "old content")
+                            Dummy.model(fromModel: model, content: "old content")
                         ))
                     }
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to update content", message: NoteDummy.errorMessage)
+                            .showError(title: "Failed to update content", message: Dummy.errorMessage)
                             ]))
                     }
 
@@ -320,19 +316,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to add tag") {
                     beforeEach {
-                        event = .didAddTag(tag: "tag", error: error)
+                        event = .didAddTag(tag: "tag", error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("removes tag from model") {
                         expect(e.model).to(equalDiff(
-                            NoteDummy.model(fromModel: model, tags: [])
+                            Dummy.model(fromModel: model, tags: [])
                         ))
                     }
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to add tag", message: NoteDummy.errorMessage)
+                            .showError(title: "Failed to add tag", message: Dummy.errorMessage)
                         ]))
                     }
 
@@ -366,19 +362,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to remove tag") {
                     beforeEach {
-                        event = .didRemoveTag(tag: "removed tag", error: error)
+                        event = .didRemoveTag(tag: "removed tag", error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("adds tag back to model") {
                         expect(e.model).to(equalDiff(
-                            NoteDummy.model(fromModel: model, tags: ["tag", "removed tag"])
+                            Dummy.model(fromModel: model, tags: ["tag", "removed tag"])
                         ))
                     }
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to remove tag", message: NoteDummy.errorMessage)
+                            .showError(title: "Failed to remove tag", message: Dummy.errorMessage)
                         ]))
                     }
 
@@ -393,29 +389,16 @@ class NoteEvaluatorSpec: QuickSpec {
     }
 }
 
-enum NoteDummy {
+private enum Dummy {
+    static let note = Core.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
+    static let model = Note.Model(title: note.title, tags: note.tags, content: "content", isNew: false)
+    static let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+    static let errorMessage = "message"
     static var isNew: Bool {
-        return false
+        return model.isNew
     }
-
-    static var note: Core.Note.Meta {
-        return Core.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
-    }
-
     static var content: String {
-        return "content"
-    }
-
-    static var model: Note.Model {
-        return Note.Model(title: "title", tags: ["tag"], content: "content", isNew: false)
-    }
-
-    static var error: Error {
-        return NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: errorMessage])
-    }
-
-    static var errorMessage: String {
-        return "message"
+        return model.content
     }
 
     static func model(fromModel model: Note.Model, title: String? = nil,
