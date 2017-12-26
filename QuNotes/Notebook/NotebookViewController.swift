@@ -49,6 +49,7 @@ final public class NotebookViewController: UIViewController {
         view = UIView()
         addTableView()
         addAddNoteButton()
+        addSearchController()
     }
     
     override public func viewDidLoad() {
@@ -123,6 +124,13 @@ final public class NotebookViewController: UIViewController {
             addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
         ])
+    }
+
+    private func addSearchController() {
+        searchController.searchResultsUpdater = self
+        searchController.dimsBackgroundDuringPresentation = false
+        definesPresentationContext = true
+        navigationItem.searchController = searchController
     }
 
     @objc private func addNote() {
