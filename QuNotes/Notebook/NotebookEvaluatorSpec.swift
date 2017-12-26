@@ -8,15 +8,12 @@
 
 import Quick
 import Nimble
-import Result
 import Core
 
 class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {
         let notebook = Core.Notebook.Meta(uuid: "uuid", name: "name")
-        var e:Notebook.Evaluator!
-        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
-        let error = AnyError(underlyingError)
+        var e: Notebook.Evaluator!
 
         beforeEach {
             e = Notebook.Evaluator(notebook: notebook)
@@ -40,8 +37,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving addNote event") {
 
-                let anotherNote = Core.Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
-                let expectedNote = Core.Note.Meta(uuid: "nUUID", title: "", tags: [], updated_at: 66, created_at: 66)
+                let anotherNote = Dummy.note(withTitle: "aT", tags: ["t"])
+                let expectedNote = Dummy.note(withTitle: "", uuid: "nUUID", date: 66)
 
                 beforeEach {
                     event = .addNote
@@ -71,7 +68,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving selectNote event") {
-                let note = Core.Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+                let note = Dummy.note(withTitle: "AB", tags: ["t"])
 
                 beforeEach {
                     event = .selectNote(index: 0)
@@ -87,7 +84,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNote event") {
-                let note = Core.Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
+                let note = Dummy.note(withTitle: "AB", tags: ["t"])
 
                 beforeEach {
                     event = .deleteNote(index: 0)
@@ -122,9 +119,9 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving filterNotes event") {
-                let firstNote = Core.Note.Meta(uuid: "fU", title: "AB", tags: ["t"], updated_at: 1, created_at: 1)
-                let secondNote = Core.Note.Meta(uuid: "sU", title: "ab", tags: ["t"], updated_at: 2, created_at: 2)
-                let thirdNote = Core.Note.Meta(uuid: "tU", title: "g", tags: ["t"], updated_at: 3, created_at: 3)
+                let firstNote = Dummy.note(withTitle: "AB", tags: ["t"])
+                let secondNote = Dummy.note(withTitle: "ab", tags: ["t"])
+                let thirdNote = Dummy.note(withTitle: "g", tags: ["t"])
 
                 beforeEach {
                     e = e.evaluate(event: .didLoadNotes(notes: [firstNote, secondNote, thirdNote]))
@@ -233,9 +230,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                 }
 
                 context("when notebook list is not empty") {
-                    let firstNote = Core.Note.Meta(uuid: "fU", title: "b", tags: ["t"], updated_at: 1, created_at: 1)
-                    let secondNote = Core.Note.Meta(uuid: "sU", title: "a", tags: ["t"], updated_at: 2, created_at: 2)
-                    let thirdNote = Core.Note.Meta(uuid: "tU", title: "C", tags: ["t"], updated_at: 3, created_at: 3)
+                    let firstNote = Dummy.note(withTitle: "b", tags: ["t"])
+                    let secondNote = Dummy.note(withTitle: "a", tags: ["t"])
+                    let thirdNote = Dummy.note(withTitle: "C", tags: ["t"])
 
                     beforeEach {
                         event = .didLoadNotes(notes: [firstNote, secondNote, thirdNote])
@@ -282,7 +279,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to update notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(notebook: oldNotebook, error: error)
+                        event = .didUpdateNotebook(notebook: oldNotebook, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -295,7 +292,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
                             .showError(title: "Failed to update notebook's title",
-                                       message: error.localizedDescription)
+                                       message: Dummy.errorMessage)
                         ]))
                     }
 
@@ -323,14 +320,14 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to delete notebook") {
                     beforeEach {
-                        event = .didDeleteNotebook(error: error)
+                        event = .didDeleteNotebook(error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
                             .showError(title: "Failed to delete notebook",
-                                       message: error.localizedDescription)
+                                       message: Dummy.errorMessage)
                         ]))
                     }
                 }
@@ -338,8 +335,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving didAddNote event") {
 
-                let note = Core.Note.Meta(uuid: "aU", title: "aT", tags: ["t"], updated_at: 1, created_at: 1)
-                let addedNote = Core.Note.Meta(uuid: "fU", title: "sN", tags: [], updated_at: 6, created_at: 6)
+                let note = Dummy.note(withTitle: "aT", tags: ["t"])
+                let addedNote = Dummy.note(withTitle: "sN", tags: [])
 
                 beforeEach {
                     e = e.evaluate(event: .didLoadNotes(notes: [note, addedNote]))
@@ -370,7 +367,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to add note") {
                     beforeEach {
-                        event = .didAddNote(note: addedNote, error: error)
+                        event = .didAddNote(note: addedNote, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -382,7 +379,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to add note", message: error.localizedDescription)
+                            .showError(title: "Failed to add note", message: Dummy.errorMessage)
                         ]))
                     }
 
@@ -396,8 +393,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
             context("when receiving didDeleteNote event") {
 
-                let note = Core.Note.Meta(uuid: "bU", title: "bT", tags: ["t"], updated_at: 1, created_at: 1)
-                let deletedNote = Core.Note.Meta(uuid: "aU", title: "aN", tags: [], updated_at: 6, created_at: 6)
+                let note = Dummy.note(withTitle: "bT", tags: ["t"])
+                let deletedNote = Dummy.note(withTitle: "aN")
 
                 beforeEach {
                     e = e.evaluate(event: .didLoadNotes(notes: [note]))
@@ -426,7 +423,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to delete note") {
                     beforeEach {
-                        event = .didDeleteNote(note: deletedNote, error: error)
+                        event = .didDeleteNote(note: deletedNote, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -438,7 +435,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to delete note", message: error.localizedDescription)
+                            .showError(title: "Failed to delete note", message: Dummy.errorMessage)
                         ]))
                     }
 
@@ -450,5 +447,14 @@ class NotebookEvaluatorSpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+private enum Dummy {
+    static let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: errorMessage])
+    static let errorMessage = "message"
+
+    static func note(withTitle title: String, tags: [String] = [], uuid: String = UUID().uuidString, date: Double = 5) -> Core.Note.Meta {
+        return Core.Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: date, created_at: date)
     }
 }
