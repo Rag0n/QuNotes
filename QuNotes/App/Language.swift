@@ -35,6 +35,5 @@ public enum Language: String, AutoEquatable {
         }
 
         self = language
-        return nil
     }
 }
