@@ -56,11 +56,11 @@ extension Library {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
                 dispatchToLibrary <| .didAddNotebook(notebook: notebook, error: error)
-                dispatch <| .didAddNotebook(notebook: notebook.meta, error: error)
+                dispatch <| .didAddNotebook(notebook.meta, error: error)
             case let .deleteNotebook(notebook, url):
                 let error = fileExecuter.deleteDirectory(at: url)
                 dispatchToLibrary <| .didRemoveNotebook(notebook: notebook, error: error)
-                dispatch <| .didDeleteNotebook(notebook: notebook.meta, error: error)
+                dispatch <| .didDeleteNotebook(notebook.meta, error: error)
             case .readBaseDirectory:
                 let result = fileExecuter.contentOfDocumentsFolder()
                 dispatchToLibrary <| .didReadBaseDirectory(urls: result)
@@ -70,7 +70,7 @@ extension Library {
             case let .handleError(title, message):
                 showError(title: title, message: message)
             case .didLoadNotebooks(let notebooks):
-                dispatch <| .didLoadNotebooks(notebooks: notebooks)
+                dispatch <| .didLoadNotebooks(notebooks)
             }
         }
 

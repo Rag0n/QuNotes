@@ -15,25 +15,25 @@ public enum Library {
     }
 
     public enum Action: AutoEquatable {
-        case addNotebook(notebook: Core.Notebook.Model)
-        case deleteNotebook(notebook: Core.Notebook.Meta)
-        case updateNotebook(notebook: Core.Notebook.Meta)
-        case showNotebook(notebook: Core.Notebook.Meta)
-        case reloadNotebook(notebook: Core.Notebook.Meta)
+        case addNotebook(Core.Notebook.Model)
+        case deleteNotebook(Core.Notebook.Meta)
+        case updateNotebook(Core.Notebook.Meta)
+        case showNotebook(Core.Notebook.Meta)
+        case reloadNotebook(Core.Notebook.Meta)
         case showError(title: String, message: String)
     }
 
     public enum ViewEffect: AutoEquatable {
-        case updateAllNotebooks(notebooks: [NotebookViewModel])
+        case updateAllNotebooks([NotebookViewModel])
         case addNotebook(index: Int, notebooks: [NotebookViewModel])
         case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
         case deleteNotebook(index: Int, notebooks: [NotebookViewModel])
     }
 
     public enum CoordinatorEvent {
-        case didLoadNotebooks(notebooks: [Core.Notebook.Meta])
-        case didAddNotebook(notebook: Core.Notebook.Meta, error: Error?)
-        case didDeleteNotebook(notebook: Core.Notebook.Meta, error: Error?)
+        case didLoadNotebooks([Core.Notebook.Meta])
+        case didAddNotebook(Core.Notebook.Meta, error: Error?)
+        case didDeleteNotebook(Core.Notebook.Meta, error: Error?)
         case didFinishShowing(notebook: Core.Notebook.Meta)
     }
 

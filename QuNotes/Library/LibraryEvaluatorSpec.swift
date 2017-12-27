@@ -56,7 +56,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 it("has addNotebook action with notebook model") {
                     e.generateUUID = { "newUUID" }
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.addNotebook(notebook: notebookModel)))
+                        .to(equal(.addNotebook(notebookModel)))
                 }
 
                 it("has addNotebook effect with correct viewModels and index") {
@@ -88,7 +88,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has deleteNotebook action with correct notebook") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteNotebook(notebook: firstNotebookMeta)))
+                            .to(equal(.deleteNotebook(firstNotebookMeta)))
                     }
 
                     it("has addNotebook effect with correct viewModels and index") {
@@ -128,7 +128,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 it("has showNotebook action") {
                     expect(e.actions).to(equalDiff([
-                        .showNotebook(notebook: Core.Notebook.Meta(uuid: "uuid", name: "name"))
+                        .showNotebook(Core.Notebook.Meta(uuid: "uuid", name: "name"))
                     ]))
                 }
             }
@@ -165,7 +165,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has updateNotebook action with updated notebook") {
                         expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook: Core.Notebook.Meta(uuid: "sUUID", name: "a new name"))
+                            .updateNotebook(Core.Notebook.Meta(uuid: "sUUID", name: "a new name"))
                             ]))
                     }
                 }
@@ -191,7 +191,7 @@ class LibraryEvaluatorSpec: QuickSpec {
             context("when receiving didLoadNotebooks") {
                 context("when notebook list is empty") {
                     beforeEach {
-                        event = .didLoadNotebooks(notebooks: [])
+                        event = .didLoadNotebooks([])
                         e = e.evaluate(event: event)
                     }
 
@@ -201,7 +201,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotebooks effect with empty viewModels") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotebooks(notebooks: [])
+                            .updateAllNotebooks([])
                         ]))
                     }
                 }
@@ -212,7 +212,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                     let thirdNotebook = Core.Notebook.Meta(uuid: "uuid3", name: "Cde")
 
                     beforeEach {
-                        event = .didLoadNotebooks(notebooks: [firstNotebook, secondNotebook, thirdNotebook])
+                        event = .didLoadNotebooks([firstNotebook, secondNotebook, thirdNotebook])
                         e = e.evaluate(event: event)
                     }
 
@@ -224,7 +224,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotebooks effect with sorted viewModels") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotebooks(notebooks: [
+                            .updateAllNotebooks([
                                 Library.NotebookViewModel(title: "abc", isEditable: false),
                                 Library.NotebookViewModel(title: "bcd", isEditable: false),
                                 Library.NotebookViewModel(title: "Cde", isEditable: false),
@@ -246,7 +246,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when successfully adds notebook") {
                     beforeEach {
-                        event = .didAddNotebook(notebook: notebook, error: nil)
+                        event = .didAddNotebook(notebook, error: nil)
                     }
 
                     it("doesnt update model") {
@@ -267,7 +267,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when failed to add notebook") {
                     beforeEach {
-                        event = .didAddNotebook(notebook: notebook, error: underlyingError)
+                        event = .didAddNotebook(notebook, error: underlyingError)
                     }
 
                     it("removes that notebook from model") {
@@ -277,7 +277,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotebooks effect with view models without notebook") {
                         expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.updateAllNotebooks(notebooks: [anotherNotebookViewModel])))
+                            .to(equal(.updateAllNotebooks([anotherNotebookViewModel])))
                     }
 
                     it("has showError action with message from error") {
@@ -300,7 +300,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when successfully deletes notebook") {
                     beforeEach {
-                        event = .didDeleteNotebook(notebook: notebook, error: nil)
+                        event = .didDeleteNotebook(notebook, error: nil)
                     }
 
                     it("doesnt update model") {
@@ -321,7 +321,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when fails to delete notebook") {
                     beforeEach {
-                        event = .didDeleteNotebook(notebook: notebook, error: error)
+                        event = .didDeleteNotebook(notebook, error: error)
                     }
 
                     it("adds that notebook back to model") {
@@ -331,8 +331,8 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotebooks effect with view models with notebook") {
                         expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.updateAllNotebooks(notebooks: [anotherNotebookViewModel,
-                                                                      notebookViewModel])))
+                            .to(equal(.updateAllNotebooks([anotherNotebookViewModel,
+                                                           notebookViewModel])))
                     }
 
                     it("has showError action with message from error") {
@@ -354,7 +354,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 it("has reloadNotebook action with passed notebook") {
                     expect(e.actions).to(equalDiff([
-                        .reloadNotebook(notebook: notebook)
+                        .reloadNotebook(notebook)
                     ]))
                 }
             }
