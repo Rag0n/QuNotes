@@ -14,5 +14,5 @@ let frame = parent.view.frame
 PlaygroundPage.current.liveView = parent
 parent.view.frame = frame
 
-controller.perform(effect: .updateAllNotes(notes: ["First note", "Second note", "Third note"]))
-controller.perform(effect: .updateTitle(title: "Notebook title"))
+controller.perform(effect: .updateAllNotes(["First note", "Second note", "Third note"]))
+controller.perform(effect: .updateTitle("Notebook title"))

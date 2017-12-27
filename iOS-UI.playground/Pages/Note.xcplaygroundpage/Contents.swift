@@ -16,5 +16,5 @@ PlaygroundPage.current.liveView = parent
 parent.view.frame = frame
 
 //controller.perform(effect: .updateTitle(title: "Title"))
-controller.perform(effect: .addTag(tag: "first tag"))
-controller.perform(effect: .addTag(tag: "second tag"))
+controller.perform(effect: .addTag("first tag"))
+controller.perform(effect: .addTag("second tag"))

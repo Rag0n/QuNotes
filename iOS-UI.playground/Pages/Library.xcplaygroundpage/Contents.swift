@@ -17,6 +17,4 @@ parent.view.frame = frame
 let firstNotebook = Library.NotebookViewModel(title: "First notebook title", isEditable: false)
 let secondNotebook = Library.NotebookViewModel(title: "Second notebook title", isEditable: false)
 let thirdNotebook = Library.NotebookViewModel(title: "Third notebook title", isEditable: false)
-controller.perform(effect: .updateAllNotebooks(notebooks: [firstNotebook,
-                                                           secondNotebook,
-                                                           thirdNotebook]))
+controller.perform(effect: .updateAllNotebooks([firstNotebook, secondNotebook, thirdNotebook]))
