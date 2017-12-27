@@ -9,10 +9,6 @@
 import UIKit
 
 final class NoteTableViewCell: UITableViewCell {
-    static func registerFor(tableView: UITableView, reuseIdentifier: String) {
-        tableView.register(self, forCellReuseIdentifier: reuseIdentifier)
-    }
-
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.addSubview(titleLabel)

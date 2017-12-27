@@ -129,6 +129,8 @@
 		11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */; };
 		11CDB3E71F969C130014C58F /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
 		11DD708F1FF18BDF00411E3A /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FFCB081FED8CA8003908D4 /* Language.swift */; };
+		11E139651FF42BD400DD3AE9 /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E139641FF42BD400DD3AE9 /* TableViewCell+Extensions.swift */; };
+		11E139661FF42C0400DD3AE9 /* TableViewCell+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E139641FF42BD400DD3AE9 /* TableViewCell+Extensions.swift */; };
 		11E39D741FC494C500D9232D /* Difference.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11E39D731FC494C500D9232D /* Difference.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11E39D771FC4C12900D9232D /* EqualDiffMatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11E39D761FC4C12900D9232D /* EqualDiffMatcher.swift */; };
 		11E57B1F1FEEF0FA0055FE89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1A1FEEF0FA0055FE89 /* LaunchScreen.storyboard */; };
@@ -302,6 +304,7 @@
 		11C1B7CC1FE31D7B009B1D3A /* AutoEquatableCore.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoEquatableCore.generated.swift; sourceTree = "<group>"; };
 		11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		11C41FF01F74477300397DD9 /* LibraryCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryCoordinator.swift; sourceTree = "<group>"; };
+		11E139641FF42BD400DD3AE9 /* TableViewCell+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TableViewCell+Extensions.swift"; sourceTree = "<group>"; };
 		11E39D731FC494C500D9232D /* Difference.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Difference.framework; path = Carthage/Build/iOS/Difference.framework; sourceTree = "<group>"; };
 		11E39D761FC4C12900D9232D /* EqualDiffMatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EqualDiffMatcher.swift; sourceTree = "<group>"; };
 		11E57B1B1FEEF0FA0055FE89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -426,6 +429,7 @@
 			children = (
 				117D151E1FB63F4500410F6F /* URL+Extensions.swift */,
 				117D15211FB63F5E00410F6F /* URL+ExtensionsSpec.swift */,
+				11E139641FF42BD400DD3AE9 /* TableViewCell+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1108,6 +1112,7 @@
 				1138B0061FE847CC002D28DC /* ThemeExecuter.swift in Sources */,
 				11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */,
 				1138B0031FE831B1002D28DC /* Environment.swift in Sources */,
+				11E139661FF42C0400DD3AE9 /* TableViewCell+Extensions.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
 				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
 				11FFCB0B1FED8CB2003908D4 /* Language.swift in Sources */,
@@ -1144,6 +1149,7 @@
 				1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */,
 				112D49831EF5391400C75B6A /* main.swift in Sources */,
 				11A1A72D1FF03F1D000743CF /* LocalizedString.swift in Sources */,
+				11E139651FF42BD400DD3AE9 /* TableViewCell+Extensions.swift in Sources */,
 				11C41FEE1F7444EC00397DD9 /* LibraryViewController.swift in Sources */,
 				111743751F5216AC006EDA89 /* Coordinator.swift in Sources */,
 				11A1A72B1FF03F1D000743CF /* String+LocalizedString.swift in Sources */,
