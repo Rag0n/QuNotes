@@ -98,15 +98,15 @@ extension Notebook {
             case let .createNote(note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNotebook <| .didAddNote(note: note, error: error)
-                dispatch <| .didAddNote(note: note, error: error)
+                dispatch <| .didAddNote(note, error: error)
             case let .updateNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
                 dispatchToNotebook <| .didUpdateNotebook(notebook: notebook, error: error)
-                dispatch <| .didUpdateNotebook(notebook: notebook, error: error)
+                dispatch <| .didUpdateNotebook(notebook, error: error)
             case let .deleteNote(note, url):
                 let error = fileExecuter.deleteFile(at: url)
                 dispatchToNotebook <| .didDeleteNote(note: note, error: error)
-                dispatch <| .didDeleteNote(note: note, error: error)
+                dispatch <| .didDeleteNote(note, error: error)
             case let .readDirectory(url):
                 let urls = fileExecuter.contentOfFolder(at: url)
                  dispatchToNotebook <| .didReadDirectory(urls: urls)
@@ -117,7 +117,7 @@ extension Notebook {
                 // TODO: When UI is not loaded error will not be shown
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
-                dispatch <| .didLoadNotes(notes: notes)
+                dispatch <| .didLoadNotes(notes)
             }
         }
     }

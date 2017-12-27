@@ -16,30 +16,30 @@ public enum Notebook {
     }
 
     public enum Action: AutoEquatable {
-        case addNote(note: Core.Note.Meta)
-        case showNote(note: Core.Note.Meta, isNew: Bool)
-        case deleteNote(note: Core.Note.Meta)
-        case deleteNotebook(notebook: Core.Notebook.Meta)
-        case updateNotebook(notebook: Core.Notebook.Meta, title: String)
+        case addNote(Core.Note.Meta)
+        case showNote(Core.Note.Meta, isNew: Bool)
+        case deleteNote(Core.Note.Meta)
+        case deleteNotebook(Core.Notebook.Meta)
+        case updateNotebook(Core.Notebook.Meta, title: String)
         case finish
         case showError(title: String, message: String)
     }
 
     public enum ViewEffect: AutoEquatable {
-        case updateAllNotes(notes: [String])
+        case updateAllNotes([String])
         case hideBackButton
         case showBackButton
-        case updateTitle(title: String)
+        case updateTitle(String)
         case deleteNote(index: Int, notes: [String])
         case addNote(index: Int, notes: [String])
     }
 
     public enum CoordinatorEvent {
-        case didUpdateNotebook(notebook: Core.Notebook.Meta, error: Error?)
+        case didUpdateNotebook(Core.Notebook.Meta, error: Error?)
         case didDeleteNotebook(error: Error?)
-        case didLoadNotes(notes: [Core.Note.Meta])
-        case didAddNote(note: Core.Note.Meta, error: Error?)
-        case didDeleteNote(note: Core.Note.Meta, error: Error?)
+        case didLoadNotes([Core.Note.Meta])
+        case didAddNote(Core.Note.Meta, error: Error?)
+        case didDeleteNote(Core.Note.Meta, error: Error?)
     }
 
     public enum ViewEvent {

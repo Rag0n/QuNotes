@@ -30,7 +30,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has updateTitle effect") {
                     expect(e.effects).to(equalDiff([
-                        .updateTitle(title: "name")
+                        .updateTitle("name")
                     ]))
                 }
             }
@@ -42,7 +42,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 beforeEach {
                     event = .addNote
-                    e = e.evaluate(event: .didLoadNotes(notes: [anotherNote]))
+                    e = e.evaluate(event: .didLoadNotes([anotherNote]))
                     e.currentTimestamp = { 66 }
                     e.generateUUID = { "nUUID" }
                     e = e.evaluate(event: event)
@@ -50,7 +50,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has addNote actions") {
                     expect(e.actions).to(equalDiff([
-                        .addNote(note: expectedNote)
+                        .addNote(expectedNote)
                     ]))
                 }
 
@@ -72,13 +72,13 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 beforeEach {
                     event = .selectNote(index: 0)
-                    e = e.evaluate(event: .didLoadNotes(notes: [note]))
+                    e = e.evaluate(event: .didLoadNotes([note]))
                         .evaluate(event: event)
                 }
 
                 it("has showNote action") {
                     expect(e.actions).to(equalDiff([
-                        .showNote(note: note, isNew: false)
+                        .showNote(note, isNew: false)
                     ]))
                 }
             }
@@ -88,13 +88,13 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 beforeEach {
                     event = .deleteNote(index: 0)
-                    e = e.evaluate(event: .didLoadNotes(notes: [note]))
+                    e = e.evaluate(event: .didLoadNotes([note]))
                         .evaluate(event: event)
                 }
 
                 it("has deleteNote action") {
                     expect(e.actions).to(equalDiff([
-                        .deleteNote(note: note)
+                        .deleteNote(note)
                     ]))
                 }
 
@@ -113,7 +113,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has deleteNotebook action") {
                     expect(e.actions).to(equalDiff([
-                        .deleteNotebook(notebook: notebook)
+                        .deleteNotebook(notebook)
                     ]))
                 }
             }
@@ -124,7 +124,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let thirdNote = Dummy.note(withTitle: "g", tags: ["t"])
 
                 beforeEach {
-                    e = e.evaluate(event: .didLoadNotes(notes: [firstNote, secondNote, thirdNote]))
+                    e = e.evaluate(event: .didLoadNotes([firstNote, secondNote, thirdNote]))
                 }
 
                 context("when filter is not passed") {
@@ -135,7 +135,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect with all note's titles") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(notes: ["AB", "ab", "g"])
+                            .updateAllNotes(["AB", "ab", "g"])
                         ]))
                     }
                 }
@@ -148,7 +148,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect with only titles that contains filter in any register") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(notes: ["AB", "ab"])
+                            .updateAllNotes(["AB", "ab"])
                         ]))
                     }
                 }
@@ -176,7 +176,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateNotebook action with passed title") {
                         expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook: notebook, title: "new title")
+                            .updateNotebook(notebook, title: "new title")
                         ]))
                     }
 
@@ -195,7 +195,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateNotebook action with empty title") {
                         expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook: notebook, title: "")
+                            .updateNotebook(notebook, title: "")
                         ]))
                     }
 
@@ -214,7 +214,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             context("when receiving didLoadNotes") {
                 context("when note list is empty") {
                     beforeEach {
-                        event = .didLoadNotes(notes: [])
+                        event = .didLoadNotes([])
                         e = e.evaluate(event: event)
                     }
 
@@ -224,7 +224,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotebooks effect with empty viewModels") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(notes: [])
+                            .updateAllNotes([])
                         ]))
                     }
                 }
@@ -235,7 +235,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     let thirdNote = Dummy.note(withTitle: "C", tags: ["t"])
 
                     beforeEach {
-                        event = .didLoadNotes(notes: [firstNote, secondNote, thirdNote])
+                        event = .didLoadNotes([firstNote, secondNote, thirdNote])
                         e = e.evaluate(event: event)
                     }
 
@@ -247,7 +247,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotebooks effect with sorted viewModels") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(notes: ["a", "b", "C"])
+                            .updateAllNotes(["a", "b", "C"])
                         ]))
                     }
                 }
@@ -258,7 +258,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when successfuly updates notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(notebook: oldNotebook, error: nil)
+                        event = .didUpdateNotebook(oldNotebook, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -279,13 +279,13 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to update notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(notebook: oldNotebook, error: Dummy.error)
+                        event = .didUpdateNotebook(oldNotebook, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("has updateTitle effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateTitle(title: "old name")
+                            .updateTitle("old name")
                         ]))
                     }
 
@@ -339,18 +339,18 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let addedNote = Dummy.note(withTitle: "sN", tags: [])
 
                 beforeEach {
-                    e = e.evaluate(event: .didLoadNotes(notes: [note, addedNote]))
+                    e = e.evaluate(event: .didLoadNotes([note, addedNote]))
                 }
 
                 context("when successfully adds note") {
                     beforeEach {
-                        event = .didAddNote(note: addedNote, error: nil)
+                        event = .didAddNote(addedNote, error: nil)
                         e = e.evaluate(event: event)
                     }
 
                     it("has showNote action") {
                         expect(e.actions).to(equalDiff([
-                            .showNote(note: addedNote, isNew: true)
+                            .showNote(addedNote, isNew: true)
                         ]))
                     }
 
@@ -367,7 +367,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to add note") {
                     beforeEach {
-                        event = .didAddNote(note: addedNote, error: Dummy.error)
+                        event = .didAddNote(addedNote, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -397,12 +397,12 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let deletedNote = Dummy.note(withTitle: "aN")
 
                 beforeEach {
-                    e = e.evaluate(event: .didLoadNotes(notes: [note]))
+                    e = e.evaluate(event: .didLoadNotes([note]))
                 }
 
                 context("when successfully deletes note") {
                     beforeEach {
-                        event = .didDeleteNote(note: deletedNote, error: nil)
+                        event = .didDeleteNote(deletedNote, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -423,7 +423,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to delete note") {
                     beforeEach {
-                        event = .didDeleteNote(note: deletedNote, error: Dummy.error)
+                        event = .didDeleteNote(deletedNote, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 

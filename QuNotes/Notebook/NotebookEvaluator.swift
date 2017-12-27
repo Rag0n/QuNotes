@@ -38,37 +38,37 @@ extension Notebook {
 
             switch event {
             case .didLoad:
-                effects = [.updateTitle(title: model.notebook.name)]
+                effects = [.updateTitle(model.notebook.name)]
             case .addNote:
                 let note = Core.Note.Meta(uuid: generateUUID(), title: "", tags: [],
                                      updated_at: currentTimestamp(), created_at: currentTimestamp())
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
                 let indexOfNote = newModel.notes.index(of: note)!
-                actions = [.addNote(note: note)]
+                actions = [.addNote(note)]
                 // TODO: What if we have filter?
                 effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
             case .selectNote(let index):
                 let note = model.notes[index]
-                actions = [.showNote(note: note, isNew: false)]
+                actions = [.showNote(note, isNew: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
-                actions = [.deleteNote(note: note)]
+                actions = [.deleteNote(note)]
             case .deleteNotebook:
-                actions = [.deleteNotebook(notebook: model.notebook)]
+                actions = [.deleteNotebook(model.notebook)]
             case let .filterNotes(filter):
                 var filteredNotes = model.notes
                 if let filter = filter?.lowercased() {
                     filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
                 }
                 // TODO: This event is not working correctly. Eg: filter notes, then select note. Indexes will differ because here we store all notes and in UI we pass only filtered notes
-                effects = [.updateAllNotes(notes: titles(from: filteredNotes))]
+                effects = [.updateAllNotes(titles(from: filteredNotes))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
                 effects = [.showBackButton]
-                actions = [.updateNotebook(notebook: model.notebook, title: newTitle ?? "")]
+                actions = [.updateNotebook(model.notebook, title: newTitle ?? "")]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel	)
@@ -83,7 +83,7 @@ extension Notebook {
             case let .didUpdateNotebook(notebook, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notebook .~ notebook
-                effects = [.updateTitle(title: notebook.name)]
+                effects = [.updateTitle(notebook.name)]
                 actions = [.showError(title: "Failed to update notebook's title",
                                       message: error.localizedDescription)]
             case let .didDeleteNotebook(error):
@@ -95,10 +95,10 @@ extension Notebook {
             case let .didLoadNotes(notes):
                 newModel = model |> Model.lens.notes .~ notes.sorted(by: title)
                 // TODO: what if we have filter
-                effects = [.updateAllNotes(notes: titles(from: newModel))]
+                effects = [.updateAllNotes(titles(from: newModel))]
             case let .didAddNote(note, error):
                 guard let error = error else {
-                    actions = [.showNote(note: note, isNew: true)]
+                    actions = [.showNote(note, isNew: true)]
                     break
                 }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
