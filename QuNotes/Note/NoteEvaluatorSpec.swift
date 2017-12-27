@@ -35,8 +35,8 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateTitle, showTags and focusOnTitle effects") {
                         expect(e.effects).to(equalDiff([
-                            .updateTitle(title: "title"),
-                            .showTags(tags: ["tag"]),
+                            .updateTitle("title"),
+                            .showTags(["tag"]),
                             .focusOnTitle
                         ]))
                     }
@@ -50,8 +50,8 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateTitle and showTags effects") {
                         expect(e.effects).to(equalDiff([
-                            .updateTitle(title: "title"),
-                            .showTags(tags: ["tag"])
+                            .updateTitle("title"),
+                            .showTags(["tag"])
                         ]))
                     }
                 }
@@ -59,19 +59,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving changeContent event") {
                 beforeEach {
-                    event = .changeContent(newContent: "newContent")
+                    event = .changeContent("newContent")
                     e = e.evaluate(event: event)
                 }
 
                 it("has updateContent action") {
                     expect(e.actions).to(equalDiff([
-                        .updateContent(content: "newContent")
+                        .updateContent("newContent")
                     ]))
                 }
 
                 it("has updateContent effect") {
                     expect(e.effects).to(equalDiff([
-                        .updateContent(content: "newContent")
+                        .updateContent("newContent")
                     ]))
                 }
 
@@ -84,19 +84,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving changeTitle event") {
                 beforeEach {
-                    event = .changeTitle(newTitle: "newTitle")
+                    event = .changeTitle("newTitle")
                     e = e.evaluate(event: event)
                 }
 
                 it("has updateTitle action") {
                     expect(e.actions).to(equalDiff([
-                        .updateTitle(title: "newTitle")
+                        .updateTitle("newTitle")
                     ]))
                 }
 
                 it("has updateTitle effect") {
                     expect(e.effects).to(equalDiff([
-                        .updateTitle(title: "newTitle")
+                        .updateTitle("newTitle")
                     ]))
                 }
 
@@ -122,19 +122,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving addTag event") {
                 beforeEach {
-                    event = .addTag(tag: "new tag")
+                    event = .addTag("new tag")
                     e = e.evaluate(event: event)
                 }
 
                 it("has addTag action") {
                     expect(e.actions).to(equalDiff([
-                        .addTag(tag: "new tag")
+                        .addTag("new tag")
                     ]))
                 }
 
                 it("has addTag effect") {
                     expect(e.effects).to(equalDiff([
-                        .addTag(tag: "new tag")
+                        .addTag("new tag")
                     ]))
                 }
 
@@ -147,19 +147,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving removeTag event") {
                 beforeEach {
-                    event = .removeTag(tag: "tag")
+                    event = .removeTag("tag")
                     e = e.evaluate(event: event)
                 }
 
                 it("has removeTag action") {
                     expect(e.actions).to(equalDiff([
-                        .removeTag(tag: "tag")
+                        .removeTag("tag")
                     ]))
                 }
 
                 it("has removeTag effect") {
                     expect(e.effects).to(equalDiff([
-                        .removeTag(tag: "tag")
+                        .removeTag("tag")
                     ]))
                 }
 
@@ -242,7 +242,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateTitle effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateTitle(title: "old title")
+                            .updateTitle("old title")
                         ]))
                     }
                 }
@@ -288,7 +288,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateContent effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateContent(content: "old content")
+                            .updateContent("old content")
                         ]))
                     }
                 }
@@ -297,7 +297,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving didAddTag event") {
                 context("when successfully adds tag") {
                     beforeEach {
-                        event = .didAddTag(tag: "tag", error: nil)
+                        event = .didAddTag("tag", error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -316,7 +316,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to add tag") {
                     beforeEach {
-                        event = .didAddTag(tag: "tag", error: Dummy.error)
+                        event = .didAddTag("tag", error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -334,7 +334,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has removeTag effect") {
                         expect(e.effects).to(equalDiff([
-                            .removeTag(tag: "tag")
+                            .removeTag("tag")
                         ]))
                     }
                 }
@@ -343,7 +343,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving didRemoveTag event") {
                 context("when successfully removes tag") {
                     beforeEach {
-                        event = .didRemoveTag(tag: "removed tag", error: nil)
+                        event = .didRemoveTag("removed tag", error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -362,7 +362,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when fails to remove tag") {
                     beforeEach {
-                        event = .didRemoveTag(tag: "removed tag", error: Dummy.error)
+                        event = .didRemoveTag("removed tag", error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -380,7 +380,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has addTag effect") {
                         expect(e.effects).to(equalDiff([
-                            .addTag(tag: "removed tag")
+                            .addTag("removed tag")
                         ]))
                     }
                 }

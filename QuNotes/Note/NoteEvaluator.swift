@@ -33,30 +33,30 @@ extension Note {
             switch event {
             case .didLoad:
                 effects = [
-                    .updateTitle(title: model.title),
-                    .showTags(tags: model.tags)
+                    .updateTitle(model.title),
+                    .showTags(model.tags)
                 ]
                 if model.isNew {
                     effects += [.focusOnTitle]
                 }
             case let .changeContent(newContent):
                 newModel = model |> Model.lens.content .~ newContent
-                actions = [.updateContent(content: newContent)]
-                effects = [.updateContent(content: newContent)]
+                actions = [.updateContent(newContent)]
+                effects = [.updateContent(newContent)]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
-                actions = [.updateTitle(title: newTitle)]
-                effects = [.updateTitle(title: newTitle)]
+                actions = [.updateTitle(newTitle)]
+                effects = [.updateTitle(newTitle)]
             case .delete:
                 actions = [.deleteNote]
             case let .addTag(tag):
                 newModel = model |> Model.lens.tags .~ model.tags.appending(tag)
-                actions = [.addTag(tag: tag)]
-                effects = [.addTag(tag: tag)]
+                actions = [.addTag(tag)]
+                effects = [.addTag(tag)]
             case let .removeTag(tag):
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
-                actions = [.removeTag(tag: tag)]
-                effects = [.removeTag(tag: tag)]
+                actions = [.removeTag(tag)]
+                effects = [.removeTag(tag)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -78,22 +78,22 @@ extension Note {
                 guard let error = error else { break }
                 newModel = model |> Model.lens.title .~ oldTitle
                 actions = [.showError(title: "Failed to update title", message: error.localizedDescription)]
-                effects = [.updateTitle(title: oldTitle)]
+                effects = [.updateTitle(oldTitle)]
             case let .didUpdateContent(oldContent, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.content .~ oldContent
                 actions = [.showError(title: "Failed to update content", message: error.localizedDescription)]
-                effects = [.updateContent(content: oldContent)]
+                effects = [.updateContent(oldContent)]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
                 actions = [.showError(title: "Failed to add tag", message: error.localizedDescription)]
-                effects = [.removeTag(tag: tag)]
+                effects = [.removeTag(tag)]
             case let .didRemoveTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.appending(tag)
                 actions = [.showError(title: "Failed to remove tag", message: error.localizedDescription)]
-                effects = [.addTag(tag: tag)]
+                effects = [.addTag(tag)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

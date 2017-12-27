@@ -17,39 +17,39 @@ public enum Note {
     }
 
     public enum Action: AutoEquatable {
-        case updateTitle(title: String)
-        case updateContent(content: String)
-        case addTag(tag: String)
-        case removeTag(tag: String)
+        case updateTitle(String)
+        case updateContent(String)
+        case addTag(String)
+        case removeTag(String)
         case deleteNote
         case finish
         case showError(title: String, message: String)
     }
 
     public enum ViewEffect: AutoEquatable {
-        case updateTitle(title: String)
+        case updateTitle(String)
         case focusOnTitle
-        case updateContent(content: String)
-        case showTags(tags: [String])
-        case addTag(tag: String)
-        case removeTag(tag: String)
+        case updateContent(String)
+        case showTags([String])
+        case addTag(String)
+        case removeTag(String)
     }
 
     public enum CoordinatorEvent {
         case didDeleteNote(error: Error?)
         case didUpdateTitle(oldTitle: String, error: Error?)
         case didUpdateContent(oldContent: String, error: Error?)
-        case didAddTag(tag: String, error: Error?)
-        case didRemoveTag(tag: String, error: Error?)
+        case didAddTag(String, error: Error?)
+        case didRemoveTag(String, error: Error?)
     }
 
     public enum ViewEvent {
         case didLoad
-        case changeContent(newContent: String)
-        case changeTitle(newTitle: String)
+        case changeContent(String)
+        case changeTitle(String)
         case delete
-        case addTag(tag: String)
-        case removeTag(tag: String)
+        case addTag(String)
+        case removeTag(String)
     }
 
     public typealias ViewDispacher = (_ event: ViewEvent) -> ()

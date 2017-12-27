@@ -79,11 +79,11 @@ extension Note {
             case let .addTag(note, url, tag):
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didAddTag(tag: tag, error: error)
-                dispatch <| .didAddTag(tag: tag, error: error)
+                dispatch <| .didAddTag(tag, error: error)
             case let .removeTag(note, url, tag):
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didRemoveTag(tag: tag, error: error)
-                dispatch <| .didRemoveTag(tag: tag, error: error)
+                dispatch <| .didRemoveTag(tag, error: error)
             }
         }
 

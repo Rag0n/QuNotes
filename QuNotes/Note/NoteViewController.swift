@@ -100,10 +100,10 @@ public final class NoteViewController: UIViewController {
 
         stackView.addArrangedSubview(tagView)
         tagView.onDidAddTag = { [unowned self] _, tag in
-            self.dispatch(.addTag(tag: tag.text))
+            self.dispatch(.addTag(tag.text))
         }
         tagView.onDidRemoveTag = { [unowned self] _, tag in
-            self.dispatch(.removeTag(tag: tag.text))
+            self.dispatch(.removeTag(tag.text))
         }
     }
 
@@ -129,7 +129,7 @@ public final class NoteViewController: UIViewController {
     }
 
     @objc private func onTitleTextFieldChange() {
-        dispatch(.changeTitle(newTitle: titleTextField.text ?? ""))
+        dispatch(.changeTitle(titleTextField.text ?? ""))
     }
 
     // MARK: Data
@@ -149,6 +149,6 @@ public final class NoteViewController: UIViewController {
 
 extension NoteViewController: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
-        dispatch(.changeContent(newContent: textView.text ?? ""))
+        dispatch(.changeContent(textView.text ?? ""))
     }
 }
