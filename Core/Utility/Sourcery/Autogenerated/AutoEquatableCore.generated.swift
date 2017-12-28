@@ -69,11 +69,11 @@ extension Library.Effect: Equatable {}
 public func == (lhs: Library.Effect, rhs: Library.Effect) -> Bool {
     switch (lhs, rhs) {
     case (.createNotebook(let lhs), .createNotebook(let rhs)):
-        if lhs.notebook != rhs.notebook { return false }
+        if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
         return true
     case (.deleteNotebook(let lhs), .deleteNotebook(let rhs)):
-        if lhs.notebook != rhs.notebook { return false }
+        if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
         return true
     case (.readBaseDirectory, .readBaseDirectory):

@@ -20,22 +20,22 @@ public enum Library {
     }
 
     public enum Effect: AutoEquatable {
-        case createNotebook(notebook: Notebook.Model, url: URL)
-        case deleteNotebook(notebook: Notebook.Model, url: URL)
+        case createNotebook(Notebook.Model, url: URL)
+        case deleteNotebook(Notebook.Model, url: URL)
         case readBaseDirectory
         case readNotebooks(urls: [URL])
         case handleError(title: String, message: String)
-        case didLoadNotebooks(notebooks: [Notebook.Meta])
+        case didLoadNotebooks([Notebook.Meta])
     }
 
     public enum Event {
         case loadNotebooks
-        case addNotebook(notebook: Notebook.Model)
-        case removeNotebook(notebook: Notebook.Meta)
-        case didAddNotebook(notebook: Notebook.Model, error: Error?)
-        case didRemoveNotebook(notebook: Notebook.Model, error: Error?)
+        case addNotebook(Notebook.Model)
+        case removeNotebook(Notebook.Meta)
+        case didAddNotebook(Notebook.Model, error: Error?)
+        case didRemoveNotebook(Notebook.Model, error: Error?)
         case didReadBaseDirectory(urls: Result<[URL], NSError>)
-        case didReadNotebooks(notebooks: [Result<Notebook.Meta, AnyError>])
+        case didReadNotebooks([Result<Notebook.Meta, AnyError>])
     }
 
     public struct Evaluator {
@@ -57,11 +57,11 @@ public enum Library {
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.meta.uuid) else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
-                effects = [.createNotebook(notebook: notebook, url: notebook.noteBookMetaURL())]
+                effects = [.createNotebook(notebook, url: notebook.noteBookMetaURL())]
             case let .removeNotebook(notebookMeta):
                 guard let notebook = model.notebooks.filter({$0.meta.uuid == notebookMeta.uuid}).first else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
-                effects = [.deleteNotebook(notebook: notebook, url: notebook.notebookURL())]
+                effects = [.deleteNotebook(notebook, url: notebook.notebookURL())]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
@@ -87,7 +87,7 @@ public enum Library {
                     break
                 }
                 let notebooks = results.map { $0.value! }
-                effects = [.didLoadNotebooks(notebooks: notebooks)]
+                effects = [.didLoadNotebooks(notebooks)]
             }
 
             return Evaluator(effects: effects, model: modelUpdate(model))
