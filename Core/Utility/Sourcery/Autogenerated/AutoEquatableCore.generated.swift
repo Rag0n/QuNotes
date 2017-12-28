@@ -104,14 +104,14 @@ public func == (lhs: Note.Effect, rhs: Note.Effect) -> Bool {
         if lhs.oldContent != rhs.oldContent { return false }
         return true
     case (.addTag(let lhs), .addTag(let rhs)):
+        if lhs.0 != rhs.0 { return false }
         if lhs.note != rhs.note { return false }
         if lhs.url != rhs.url { return false }
-        if lhs.tag != rhs.tag { return false }
         return true
     case (.removeTag(let lhs), .removeTag(let rhs)):
+        if lhs.0 != rhs.0 { return false }
         if lhs.note != rhs.note { return false }
         if lhs.url != rhs.url { return false }
-        if lhs.tag != rhs.tag { return false }
         return true
     default: return false
     }

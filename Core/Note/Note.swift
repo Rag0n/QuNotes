@@ -41,19 +41,19 @@ public enum Note {
     public enum Effect: AutoEquatable {
         case updateTitle(note: Meta, url: URL, oldTitle: String)
         case updateContent(content: String, url: URL, oldContent: String)
-        case addTag(note: Meta, url: URL, tag: String)
-        case removeTag(note: Meta, url: URL, tag: String)
+        case addTag(String, note: Meta, url: URL)
+        case removeTag(String, note: Meta, url: URL)
     }
 
     public enum Event {
-        case changeTitle(newTitle: String)
-        case changeContent(newContent: String)
-        case addTag(tag: String)
-        case removeTag(tag: String)
+        case changeTitle(String)
+        case changeContent(String)
+        case addTag(String)
+        case removeTag(String)
         case didChangeTitle(oldTitle: String, error: Error?)
         case didChangeContent(oldContent: String, error: Error?)
-        case didAddTag(tag: String, error: Error?)
-        case didRemoveTag(tag: String, error: Error?)
+        case didAddTag(String, error: Error?)
+        case didRemoveTag(String, error: Error?)
     }
 
     public struct Evaluator {
@@ -89,14 +89,14 @@ public enum Note {
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.addTag(note: newModel.meta, url: url, tag: tag)]
+                effects = [.addTag(tag, note: newModel.meta, url: url)]
             case let .removeTag(tag):
                 guard let indexOfTag = model.meta.tags.index(of: tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(at: indexOfTag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.removeTag(note: newModel.meta, url: url, tag: tag)]
+                effects = [.removeTag(tag, note: newModel.meta, url: url)]
             case let .didChangeTitle(oldTitle, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.title .~ oldTitle

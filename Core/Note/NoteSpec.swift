@@ -35,7 +35,7 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving changeTitle event") {
                 beforeEach {
-                    event = .changeTitle(newTitle: "new title")
+                    event = .changeTitle("new title")
                     e.currentTimestamp = { 15 }
                     e = e.evaluate(event: event)
                 }
@@ -73,7 +73,7 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving changeContent event") {
                 beforeEach {
-                    event = .changeContent(newContent: "new content")
+                    event = .changeContent("new content")
                     e.currentTimestamp = { 16 }
                     e = e.evaluate(event: event)
                 }
@@ -110,7 +110,7 @@ class NoteExperimantalSpec: QuickSpec {
             context("when receiving addTag event") {
                 context("when tag was already added") {
                     beforeEach {
-                        event = .addTag(tag: "tag")
+                        event = .addTag("tag")
                         e = e.evaluate(event: event)
                     }
 
@@ -125,7 +125,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when tag is new") {
                     beforeEach {
-                        event = .addTag(tag: "new tag")
+                        event = .addTag("new tag")
                         e.currentTimestamp = { 18 }
                         e = e.evaluate(event: event)
                     }
@@ -152,11 +152,11 @@ class NoteExperimantalSpec: QuickSpec {
 
                         it("has addTag effect") {
                             expect(e.effects).to(equalDiff([
-                                .addTag(note: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                .addTag("new tag",
+                                        note: Note.Meta(uuid: meta.uuid, title: meta.title,
                                                         tags: ["tag", "new tag"], updated_at: 20,
                                                         created_at: meta.created_at),
-                                        url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                        tag: "new tag")
+                                        url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                             ]))
                         }
                     }
@@ -166,7 +166,7 @@ class NoteExperimantalSpec: QuickSpec {
             context("when receiving removeTag event") {
                 context("when that tag exist") {
                     beforeEach {
-                        event = .removeTag(tag: "tag")
+                        event = .removeTag("tag")
                         e.currentTimestamp = { 20 }
                         e = e.evaluate(event: event)
                     }
@@ -193,10 +193,10 @@ class NoteExperimantalSpec: QuickSpec {
 
                         it("has removeTag effect") {
                             expect(e.effects).to(equalDiff([
-                                .removeTag(note: Note.Meta(uuid: meta.uuid, title: meta.title,
+                                .removeTag("tag",
+                                           note: Note.Meta(uuid: meta.uuid, title: meta.title,
                                                         tags: [], updated_at: 22, created_at: meta.created_at),
-                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                           tag: "tag")
+                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                             ]))
                         }
                     }
@@ -204,7 +204,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when that tag doesnt exist") {
                     beforeEach {
-                        event = .removeTag(tag: "not existing tag")
+                        event = .removeTag("not existing tag")
                         e = e.evaluate(event: event)
                     }
 
@@ -279,7 +279,7 @@ class NoteExperimantalSpec: QuickSpec {
             context("when receiving didAddTag event") {
                 context("when successfully adds tag") {
                     beforeEach {
-                        event = .didAddTag(tag: "tag", error: nil)
+                        event = .didAddTag("tag", error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -290,7 +290,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when fails to add tag") {
                     beforeEach {
-                        event = .didAddTag(tag: "tag", error: error)
+                        event = .didAddTag("tag", error: error)
                         e = e.evaluate(event: event)
                     }
 
@@ -308,7 +308,7 @@ class NoteExperimantalSpec: QuickSpec {
             context("when receiving didRemoveTag event") {
                 context("when successfuly removes tag") {
                     beforeEach {
-                        event = .didRemoveTag(tag: "removed tag", error: nil)
+                        event = .didRemoveTag("removed tag", error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -319,7 +319,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when fails to remove tag") {
                     beforeEach {
-                        event = .didRemoveTag(tag: "removed tag", error: error)
+                        event = .didRemoveTag("removed tag", error: error)
                         e = e.evaluate(event: event)
                     }
 
