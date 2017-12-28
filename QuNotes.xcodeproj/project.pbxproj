@@ -103,6 +103,7 @@
 		1190D5B01FC1D44E0064D569 /* AutoEquatable.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1190D5AE1FC1D44E0064D569 /* AutoEquatable.generated.swift */; };
 		1190D5B21FC1D4AF0064D569 /* SourceryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1190D5B11FC1D4AF0064D569 /* SourceryProtocols.swift */; };
 		1190D5B31FC1D4AF0064D569 /* SourceryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1190D5B11FC1D4AF0064D569 /* SourceryProtocols.swift */; };
+		1193B6E41FF5642E00080944 /* DynamicBaseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1193B6E01FF5642600080944 /* DynamicBaseURL.swift */; };
 		119B7A4C1FE985A200563244 /* FailingFileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */; };
 		119B7A4E1FE985CB00563244 /* FileExecuterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B7A4D1FE985CB00563244 /* FileExecuterType.swift */; };
 		119B7A501FE987EF00563244 /* FileExecuterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119B7A4D1FE985CB00563244 /* FileExecuterType.swift */; };
@@ -281,6 +282,7 @@
 		1190D5AB1FC1CEA90064D569 /* AutoEquatable.stencil */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = AutoEquatable.stencil; sourceTree = "<group>"; };
 		1190D5AE1FC1D44E0064D569 /* AutoEquatable.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoEquatable.generated.swift; sourceTree = "<group>"; };
 		1190D5B11FC1D4AF0064D569 /* SourceryProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SourceryProtocols.swift; sourceTree = "<group>"; };
+		1193B6E01FF5642600080944 /* DynamicBaseURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicBaseURL.swift; sourceTree = "<group>"; };
 		119955FC1F07C0FD007AB79A /* Notepad.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Notepad.framework; path = Carthage/Build/iOS/Notepad.framework; sourceTree = "<group>"; };
 		119B7A4D1FE985CB00563244 /* FileExecuterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileExecuterType.swift; sourceTree = "<group>"; };
 		11A1A7291FF03F1D000743CF /* String+LocalizedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+LocalizedString.swift"; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 				11A1FE601FA7B335006BAF4C /* Notebook */,
 				11A1FE641FA7B405006BAF4C /* Note */,
 				1150D3331FE438FE00AC1427 /* Utility */,
+				1193B6E01FF5642600080944 /* DynamicBaseURL.swift */,
 				1150D2FB1FE433C000AC1427 /* Core.h */,
 				1150D2FC1FE433C000AC1427 /* Info.plist */,
 			);
@@ -1075,6 +1078,7 @@
 			files = (
 				1150D3211FE4371B00AC1427 /* AutoEquatableCore.generated.swift in Sources */,
 				1150D3271FE4374D00AC1427 /* Library.swift in Sources */,
+				1193B6E41FF5642E00080944 /* DynamicBaseURL.swift in Sources */,
 				1150D3201FE4371800AC1427 /* AutoLensCore.generated.swift in Sources */,
 				1150D32C1FE4381400AC1427 /* Array+Extensions.swift in Sources */,
 				1150D31B1FE4346C00AC1427 /* SourceryProtocols.swift in Sources */,
