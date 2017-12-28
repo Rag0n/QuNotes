@@ -121,15 +121,15 @@ extension Notebook.Effect: Equatable {}
 public func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
     switch (lhs, rhs) {
     case (.createNote(let lhs), .createNote(let rhs)):
-        if lhs.note != rhs.note { return false }
+        if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
         return true
     case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
-        if lhs.notebook != rhs.notebook { return false }
+        if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
         return true
     case (.deleteNote(let lhs), .deleteNote(let rhs)):
-        if lhs.note != rhs.note { return false }
+        if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
         return true
     case (.readDirectory(let lhs), .readDirectory(let rhs)):

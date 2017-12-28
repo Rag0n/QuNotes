@@ -33,25 +33,25 @@ public enum Notebook {
     }
 
     public enum Effect: AutoEquatable {
-        case createNote(note: Note.Meta, url: URL)
-        case updateNotebook(notebook: Meta, url: URL)
-        case deleteNote(note: Note.Meta, url: URL)
+        case createNote(Note.Meta, url: URL)
+        case updateNotebook(Meta, url: URL)
+        case deleteNote(Note.Meta, url: URL)
         case readDirectory(atURL: URL)
         case readNotes(urls: [URL])
         case handleError(title: String, message: String)
-        case didLoadNotes(notes: [Note.Meta])
+        case didLoadNotes([Note.Meta])
     }
 
     public enum Event {
         case loadNotes
-        case changeName(newName: String)
-        case addNote(note: Note.Meta)
-        case removeNote(note: Note.Meta)
+        case changeName(String)
+        case addNote(Note.Meta)
+        case removeNote(Note.Meta)
         case didReadDirectory(urls: Result<[URL], NSError>)
-        case didReadNotes(notes: [Result<Note.Meta, AnyError>])
-        case didAddNote(note: Note.Meta, error: Error?)
-        case didDeleteNote(note: Note.Meta, error: Error?)
-        case didUpdateNotebook(notebook: Meta, error: Error?)
+        case didReadNotes([Result<Note.Meta, AnyError>])
+        case didAddNote(Note.Meta, error: Error?)
+        case didDeleteNote(Note.Meta, error: Error?)
+        case didUpdateNotebook(Meta, error: Error?)
     }
 
     public struct Evaluator {
@@ -73,18 +73,18 @@ public enum Notebook {
             case let .changeName(newName):
                 newModel = model |> Model.lens.meta.name .~ newName
                 let url = newModel.noteBookMetaURL()
-                effects = [.updateNotebook(notebook: newModel.meta, url: url)]
+                effects = [.updateNotebook(newModel.meta, url: url)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
                 let url = newModel.meta.noteMetaURL(for: noteToAdd)
-                effects = [.createNote(note: noteToAdd, url: url)]
+                effects = [.createNote(noteToAdd, url: url)]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removing(at: indexOfRemovedNote)
                 newModel = model |> Model.lens.notes .~ notes
                 let url = newModel.meta.noteURL(for: noteToRemove)
-                effects = [.deleteNote(note: noteToRemove, url: url)]
+                effects = [.deleteNote(noteToRemove, url: url)]
             case let .didReadDirectory(result):
                 guard let urls = result.value else {
                     effects = [.handleError(title: "Failed to load notes",
@@ -104,7 +104,7 @@ public enum Notebook {
                     break
                 }
                 let notes = result.map { $0.value! }
-                effects = [.didLoadNotes(notes: notes)]
+                effects = [.didLoadNotes(notes)]
             case let .didAddNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)

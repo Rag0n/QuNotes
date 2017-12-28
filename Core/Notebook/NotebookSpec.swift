@@ -54,13 +54,13 @@ class NotebookSpec: QuickSpec {
 
             context("when receiving changeName event") {
                 beforeEach {
-                    event = .changeName(newName: "new name")
+                    event = .changeName("new name")
                     e = e.evaluate(event: event)
                 }
 
                 it("has updateFile effect with notebook & notebook URL") {
                     expect(e.effects).to(equalDiff([
-                        .updateNotebook(notebook: Notebook.Meta(uuid: "uuid", name: "new name"),
+                        .updateNotebook(Notebook.Meta(uuid: "uuid", name: "new name"),
                                         url: URL(string: "uuid.qvnotebook/meta.json")!)
                     ]))
                 }
@@ -78,14 +78,14 @@ class NotebookSpec: QuickSpec {
                                             updated_at: 12, created_at: 12)
 
                     beforeEach {
-                        event = .addNote(note: newNote)
+                        event = .addNote(newNote)
                         e = e.evaluate(event: event)
                     }
 
                     it("has createNote effect") {
                         expect(e.effects).to(equalDiff([
-                            .createNote(note: Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
-                                                        updated_at: 12, created_at: 12),
+                            .createNote(Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
+                                                  updated_at: 12, created_at: 12),
                                         url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!)
                         ]))
                     }
@@ -99,7 +99,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when note with that uuid is already added") {
                     beforeEach {
-                        event = .addNote(note: note)
+                        event = .addNote(note)
                         e = e.evaluate(event: event)
                     }
 
@@ -116,13 +116,13 @@ class NotebookSpec: QuickSpec {
             context("when receiving removeNote event") {
                 context("when passed note is exist") {
                     beforeEach {
-                        event = .removeNote(note: note)
+                        event = .removeNote(note)
                         e = e.evaluate(event: event)
                     }
 
                     it("has deleteFile effect with URL of deleted note") {
                         expect(e.effects).to(equalDiff([
-                            .deleteNote(note: note, url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
+                            .deleteNote(note, url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
                         ]))
                     }
 
@@ -137,7 +137,7 @@ class NotebookSpec: QuickSpec {
                     beforeEach {
                         let notAddedNote = Note.Meta(uuid: "nAUUID", title: "t", tags: [],
                                                      updated_at: 14, created_at: 14)
-                        event = .removeNote(note: notAddedNote)
+                        event = .removeNote(notAddedNote)
                         e = e.evaluate(event: event)
                     }
 
@@ -188,13 +188,13 @@ class NotebookSpec: QuickSpec {
             context("when receiving didReadNotes event") {
                 context("when note list is empty") {
                     beforeEach {
-                        event = .didReadNotes(notes: [])
+                        event = .didReadNotes([])
                         e = e.evaluate(event: event)
                     }
 
                     it("has didLoadNotes effect with empty list") {
                         expect(e.effects).to(equalDiff([
-                            .didLoadNotes(notes: [])
+                            .didLoadNotes([])
                         ]))
                     }
                 }
@@ -202,21 +202,21 @@ class NotebookSpec: QuickSpec {
                 context("when note list has result with note") {
                     beforeEach {
                         let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
-                        event = .didReadNotes(notes: [Result(value: note)])
+                        event = .didReadNotes([Result(value: note)])
                         e = e.evaluate(event: event)
                     }
 
                     it("has didLoadNotes effect with 1 note") {
                         expect(e.effects).to(equalDiff([
-                            .didLoadNotes(notes: [Note.Meta(uuid: "u", title: "t", tags: ["t"],
-                                                            updated_at: 2, created_at: 2)])
+                            .didLoadNotes([Note.Meta(uuid: "u", title: "t", tags: ["t"],
+                                                     updated_at: 2, created_at: 2)])
                         ]))
                     }
                 }
 
                 context("when note list has result with error") {
                     beforeEach {
-                        event = .didReadNotes(notes: [Result(error: AnyError(error))])
+                        event = .didReadNotes([Result(error: AnyError(error))])
                         e = e.evaluate(event: event)
                     }
 
@@ -232,9 +232,9 @@ class NotebookSpec: QuickSpec {
                         let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
                         let secondError = NSError(domain: "error domain", code: 1,
                                                   userInfo: [NSLocalizedDescriptionKey: "secondMessage"])
-                        event = .didReadNotes(notes: [Result(error: AnyError(error)),
-                                                      Result(value: note),
-                                                      Result(error: AnyError(secondError))])
+                        event = .didReadNotes([Result(error: AnyError(error)),
+                                               Result(value: note),
+                                               Result(error: AnyError(secondError))])
                         e = e.evaluate(event: event)
                     }
 
@@ -250,7 +250,7 @@ class NotebookSpec: QuickSpec {
                 context("when successfully adds note") {
                     beforeEach {
                         let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
-                        event = .didAddNote(note: note, error: nil)
+                        event = .didAddNote(note, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -261,7 +261,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when fails to add note") {
                     beforeEach {
-                        event = .didAddNote(note: note, error: error)
+                        event = .didAddNote(note, error: error)
                         e = e.evaluate(event: event)
                     }
 
@@ -276,7 +276,7 @@ class NotebookSpec: QuickSpec {
             context("when receiving didDeleteNote event") {
                 context("when successfully deletes note") {
                     beforeEach {
-                        event = .didDeleteNote(note: note, error: nil)
+                        event = .didDeleteNote(note, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -289,7 +289,7 @@ class NotebookSpec: QuickSpec {
                     let deletedNote = Note.Meta(uuid: "c", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
 
                     beforeEach {
-                        event = .didDeleteNote(note: deletedNote, error: error)
+                        event = .didDeleteNote(deletedNote, error: error)
                         e = e.evaluate(event: event)
                     }
 
@@ -306,7 +306,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when successfilly updated notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(notebook: oldNotebook, error: nil)
+                        event = .didUpdateNotebook(oldNotebook, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -317,7 +317,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when fails to update notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(notebook: oldNotebook, error: error)
+                        event = .didUpdateNotebook(oldNotebook, error: error)
                         e = e.evaluate(event: event)
                     }
 
