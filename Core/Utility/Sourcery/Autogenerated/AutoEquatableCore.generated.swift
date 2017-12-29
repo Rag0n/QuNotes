@@ -24,6 +24,12 @@ fileprivate func compareArrays<T>(lhs: [T], rhs: [T], compare: (_ lhs: T, _ rhs:
 
 
 // MARK: - AutoEquatable for classes, protocols, structs
+// MARK: - DynamicBaseURL AutoEquatable
+extension DynamicBaseURL: Equatable {}
+public func == (lhs: DynamicBaseURL, rhs: DynamicBaseURL) -> Bool {
+    guard lhs.url == rhs.url else { return false }
+    return true
+}
 // MARK: - Library.Model AutoEquatable
 extension Library.Model: Equatable {}
 public func == (lhs: Library.Model, rhs: Library.Model) -> Bool {

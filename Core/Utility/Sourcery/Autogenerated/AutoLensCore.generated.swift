@@ -4,6 +4,16 @@
 import Prelude
 
 // MARK: - Lens
+extension DynamicBaseURL {
+    enum lens {
+        static let url = Lens<DynamicBaseURL, URL>(
+            get: { $0.url },
+            set: { url, dynamicbaseurl in
+                DynamicBaseURL(url: url)
+            }
+        )
+    }
+}
 extension Library.Model {
     enum lens {
         static let notebooks = Lens<Library.Model, [Notebook.Model]>(
