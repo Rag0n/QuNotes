@@ -22,6 +22,7 @@
 		1138B0031FE831B1002D28DC /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFF61FE82D22002D28DC /* Environment.swift */; };
 		1138B0051FE847CC002D28DC /* ThemeExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138B0041FE847CB002D28DC /* ThemeExecuter.swift */; };
 		1138B0061FE847CC002D28DC /* ThemeExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138B0041FE847CB002D28DC /* ThemeExecuter.swift */; };
+		113AAA261FF6DAF2007B8AD5 /* DynamicBaseURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1193B6E01FF5642600080944 /* DynamicBaseURL.swift */; };
 		11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA61FE4582500BEF81F /* NotebookDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA41FE4582500BEF81F /* NotebookDatatypes.swift */; };
 		11406FA81FE4583600BEF81F /* LibraryDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11406FA71FE4583600BEF81F /* LibraryDatatypes.swift */; };
@@ -1097,6 +1098,7 @@
 				1150D3341FE4390F00AC1427 /* EqualDiffMatcher.swift in Sources */,
 				1150D3281FE4374E00AC1427 /* Library.swift in Sources */,
 				1150D3221FE4371B00AC1427 /* AutoEquatableCore.generated.swift in Sources */,
+				113AAA261FF6DAF2007B8AD5 /* DynamicBaseURL.swift in Sources */,
 				1150D3291FE4375200AC1427 /* LibrarySpec.swift in Sources */,
 				1150D3261FE4374900AC1427 /* NotebookSpec.swift in Sources */,
 				1150D31E1FE4361500AC1427 /* Note.swift in Sources */,
