@@ -12,8 +12,8 @@ import Result
 
 class NotebookSpec: QuickSpec {
     override func spec() {
-        let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
-        let note = Note.Meta(uuid: "noteUUID", title: "title", tags: [], updated_at: 0, created_at: 123)
+        let error = Dummy.error(withMessage: "message")
+        let note = Dummy.note(uuid: "noteUUID")
         let meta = Notebook.Meta(uuid: "uuid", name: "name")
         let model = Notebook.Model(meta: meta, notes: [note])
         var e: Notebook.Evaluator!
@@ -74,8 +74,7 @@ class NotebookSpec: QuickSpec {
 
             context("when receiving addNote event") {
                 context("when note with that uuid is not added yet") {
-                    let newNote = Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
-                                            updated_at: 12, created_at: 12)
+                    let newNote = Dummy.note(uuid: "newNoteUUID")
 
                     beforeEach {
                         event = .addNote(newNote)
@@ -84,8 +83,7 @@ class NotebookSpec: QuickSpec {
 
                     it("has createNote effect") {
                         expect(e.effects).to(equalDiff([
-                            .createNote(Note.Meta(uuid: "newNoteUUID", title: "title", tags: ["tag"],
-                                                  updated_at: 12, created_at: 12),
+                            .createNote(newNote,
                                         url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!)
                         ]))
                     }
@@ -134,9 +132,9 @@ class NotebookSpec: QuickSpec {
                 }
 
                 context("when passed note is not exist") {
+                    let notAddedNote = Dummy.note()
+
                     beforeEach {
-                        let notAddedNote = Note.Meta(uuid: "nAUUID", title: "t", tags: [],
-                                                     updated_at: 14, created_at: 14)
                         event = .removeNote(notAddedNote)
                         e = e.evaluate(event: event)
                     }
@@ -200,16 +198,16 @@ class NotebookSpec: QuickSpec {
                 }
 
                 context("when note list has result with note") {
+                    let note = Dummy.note()
+
                     beforeEach {
-                        let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
                         event = .didReadNotes([Result(value: note)])
                         e = e.evaluate(event: event)
                     }
 
                     it("has didLoadNotes effect with 1 note") {
                         expect(e.effects).to(equalDiff([
-                            .didLoadNotes([Note.Meta(uuid: "u", title: "t", tags: ["t"],
-                                                     updated_at: 2, created_at: 2)])
+                            .didLoadNotes([note])
                         ]))
                     }
                 }
@@ -229,9 +227,8 @@ class NotebookSpec: QuickSpec {
 
                 context("when note list has result with note and several errors") {
                     beforeEach {
-                        let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
-                        let secondError = NSError(domain: "error domain", code: 1,
-                                                  userInfo: [NSLocalizedDescriptionKey: "secondMessage"])
+                        let note = Dummy.note()
+                        let secondError = Dummy.error(withMessage: "secondMessage")
                         event = .didReadNotes([Result(error: AnyError(error)),
                                                Result(value: note),
                                                Result(error: AnyError(secondError))])
@@ -249,7 +246,7 @@ class NotebookSpec: QuickSpec {
             context("when receiving didAddNote event") {
                 context("when successfully adds note") {
                     beforeEach {
-                        let note = Note.Meta(uuid: "u", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
+                        let note = Dummy.note()
                         event = .didAddNote(note, error: nil)
                         e = e.evaluate(event: event)
                     }
@@ -286,7 +283,7 @@ class NotebookSpec: QuickSpec {
                 }
 
                 context("when fails to delete note") {
-                    let deletedNote = Note.Meta(uuid: "c", title: "t", tags: ["t"], updated_at: 2, created_at: 2)
+                    let deletedNote = Dummy.note()
 
                     beforeEach {
                         event = .didDeleteNote(deletedNote, error: error)
@@ -329,5 +326,15 @@ class NotebookSpec: QuickSpec {
                 }
             }
         }
+    }
+}
+
+private enum Dummy {
+    static func note(uuid: String = UUID().uuidString) -> Note.Meta {
+        return Note.Meta(uuid: uuid, title: uuid + "title", tags: [uuid + "tag"], updated_at: 7, created_at: 7)
+    }
+
+    static func error(withMessage message: String) -> NSError {
+        return NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
     }
 }
