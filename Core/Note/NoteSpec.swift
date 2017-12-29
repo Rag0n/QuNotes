@@ -42,8 +42,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 it("updates model by changing title and updatedDate") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(meta: Note.Meta(uuid: "uuid", title: "new title", tags: ["tag"],
-                                                   updated_at: 15, created_at: 12), content: "content")
+                        Dummy.model(fromModel: model, title: "new title", updated_at: 15)
                     ))
                 }
 
@@ -62,8 +61,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("has updateTitle effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateTitle(note: Note.Meta(uuid: meta.uuid, title: "new title", tags: meta.tags,
-                                                         updated_at: 15, created_at: meta.created_at),
+                            .updateTitle(note: Dummy.meta(fromMeta: meta, title: "new title", updated_at: 15),
                                          url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
                                          oldTitle: "title")
                         ]))
@@ -80,8 +78,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 it("updates model by changing content and updatedDate") {
                     expect(e.model).to(equalDiff(
-                        Note.Model(meta: Note.Meta(uuid: "uuid", title: "title", tags: ["tag"],
-                                                   updated_at: 16, created_at: 12), content: "new content")
+                        Dummy.model(fromModel: model, updated_at: 16, content: "new content")
                     ))
                 }
 
@@ -132,8 +129,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by appending tag and updating updateDate") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(meta: Note.Meta(uuid: "uuid", title: "title", tags: ["tag", "new tag"],
-                                                       updated_at: 18, created_at: 12), content: "content")
+                            Dummy.model(fromModel: model, tags: ["tag", "new tag"], updated_at: 18)
                         ))
                     }
 
@@ -153,9 +149,7 @@ class NoteExperimantalSpec: QuickSpec {
                         it("has addTag effect") {
                             expect(e.effects).to(equalDiff([
                                 .addTag("new tag",
-                                        note: Note.Meta(uuid: meta.uuid, title: meta.title,
-                                                        tags: ["tag", "new tag"], updated_at: 20,
-                                                        created_at: meta.created_at),
+                                        note: Dummy.meta(fromMeta: meta, tags: ["tag", "new tag"], updated_at: 20),
                                         url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                             ]))
                         }
@@ -173,8 +167,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by removing tag and updating updatedDate") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(meta: Note.Meta(uuid: "uuid", title: "title", tags: [],
-                                                       updated_at: 20, created_at: 12), content: "content")
+                            Dummy.model(fromModel: model, tags: [], updated_at: 20)
                         ))
                     }
 
@@ -194,8 +187,7 @@ class NoteExperimantalSpec: QuickSpec {
                         it("has removeTag effect") {
                             expect(e.effects).to(equalDiff([
                                 .removeTag("tag",
-                                           note: Note.Meta(uuid: meta.uuid, title: meta.title,
-                                                        tags: [], updated_at: 22, created_at: meta.created_at),
+                                           note: Dummy.meta(fromMeta: meta, tags: [], updated_at: 22),
                                            url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
                             ]))
                         }
@@ -238,10 +230,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by setting title back to the old") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: "old title",
-                                                       tags: meta.tags, updated_at: meta.updated_at,
-                                                       created_at: meta.created_at),
-                                       content: "content")
+                            Dummy.model(fromModel: model, title: "old title")
                         ))
                     }
                 }
@@ -267,10 +256,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by setting content back to the old") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: meta.title,
-                                                       tags: meta.tags, updated_at: meta.updated_at,
-                                                       created_at: meta.created_at),
-                                       content: "old content")
+                            Dummy.model(fromModel: model, content: "old content")
                         ))
                     }
                 }
@@ -296,10 +282,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("removes tag from the model") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: meta.title,
-                                                       tags: [], updated_at: meta.updated_at,
-                                                       created_at: meta.created_at),
-                                       content: "content")
+                            Dummy.model(fromModel: model, tags: [])
                         ))
                     }
                 }
@@ -325,14 +308,32 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("adds removed tag back to model") {
                         expect(e.model).to(equalDiff(
-                            Note.Model(meta: Note.Meta(uuid: meta.uuid, title: meta.title,
-                                                       tags: ["tag", "removed tag"], updated_at: meta.updated_at,
-                                                       created_at: meta.created_at),
-                                       content: "content")
+                            Dummy.model(fromModel: model, tags: ["tag", "removed tag"])
                         ))
                     }
                 }
             }
         }
+    }
+}
+
+private enum Dummy {
+    static func meta(fromMeta meta: Note.Meta, title: String? = nil, tags: [String]? = nil,
+                     updated_at: TimeInterval? = nil, created_at: TimeInterval? = nil) -> Note.Meta {
+        return Note.Meta(uuid: meta.uuid,
+                         title: title ?? meta.title,
+                         tags: tags ?? meta.tags,
+                         updated_at: updated_at ?? meta.updated_at,
+                         created_at: created_at ?? meta.created_at)
+    }
+
+    static func model(fromModel model: Note.Model, title: String? = nil, tags: [String]? = nil,
+                      updated_at: TimeInterval? = nil, created_at: TimeInterval? = nil,
+                      content: String? = nil, notebook: Notebook.Meta? = nil) -> Note.Model {
+        let newMeta = meta(fromMeta: model.meta, title: title, tags: tags,
+                           updated_at: updated_at, created_at: created_at)
+        return Note.Model(meta: newMeta,
+                          content: content ?? model.content,
+                          notebook: notebook ?? model.notebook)
     }
 }
