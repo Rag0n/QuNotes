@@ -58,9 +58,9 @@ extension Notebook {
             case .deleteNotebook:
                 actions = [.deleteNotebook(model.notebook)]
             case let .filterNotes(filter):
-                let lowerCasedFilter = filter?.lowercased() ?? ""
-                newModel = model |> Model.lens.filter .~ lowerCasedFilter
-                effects = [.updateAllNotes(titles(from: newModel.filteredNotes))]
+                let lowercasedFilter = filter?.lowercased() ?? ""
+                newModel = model |> Model.lens.filter .~ lowercasedFilter
+                effects = [.updateAllNotes(titles(from: newModel))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
@@ -124,11 +124,7 @@ private extension Notebook {
     }
 
     static func titles(from model: Model) -> [String] {
-        return titles(from: model.filteredNotes)
-    }
-
-    static func titles(from notes: [Core.Note.Meta]) -> [String] {
-        return notes.map { $0.title }
+        return model.filteredNotes.map { $0.title }
     }
 }
 
