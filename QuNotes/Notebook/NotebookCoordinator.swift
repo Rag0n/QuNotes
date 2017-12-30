@@ -7,13 +7,17 @@
 //
 
 import UIKit
-import Result
 import Core
 import Prelude
 
 extension Notebook {
     final class CoordinatorImp: Coordinator {
-        // MARK: - Coordinator
+        init(withNavigationController navigationController: NavigationController, notebook: Core.Notebook.Meta) {
+            self.navigationController = navigationController
+            self.evaluator = Evaluator(notebook: notebook)
+            self.notebookEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
+            self.notebook = notebook
+        }
 
         func onStart() {
             .loadNotes |> dispatchToNotebook
@@ -23,55 +27,9 @@ extension Notebook {
             return notebookViewController
         }
 
-        // MARK: - Life cycle
-
-        fileprivate var fileExecuter: FileExecuterType {
-            return AppEnvironment.current.fileExecuter
-        }
-        fileprivate let navigationController: NavigationController
-        fileprivate var evaluator: Evaluator
-        fileprivate var notebookEvaluator: Core.Notebook.Evaluator
-        fileprivate let notebook: Core.Notebook.Meta
-
-        fileprivate lazy var notebookViewController: NotebookViewController = {
-            let vc = NotebookViewController(withDispatch: dispatch)
-            vc.navigationItem.largeTitleDisplayMode = .never
-            return vc
-        }()
-
-        init(withNavigationController navigationController: NavigationController, notebook: Core.Notebook.Meta) {
-            self.navigationController = navigationController
-            self.evaluator = Evaluator(notebook: notebook)
-            self.notebookEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
-            self.notebook = notebook
-        }
-
         // MARK: - Private
 
-        fileprivate func dispatch(event: ViewEvent) {
-            event |> evaluator.evaluate |> updateEvaluator
-        }
-
-        fileprivate func dispatch(event: CoordinatorEvent) {
-            event |> evaluator.evaluate |> updateEvaluator
-        }
-
-        fileprivate func dispatchToNotebook(event: Core.Notebook.Event) {
-            event |> notebookEvaluator.evaluate |> updateNotebook
-        }
-
-        fileprivate func updateEvaluator(evaluator: Evaluator) {
-            self.evaluator = evaluator
-            evaluator.actions.forEach(perform)
-            evaluator.effects.forEach(notebookViewController.perform)
-        }
-
-        fileprivate func updateNotebook(notebook: Core.Notebook.Evaluator) {
-            self.notebookEvaluator = notebook
-            notebook.effects.forEach(perform)
-        }
-
-        fileprivate func perform(action: Action) {
+        private func perform(action: Action) {
             switch action {
             case let .addNote(note):
                 dispatchToNotebook <| .addNote(note: note)
@@ -88,12 +46,12 @@ extension Notebook {
                 showError(title: title, message: message)
             case let .showNote(note, isNewNote):
                 let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController, note: note,
-                                                             isNewNote: isNewNote, notebook: notebook)
+                                                          isNewNote: isNewNote, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true)
             }
         }
 
-        fileprivate func perform(action: Core.Notebook.Effect) {
+        private func perform(action: Core.Notebook.Effect) {
             switch action {
             case let .createNote(note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
@@ -109,7 +67,7 @@ extension Notebook {
                 dispatch <| .didDeleteNote(note, error: error)
             case let .readDirectory(url):
                 let urls = fileExecuter.contentOfFolder(at: url)
-                 dispatchToNotebook <| .didReadDirectory(urls: urls)
+                dispatchToNotebook <| .didReadDirectory(urls: urls)
             case let .readNotes(urls):
                 let result = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Note.Meta.self) }
                 dispatchToNotebook <| .didReadNotes(notes: result)
@@ -119,6 +77,46 @@ extension Notebook {
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes)
             }
+        }
+
+        // MARK: State
+
+        private let navigationController: NavigationController
+        private var evaluator: Evaluator
+        private var notebookEvaluator: Core.Notebook.Evaluator
+        private let notebook: Core.Notebook.Meta
+        private lazy var notebookViewController: NotebookViewController = {
+            let vc = NotebookViewController(withDispatch: dispatch)
+            vc.navigationItem.largeTitleDisplayMode = .never
+            return vc
+        }()
+        private var fileExecuter: FileExecuterType {
+            return AppEnvironment.current.fileExecuter
+        }
+
+        // MARK: Utility
+
+        private func dispatch(event: ViewEvent) {
+            event |> evaluator.evaluate |> updateEvaluator
+        }
+
+        private func dispatch(event: CoordinatorEvent) {
+            event |> evaluator.evaluate |> updateEvaluator
+        }
+
+        private func dispatchToNotebook(event: Core.Notebook.Event) {
+            event |> notebookEvaluator.evaluate |> updateNotebook
+        }
+
+        private func updateEvaluator(evaluator: Evaluator) {
+            self.evaluator = evaluator
+            evaluator.actions.forEach(perform)
+            evaluator.effects.forEach(notebookViewController.perform)
+        }
+
+        private func updateNotebook(notebook: Core.Notebook.Evaluator) {
+            self.notebookEvaluator = notebook
+            notebook.effects.forEach(perform)
         }
     }
 }

@@ -13,7 +13,11 @@ import Prelude
 
 extension Library {
     final class CoordinatorImp: Coordinator {
-        // MARK: - Coordinator
+        init(withNavigationController navigationController: NavigationController) {
+            self.navigationController = navigationController
+            evaluator = Evaluator()
+            libraryEvaluator = Core.Library.Evaluator(model: Core.Library.Model(notebooks: []))
+        }
 
         func onStart() {
             dispatchToLibrary <| .loadNotebooks
@@ -23,15 +27,9 @@ extension Library {
             return libraryViewController
         }
 
-        init(withNavigationController navigationController: NavigationController) {
-            self.navigationController = navigationController
-            evaluator = Evaluator()
-            libraryEvaluator = Core.Library.Evaluator(model: Core.Library.Model(notebooks: []))
-        }
-
         // MARK: - Private
 
-        fileprivate func perform(action: Action) {
+        private func perform(action: Action) {
             switch action {
             case let .addNotebook(notebook):
                 dispatchToLibrary <| .addNotebook(notebook: notebook)
@@ -51,7 +49,7 @@ extension Library {
             }
         }
 
-        fileprivate func perform(action: Core.Library.Effect) {
+        private func perform(action: Core.Library.Effect) {
             switch action {
             case let .createNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
@@ -76,38 +74,37 @@ extension Library {
 
         // MARK: State
 
-        fileprivate var fileExecuter: FileExecuterType {
-            return AppEnvironment.current.fileExecuter
-        }
-        fileprivate let navigationController: NavigationController
-        fileprivate var evaluator: Evaluator
-        fileprivate var libraryEvaluator: Core.Library.Evaluator
-
-        fileprivate lazy var libraryViewController: LibraryViewController = {
+        private let navigationController: NavigationController
+        private var evaluator: Evaluator
+        private var libraryEvaluator: Core.Library.Evaluator
+        private lazy var libraryViewController: LibraryViewController = {
             return LibraryViewController(withDispatch: dispatch)
         }()
+        private var fileExecuter: FileExecuterType {
+            return AppEnvironment.current.fileExecuter
+        }
 
         // MARK: Utility
 
-        fileprivate func dispatch(event: ViewEvent) {
+        private func dispatch(event: ViewEvent) {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func dispatch(event: CoordinatorEvent) {
+        private func dispatch(event: CoordinatorEvent) {
             updateEvaluator <| evaluator.evaluate(event: event)
         }
 
-        fileprivate func dispatchToLibrary(event: Core.Library.Event) {
+        private func dispatchToLibrary(event: Core.Library.Event) {
             updateLibrary <| libraryEvaluator.evaluate(event: event)
         }
 
-        fileprivate func updateEvaluator(evaluator: Evaluator) {
+        private func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
             evaluator.actions.forEach(perform)
             evaluator.effects.forEach(libraryViewController.perform)
         }
 
-        fileprivate func updateLibrary(library: Core.Library.Evaluator) {
+        private func updateLibrary(library: Core.Library.Evaluator) {
             self.libraryEvaluator = library
             library.effects.forEach(perform)
         }
