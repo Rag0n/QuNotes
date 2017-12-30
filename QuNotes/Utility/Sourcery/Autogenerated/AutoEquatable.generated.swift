@@ -53,6 +53,7 @@ extension Notebook.Model: Equatable {}
 public func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
     guard lhs.notebook == rhs.notebook else { return false }
     guard lhs.notes == rhs.notes else { return false }
+    guard lhs.filter == rhs.filter else { return false }
     return true
 }
 

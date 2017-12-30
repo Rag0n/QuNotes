@@ -22,7 +22,7 @@ extension Notebook {
         init(notebook: Core.Notebook.Meta) {
             effects = []
             actions = []
-            model = Model(notebook: notebook, notes: [])
+            model = Model(notebook: notebook, notes: [], filter: "")
         }
 
         fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
@@ -49,7 +49,7 @@ extension Notebook {
                 // TODO: What if we have filter?
                 effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
             case .selectNote(let index):
-                let note = model.notes[index]
+                let note = model.filteredNotes[index]
                 actions = [.showNote(note, isNew: false)]
             case .deleteNote(let index):
                 let note = model.notes[index]
@@ -58,12 +58,9 @@ extension Notebook {
             case .deleteNotebook:
                 actions = [.deleteNotebook(model.notebook)]
             case let .filterNotes(filter):
-                var filteredNotes = model.notes
-                if let filter = filter?.lowercased() {
-                    filteredNotes = model.notes.filter { $0.title.lowercased().contains(filter) }
-                }
-                // TODO: This event is not working correctly. Eg: filter notes, then select note. Indexes will differ because here we store all notes and in UI we pass only filtered notes
-                effects = [.updateAllNotes(titles(from: filteredNotes))]
+                let lowerCasedFilter = filter?.lowercased() ?? ""
+                newModel = model |> Model.lens.filter .~ lowerCasedFilter
+                effects = [.updateAllNotes(titles(from: newModel.filteredNotes))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
@@ -127,10 +124,17 @@ private extension Notebook {
     }
 
     static func titles(from model: Model) -> [String] {
-        return titles(from: model.notes)
+        return titles(from: model.filteredNotes)
     }
 
     static func titles(from notes: [Core.Note.Meta]) -> [String] {
         return notes.map { $0.title }
+    }
+}
+
+private extension Notebook.Model {
+    var filteredNotes: [Core.Note.Meta] {
+        guard filter.count != 0 else { return notes }
+        return notes.filter { $0.title.lowercased().contains(filter) }
     }
 }

@@ -13,6 +13,7 @@ public enum Notebook {
     public struct Model: AutoEquatable, AutoLens {
         let notebook: Core.Notebook.Meta
         let notes: [Core.Note.Meta]
+        let filter: String
     }
 
     public enum Action: AutoEquatable {

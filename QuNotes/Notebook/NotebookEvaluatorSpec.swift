@@ -56,7 +56,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("updates model by adding new note") {
                     expect(e.model).to(equalDiff(
-                        Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote])
+                        Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote], filter: "")
                     ))
                 }
 
@@ -68,18 +68,38 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving selectNote event") {
-                let note = Dummy.note(withTitle: "AB", tags: ["t"])
+                let note = Dummy.note(withTitle: "ab")
+                let secondNote = Dummy.note(withTitle: "ac")
+                let thirdNote = Dummy.note(withTitle: "b")
 
                 beforeEach {
-                    event = .selectNote(index: 0)
-                    e = e.evaluate(event: .didLoadNotes([note]))
-                        .evaluate(event: event)
+                    event = .selectNote(index: 1)
+                    e = e.evaluate(event: .didLoadNotes([note, secondNote, thirdNote]))
                 }
 
-                it("has showNote action") {
-                    expect(e.actions).to(equalDiff([
-                        .showNote(note, isNew: false)
-                    ]))
+                context("when model has filter") {
+                    beforeEach {
+                        e = e.evaluate(event: .filterNotes(filter: "b"))
+                            .evaluate(event: event)
+                    }
+
+                    it("has showNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .showNote(thirdNote, isNew: false)
+                        ]))
+                    }
+                }
+
+                context("when model doesnt have filter") {
+                    beforeEach {
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has showNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .showNote(secondNote, isNew: false)
+                        ]))
+                    }
                 }
             }
 
@@ -100,7 +120,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("updates model by removing note") {
                     expect(e.model).to(equalDiff(
-                        Notebook.Model(notebook: notebook, notes: [])
+                        Notebook.Model(notebook: notebook, notes: [], filter: "")
                     ))
                 }
             }
@@ -133,6 +153,13 @@ class NotebookEvaluatorSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
+                    it("updates model with empty filter") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [firstNote, secondNote, thirdNote],
+                                           filter: "")
+                        ))
+                    }
+
                     it("has updateAllNotes effect with all note's titles") {
                         expect(e.effects).to(equalDiff([
                             .updateAllNotes(["AB", "ab", "g"])
@@ -144,6 +171,13 @@ class NotebookEvaluatorSpec: QuickSpec {
                     beforeEach {
                         event = .filterNotes(filter: "aB")
                         e = e.evaluate(event: event)
+                    }
+
+                    it("updates model with lowecased filter") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [firstNote, secondNote, thirdNote],
+                                           filter: "ab")
+                        ))
                     }
 
                     it("has updateAllNotes effect with only titles that contains filter in any register") {
@@ -219,10 +253,11 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("has model with empty notebooks") {
-                        expect(e.model).to(equalDiff(Notebook.Model(notebook: notebook, notes: [])))
+                        expect(e.model).to(equalDiff(Notebook.Model(notebook: notebook, notes: [],
+                                                                    filter: "")))
                     }
 
-                    it("has updateAllNotebooks effect with empty viewModels") {
+                    it("has updateAllNotes effect with empty viewModels") {
                         expect(e.effects).to(equalDiff([
                             .updateAllNotes([])
                         ]))
@@ -230,25 +265,51 @@ class NotebookEvaluatorSpec: QuickSpec {
                 }
 
                 context("when notebook list is not empty") {
-                    let firstNote = Dummy.note(withTitle: "b", tags: ["t"])
+                    let firstNote = Dummy.note(withTitle: "ba", tags: ["t"])
                     let secondNote = Dummy.note(withTitle: "a", tags: ["t"])
                     let thirdNote = Dummy.note(withTitle: "C", tags: ["t"])
 
                     beforeEach {
                         event = .didLoadNotes([firstNote, secondNote, thirdNote])
-                        e = e.evaluate(event: event)
                     }
 
-                    it("has model with sorted by name notebooks") {
-                        expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote])
-                        ))
+                    context("when model has filter") {
+                        beforeEach {
+                            e = e.evaluate(event: .filterNotes(filter: "a"))
+                                .evaluate(event: event)
+                        }
+
+                        it("has model with sorted by title notes") {
+                            expect(e.model).to(equalDiff(
+                                Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote],
+                                               filter: "a")
+                            ))
+                        }
+
+                        it("has updateAllNotes effect with sorted and filtered viewModels") {
+                            expect(e.effects).to(equalDiff([
+                                .updateAllNotes(["a", "ba"])
+                            ]))
+                        }
                     }
 
-                    it("has updateAllNotebooks effect with sorted viewModels") {
-                        expect(e.effects).to(equalDiff([
-                            .updateAllNotes(["a", "b", "C"])
-                        ]))
+                    context("when model doesnt have filter") {
+                        beforeEach {
+                            e = e.evaluate(event: event)
+                        }
+
+                        it("has model with sorted by title notes") {
+                            expect(e.model).to(equalDiff(
+                                Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote],
+                                               filter: "")
+                            ))
+                        }
+
+                        it("has updateAllNotes effect with sorted viewModels") {
+                            expect(e.effects).to(equalDiff([
+                                .updateAllNotes(["a", "ba", "C"])
+                            ]))
+                        }
                     }
                 }
             }
@@ -272,7 +333,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [])
+                            Notebook.Model(notebook: notebook, notes: [], filter: "")
                         ))
                     }
                 }
@@ -298,7 +359,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("updates model by setting notebook to the old") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: oldNotebook, notes: [])
+                            Notebook.Model(notebook: oldNotebook, notes: [], filter: "")
                         ))
                     }
                 }
@@ -356,7 +417,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [note, addedNote])
+                            Notebook.Model(notebook: notebook, notes: [note, addedNote], filter: "")
                         ))
                     }
 
@@ -373,7 +434,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("removes note from model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [note])
+                            Notebook.Model(notebook: notebook, notes: [note], filter: "")
                         ))
                     }
 
@@ -408,7 +469,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [note])
+                            Notebook.Model(notebook: notebook, notes: [note], filter: "")
                         ))
                     }
 
@@ -429,7 +490,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("adds deleted note back to model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [deletedNote, note])
+                            Notebook.Model(notebook: notebook, notes: [deletedNote, note], filter: "")
                         ))
                     }
 
