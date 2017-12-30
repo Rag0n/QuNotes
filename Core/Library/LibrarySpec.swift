@@ -12,10 +12,9 @@ import Result
 
 class LibrarySpec: QuickSpec {
     override func spec() {
-        let notebook = Notebook.Model(meta: Notebook.Meta(uuid: "notebookUUID", name: "notebookName"),
-                                      notes: [])
+        let notebook = Dummy.notebook(uuid: "notebookUUID")
         let model = Library.Model(notebooks: [notebook])
-        let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
+        let error = Dummy.error(withMessage: "message")
         var e: Library.Evaluator!
 
         beforeEach {
@@ -37,7 +36,7 @@ class LibrarySpec: QuickSpec {
 
             context("when receiving addNotebook event") {
                 context("when notebook with that uuid is not added yet") {
-                    let newNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "newNotebookUUID", name: "newNotebookName"), notes: [])
+                    let newNotebook = Dummy.notebook(uuid: "newNotebookUUID")
 
                     beforeEach {
                         event = .addNotebook(newNotebook)
@@ -97,7 +96,7 @@ class LibrarySpec: QuickSpec {
 
                 context("when notebook with that uuid was not added") {
                     beforeEach {
-                        let notAddedNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "nAUUID", name: "nAName"), notes: [])
+                        let notAddedNotebook = Dummy.notebook()
                         event = .removeNotebook(notAddedNotebook.meta)
                         e = e.evaluate(event: event)
                     }
@@ -132,7 +131,7 @@ class LibrarySpec: QuickSpec {
             context("when receiving didAddNotebook event") {
                 context("when successfully adds notebook") {
                     beforeEach {
-                        let notebook = Notebook.Model(meta: Notebook.Meta(uuid: "notebookUUID", name: "notebookName"), notes: [])
+                        let notebook = Dummy.notebook()
                         event = .didAddNotebook(notebook, error: nil)
                         e = e.evaluate(event: event)
                     }
@@ -162,7 +161,7 @@ class LibrarySpec: QuickSpec {
 
                     context("when notebook is not in model") {
                         beforeEach {
-                            let anotherNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "aUUID", name: "aName"), notes: [])
+                            let anotherNotebook = Dummy.notebook()
                             event = .didAddNotebook(anotherNotebook, error: error)
                             e = e.evaluate(event: event)
                         }
@@ -176,7 +175,7 @@ class LibrarySpec: QuickSpec {
             }
 
             context("when receiving didRemoveNotebook event") {
-                let removedNotebook = Notebook.Model(meta: Notebook.Meta(uuid: "removedUUID", name: "removeName"), notes: [])
+                let removedNotebook = Dummy.notebook()
 
                 context("when successfully removes notebook") {
                     beforeEach {
@@ -256,15 +255,16 @@ class LibrarySpec: QuickSpec {
                 }
 
                 context("when notebooks list has result with notebook") {
+                    let notebook = Dummy.notebookMeta()
+
                     beforeEach {
-                        let notebook = Notebook.Meta(uuid: "uuid", name: "name")
                         event = .didReadNotebooks([Result(value: notebook)])
                         e = e.evaluate(event: event)
                     }
 
                     it("has didLoadNotebooks effect with 1 notebook") {
                         expect(e.effects).to(equalDiff([
-                            .didLoadNotebooks([Notebook.Meta(uuid: "uuid", name: "name")])
+                            .didLoadNotebooks([notebook])
                         ]))
                     }
                 }
@@ -284,9 +284,8 @@ class LibrarySpec: QuickSpec {
 
                 context("when notebook list has result with notebook and several errors") {
                     beforeEach {
-                        let notebook = Notebook.Meta(uuid: "uuid", name: "name")
-                        let secondError = NSError(domain: "error domain", code: 1,
-                                                  userInfo: [NSLocalizedDescriptionKey: "secondMessage"])
+                        let notebook = Dummy.notebookMeta()
+                        let secondError = Dummy.error(withMessage: "secondMessage")
                         event = .didReadNotebooks([Result(error: AnyError(error)),
                                                    Result(value: notebook),
                                                    Result(error: AnyError(secondError))])
@@ -296,10 +295,29 @@ class LibrarySpec: QuickSpec {
                     it("has handleError effect with combined message from errors") {
                         expect(e.effects).to(equalDiff([
                             .handleError(title: "Unable to load notebooks", message: "message\nsecondMessage")
-                            ]))
+                        ]))
                     }
                 }
             }
         }
+    }
+}
+
+private enum Dummy {
+    static func notebook(uuid: String = UUID().uuidString) -> Notebook.Model {
+        let note = Note.Meta(uuid: uuid + "note",
+                             title: uuid + "title",
+                             tags: [uuid + "tag"],
+                             updated_at: 1,
+                             created_at: 1)
+        return Notebook.Model(meta: notebookMeta(uuid: uuid), notes: [note])
+    }
+
+    static func notebookMeta(uuid: String = UUID().uuidString) -> Notebook.Meta {
+        return Notebook.Meta(uuid: uuid, name: uuid + "name")
+    }
+
+    static func error(withMessage message: String) -> NSError {
+        return NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
     }
 }
