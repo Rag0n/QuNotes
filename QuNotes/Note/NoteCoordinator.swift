@@ -20,6 +20,7 @@ extension Note {
             return noteViewController
         }
 
+        var output = 0
         // MARK: - Private
 
         private func perform(action: Action) {

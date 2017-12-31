@@ -13,7 +13,7 @@ typealias CoordinatorDisposeBlock = () -> ()
 final class NavigationController: UIViewController {
     // MARK: - API
 
-    func pushCoordinator(coordinator: Coordinator, animated: Bool, onDispose: CoordinatorDisposeBlock? = nil) {
+    func pushCoordinator<C: Coordinator>(coordinator: C, animated: Bool, onDispose: CoordinatorDisposeBlock? = nil) {
         viewControllerToCoordinatorMap[coordinator.viewController] = coordinator
         viewControllerToDisposeBlockMap[coordinator.viewController] = onDispose
         coordinator.onStart()
@@ -40,7 +40,8 @@ final class NavigationController: UIViewController {
         return vc;
     }()
 
-    fileprivate var viewControllerToCoordinatorMap: [UIViewController: Coordinator] = [:]
+    // TODO: AnyObject is actually a Coordinator type
+    fileprivate var viewControllerToCoordinatorMap: [UIViewController: AnyObject] = [:]
     // TODO: Probably should map Coordinator -> Block, not ViewController -> Block
     fileprivate var viewControllerToDisposeBlockMap: [UIViewController: CoordinatorDisposeBlock] = [:]
 

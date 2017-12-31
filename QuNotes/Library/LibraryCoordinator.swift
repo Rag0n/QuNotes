@@ -27,6 +27,11 @@ extension Library {
             return libraryViewController
         }
 
+        typealias ResultEffect = Int
+        var output: Library.CoordinatorImp.ResultEffect {
+            return 1
+        }
+
         // MARK: - Private
 
         private func perform(action: Action) {

@@ -8,8 +8,10 @@
 
 import UIKit
 
-protocol Coordinator {
+protocol Coordinator: class {
+    associatedtype ResultEffect
     var viewController: UIViewController { get }
+    var output: ResultEffect { get }
     func onStart()
     func showError(title: String, message: String)
 }

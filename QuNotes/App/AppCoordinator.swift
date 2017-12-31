@@ -18,6 +18,8 @@ final class AppCoordinator: Coordinator {
         return navigationController
     }
 
+    let output = 0
+
     // MARK: - Life cycle
 
     init(withWindow window: UIWindow) {

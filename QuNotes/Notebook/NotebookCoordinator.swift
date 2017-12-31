@@ -27,6 +27,11 @@ extension Notebook {
             return notebookViewController
         }
 
+        typealias ResultEffect = Int
+        var output: Notebook.CoordinatorImp.ResultEffect {
+            return 1
+        }
+
         // MARK: - Private
 
         private func perform(action: Action) {
