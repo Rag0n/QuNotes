@@ -32,11 +32,11 @@ extension Notebook {
         private func perform(action: Action) {
             switch action {
             case let .addNote(note):
-                dispatchToNotebook <| .addNote(note: note)
+                dispatchToNotebook <| .addNote(note)
             case let .deleteNote(note):
-                dispatchToNotebook <| .removeNote(note: note)
+                dispatchToNotebook <| .removeNote(note)
             case let .updateNotebook(notebook, title):
-                dispatchToNotebook <| .changeName(newName: title)
+                dispatchToNotebook <| .changeName(title)
             case let .deleteNotebook(notebook):
                 // TODO: Interesting case. Should use library evaluator? Or not..
                 break
@@ -55,22 +55,22 @@ extension Notebook {
             switch action {
             case let .createNote(note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNotebook <| .didAddNote(note: note, error: error)
+                dispatchToNotebook <| .didAddNote(note, error: error)
                 dispatch <| .didAddNote(note, error: error)
             case let .updateNotebook(notebook, url):
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
-                dispatchToNotebook <| .didUpdateNotebook(notebook: notebook, error: error)
+                dispatchToNotebook <| .didUpdateNotebook(notebook, error: error)
                 dispatch <| .didUpdateNotebook(notebook, error: error)
             case let .deleteNote(note, url):
                 let error = fileExecuter.deleteFile(at: url)
-                dispatchToNotebook <| .didDeleteNote(note: note, error: error)
+                dispatchToNotebook <| .didDeleteNote(note, error: error)
                 dispatch <| .didDeleteNote(note, error: error)
             case let .readDirectory(url):
                 let urls = fileExecuter.contentOfFolder(at: url)
                 dispatchToNotebook <| .didReadDirectory(urls: urls)
             case let .readNotes(urls):
-                let result = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Note.Meta.self) }
-                dispatchToNotebook <| .didReadNotes(notes: result)
+                let notes = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Note.Meta.self) }
+                dispatchToNotebook <| .didReadNotes(notes)
             case let .handleError(title, message):
                 // TODO: When UI is not loaded error will not be shown
                 showError(title: title, message: message)

@@ -25,13 +25,13 @@ extension Note {
         private func perform(action: Action) {
             switch action {
             case let .updateTitle(title):
-                dispatchToNote <| .changeTitle(newTitle: title)
+                dispatchToNote <| .changeTitle(title)
             case let .updateContent(content):
-                dispatchToNote <| .changeContent(newContent: content)
+                dispatchToNote <| .changeContent(content)
             case let .addTag(tag):
-                dispatchToNote <| .addTag(tag: tag)
+                dispatchToNote <| .addTag(tag)
             case let .removeTag(tag):
-                dispatchToNote <| .removeTag(tag: tag)
+                dispatchToNote <| .removeTag(tag)
             case .deleteNote:
                 // TODO: who is responsible for that action?
                 break
@@ -52,13 +52,13 @@ extension Note {
                 let error = fileExecuter.createFile(atURL: url, content: content)
                 dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
                 dispatch <| .didUpdateContent(oldContent: oldContent, error: error)
-            case let .addTag(note, url, tag):
+            case let .addTag(tag, note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNote <| .didAddTag(tag: tag, error: error)
+                dispatchToNote <| .didAddTag(tag, error: error)
                 dispatch <| .didAddTag(tag, error: error)
-            case let .removeTag(note, url, tag):
+            case let .removeTag(tag, note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNote <| .didRemoveTag(tag: tag, error: error)
+                dispatchToNote <| .didRemoveTag(tag, error: error)
                 dispatch <| .didRemoveTag(tag, error: error)
             }
         }
