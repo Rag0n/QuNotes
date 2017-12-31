@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Core
 
 public enum Note {
     struct Model: AutoEquatable, AutoLens {
@@ -50,6 +51,12 @@ public enum Note {
         case delete
         case addTag(String)
         case removeTag(String)
+    }
+
+    public enum CoordinatorResultEffect {
+        case updateNote(Core.Note.Meta)
+        case deleteNote(Core.Note.Meta)
+        case none
     }
 
     public typealias ViewDispacher = (_ event: ViewEvent) -> ()

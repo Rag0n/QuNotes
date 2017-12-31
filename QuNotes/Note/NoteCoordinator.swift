@@ -12,6 +12,7 @@ extension Note {
         init(withNavigationController navigationController: NavigationController, note: Core.Note.Meta,
              isNewNote: Bool, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
+            self.note = note
             evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
             noteEvaluator = Core.Note.Evaluator(model: Core.Note.Model(meta: note, content: "", notebook: notebook))
         }
@@ -20,7 +21,8 @@ extension Note {
             return noteViewController
         }
 
-        var output = 0
+        var output: CoordinatorResultEffect = .none
+
         // MARK: - Private
 
         private func perform(action: Action) {
@@ -34,8 +36,8 @@ extension Note {
             case let .removeTag(tag):
                 dispatchToNote <| .removeTag(tag)
             case .deleteNote:
-                // TODO: who is responsible for that action?
-                break
+                output = .deleteNote(note)
+                navigationController.popViewController(animated: true)
             case .finish:
                 navigationController.popViewController(animated: true)
             case let .showError(title, message):
@@ -46,6 +48,7 @@ extension Note {
         private func perform(effect: Core.Note.Effect) {
             switch effect {
             case let .updateTitle(note, url, oldTitle):
+                output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didChangeTitle(oldTitle: oldTitle, error: error)
                 dispatch <| .didUpdateTitle(oldTitle: oldTitle, error: error)
@@ -54,10 +57,12 @@ extension Note {
                 dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
                 dispatch <| .didUpdateContent(oldContent: oldContent, error: error)
             case let .addTag(tag, note, url):
+                output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didAddTag(tag, error: error)
                 dispatch <| .didAddTag(tag, error: error)
             case let .removeTag(tag, note, url):
+                output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didRemoveTag(tag, error: error)
                 dispatch <| .didRemoveTag(tag, error: error)
@@ -66,6 +71,7 @@ extension Note {
 
         // MARK: State
         private let navigationController: NavigationController
+        private let note: Core.Note.Meta
         private var evaluator: Evaluator
         private var noteEvaluator: Core.Note.Evaluator
         private lazy var noteViewController: NoteViewController = {

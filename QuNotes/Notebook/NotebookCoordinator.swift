@@ -50,9 +50,11 @@ extension Notebook {
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNote(note, isNewNote):
-                let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController, note: note,
-                                                          isNewNote: isNewNote, notebook: notebook)
-                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true)
+                let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController,
+                                                          note: note, isNewNote: isNewNote, notebook: notebook)
+                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [weak self] in
+                    self?.handleNoteCoordinatorOutput(output: noteCoordinator.output)
+                }
             }
         }
 
@@ -81,6 +83,17 @@ extension Notebook {
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes)
+            }
+        }
+
+        private func handleNoteCoordinatorOutput(output: Note.CoordinatorImp.ResultEffect) {
+            switch (output) {
+            case let .updateNote(note):
+                break
+            case let .deleteNote(note):
+                break
+            case .none:
+                break
             }
         }
 
