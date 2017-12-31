@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import Result
 import Prelude
 import Core
 
@@ -46,7 +45,6 @@ extension Notebook {
                     .~ model.notes.appending(note).sorted(by: title)
                 let indexOfNote = newModel.notes.index(of: note)!
                 actions = [.addNote(note)]
-                // TODO: What if we have filter?
                 effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
             case .selectNote(let index):
                 let note = model.filteredNotes[index]
@@ -91,7 +89,6 @@ extension Notebook {
                 actions = [.finish]
             case let .didLoadNotes(notes):
                 newModel = model |> Model.lens.notes .~ notes.sorted(by: title)
-                // TODO: what if we have filter
                 effects = [.updateAllNotes(titles(from: newModel))]
             case let .didAddNote(note, error):
                 guard let error = error else {
