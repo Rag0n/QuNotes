@@ -89,9 +89,9 @@ extension Notebook {
         private func handleNoteCoordinatorOutput(output: Note.CoordinatorImp.ResultEffect) {
             switch (output) {
             case let .updateNote(note):
-                break
+                dispatch <| .updateNote(note)
             case let .deleteNote(note):
-                break
+                dispatch <| .deleteNote(note)
             case .none:
                 break
             }
