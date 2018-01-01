@@ -80,6 +80,12 @@ extension Notebook {
                 newModel = model |> Model.lens.notes .~
                     model.notes.removing(oldNote).appending(note).sorted(by: title)
                 effects = [.updateAllNotes(titles(from: newModel))]
+            case let .deleteNote(note):
+                guard let indexOfRemovedNote = model.index(ofNoteWithUUID: note.uuid) else { break }
+                let noteToRemove = model.notes[indexOfRemovedNote]
+                newModel = model |> Model.lens.notes .~ model.notes.removing(at: indexOfRemovedNote)
+                actions = [.deleteNote(noteToRemove)]
+                effects = [.deleteNote(index: indexOfRemovedNote, notes: titles(from: newModel))]
             case let .didUpdateNotebook(notebook, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notebook .~ notebook
@@ -138,5 +144,8 @@ private extension Notebook.Model {
 
     func note(withUUID uuid: String) -> Core.Note.Meta? {
         return notes.filter { $0.uuid == uuid }.first
+
+    func index(ofNoteWithUUID uuid: String) -> Array<Core.Note.Meta>.Index? {
+        return notes.index { $0.uuid == uuid }
     }
 }

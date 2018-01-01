@@ -37,6 +37,7 @@ public enum Notebook {
 
     public enum CoordinatorEvent {
         case updateNote(Core.Note.Meta)
+        case deleteNote(Core.Note.Meta)
         case didUpdateNotebook(Core.Notebook.Meta, error: Error?)
         case didDeleteNotebook(error: Error?)
         case didLoadNotes([Core.Note.Meta])

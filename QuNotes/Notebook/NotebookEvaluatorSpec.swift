@@ -256,7 +256,6 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when note with that uuid is exist in model") {
                     beforeEach {
                         let oldNote = Dummy.note(withTitle: "old title", uuid: updatedNote.uuid)
-                        event = .updateNote(updatedNote)
                         e = e.evaluate(event: .didLoadNotes([anotherNote, oldNote]))
                             .evaluate(event: event)
                     }
@@ -274,7 +273,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
                 }
 
-                context("when note with taht uuid doesnt exist in model") {
+                context("when note with that uuid doesnt exist in model") {
                     beforeEach {
                         e = e.evaluate(event: .didLoadNotes([anotherNote]))
                             .evaluate(event: event)
@@ -284,6 +283,61 @@ class NotebookEvaluatorSpec: QuickSpec {
                         expect(e.model).to(equalDiff(
                             Notebook.Model(notebook: notebook, notes: [anotherNote], filter: "")
                         ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
+            context("when receiving deleteNote event") {
+                let note = Dummy.note(withTitle: "deleted note title")
+                let noteInModel = Dummy.note(withTitle: "old title", uuid: note.uuid)
+                let anotherNote = Dummy.note(withTitle: "z")
+
+                beforeEach {
+                    event = .deleteNote(note)
+                }
+
+                context("when note with that uuid is exist in model") {
+                    beforeEach {
+                        e = e.evaluate(event: .didLoadNotes([anotherNote, noteInModel]))
+                            .evaluate(event: event)
+                    }
+
+                    it("removes note with that uuid from model") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [anotherNote], filter: "")
+                        ))
+                    }
+
+                    it("has deleteNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .deleteNote(noteInModel)
+                        ]))
+                    }
+
+                    it("has deleteNote effect") {
+                        expect(e.effects).to(equalDiff([
+                            .deleteNote(index: 0, notes: ["z"])
+                        ]))
+                    }
+                }
+
+                context("when note with that uuid doesnt exist in model") {
+                    beforeEach {
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [], filter: "")
+                        ))
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
                     }
 
                     it("doesnt have effects") {
