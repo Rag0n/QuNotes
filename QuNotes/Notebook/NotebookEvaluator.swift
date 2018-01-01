@@ -76,9 +76,9 @@ extension Notebook {
 
             switch event {
             case let .updateNote(note):
-                guard let oldNote = model.note(withUUID: note.uuid) else { break }
+                guard let indexOfOldNote = model.index(ofNoteWithUUID: note.uuid) else { break }
                 newModel = model |> Model.lens.notes .~
-                    model.notes.removing(oldNote).appending(note).sorted(by: title)
+                    model.notes.removing(at: indexOfOldNote).appending(note).sorted(by: title)
                 effects = [.updateAllNotes(titles(from: newModel))]
             case let .deleteNote(note):
                 guard let indexOfRemovedNote = model.index(ofNoteWithUUID: note.uuid) else { break }
@@ -143,7 +143,8 @@ private extension Notebook.Model {
     }
 
     func note(withUUID uuid: String) -> Core.Note.Meta? {
-        return notes.filter { $0.uuid == uuid }.first
+        return notes.first { $0.uuid == uuid }
+    }
 
     func index(ofNoteWithUUID uuid: String) -> Array<Core.Note.Meta>.Index? {
         return notes.index { $0.uuid == uuid }
