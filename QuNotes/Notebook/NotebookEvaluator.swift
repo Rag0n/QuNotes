@@ -75,6 +75,11 @@ extension Notebook {
             var newModel = model
 
             switch event {
+            case let .updateNote(note):
+                guard let oldNote = model.note(withUUID: note.uuid) else { break }
+                newModel = model |> Model.lens.notes .~
+                    model.notes.removing(oldNote).appending(note).sorted(by: title)
+                effects = [.updateAllNotes(titles(from: newModel))]
             case let .didUpdateNotebook(notebook, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notebook .~ notebook
@@ -129,5 +134,9 @@ private extension Notebook.Model {
     var filteredNotes: [Core.Note.Meta] {
         guard filter.count != 0 else { return notes }
         return notes.filter { $0.title.lowercased().contains(filter) }
+    }
+
+    func note(withUUID uuid: String) -> Core.Note.Meta? {
+        return notes.filter { $0.uuid == uuid }.first
     }
 }

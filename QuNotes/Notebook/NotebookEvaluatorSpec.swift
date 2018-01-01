@@ -245,6 +245,53 @@ class NotebookEvaluatorSpec: QuickSpec {
         describe("-evaluate:CoordinatorEvent") {
             var event: Notebook.CoordinatorEvent!
 
+            context("when receiving updateNote event") {
+                let updatedNote = Dummy.note(withTitle: "new title")
+                let anotherNote = Dummy.note(withTitle: "z")
+
+                beforeEach {
+                    event = .updateNote(updatedNote)
+                }
+
+                context("when note with that uuid is exist in model") {
+                    beforeEach {
+                        let oldNote = Dummy.note(withTitle: "old title", uuid: updatedNote.uuid)
+                        event = .updateNote(updatedNote)
+                        e = e.evaluate(event: .didLoadNotes([anotherNote, oldNote]))
+                            .evaluate(event: event)
+                    }
+
+                    it("updates model by replacing old note with new note") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [updatedNote, anotherNote], filter: "")
+                        ))
+                    }
+
+                    it("has updateAllNotes effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotes(["new title", "z"])
+                        ]))
+                    }
+                }
+
+                context("when note with taht uuid doesnt exist in model") {
+                    beforeEach {
+                        e = e.evaluate(event: .didLoadNotes([anotherNote]))
+                            .evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [anotherNote], filter: "")
+                        ))
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
             context("when receiving didLoadNotes") {
                 context("when note list is empty") {
                     beforeEach {
@@ -253,8 +300,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("has model with empty notebooks") {
-                        expect(e.model).to(equalDiff(Notebook.Model(notebook: notebook, notes: [],
-                                                                    filter: "")))
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(notebook: notebook, notes: [], filter: "")
+                        ))
                     }
 
                     it("has updateAllNotes effect with empty viewModels") {
