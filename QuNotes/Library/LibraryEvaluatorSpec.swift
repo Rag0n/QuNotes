@@ -188,6 +188,43 @@ class LibraryEvaluatorSpec: QuickSpec {
         describe("-evaluate:CoordinatorEvent") {
             var event: Library.CoordinatorEvent!
 
+            context("when receiving updateNotebook event") {
+                let notebook = Core.Notebook.Meta(uuid: "uuid", name: "aname")
+                let secondNotebook = Core.Notebook.Meta(uuid: "suuid", name: "sname")
+
+                beforeEach {
+                    event = .updateNotebook(notebook)
+                }
+
+                context("when notebook with that uuid exist in model") {
+                    beforeEach {
+                        let oldNotebook = Core.Notebook.Meta(uuid: "uuid", name: "old name")
+                        e = e.evaluate(event: .didLoadNotebooks([secondNotebook, oldNotebook]))
+                            .evaluate(event: event)
+                    }
+
+                    it("updates notebook with that uuid in model") {
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [notebook, secondNotebook])
+                        ))
+                    }
+
+                    it("has updateNotebook action") {
+                        expect(e.actions).to(equalDiff([
+                            .updateNotebook(notebook)
+                        ]))
+                    }
+
+                    it("has updateAllNotebooks effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotebooks([
+                                Library.NotebookViewModel(title: "aname", isEditable: false),
+                                Library.NotebookViewModel(title: "sname", isEditable: false)
+                            ])
+                        ]))
+                    }
+                }
+
             context("when receiving didLoadNotebooks") {
                 context("when notebook list is empty") {
                     beforeEach {

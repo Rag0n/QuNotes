@@ -63,6 +63,12 @@ extension Library {
             var newModel = model
 
             switch event {
+            case let .updateNotebook(notebook):
+                guard let index = model.index(ofNotebookWithUUID: notebook.uuid) else { break }
+                newModel = model |> Model.lens.notebooks .~
+                    model.notebooks.replacing(at: index, new: notebook).sorted(by: name)
+                effects = [.updateAllNotebooks(viewModels(from: newModel))]
+                actions = [.updateNotebook(notebook)]
             case let .didLoadNotebooks(notebooks):
                 newModel = model |> Model.lens.notebooks .~ notebooks.sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
@@ -107,5 +113,11 @@ private extension Library {
 
     static func name(lhs: Core.Notebook.Meta, rhs: Core.Notebook.Meta) -> Bool {
         return lhs.name.lowercased() < rhs.name.lowercased()
+    }
+}
+
+private extension Library.Model {
+    func index(ofNotebookWithUUID uuid: String) -> Array<Core.Notebook.Meta>.Index? {
+        return notebooks.index { $0.uuid == uuid }
     }
 }
