@@ -93,8 +93,6 @@ extension Library {
                     .~ model.notebooks.appending(notebook).sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
                 actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
-            case let .didFinishShowing(notebook):
-                actions = [.reloadNotebook(notebook)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

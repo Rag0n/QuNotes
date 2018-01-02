@@ -19,7 +19,6 @@ public enum Library {
         case deleteNotebook(Core.Notebook.Meta)
         case updateNotebook(Core.Notebook.Meta)
         case showNotebook(Core.Notebook.Meta)
-        case reloadNotebook(Core.Notebook.Meta)
         case showError(title: String, message: String)
     }
 
@@ -36,7 +35,6 @@ public enum Library {
         case didLoadNotebooks([Core.Notebook.Meta])
         case didAddNotebook(Core.Notebook.Meta, error: Error?)
         case didDeleteNotebook(Core.Notebook.Meta, error: Error?)
-        case didFinishShowing(notebook: Core.Notebook.Meta)
     }
 
     public enum ViewEvent {
