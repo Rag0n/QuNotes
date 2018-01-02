@@ -49,7 +49,7 @@ extension Library {
             case let .showNotebook(notebook):
                 let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
-                    self.dispatch <| .didFinishShowing(notebook: notebook)
+                    self.handleNotebookCoordinatorOutput(output: notebookCoordinator.output)
                 }
             }
         }
@@ -74,6 +74,17 @@ extension Library {
                 showError(title: title, message: message)
             case .didLoadNotebooks(let notebooks):
                 dispatch <| .didLoadNotebooks(notebooks)
+            }
+        }
+
+        private func handleNotebookCoordinatorOutput(output: Notebook.CoordinatorImp.ResultEffect) {
+            switch output {
+            case let .updateNotebook(notebook):
+                self.dispatch <| .updateNotebook(notebook)
+            case let .deleteNotebook(notebook):
+                self.dispatch <| .deleteNotebook(notebook)
+            case .none:
+                break
             }
         }
 
