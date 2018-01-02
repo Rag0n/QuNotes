@@ -69,6 +69,12 @@ extension Library {
                     model.notebooks.replacing(at: index, new: notebook).sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
                 actions = [.updateNotebook(notebook)]
+            case let .deleteNotebook(notebook):
+                guard let index = model.index(ofNotebookWithUUID: notebook.uuid) else { break }
+                newModel = model |> Model.lens.notebooks .~
+                    model.notebooks.removing(at: index)
+                effects = [.deleteNotebook(index: index, notebooks: viewModels(from: newModel))]
+                actions = [.deleteNotebook(notebook)]
             case let .didLoadNotebooks(notebooks):
                 newModel = model |> Model.lens.notebooks .~ notebooks.sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]

@@ -225,6 +225,84 @@ class LibraryEvaluatorSpec: QuickSpec {
                     }
                 }
 
+                context("when notebook with that uuid doesnt exist in model") {
+                    beforeEach {
+                        e = e.evaluate(event: .didLoadNotebooks([secondNotebook]))
+                            .evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [secondNotebook])
+                        ))
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
+            context("when receiving deleteNotebook event") {
+                let notebook = Core.Notebook.Meta(uuid: "uuid", name: "aname")
+                let secondNotebook = Core.Notebook.Meta(uuid: "suuid", name: "sname")
+
+                beforeEach {
+                    event = .deleteNotebook(notebook)
+                }
+
+                context("when notebook with that uuid exist in model") {
+                    beforeEach {
+                        e = e.evaluate(event: .didLoadNotebooks([notebook, secondNotebook]))
+                            .evaluate(event: event)
+                    }
+
+                    it("removes notebook from model") {
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [secondNotebook])
+                        ))
+                    }
+
+                    it("has deleteNotebook action") {
+                        expect(e.actions).to(equalDiff([
+                            .deleteNotebook(notebook)
+                        ]))
+                    }
+
+                    it("has deleteNotebook effect") {
+                        expect(e.effects).to(equalDiff([
+                            .deleteNotebook(index: 0, notebooks: [Library.NotebookViewModel(title: "sname",
+                                                                                            isEditable: false)])
+                        ]))
+                    }
+                }
+
+                context("when notebook with that uuid doesnt exist in model") {
+                    beforeEach {
+                        e = e.evaluate(event: .didLoadNotebooks([secondNotebook]))
+                            .evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [secondNotebook])
+                        ))
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
             context("when receiving didLoadNotebooks") {
                 context("when notebook list is empty") {
                     beforeEach {

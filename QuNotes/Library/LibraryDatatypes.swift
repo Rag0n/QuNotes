@@ -32,6 +32,7 @@ public enum Library {
 
     public enum CoordinatorEvent {
         case updateNotebook(Core.Notebook.Meta)
+        case deleteNotebook(Core.Notebook.Meta)
         case didLoadNotebooks([Core.Notebook.Meta])
         case didAddNotebook(Core.Notebook.Meta, error: Error?)
         case didDeleteNotebook(Core.Notebook.Meta, error: Error?)
