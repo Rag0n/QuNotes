@@ -27,10 +27,7 @@ extension Notebook {
             return notebookViewController
         }
 
-        typealias ResultEffect = Int
-        var output: Notebook.CoordinatorImp.ResultEffect {
-            return 1
-        }
+        var output: CoordinatorResultEffect = .none
 
         // MARK: - Private
 
@@ -43,8 +40,8 @@ extension Notebook {
             case let .updateNotebook(notebook, title):
                 dispatchToNotebook <| .changeName(title)
             case let .deleteNotebook(notebook):
-                // TODO: Interesting case. Should use library evaluator? Or not..
-                break
+                output = .deleteNotebook(self.notebook)
+                navigationController.popViewController(animated: true)
             case .finish:
                 navigationController.popViewController(animated: true)
             case let .showError(title, message):
@@ -52,8 +49,8 @@ extension Notebook {
             case let .showNote(note, isNewNote):
                 let noteCoordinator = Note.CoordinatorImp(withNavigationController: navigationController,
                                                           note: note, isNewNote: isNewNote, notebook: notebook)
-                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [weak self] in
-                    self?.handleNoteCoordinatorOutput(output: noteCoordinator.output)
+                navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [unowned self] in
+                    self.handleNoteCoordinatorOutput(output: noteCoordinator.output)
                 }
             }
         }
@@ -65,6 +62,7 @@ extension Notebook {
                 dispatchToNotebook <| .didAddNote(note, error: error)
                 dispatch <| .didAddNote(note, error: error)
             case let .updateNotebook(notebook, url):
+                output = .updateNotebook(notebook)
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
                 dispatchToNotebook <| .didUpdateNotebook(notebook, error: error)
                 dispatch <| .didUpdateNotebook(notebook, error: error)

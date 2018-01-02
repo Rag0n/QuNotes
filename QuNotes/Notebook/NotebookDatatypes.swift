@@ -56,5 +56,11 @@ public enum Notebook {
         case didFinishToEditTitle(newTitle: String?)
     }
 
+    public enum CoordinatorResultEffect {
+        case updateNotebook(Core.Notebook.Meta)
+        case deleteNotebook(Core.Notebook.Meta)
+        case none
+    }
+
     public typealias ViewDispacher = (_ event: Notebook.ViewEvent) -> ()
 }
