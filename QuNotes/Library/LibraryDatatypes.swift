@@ -54,5 +54,9 @@ public enum Library {
         }
     }
 
+    public enum CoordinatorResultEffect {
+        case none
+    }
+
     public typealias ViewDispacher = (_ event: ViewEvent) -> ()
 }

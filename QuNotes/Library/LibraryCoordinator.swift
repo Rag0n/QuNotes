@@ -27,10 +27,7 @@ extension Library {
             return libraryViewController
         }
 
-        typealias ResultEffect = Int
-        var output: Library.CoordinatorImp.ResultEffect {
-            return 1
-        }
+        private(set) var output: CoordinatorResultEffect = .none
 
         // MARK: - Private
 

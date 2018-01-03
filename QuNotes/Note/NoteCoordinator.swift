@@ -21,7 +21,7 @@ extension Note {
             return noteViewController
         }
 
-        var output: CoordinatorResultEffect = .none
+        private(set) var output: CoordinatorResultEffect = .none
 
         // MARK: - Private
 

@@ -27,7 +27,7 @@ extension Notebook {
             return notebookViewController
         }
 
-        var output: CoordinatorResultEffect = .none
+        private(set) var output: CoordinatorResultEffect = .none
 
         // MARK: - Private
 
