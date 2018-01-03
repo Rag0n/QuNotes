@@ -54,7 +54,7 @@ extension Notebook {
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.deleteNote(note)]
             case .deleteNotebook:
-                actions = [.deleteNotebook(model.notebook)]
+                actions = [.deleteNotebook]
             case let .filterNotes(filter):
                 let lowercasedFilter = filter?.lowercased() ?? ""
                 newModel = model |> Model.lens.filter .~ lowercasedFilter
@@ -63,7 +63,7 @@ extension Notebook {
                 effects = [.hideBackButton]
             case .didFinishToEditTitle(let newTitle):
                 effects = [.showBackButton]
-                actions = [.updateNotebook(model.notebook, title: newTitle ?? "")]
+                actions = [.updateNotebook(title: newTitle ?? "")]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel	)

@@ -133,7 +133,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has deleteNotebook action") {
                     expect(e.actions).to(equalDiff([
-                        .deleteNotebook(notebook)
+                        .deleteNotebook
                     ]))
                 }
             }
@@ -210,7 +210,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateNotebook action with passed title") {
                         expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook, title: "new title")
+                            .updateNotebook(title: "new title")
                         ]))
                     }
 
@@ -229,7 +229,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateNotebook action with empty title") {
                         expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook, title: "")
+                            .updateNotebook(title: "")
                         ]))
                     }
 

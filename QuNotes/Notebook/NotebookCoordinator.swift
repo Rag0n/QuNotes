@@ -37,9 +37,9 @@ extension Notebook {
                 dispatchToNotebook <| .addNote(note)
             case let .deleteNote(note):
                 dispatchToNotebook <| .removeNote(note)
-            case let .updateNotebook(notebook, title):
+            case let .updateNotebook(title):
                 dispatchToNotebook <| .changeName(title)
-            case let .deleteNotebook(notebook):
+            case .deleteNotebook:
                 output = .deleteNotebook(self.notebook)
                 navigationController.popViewController(animated: true)
             case .finish:

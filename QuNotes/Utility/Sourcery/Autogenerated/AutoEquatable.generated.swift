@@ -163,12 +163,10 @@ public func == (lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
         return true
     case (.deleteNote(let lhs), .deleteNote(let rhs)):
         return lhs == rhs
-    case (.deleteNotebook(let lhs), .deleteNotebook(let rhs)):
-        return lhs == rhs
-    case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
-        if lhs.0 != rhs.0 { return false }
-        if lhs.title != rhs.title { return false }
+    case (.deleteNotebook, .deleteNotebook):
         return true
+    case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
+        return lhs == rhs
     case (.finish, .finish):
         return true
     case (.showError(let lhs), .showError(let rhs)):

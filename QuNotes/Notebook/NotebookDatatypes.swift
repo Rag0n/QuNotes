@@ -20,8 +20,8 @@ public enum Notebook {
         case addNote(Core.Note.Meta)
         case showNote(Core.Note.Meta, isNew: Bool)
         case deleteNote(Core.Note.Meta)
-        case deleteNotebook(Core.Notebook.Meta)
-        case updateNotebook(Core.Notebook.Meta, title: String)
+        case deleteNotebook
+        case updateNotebook(title: String)
         case finish
         case showError(title: String, message: String)
     }
