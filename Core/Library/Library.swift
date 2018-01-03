@@ -87,6 +87,7 @@ public enum Library {
                     break
                 }
                 let notebooks = results.map { $0.value! }
+                modelUpdate = Model.lens.notebooks .~ notebooks
                 effects = [.didLoadNotebooks(notebooks)]
             }
 

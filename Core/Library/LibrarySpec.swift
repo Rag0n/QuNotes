@@ -252,6 +252,12 @@ class LibrarySpec: QuickSpec {
                             .didLoadNotebooks([])
                         ]))
                     }
+
+                    it("updates model with empty notebook list") {
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [])
+                        ))
+                    }
                 }
 
                 context("when notebooks list has result with notebook") {
@@ -266,6 +272,12 @@ class LibrarySpec: QuickSpec {
                         expect(e.effects).to(equalDiff([
                             .didLoadNotebooks([notebook])
                         ]))
+                    }
+
+                    it("updates model with notebook") {
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [notebook])
+                        ))
                     }
                 }
 
