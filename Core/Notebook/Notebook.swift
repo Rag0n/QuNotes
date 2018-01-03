@@ -163,6 +163,12 @@ extension Notebook.Meta {
         return URL(string: uuid)!.appendingPathExtension(Notebook.Model.Extension.notebook)
     }
 
+    func metaURL() -> URL {
+        return notebookURL()
+            .appendingPathComponent(Notebook.Model.Component.meta)
+            .appendingPathExtension(Notebook.Model.Extension.json)
+    }
+
     func noteURL(for note: Note.Meta) -> URL {
         return notebookURL()
             .appendingPathComponent(note.uuid)

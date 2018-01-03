@@ -15,7 +15,7 @@ public enum Library {
     }
 
     public enum Action: AutoEquatable {
-        case addNotebook(Core.Notebook.Model)
+        case addNotebook(Core.Notebook.Meta)
         case deleteNotebook(Core.Notebook.Meta)
         case updateNotebook(Core.Notebook.Meta)
         case showNotebook(Core.Notebook.Meta)

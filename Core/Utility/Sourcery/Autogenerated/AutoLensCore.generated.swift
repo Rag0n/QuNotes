@@ -16,7 +16,7 @@ extension DynamicBaseURL {
 }
 extension Library.Model {
     enum lens {
-        static let notebooks = Lens<Library.Model, [Notebook.Model]>(
+        static let notebooks = Lens<Library.Model, [Notebook.Meta]>(
             get: { $0.notebooks },
             set: { notebooks, model in
                 Library.Model(notebooks: notebooks)

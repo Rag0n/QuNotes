@@ -25,11 +25,10 @@ class LibraryEvaluatorSpec: QuickSpec {
             var event: Library.ViewEvent!
 
             context("when receiving addNotebook event") {
-                let notebookModel = Core.Notebook.Model(meta: Core.Notebook.Meta(uuid: "newUUID", name: ""), notes: [])
-                let notebookMeta = Core.Notebook.Meta(uuid: "newUUID", name: "")
+                let notebook = Core.Notebook.Meta(uuid: "newUUID", name: "")
 
-                let firstNotebookMeta = Core.Notebook.Meta(uuid: "firstUUID", name: "abc")
-                let secondNotebookMeta = Core.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let firstNotebook = Core.Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebook = Core.Notebook.Meta(uuid: "secondUUID", name: "cde")
                 let expectedViewModels = [
                     Library.NotebookViewModel(title: "", isEditable: false), // TODO: replace by true
                     Library.NotebookViewModel(title: "abc", isEditable: false),
@@ -37,7 +36,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 ]
 
                 beforeEach {
-                    e = Library.Evaluator(notebooks:  [firstNotebookMeta, secondNotebookMeta])
+                    e = Library.Evaluator(notebooks:  [firstNotebook, secondNotebook])
                     event = .addNotebook
                 }
 
@@ -50,13 +49,13 @@ class LibraryEvaluatorSpec: QuickSpec {
                 it("updates model by adding notebook meta and sorting notebooks") {
                     e.generateUUID = { "newUUID" }
                     expect(e.evaluate(event: event).model.notebooks)
-                        .to(equal([notebookMeta, firstNotebookMeta, secondNotebookMeta]))
+                        .to(equal([notebook, firstNotebook, secondNotebook]))
                 }
 
                 it("has addNotebook action with notebook model") {
                     e.generateUUID = { "newUUID" }
                     expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.addNotebook(notebookModel)))
+                        .to(equal(.addNotebook(notebook)))
                 }
 
                 it("has addNotebook effect with correct viewModels and index") {
@@ -66,13 +65,13 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving deleteNotebook event") {
-                let firstNotebookMeta = Core.Notebook.Meta(uuid: "firstUUID", name: "abc")
-                let secondNotebookMeta = Core.Notebook.Meta(uuid: "secondUUID", name: "cde")
+                let firstNotebook = Core.Notebook.Meta(uuid: "firstUUID", name: "abc")
+                let secondNotebook = Core.Notebook.Meta(uuid: "secondUUID", name: "cde")
                 let expectedViewModels = [Library.NotebookViewModel(title: "cde", isEditable: false)]
-                let model = Library.Model(notebooks: [firstNotebookMeta, secondNotebookMeta])
+                let model = Library.Model(notebooks: [firstNotebook, secondNotebook])
 
                 beforeEach {
-                    e = Library.Evaluator(notebooks: [firstNotebookMeta, secondNotebookMeta])
+                    e = Library.Evaluator(notebooks: [firstNotebook, secondNotebook])
                     event = .deleteNotebook(index: 0)
                 }
 
@@ -83,12 +82,12 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("updates model by removing notebook meta") {
                         expect(e.evaluate(event: event).model.notebooks)
-                            .to(equal([secondNotebookMeta]))
+                            .to(equal([secondNotebook]))
                     }
 
                     it("has deleteNotebook action with correct notebook") {
                         expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.deleteNotebook(firstNotebookMeta)))
+                            .to(equal(.deleteNotebook(firstNotebook)))
                     }
 
                     it("has addNotebook effect with correct viewModels and index") {

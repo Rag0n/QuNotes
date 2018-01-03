@@ -12,16 +12,16 @@ import Prelude
 
 public enum Library {
     public struct Model: AutoEquatable, AutoLens {
-        public let notebooks: [Notebook.Model]
+        public let notebooks: [Notebook.Meta]
 
-        public init(notebooks: [Notebook.Model]) {
+        public init(notebooks: [Notebook.Meta]) {
             self.notebooks = notebooks
         }
     }
 
     public enum Effect: AutoEquatable {
-        case createNotebook(Notebook.Model, url: URL)
-        case deleteNotebook(Notebook.Model, url: URL)
+        case createNotebook(Notebook.Meta, url: URL)
+        case deleteNotebook(Notebook.Meta, url: URL)
         case readBaseDirectory
         case readNotebooks(urls: [URL])
         case handleError(title: String, message: String)
@@ -30,10 +30,10 @@ public enum Library {
 
     public enum Event {
         case loadNotebooks
-        case addNotebook(Notebook.Model)
+        case addNotebook(Notebook.Meta)
         case removeNotebook(Notebook.Meta)
-        case didAddNotebook(Notebook.Model, error: Error?)
-        case didRemoveNotebook(Notebook.Model, error: Error?)
+        case didAddNotebook(Notebook.Meta, error: Error?)
+        case didRemoveNotebook(Notebook.Meta, error: Error?)
         case didReadBaseDirectory(urls: Result<[URL], NSError>)
         case didReadNotebooks([Result<Notebook.Meta, AnyError>])
     }
@@ -55,11 +55,11 @@ public enum Library {
             case .loadNotebooks:
                 effects = [.readBaseDirectory]
             case let .addNotebook(notebook):
-                guard !model.hasNotebook(withUUID: notebook.meta.uuid) else { break }
+                guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
-                effects = [.createNotebook(notebook, url: notebook.noteBookMetaURL())]
+                effects = [.createNotebook(notebook, url: notebook.metaURL())]
             case let .removeNotebook(notebookMeta):
-                guard let notebook = model.notebooks.filter({$0.meta.uuid == notebookMeta.uuid}).first else { break }
+                guard let notebook = model.notebooks.first(where: { $0.uuid == notebookMeta.uuid }) else { break }
                 modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
                 effects = [.deleteNotebook(notebook, url: notebook.notebookURL())]
             case let .didAddNotebook(notebook, error):
@@ -104,6 +104,6 @@ public enum Library {
 
 private extension Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
-        return notebooks.filter({ $0.meta.uuid == notebookUUID }).count > 0
+        return notebooks.filter({ $0.uuid == notebookUUID }).count > 0
     }
 }

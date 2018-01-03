@@ -52,13 +52,13 @@ extension Library {
         private func perform(action: Core.Library.Effect) {
             switch action {
             case let .createNotebook(notebook, url):
-                let error = fileExecuter.createFile(atURL: url, content: notebook.meta)
+                let error = fileExecuter.createFile(atURL: url, content: notebook)
                 dispatchToLibrary <| .didAddNotebook(notebook, error: error)
-                dispatch <| .didAddNotebook(notebook.meta, error: error)
+                dispatch <| .didAddNotebook(notebook, error: error)
             case let .deleteNotebook(notebook, url):
                 let error = fileExecuter.deleteDirectory(at: url)
                 dispatchToLibrary <| .didRemoveNotebook(notebook, error: error)
-                dispatch <| .didDeleteNotebook(notebook.meta, error: error)
+                dispatch <| .didDeleteNotebook(notebook, error: error)
             case .readBaseDirectory:
                 let result = fileExecuter.contentOfDocumentsFolder()
                 dispatchToLibrary <| .didReadBaseDirectory(urls: result)

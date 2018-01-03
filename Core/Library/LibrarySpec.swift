@@ -76,7 +76,7 @@ class LibrarySpec: QuickSpec {
             context("when receiving removeNotebook event") {
                 context("when notebook with that uuid was added") {
                     beforeEach {
-                        event = .removeNotebook(notebook.meta)
+                        event = .removeNotebook(notebook)
                         e = e.evaluate(event: event)
                     }
 
@@ -97,7 +97,7 @@ class LibrarySpec: QuickSpec {
                 context("when notebook with that uuid was not added") {
                     beforeEach {
                         let notAddedNotebook = Dummy.notebook()
-                        event = .removeNotebook(notAddedNotebook.meta)
+                        event = .removeNotebook(notAddedNotebook)
                         e = e.evaluate(event: event)
                     }
 
@@ -255,7 +255,7 @@ class LibrarySpec: QuickSpec {
                 }
 
                 context("when notebooks list has result with notebook") {
-                    let notebook = Dummy.notebookMeta()
+                    let notebook = Dummy.notebook()
 
                     beforeEach {
                         event = .didReadNotebooks([Result(value: notebook)])
@@ -284,7 +284,7 @@ class LibrarySpec: QuickSpec {
 
                 context("when notebook list has result with notebook and several errors") {
                     beforeEach {
-                        let notebook = Dummy.notebookMeta()
+                        let notebook = Dummy.notebook()
                         let secondError = Dummy.error(withMessage: "secondMessage")
                         event = .didReadNotebooks([Result(error: AnyError(error)),
                                                    Result(value: notebook),
@@ -304,16 +304,7 @@ class LibrarySpec: QuickSpec {
 }
 
 private enum Dummy {
-    static func notebook(uuid: String = UUID().uuidString) -> Notebook.Model {
-        let note = Note.Meta(uuid: uuid + "note",
-                             title: uuid + "title",
-                             tags: [uuid + "tag"],
-                             updated_at: 1,
-                             created_at: 1)
-        return Notebook.Model(meta: notebookMeta(uuid: uuid), notes: [note])
-    }
-
-    static func notebookMeta(uuid: String = UUID().uuidString) -> Notebook.Meta {
+    static func notebook(uuid: String = UUID().uuidString) -> Notebook.Meta {
         return Notebook.Meta(uuid: uuid, name: uuid + "name")
     }
 

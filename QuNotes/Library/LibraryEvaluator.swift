@@ -30,10 +30,10 @@ extension Library {
 
             switch event {
             case .addNotebook:
-                let notebook = Core.Notebook.Model(meta: Core.Notebook.Meta(uuid: generateUUID(), name: ""), notes: [])
+                let notebook = Core.Notebook.Meta(uuid: generateUUID(), name: "")
                 newModel = model |> Model.lens.notebooks
-                    .~ model.notebooks.appending(notebook.meta).sorted(by: name)
-                let indexOfNewNotebook = newModel.notebooks.index(of: notebook.meta)!
+                    .~ model.notebooks.appending(notebook).sorted(by: name)
+                let indexOfNewNotebook = newModel.notebooks.index(of: notebook)!
                 effects = [.addNotebook(index: indexOfNewNotebook, notebooks: viewModels(from: newModel))]
                 actions = [.addNotebook(notebook)]
             case let .deleteNotebook(index):
