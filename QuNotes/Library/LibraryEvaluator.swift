@@ -64,13 +64,13 @@ extension Library {
 
             switch event {
             case let .updateNotebook(notebook):
-                guard let index = model.index(ofNotebookWithUUID: notebook.uuid) else { break }
+                guard let index = model.index(ofNotebook: notebook) else { break }
                 newModel = model |> Model.lens.notebooks .~
                     model.notebooks.replacing(at: index, new: notebook).sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
                 actions = [.updateNotebook(notebook)]
             case let .deleteNotebook(notebook):
-                guard let index = model.index(ofNotebookWithUUID: notebook.uuid) else { break }
+                guard let index = model.index(ofNotebook: notebook) else { break }
                 newModel = model |> Model.lens.notebooks .~
                     model.notebooks.removing(at: index)
                 effects = [.deleteNotebook(index: index, notebooks: viewModels(from: newModel))]
@@ -121,7 +121,7 @@ private extension Library {
 }
 
 private extension Library.Model {
-    func index(ofNotebookWithUUID uuid: String) -> Array<Core.Notebook.Meta>.Index? {
-        return notebooks.index { $0.uuid == uuid }
+    func index(ofNotebook notebook: Core.Notebook.Meta) -> Array<Core.Notebook.Meta>.Index? {
+        return notebooks.index { $0.uuid == notebook.uuid }
     }
 }

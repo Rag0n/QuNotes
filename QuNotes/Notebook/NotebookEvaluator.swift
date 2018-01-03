@@ -76,16 +76,16 @@ extension Notebook {
 
             switch event {
             case let .updateNote(note):
-                guard let indexOfOldNote = model.index(ofNoteWithUUID: note.uuid) else { break }
+                guard let index = model.index(ofNote: note) else { break }
                 newModel = model |> Model.lens.notes .~
-                    model.notes.removing(at: indexOfOldNote).appending(note).sorted(by: title)
+                    model.notes.replacing(at: index, new: note).sorted(by: title)
                 effects = [.updateAllNotes(titles(from: newModel))]
             case let .deleteNote(note):
-                guard let indexOfRemovedNote = model.index(ofNoteWithUUID: note.uuid) else { break }
-                let noteToRemove = model.notes[indexOfRemovedNote]
-                newModel = model |> Model.lens.notes .~ model.notes.removing(at: indexOfRemovedNote)
+                guard let index = model.index(ofNote: note) else { break }
+                let noteToRemove = model.notes[index]
+                newModel = model |> Model.lens.notes .~ model.notes.removing(at: index)
                 actions = [.deleteNote(noteToRemove)]
-                effects = [.deleteNote(index: indexOfRemovedNote, notes: titles(from: newModel))]
+                effects = [.deleteNote(index: index, notes: titles(from: newModel))]
             case let .didUpdateNotebook(notebook, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notebook .~ notebook
@@ -108,15 +108,15 @@ extension Notebook {
                 }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.showError(title: "Failed to add note", message: error.localizedDescription)]
-                let indexOfNote = model.notes.index(of: note)!
-                effects = [.deleteNote(index: indexOfNote, notes: titles(from: newModel))]
+                let index = model.notes.index(of: note)!
+                effects = [.deleteNote(index: index, notes: titles(from: newModel))]
             case let .didDeleteNote(note, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
                 actions = [.showError(title: "Failed to delete note", message: error.localizedDescription)]
-                let indexOfNote = newModel.notes.index(of: note)!
-                effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
+                let index = newModel.notes.index(of: note)!
+                effects = [.addNote(index: index, notes: titles(from: newModel))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -142,11 +142,7 @@ private extension Notebook.Model {
         return notes.filter { $0.title.lowercased().contains(filter) }
     }
 
-    func note(withUUID uuid: String) -> Core.Note.Meta? {
-        return notes.first { $0.uuid == uuid }
-    }
-
-    func index(ofNoteWithUUID uuid: String) -> Array<Core.Note.Meta>.Index? {
-        return notes.index { $0.uuid == uuid }
+    func index(ofNote note: Core.Note.Meta) -> Array<Core.Note.Meta>.Index? {
+        return notes.index { $0.uuid == note.uuid }
     }
 }
