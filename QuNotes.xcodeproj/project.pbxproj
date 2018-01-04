@@ -13,6 +13,7 @@
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
 		11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
+		112B61E91FFE5C93009EBD2D /* YogaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112B61E81FFE5C93009EBD2D /* YogaKit.framework */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
 		1138AFF71FE82D22002D28DC /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFF61FE82D22002D28DC /* Environment.swift */; };
 		1138AFFB1FE82D9D002D28DC /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1138AFFA1FE82D9D002D28DC /* Theme.swift */; };
@@ -139,6 +140,9 @@
 		11E57B201FEEF0FA0055FE89 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1C1FEEF0FA0055FE89 /* Localizable.strings */; };
 		11E57B211FEEF2250055FE89 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 11E57B1C1FEEF0FA0055FE89 /* Localizable.strings */; };
 		11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11EA22251F8A105A0042CB96 /* LibraryEvaluator.swift */; };
+		11F036EF1FFD000E0025A351 /* FlexLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11BC93001FFCE1EB00D5D433 /* FlexLayout.framework */; };
+		11F036F01FFD00370025A351 /* FlexLayout.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11BC93001FFCE1EB00D5D433 /* FlexLayout.framework */; };
+		11F036F31FFD00690025A351 /* FlexLayout.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11BC93001FFCE1EB00D5D433 /* FlexLayout.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAB1EED946D00135646 /* Result.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; };
 		11FBDBAC1EED947700135646 /* Result.framework in Copy Files */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -205,6 +209,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				11F036F31FFD00690025A351 /* FlexLayout.framework in CopyFiles */,
 				1150D3601FE4542B00AC1427 /* WSTagsField.framework in CopyFiles */,
 				1150D3611FE4542B00AC1427 /* Notepad.framework in CopyFiles */,
 				1150D3621FE4542B00AC1427 /* Result.framework in CopyFiles */,
@@ -248,6 +253,7 @@
 		111161E21FA7B61100023B27 /* NoteSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSpec.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		112B61E81FFE5C93009EBD2D /* YogaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YogaKit.framework; path = Carthage/Build/iOS/YogaKit.framework; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		1138AFF61FE82D22002D28DC /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
@@ -297,6 +303,7 @@
 		11B7059F1EEBCB0E0039A863 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		11B705A01EEBCB0E0039A863 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		11B705A71EEBD3810039A863 /* Result.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Result.framework; path = Carthage/Build/iOS/Result.framework; sourceTree = "<group>"; };
+		11BC93001FFCE1EB00D5D433 /* FlexLayout.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlexLayout.framework; path = Carthage/Build/iOS/FlexLayout.framework; sourceTree = "<group>"; };
 		11C1B7BA1FE315B5009B1D3A /* Operators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		11C1B7BC1FE315DA009B1D3A /* Lens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lens.swift; sourceTree = "<group>"; };
 		11C1B7BF1FE31708009B1D3A /* Curry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Curry.swift; sourceTree = "<group>"; };
@@ -358,6 +365,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				11F036F01FFD00370025A351 /* FlexLayout.framework in Frameworks */,
 				11B704D31FE503F50044D54D /* Prelude.framework in Frameworks */,
 				1150D35C1FE4541900AC1427 /* WSTagsField.framework in Frameworks */,
 				1150D35D1FE4541900AC1427 /* Result.framework in Frameworks */,
@@ -369,6 +377,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				112B61E91FFE5C93009EBD2D /* YogaKit.framework in Frameworks */,
+				11F036EF1FFD000E0025A351 /* FlexLayout.framework in Frameworks */,
 				1150D30E1FE433C000AC1427 /* Core.framework in Frameworks */,
 				111743721F521295006EDA89 /* Notepad.framework in Frameworks */,
 				11F144BA1F07A7CF0073EBE6 /* Result.framework in Frameworks */,
@@ -633,6 +643,8 @@
 		11B7059E1EEBCB0E0039A863 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				112B61E81FFE5C93009EBD2D /* YogaKit.framework */,
+				11BC93001FFCE1EB00D5D433 /* FlexLayout.framework */,
 				11E39D731FC494C500D9232D /* Difference.framework */,
 				11AE3C721F194E1700A13A74 /* WSTagsField.framework */,
 				119955FC1F07C0FD007AB79A /* Notepad.framework */,
@@ -1049,12 +1061,16 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Result.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Notepad.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/WSTagsField.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/FlexLayout.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/YogaKit.framework",
 			);
 			name = "Copy carthage frameworks";
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Result.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Notepad.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/WSTagsField.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/FlexLayout.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/YogaKit",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1532,6 +1548,7 @@
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
+					FLEXLAYOUT_USE_CARTHAGE,
 					"DEBUG=1",
 					"$(inherited)",
 				);
@@ -1588,6 +1605,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = FLEXLAYOUT_USE_CARTHAGE;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
