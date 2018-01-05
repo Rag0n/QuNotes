@@ -7,31 +7,47 @@
 //
 
 import UIKit
+import FlexLayout
 
 final class NoteTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(titleLabel)
         let theme = AppEnvironment.current.theme
-        titleLabel.textColor = theme.textColor
-        titleLabel.backgroundColor = theme.ligherDarkColor
-        titleLabel.highlightedTextColor = theme.darkColor
-        contentView.backgroundColor = theme.ligherDarkColor
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            titleLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor)
-        ])
+
+        contentView.flex.padding(8).minHeight(44).backgroundColor(theme.ligherDarkColor).define {
+            $0.addItem(titleLabel).grow(1)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func set(title: String) {
-        titleLabel.text = title
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.flex.layout(mode: .adjustHeight)
     }
 
-    private let titleLabel = UILabel()
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        contentView.frame = CGRect(origin: contentView.frame.origin, size: size)
+        contentView.flex.layout(mode: .adjustHeight)
+        return contentView.frame.size
+    }
+
+    func set(title: String) {
+        titleLabel.text = title
+        titleLabel.flex.markDirty()
+    }
+
+    // MARK: - Private
+
+    private let titleLabel: UILabel = {
+        let result = UILabel()
+        let theme =  AppEnvironment.current.theme
+        result.textColor = theme.textColor
+        result.backgroundColor = theme.ligherDarkColor
+        result.highlightedTextColor = theme.darkColor
+        result.numberOfLines = 0
+        return result
+    }()
 }

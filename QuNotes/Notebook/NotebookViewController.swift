@@ -8,21 +8,20 @@
 
 import UIKit
 import Prelude
+import FlexLayout
 
 final public class NotebookViewController: UIViewController {
-    // MARK: - API
-
     public func perform(effect: Notebook.ViewEffect) {
         switch effect {
         case let .updateAllNotes(notes):
             self.notes = notes
-            tableView?.reloadData()
+            tableView.reloadData()
         case .hideBackButton:
             navigationItem.setHidesBackButton(true, animated: true)
         case .showBackButton:
             navigationItem.setHidesBackButton(false, animated: true)
         case let .updateTitle(title):
-            titleTextField?.text = title
+            titleTextField.text = title
         case let .deleteNote(index, notes):
             self.notes = notes
             let indexPath = IndexPath(row: index, section: 0)
@@ -34,8 +33,6 @@ final public class NotebookViewController: UIViewController {
         }
     }
 
-    // MARK: - Life cycle
-
     public init(withDispatch dispatch: @escaping Notebook.ViewDispacher) {
         self.dispatch = dispatch
         super.init(nibName: nil, bundle: nil)
@@ -45,28 +42,37 @@ final public class NotebookViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
-    override public func loadView() {
+    public override func loadView() {
         view = UIView()
-        addTableView()
-        addAddNoteButton()
-        addSearchController()
+        view.flex.alignItems(.center).define {
+            $0.addItem(tableView).grow(1)
+            $0.addItem(addButton).position(.absolute).bottom(20)
+        }
+
+        setupNavigationBar()
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
-    override public func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
-        setupNavigationBar()
         dispatch <| .didLoad
-        tableView.reloadData()
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.flex.layout()
     }
 
     // MARK: - Private
 
+    fileprivate enum Constants {
+        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
+    }
+
     fileprivate var dispatch: Notebook.ViewDispacher
     fileprivate var notes: [String]!
 
-    private var tableView: UITableView!
-    private var addButton: UIButton!
-    private var titleTextField: UITextField!
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: nil)
         controller.searchResultsUpdater = self
@@ -75,55 +81,49 @@ final public class NotebookViewController: UIViewController {
         self.navigationItem.searchController = controller
         return controller
     }()
+    private let tableView: UITableView = {
+        let result = UITableView()
+        NoteTableViewCell.registerFor(tableView: result, reuseIdentifier: Constants.noteCellReuseIdentifier)
+        result.rowHeight = UITableViewAutomaticDimension
+        result.estimatedRowHeight = 44
+        let theme = AppEnvironment.current.theme
+        result.backgroundColor = theme.ligherDarkColor
+        result.separatorColor = theme.textColor.withAlphaComponent(0.5)
+        return result
+    }()
+    private let addButton: UIButton = {
+        let result = UIButton(type: .system)
 
-    fileprivate enum Constants {
-        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
-    }
+        result.setTitle("notebook_add_note_button".localized, for: .normal)
+        result.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
+
+        return result
+    }()
+    private let titleTextField: UITextField = {
+        let result =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
+        result.textAlignment = .center
+        result.keyboardAppearance = .dark
+        result.returnKeyType = .done
+        result.keyboardType = .asciiCapable
+        return result
+    }()
 
     private func setupNavigationBar() {
-        titleTextField =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
+        addTitleTextField()
+        addDeleteButton()
+        addSearchController()
+    }
+
+    private func addTitleTextField() {
         titleTextField.delegate = self
-        titleTextField.textAlignment = .center
-        titleTextField.keyboardAppearance = .dark
-        titleTextField.returnKeyType = .done
-        titleTextField.keyboardType = .asciiCapable
         navigationItem.titleView = titleTextField
+    }
+
+    private func addDeleteButton() {
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
                                            action: #selector(NotebookViewController.onDeleteButtonClick))
         self.navigationItem.rightBarButtonItem = deleteButton
-    }
-
-    private func addTableView() {
-        tableView = UITableView()
-        NoteTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.noteCellReuseIdentifier)
-        tableView.estimatedRowHeight = 0
-        let theme = AppEnvironment.current.theme
-        tableView.backgroundColor = theme.ligherDarkColor
-        tableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
-        tableView.rowHeight = 44
-        tableView.dataSource = self
-        tableView.delegate = self
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-
-    private func addAddNoteButton() {
-        addButton = UIButton(type: .system)
-        addButton.setTitle("notebook_add_note_button".localized, for: .normal)
-        addButton.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
-        view.addSubview(addButton)
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
-        ])
     }
 
     private func addSearchController() {
