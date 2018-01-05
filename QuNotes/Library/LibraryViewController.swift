@@ -15,10 +15,6 @@ final public class LibraryViewController: UIViewController {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
             tableView.reloadData()
-        case .updateNotebook(let index, let notebooks):
-            self.notebooks = notebooks
-            let indexPath = IndexPath(row: index, section: 0)
-            tableView.reloadRows(at: [indexPath], with: .automatic)
         case .addNotebook(let index, let notebooks):
             self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
@@ -47,10 +43,6 @@ final public class LibraryViewController: UIViewController {
         }
 
         navigationItem.title = "library_title".localized
-        let dismissGesture = UITapGestureRecognizer(target: self, action: #selector(LibraryViewController.dismissKeyboard))
-        dismissGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(dismissGesture)
-
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -88,10 +80,6 @@ final public class LibraryViewController: UIViewController {
     @objc private func addNotebookButtonDidTap() {
         dispatch <| .addNotebook
     }
-
-    @objc private func dismissKeyboard() {
-        view.endEditing(true)
-    }
 }
 
 // MARK: - UITableViewDataSource
@@ -103,9 +91,7 @@ extension LibraryViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.libraryCellReuseIdentifier, for: indexPath) as! LibraryTableViewCell
-        cell.render(viewModel: notebooks[indexPath.row], onDidChangeTitle: { [unowned self] title in
-            self.dispatch <| .updateNotebook(index: indexPath.row, title: title ?? "")
-        })
+        cell.render(viewModel: notebooks[indexPath.row])
         return cell
     }
 }

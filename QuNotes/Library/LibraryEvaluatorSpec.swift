@@ -132,57 +132,6 @@ class LibraryEvaluatorSpec: QuickSpec {
                     ]))
                 }
             }
-
-            context("when receiving updateNotebook event") {
-                context("when library has specified notebook") {
-                    let firstNotebook = Core.Notebook.Meta(uuid: "fUUID", name: "fName")
-
-                    beforeEach {
-                        let secondNotebook = Core.Notebook.Meta(uuid: "sUUID", name: "sName")
-                        e = Library.Evaluator(notebooks: [firstNotebook, secondNotebook])
-                    }
-
-                    beforeEach {
-                        event = .updateNotebook(index: 1, title: "a new name")
-                        e = e.evaluate(event: event)
-                    }
-
-                    it("updates model by changing notebook name") {
-                        expect(e.model).to(equalDiff(
-                            Library.Model(notebooks: [Core.Notebook.Meta(uuid: "sUUID", name: "a new name"),
-                                                         firstNotebook])
-                        ))
-                    }
-
-                    it("has updateNotebook effect with updated title") {
-                        expect(e.effects).to(equalDiff([
-                            .updateNotebook(index: 1, notebooks: [
-                                Library.NotebookViewModel(title: "a new name", isEditable: false),
-                                Library.NotebookViewModel(title: "fName", isEditable: false)
-                                ])
-                            ]))
-                    }
-
-                    it("has updateNotebook action with updated notebook") {
-                        expect(e.actions).to(equalDiff([
-                            .updateNotebook(Core.Notebook.Meta(uuid: "sUUID", name: "a new name"))
-                            ]))
-                    }
-                }
-
-                context("when library doesnt have specified notebook") {
-                    beforeEach {
-                        event = .updateNotebook(index: 1, title: "title")
-                        e = e.evaluate(event: event)
-                    }
-
-                    it("does nothing") {
-                        expect(e.model).to(equalDiff(Library.Model(notebooks: [])))
-                        expect(e.actions).to(beEmpty())
-                        expect(e.effects).to(beEmpty())
-                    }
-                }
-            }
         }
 
         describe("-evaluate:CoordinatorEvent") {
@@ -207,12 +156,6 @@ class LibraryEvaluatorSpec: QuickSpec {
                         expect(e.model).to(equalDiff(
                             Library.Model(notebooks: [notebook, secondNotebook])
                         ))
-                    }
-
-                    it("has updateNotebook action") {
-                        expect(e.actions).to(equalDiff([
-                            .updateNotebook(notebook)
-                        ]))
                     }
 
                     it("has updateAllNotebooks effect") {

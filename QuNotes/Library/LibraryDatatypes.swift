@@ -17,7 +17,6 @@ public enum Library {
     public enum Action: AutoEquatable {
         case addNotebook(Core.Notebook.Meta)
         case deleteNotebook(Core.Notebook.Meta)
-        case updateNotebook(Core.Notebook.Meta)
         case showNotebook(Core.Notebook.Meta)
         case showError(title: String, message: String)
     }
@@ -25,7 +24,6 @@ public enum Library {
     public enum ViewEffect: AutoEquatable {
         case updateAllNotebooks([NotebookViewModel])
         case addNotebook(index: Int, notebooks: [NotebookViewModel])
-        case updateNotebook(index: Int, notebooks:  [NotebookViewModel])
         case deleteNotebook(index: Int, notebooks: [NotebookViewModel])
     }
 
@@ -41,7 +39,6 @@ public enum Library {
         case addNotebook
         case selectNotebook(index: Int)
         case deleteNotebook(index: Int)
-        case updateNotebook(index: Int, title: String)
     }
 
     public struct NotebookViewModel: AutoEquatable {

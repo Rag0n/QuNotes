@@ -44,14 +44,6 @@ extension Library {
                 actions = [.deleteNotebook(notebook)]
             case let .selectNotebook(index):
                 actions = [.showNotebook(model.notebooks[index])]
-            case let .updateNotebook(index, title):
-                guard index < model.notebooks.count else { break }
-                let oldNotebook = model.notebooks[index]
-                let updatedNotebook = Core.Notebook.Meta(uuid: oldNotebook.uuid, name: title)
-                newModel = model |> Model.lens.notebooks
-                    .~ model.notebooks.replacing(at: index, new: updatedNotebook).sorted(by: name)
-                effects = [.updateNotebook(index: index, notebooks: viewModels(from: newModel))]
-                actions = [.updateNotebook(updatedNotebook)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -68,7 +60,6 @@ extension Library {
                 newModel = model |> Model.lens.notebooks .~
                     model.notebooks.replacing(at: index, new: notebook).sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
-                actions = [.updateNotebook(notebook)]
             case let .deleteNotebook(notebook):
                 guard let index = model.index(ofNotebook: notebook) else { break }
                 newModel = model |> Model.lens.notebooks .~

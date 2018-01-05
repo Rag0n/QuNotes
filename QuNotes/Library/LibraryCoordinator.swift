@@ -37,8 +37,6 @@ extension Library {
                 dispatchToLibrary <| .addNotebook(notebook)
             case let .deleteNotebook(notebook):
                 dispatchToLibrary <| .removeNotebook(notebook)
-            case let .updateNotebook(notebook):
-                return
             case let .showError(title, message):
                 showError(title: title, message: message)
             case let .showNotebook(notebook):

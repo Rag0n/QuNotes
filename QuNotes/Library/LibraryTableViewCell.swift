@@ -29,13 +29,13 @@ final class LibraryTableViewCell: UITableViewCell {
         contentView.flex.layout(mode: .fitContainer)
     }
 
-    func render(viewModel: Library.NotebookViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
         self.onDidChangeTitle = onDidChangeTitle
         titleTextField.text = viewModel.title
         titleTextField.isEnabled = viewModel.isEditable
         if (viewModel.isEditable) {
             titleTextField.becomeFirstResponder()
         }
+    func render(viewModel: Library.NotebookViewModel) {
     }
 
     // MARK: - Private

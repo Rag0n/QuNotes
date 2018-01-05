@@ -77,8 +77,6 @@ public func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
         return lhs == rhs
     case (.deleteNotebook(let lhs), .deleteNotebook(let rhs)):
         return lhs == rhs
-    case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
-        return lhs == rhs
     case (.showNotebook(let lhs), .showNotebook(let rhs)):
         return lhs == rhs
     case (.showError(let lhs), .showError(let rhs)):
@@ -95,10 +93,6 @@ public func == (lhs: Library.ViewEffect, rhs: Library.ViewEffect) -> Bool {
     case (.updateAllNotebooks(let lhs), .updateAllNotebooks(let rhs)):
         return lhs == rhs
     case (.addNotebook(let lhs), .addNotebook(let rhs)):
-        if lhs.index != rhs.index { return false }
-        if lhs.notebooks != rhs.notebooks { return false }
-        return true
-    case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
         if lhs.index != rhs.index { return false }
         if lhs.notebooks != rhs.notebooks { return false }
         return true
