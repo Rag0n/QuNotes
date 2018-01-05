@@ -10,29 +10,25 @@ import UIKit
 import Prelude
 
 final public class LibraryViewController: UIViewController {
-    // MARK: - API
-
     public func perform(effect: Library.ViewEffect) {
         switch effect {
         case .updateAllNotebooks(let notebooks):
             self.notebooks = notebooks
-            tableView?.reloadData()
+            tableView.reloadData()
         case .updateNotebook(let index, let notebooks):
             self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
-            tableView?.reloadRows(at: [indexPath], with: .automatic)
+            tableView.reloadRows(at: [indexPath], with: .automatic)
         case .addNotebook(let index, let notebooks):
             self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
-            tableView?.insertRows(at: [indexPath], with: .automatic)
+            tableView.insertRows(at: [indexPath], with: .automatic)
         case .deleteNotebook(let index, let notebooks):
             self.notebooks = notebooks
             let indexPath = IndexPath(row: index, section: 0)
-            tableView?.deleteRows(at: [indexPath], with: .automatic)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
-
-    // MARK: - Life cycle
 
     public init(withDispatch dispatch: @escaping Library.ViewDispacher) {
         self.dispatch = dispatch
@@ -45,24 +41,49 @@ final public class LibraryViewController: UIViewController {
 
     override public func loadView() {
         view = UIView()
-        addTableView()
-        addAddNoteButton()
+        view.flex.alignItems(.center).define {
+            $0.addItem(tableView).grow(1)
+            $0.addItem(addButton).position(.absolute).bottom(20)
+        }
+
         navigationItem.title = "library_title".localized
         let dismissGesture = UITapGestureRecognizer(target: self, action: #selector(LibraryViewController.dismissKeyboard))
         dismissGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(dismissGesture)
+
+        tableView.dataSource = self
+        tableView.delegate = self
+    }
+
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        view.flex.layout()
     }
 
     // MARK: - Private
 
-    private var tableView: UITableView!
-    private var addButton: UIButton!
-    fileprivate var notebooks: [Library.NotebookViewModel]!
-    fileprivate var dispatch: Library.ViewDispacher
-
     fileprivate enum Constants {
         static let libraryCellReuseIdentifier = "libraryCellReuseIdentifier"
     }
+    
+    fileprivate var notebooks: [Library.NotebookViewModel]!
+    fileprivate var dispatch: Library.ViewDispacher
+
+    private let tableView: UITableView = {
+        let result = UITableView()
+        LibraryTableViewCell.registerFor(tableView: result, reuseIdentifier: Constants.libraryCellReuseIdentifier)
+        let theme = AppEnvironment.current.theme
+        result.backgroundColor = theme.ligherDarkColor
+        result.separatorColor = theme.textColor.withAlphaComponent(0.5)
+        result.rowHeight = 44
+        return result
+    }()
+    private let addButton: UIButton = {
+        let result = UIButton(type: .system)
+        result.setTitle("library_add_notebook_button".localized, for: .normal)
+        result.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
+        return result
+    }()
 
     @objc private func addNotebookButtonDidTap() {
         dispatch <| .addNotebook
@@ -70,37 +91,6 @@ final public class LibraryViewController: UIViewController {
 
     @objc private func dismissKeyboard() {
         view.endEditing(true)
-    }
-
-    private func addTableView() {
-        tableView = UITableView()
-        LibraryTableViewCell.registerFor(tableView: tableView, reuseIdentifier: Constants.libraryCellReuseIdentifier)
-        let theme = AppEnvironment.current.theme
-        tableView.backgroundColor = theme.ligherDarkColor
-        tableView.separatorColor = theme.textColor.withAlphaComponent(0.5)
-        tableView.rowHeight = 44
-        tableView.dataSource = self
-        tableView.delegate = self
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-
-    private func addAddNoteButton() {
-        addButton = UIButton(type: .system)
-        addButton.setTitle("library_add_notebook_button".localized, for: .normal)
-        addButton.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
-        view.addSubview(addButton)
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            addButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20)
-        ])
     }
 }
 

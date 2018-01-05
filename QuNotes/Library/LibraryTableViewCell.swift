@@ -7,30 +7,26 @@
 //
 
 import UIKit
+import FlexLayout
 
 typealias DidChangeTitleBlock = (_ title: String?) -> Void
 
 final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.addSubview(titleTextField)
-        let theme = AppEnvironment.current.theme
-        backgroundColor = theme.ligherDarkColor
-        let attributes = [NSAttributedStringKey.foregroundColor: theme.textColor.withAlphaComponent(0.55)]
-        titleTextField.textColor = theme.textColor
-        titleTextField.attributedPlaceholder = NSAttributedString(string: "library_new_notebook_title_placeholder".localized,
-                                                                  attributes: attributes)
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleTextField.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
-            titleTextField.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 8),
-            titleTextField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: 8),
-            titleTextField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 8)
-        ])
+        backgroundColor = AppEnvironment.current.theme.ligherDarkColor
+        contentView.flex.padding(8).define {
+            $0.addItem(titleTextField).grow(1)
+        }
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.flex.layout(mode: .fitContainer)
     }
 
     func render(viewModel: Library.NotebookViewModel, onDidChangeTitle: @escaping DidChangeTitleBlock) {
@@ -44,7 +40,15 @@ final class LibraryTableViewCell: UITableViewCell {
 
     // MARK: - Private
 
-    private let titleTextField = UITextField()
+    private let titleTextField: UITextField = {
+        let result = UITextField()
+        let theme = AppEnvironment.current.theme
+        let attributes = [NSAttributedStringKey.foregroundColor: theme.textColor.withAlphaComponent(0.55)]
+        result.textColor = theme.textColor
+        result.attributedPlaceholder = NSAttributedString(string: "library_new_notebook_title_placeholder".localized,
+                                                          attributes: attributes)
+        return result
+    }()
     private var onDidChangeTitle: DidChangeTitleBlock?
 }
 
