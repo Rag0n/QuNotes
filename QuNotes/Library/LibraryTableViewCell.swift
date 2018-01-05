@@ -9,14 +9,12 @@
 import UIKit
 import FlexLayout
 
-typealias DidChangeTitleBlock = (_ title: String?) -> Void
-
 final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = AppEnvironment.current.theme.ligherDarkColor
         contentView.flex.padding(8).define {
-            $0.addItem(titleTextField).grow(1)
+            $0.addItem(titleLabel).grow(1)
         }
     }
 
@@ -29,38 +27,18 @@ final class LibraryTableViewCell: UITableViewCell {
         contentView.flex.layout(mode: .fitContainer)
     }
 
-        self.onDidChangeTitle = onDidChangeTitle
-        titleTextField.text = viewModel.title
-        titleTextField.isEnabled = viewModel.isEditable
-        if (viewModel.isEditable) {
-            titleTextField.becomeFirstResponder()
-        }
     func render(viewModel: Library.NotebookViewModel) {
+        titleLabel.text = viewModel.title
+        titleLabel.flex.markDirty()
     }
 
     // MARK: - Private
 
-    private let titleTextField: UITextField = {
-        let result = UITextField()
+    private let titleLabel: UILabel = {
+        let result = UILabel()
         let theme = AppEnvironment.current.theme
-        let attributes = [NSAttributedStringKey.foregroundColor: theme.textColor.withAlphaComponent(0.55)]
         result.textColor = theme.textColor
-        result.attributedPlaceholder = NSAttributedString(string: "library_new_notebook_title_placeholder".localized,
-                                                          attributes: attributes)
+        result.numberOfLines = 0
         return result
     }()
-    private var onDidChangeTitle: DidChangeTitleBlock?
-}
-
-// MARK: - UITextFieldDelegate
-
-extension LibraryTableViewCell: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        onDidChangeTitle?(textField.text)
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
 }

@@ -102,7 +102,7 @@ extension Library {
 private extension Library {
     static func viewModels(from model: Model) -> [NotebookViewModel] {
         return model.notebooks.map {
-            NotebookViewModel(title: $0.name, isEditable: false)
+            NotebookViewModel(title: $0.name)
         }
     }
 

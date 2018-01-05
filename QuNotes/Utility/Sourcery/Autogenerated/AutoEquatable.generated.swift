@@ -36,7 +36,6 @@ public func == (lhs: Library.Model, rhs: Library.Model) -> Bool {
 extension Library.NotebookViewModel: Equatable {}
 public func == (lhs: Library.NotebookViewModel, rhs: Library.NotebookViewModel) -> Bool {
     guard lhs.title == rhs.title else { return false }
-    guard lhs.isEditable == rhs.isEditable else { return false }
     return true
 }
 // MARK: - Note.Model AutoEquatable

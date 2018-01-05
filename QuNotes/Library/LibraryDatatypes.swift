@@ -43,11 +43,9 @@ public enum Library {
 
     public struct NotebookViewModel: AutoEquatable {
         let title: String
-        let isEditable: Bool
 
-        public init(title: String, isEditable: Bool) {
+        public init(title: String) {
             self.title = title
-            self.isEditable = isEditable
         }
     }
 
