@@ -105,6 +105,9 @@ final public class NotebookViewController: UIViewController {
         result.keyboardAppearance = .dark
         result.returnKeyType = .done
         result.keyboardType = .asciiCapable
+        let attributes = [NSAttributedStringKey.foregroundColor: AppEnvironment.current.theme.textColor.withAlphaComponent(0.55)]
+        result.attributedPlaceholder = NSAttributedString(string: "notebook_title_placeholder".localized,
+                                                          attributes: attributes)
         return result
     }()
 
