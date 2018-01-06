@@ -13,7 +13,7 @@ final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         let theme = AppEnvironment.current.theme
-        contentView.flex.padding(8).backgroundColor(theme.ligherDarkColor).define {
+        contentView.flex.padding(8).minHeight(44).backgroundColor(theme.ligherDarkColor).define {
             $0.addItem(titleLabel).grow(1)
         }
     }
