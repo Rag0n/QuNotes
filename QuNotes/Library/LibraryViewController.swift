@@ -67,7 +67,8 @@ final public class LibraryViewController: UIViewController {
         let theme = AppEnvironment.current.theme
         result.backgroundColor = theme.ligherDarkColor
         result.separatorColor = theme.textColor.withAlphaComponent(0.5)
-        result.rowHeight = 44
+        result.rowHeight = UITableViewAutomaticDimension
+        result.estimatedRowHeight = 44
         return result
     }()
     private let addButton: UIButton = {

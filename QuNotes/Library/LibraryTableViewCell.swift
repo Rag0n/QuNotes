@@ -12,8 +12,8 @@ import FlexLayout
 final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = AppEnvironment.current.theme.ligherDarkColor
-        contentView.flex.padding(8).define {
+        let theme = AppEnvironment.current.theme
+        contentView.flex.padding(8).backgroundColor(theme.ligherDarkColor).define {
             $0.addItem(titleLabel).grow(1)
         }
     }
@@ -24,7 +24,13 @@ final class LibraryTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.flex.layout(mode: .fitContainer)
+        contentView.flex.layout(mode: .adjustHeight)
+    }
+
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        contentView.frame = CGRect(origin: contentView.frame.origin, size: size)
+        contentView.flex.layout(mode: .adjustHeight)
+        return contentView.frame.size
     }
 
     func render(viewModel: Library.NotebookViewModel) {
