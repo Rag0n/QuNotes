@@ -43,7 +43,7 @@ extension Note.Model: Equatable {}
 internal func == (lhs: Note.Model, rhs: Note.Model) -> Bool {
     guard lhs.title == rhs.title else { return false }
     guard lhs.tags == rhs.tags else { return false }
-    guard lhs.content == rhs.content else { return false }
+    guard lhs.cells == rhs.cells else { return false }
     guard lhs.isNew == rhs.isNew else { return false }
     return true
 }
@@ -108,7 +108,7 @@ public func == (lhs: Note.Action, rhs: Note.Action) -> Bool {
     switch (lhs, rhs) {
     case (.updateTitle(let lhs), .updateTitle(let rhs)):
         return lhs == rhs
-    case (.updateContent(let lhs), .updateContent(let rhs)):
+    case (.updateCells(let lhs), .updateCells(let rhs)):
         return lhs == rhs
     case (.addTag(let lhs), .addTag(let rhs)):
         return lhs == rhs

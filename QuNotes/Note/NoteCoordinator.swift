@@ -13,8 +13,10 @@ extension Note {
              isNewNote: Bool, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
             self.note = note
-            evaluator = Evaluator(note: note, content: "", isNew: isNewNote)
-            noteEvaluator = Core.Note.Evaluator(model: Core.Note.Model(meta: note, content: "", notebook: notebook))
+            evaluator = Evaluator(note: note, cells: [], isNew: isNewNote)
+            let content = Core.Note.Content(title: note.title, cells: [])
+            let model = Core.Note.Model(meta: note, content: content, notebook: notebook)
+            noteEvaluator = Core.Note.Evaluator(model: model)
         }
 
         var viewController: UIViewController {
@@ -29,8 +31,8 @@ extension Note {
             switch action {
             case let .updateTitle(title):
                 dispatchToNote <| .changeTitle(title)
-            case let .updateContent(content):
-                dispatchToNote <| .changeContent(content)
+            case let .updateCells(cells):
+                dispatchToNote <| .changeCells(cells)
             case let .addTag(tag):
                 dispatchToNote <| .addTag(tag)
             case let .removeTag(tag):
@@ -55,7 +57,7 @@ extension Note {
             case let .updateContent(content, url, oldContent):
                 let error = fileExecuter.createFile(atURL: url, content: content)
                 dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
-                dispatch <| .didUpdateContent(oldContent: oldContent, error: error)
+                dispatch <| .didUpdateCells(oldCells: oldContent.cells, error: error)
             case let .addTag(tag, note, url):
                 output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)

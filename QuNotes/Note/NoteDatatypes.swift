@@ -13,13 +13,13 @@ public enum Note {
     struct Model: AutoEquatable, AutoLens {
         let title: String
         let tags: [String]
-        let content: String
+        let cells: [Core.Note.Cell]
         let isNew: Bool
     }
 
     public enum Action: AutoEquatable {
         case updateTitle(String)
-        case updateContent(String)
+        case updateCells([Core.Note.Cell])
         case addTag(String)
         case removeTag(String)
         case deleteNote
@@ -39,7 +39,7 @@ public enum Note {
     public enum CoordinatorEvent {
         case didDeleteNote(error: Error?)
         case didUpdateTitle(oldTitle: String, error: Error?)
-        case didUpdateContent(oldContent: String, error: Error?)
+        case didUpdateCells(oldCells: [Core.Note.Cell], error: Error?)
         case didAddTag(String, error: Error?)
         case didRemoveTag(String, error: Error?)
     }

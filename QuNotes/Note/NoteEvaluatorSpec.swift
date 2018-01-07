@@ -16,7 +16,7 @@ class NoteEvaluatorSpec: QuickSpec {
         let model = Dummy.model
 
         beforeEach {
-            e = Note.Evaluator(note: Dummy.note, content: Dummy.content, isNew: Dummy.isNew)
+            e = Note.Evaluator(note: Dummy.note, cells: Dummy.cells, isNew: Dummy.isNew)
         }
 
         describe("-evaluate:ViewEvent") {
@@ -29,7 +29,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is new") {
                     beforeEach {
-                        e = Note.Evaluator(note: Dummy.note, content: Dummy.content, isNew: true)
+                        e = Note.Evaluator(note: Dummy.note, cells: Dummy.cells, isNew: true)
                         e = e.evaluate(event: event)
                     }
 
@@ -44,7 +44,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when note is not new") {
                     beforeEach {
-                        e = Note.Evaluator(note: Dummy.note, content: Dummy.content, isNew: false)
+                        e = Note.Evaluator(note: Dummy.note, cells: Dummy.cells, isNew: false)
                         e = e.evaluate(event: event)
                     }
 
@@ -58,15 +58,11 @@ class NoteEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving changeContent event") {
+                let expectedCells =  [Core.Note.Cell(type: .text, data: "newContent")]
+
                 beforeEach {
                     event = .changeContent("newContent")
                     e = e.evaluate(event: event)
-                }
-
-                it("has updateContent action") {
-                    expect(e.actions).to(equalDiff([
-                        .updateContent("newContent")
-                    ]))
                 }
 
                 it("has updateContent effect") {
@@ -75,10 +71,31 @@ class NoteEvaluatorSpec: QuickSpec {
                     ]))
                 }
 
-                it("updates content in model") {
-                    expect(e.model).to(equalDiff(
-                        Dummy.model(fromModel: model, content: "newContent")
-                    ))
+                it("has updateCells action") {
+                    expect(e.actions).to(equalDiff([
+                        .updateCells(expectedCells)
+                    ]))
+                }
+
+                context("when there is some cell in the model") {
+                    it("should update model by replacing cell") {
+                        expect(e.model).to(equalDiff(
+                            Dummy.model(fromModel: model, cells: expectedCells)
+                        ))
+                    }
+                }
+
+                context("when there is no cells in the model") {
+                    beforeEach {
+                        e = Note.Evaluator(note: Dummy.note, cells: [], isNew: Dummy.isNew)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("should update model by creating new cell") {
+                        expect(e.model).to(equalDiff(
+                            Dummy.model(fromModel: model, cells: expectedCells)
+                        ))
+                    }
                 }
             }
 
@@ -248,10 +265,12 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
 
-            context("when receiving didUpdateContent event") {
-                context("when successfully updates content") {
+            context("when receiving didUpdateCells event") {
+                let oldCells = [Core.Note.Cell(type: .text, data: "old content")]
+
+                context("when successfully updates cells") {
                     beforeEach {
-                        event = .didUpdateContent(oldContent: "old content", error: nil)
+                        event = .didUpdateCells(oldCells: oldCells, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -268,15 +287,15 @@ class NoteEvaluatorSpec: QuickSpec {
                     }
                 }
 
-                context("when fails to update content") {
+                context("when fails to update cells") {
                     beforeEach {
-                        event = .didUpdateContent(oldContent: "old content", error: Dummy.error)
+                        event = .didUpdateCells(oldCells: oldCells, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
                     it("updates model with old content") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, content: "old content")
+                            Dummy.model(fromModel: model, cells: oldCells)
                         ))
                     }
 
@@ -391,21 +410,19 @@ class NoteEvaluatorSpec: QuickSpec {
 
 private enum Dummy {
     static let note = Core.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
-    static let model = Note.Model(title: note.title, tags: note.tags, content: "content", isNew: false)
+    static let model = Note.Model(title: note.title, tags: note.tags, cells: cells, isNew: false)
+    static let cells = [Core.Note.Cell(type: .text, data: "content")]
     static let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: errorMessage])
     static let errorMessage = "message"
     static var isNew: Bool {
         return model.isNew
     }
-    static var content: String {
-        return model.content
-    }
 
     static func model(fromModel model: Note.Model, title: String? = nil,
-                      tags: [String]? = nil, content: String? = nil, isNew: Bool? = nil) -> Note.Model {
+                      tags: [String]? = nil, cells: [Core.Note.Cell]? = nil, isNew: Bool? = nil) -> Note.Model {
         return Note.Model(title: title ?? model.title,
                           tags: tags ?? model.tags,
-                          content: content ?? model.content,
+                          cells: cells ?? model.cells,
                           isNew: isNew ?? model.isNew)
     }
 }

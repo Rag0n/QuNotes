@@ -20,25 +20,25 @@ extension Note.Model {
         static let title = Lens<Note.Model, String>(
             get: { $0.title },
             set: { title, model in
-                Note.Model(title: title, tags: model.tags, content: model.content, isNew: model.isNew)
+                Note.Model(title: title, tags: model.tags, cells: model.cells, isNew: model.isNew)
             }
         )
         static let tags = Lens<Note.Model, [String]>(
             get: { $0.tags },
             set: { tags, model in
-                Note.Model(title: model.title, tags: tags, content: model.content, isNew: model.isNew)
+                Note.Model(title: model.title, tags: tags, cells: model.cells, isNew: model.isNew)
             }
         )
-        static let content = Lens<Note.Model, String>(
-            get: { $0.content },
-            set: { content, model in
-                Note.Model(title: model.title, tags: model.tags, content: content, isNew: model.isNew)
+        static let cells = Lens<Note.Model, [Core.Note.Cell]>(
+            get: { $0.cells },
+            set: { cells, model in
+                Note.Model(title: model.title, tags: model.tags, cells: cells, isNew: model.isNew)
             }
         )
         static let isNew = Lens<Note.Model, Bool>(
             get: { $0.isNew },
             set: { isNew, model in
-                Note.Model(title: model.title, tags: model.tags, content: model.content, isNew: isNew)
+                Note.Model(title: model.title, tags: model.tags, cells: model.cells, isNew: isNew)
             }
         )
     }

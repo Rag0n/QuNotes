@@ -13,10 +13,10 @@ extension Note {
         let actions: [Action]
         let model: Model
 
-        init(note: Core.Note.Meta, content: String, isNew: Bool) {
+        init(note: Core.Note.Meta, cells: [Core.Note.Cell], isNew: Bool) {
             effects = []
             actions = []
-            model = Model(title: note.title, tags: note.tags, content: content, isNew: isNew)
+            model = Model(title: note.title, tags: note.tags, cells: cells, isNew: isNew)
         }
 
         fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {
@@ -40,8 +40,9 @@ extension Note {
                     effects += [.focusOnTitle]
                 }
             case let .changeContent(newContent):
-                newModel = model |> Model.lens.content .~ newContent
-                actions = [.updateContent(newContent)]
+                let newCells = [Core.Note.Cell(type: .text, data: newContent)]
+                newModel = model |> Model.lens.cells .~ newCells
+                actions = [.updateCells(newCells)]
                 effects = [.updateContent(newContent)]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
@@ -79,11 +80,11 @@ extension Note {
                 newModel = model |> Model.lens.title .~ oldTitle
                 actions = [.showError(title: "Failed to update title", message: error.localizedDescription)]
                 effects = [.updateTitle(oldTitle)]
-            case let .didUpdateContent(oldContent, error):
+            case let .didUpdateCells(oldCells, error):
                 guard let error = error else { break }
-                newModel = model |> Model.lens.content .~ oldContent
+                newModel = model |> Model.lens.cells .~ oldCells
                 actions = [.showError(title: "Failed to update content", message: error.localizedDescription)]
-                effects = [.updateContent(oldContent)]
+                effects = [.updateContent(oldCells.first?.data ?? "")]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
