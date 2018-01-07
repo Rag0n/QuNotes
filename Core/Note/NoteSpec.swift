@@ -14,6 +14,7 @@ class NoteExperimantalSpec: QuickSpec {
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
         let model = Note.Model(meta: meta, content: "content")
+        let content = "content"
         var e: Note.Evaluator!
 
         beforeEach {
@@ -53,7 +54,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when note is added to notebook") {
                     beforeEach {
                         let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
-                        let model = Note.Model(meta: meta, content: "content", notebook: notebook)
+                        let model = Note.Model(meta: meta, content: content, notebook: notebook)
                         e = Note.Evaluator(model: model)
                         e.currentTimestamp = { 15 }
                         e = e.evaluate(event: event)
@@ -89,7 +90,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when note is added to notebook") {
                     beforeEach {
                         let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
-                        let model = Note.Model(meta: meta, content: "content", notebook: notebook)
+                        let model = Note.Model(meta: meta, content: content, notebook: notebook)
                         e = Note.Evaluator(model: model)
                         e = e.evaluate(event: event)
                     }
@@ -98,7 +99,7 @@ class NoteExperimantalSpec: QuickSpec {
                         expect(e.effects).to(equalDiff([
                             .updateContent(content: "new content",
                                            url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
-                                           oldContent: "content")
+                                           oldContent: content)
                         ]))
                     }
                 }
@@ -140,7 +141,7 @@ class NoteExperimantalSpec: QuickSpec {
                     context("when note is added to notebook") {
                         beforeEach {
                             let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
-                            let model = Note.Model(meta: meta, content: "content", notebook: notebook)
+                            let model = Note.Model(meta: meta, content: content, notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 20 }
                             e = e.evaluate(event: event)
@@ -178,7 +179,7 @@ class NoteExperimantalSpec: QuickSpec {
                     context("when note is added to notebook") {
                         beforeEach {
                             let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
-                            let model = Note.Model(meta: meta, content: "content", notebook: notebook)
+                            let model = Note.Model(meta: meta, content: content, notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 22 }
                             e = e.evaluate(event: event)
