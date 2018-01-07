@@ -36,6 +36,20 @@ public func == (lhs: Library.Model, rhs: Library.Model) -> Bool {
     guard lhs.notebooks == rhs.notebooks else { return false }
     return true
 }
+// MARK: - Note.Cell AutoEquatable
+extension Note.Cell: Equatable {}
+public func == (lhs: Note.Cell, rhs: Note.Cell) -> Bool {
+    guard lhs.type == rhs.type else { return false }
+    guard lhs.data == rhs.data else { return false }
+    return true
+}
+// MARK: - Note.Content AutoEquatable
+extension Note.Content: Equatable {}
+public func == (lhs: Note.Content, rhs: Note.Content) -> Bool {
+    guard lhs.title == rhs.title else { return false }
+    guard lhs.cells == rhs.cells else { return false }
+    return true
+}
 // MARK: - Note.Meta AutoEquatable
 extension Note.Meta: Equatable {}
 public func == (lhs: Note.Meta, rhs: Note.Meta) -> Bool {

@@ -13,8 +13,8 @@ class NoteExperimantalSpec: QuickSpec {
     override func spec() {
         let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
         let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
-        let model = Note.Model(meta: meta, content: "content")
-        let content = "content"
+        let content = Note.Content(title: "title", cells: [Note.Cell(type: .text, data: "content")])
+        let model = Note.Model(meta: meta, content: content)
         var e: Note.Evaluator!
 
         beforeEach {
@@ -41,9 +41,10 @@ class NoteExperimantalSpec: QuickSpec {
                     e = e.evaluate(event: event)
                 }
 
-                it("updates model by changing title and updatedDate") {
+                it("updates model by changing title, content's title and updatedDate") {
                     expect(e.model).to(equalDiff(
-                        Dummy.model(fromModel: model, title: "new title", updated_at: 15)
+                        Dummy.model(fromModel: model, title: "new title", updated_at: 15,
+                                    content: Note.Content(title: "new title", cells: content.cells))
                     ))
                 }
 
@@ -60,26 +61,34 @@ class NoteExperimantalSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has updateTitle effect") {
+                    it("has updateTitle and updateContnet effects") {
                         expect(e.effects).to(equalDiff([
                             .updateTitle(note: Dummy.meta(fromMeta: meta, title: "new title", updated_at: 15),
                                          url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
-                                         oldTitle: "title")
+                                         oldTitle: "title"),
+                            .updateContent(content: Note.Content(title: "new title", cells: content.cells),
+                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
+                                           oldContent: content)
                         ]))
                     }
                 }
             }
 
-            context("when receiving changeContent event") {
+            context("when receiving changeCells event") {
+                let newCells = [
+                    Note.Cell(type: .text, data: "new cell")
+                ]
+
                 beforeEach {
-                    event = .changeContent("new content")
+                    event = .changeCells(newCells)
                     e.currentTimestamp = { 16 }
                     e = e.evaluate(event: event)
                 }
 
-                it("updates model by changing content and updatedDate") {
+                it("updates model by changing content's cells and updatedDate") {
                     expect(e.model).to(equalDiff(
-                        Dummy.model(fromModel: model, updated_at: 16, content: "new content")
+                        Dummy.model(fromModel: model, updated_at: 16,
+                                    content: Note.Content(title: meta.title, cells: newCells))
                     ))
                 }
 
@@ -97,7 +106,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("has updateContent effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateContent(content: "new content",
+                            .updateContent(content:  Note.Content(title: meta.title, cells: newCells),
                                            url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
                                            oldContent: content)
                         ]))
@@ -231,16 +240,20 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("updates model by setting title back to the old") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, title: "old title")
+                            Dummy.model(fromModel: model, title: "old title",
+                                        content: Note.Content(title: "old title", cells: content.cells))
                         ))
                     }
                 }
             }
 
             context("when receiving didChangeContent event") {
+                let oldContent = Note.Content(title: model.meta.title,
+                                              cells: [Note.Cell(type: .text, data: "old content")])
+
                 context("when successfully changes content") {
                     beforeEach {
-                        event = .didChangeContent(oldContent: "old content", error: nil)
+                        event = .didChangeContent(oldContent: oldContent, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -251,13 +264,13 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when fails to change content") {
                     beforeEach {
-                        event = .didChangeContent(oldContent: "old content", error: error)
+                        event = .didChangeContent(oldContent: oldContent, error: error)
                         e = e.evaluate(event: event)
                     }
 
                     it("updates model by setting content back to the old") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, content: "old content")
+                            Dummy.model(fromModel: model, content: oldContent)
                         ))
                     }
                 }
@@ -330,7 +343,7 @@ private enum Dummy {
 
     static func model(fromModel model: Note.Model, title: String? = nil, tags: [String]? = nil,
                       updated_at: TimeInterval? = nil, created_at: TimeInterval? = nil,
-                      content: String? = nil, notebook: Notebook.Meta? = nil) -> Note.Model {
+                      content: Note.Content? = nil, notebook: Notebook.Meta? = nil) -> Note.Model {
         let newMeta = meta(fromMeta: model.meta, title: title, tags: tags,
                            updated_at: updated_at, created_at: created_at)
         return Note.Model(meta: newMeta,

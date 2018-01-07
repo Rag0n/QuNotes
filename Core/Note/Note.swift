@@ -12,10 +12,10 @@ import Prelude
 public enum Note {
     public struct Model: AutoEquatable, AutoLens {
         public let meta: Meta
-        public let content: String
+        public let content: Content
         public let notebook: Notebook.Meta
 
-        public init(meta: Meta, content: String, notebook: Notebook.Meta = Notebook.Meta.Unspecified) {
+        public init(meta: Meta, content: Content, notebook: Notebook.Meta = Notebook.Meta.Unspecified) {
             self.meta = meta
             self.content = content
             self.notebook = notebook
@@ -38,20 +38,44 @@ public enum Note {
         }
     }
 
+    public struct Content: Codable, AutoEquatable, AutoLens {
+        public let title: String
+        public let cells: [Note.Cell]
+
+        public init(title: String, cells: [Note.Cell]) {
+            self.title = title
+            self.cells = cells
+        }
+    }
+
+    public struct Cell: Codable, AutoEquatable, AutoLens {
+        public let type: CellType
+        public let data: String
+
+        public init(type: CellType, data: String) {
+            self.type = type
+            self.data = data
+        }
+    }
+
+    public enum CellType: String, Codable {
+        case text
+    }
+
     public enum Effect: AutoEquatable {
         case updateTitle(note: Meta, url: URL, oldTitle: String)
-        case updateContent(content: String, url: URL, oldContent: String)
+        case updateContent(content: Content, url: URL, oldContent: Content)
         case addTag(String, note: Meta, url: URL)
         case removeTag(String, note: Meta, url: URL)
     }
 
     public enum Event {
         case changeTitle(String)
-        case changeContent(String)
+        case changeCells([Cell])
         case addTag(String)
         case removeTag(String)
         case didChangeTitle(oldTitle: String, error: Error?)
-        case didChangeContent(oldContent: String, error: Error?)
+        case didChangeContent(oldContent: Content, error: Error?)
         case didAddTag(String, error: Error?)
         case didRemoveTag(String, error: Error?)
     }
@@ -73,11 +97,17 @@ public enum Note {
             switch event {
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.meta.title .~ newTitle
+                            |> Model.lens.content.title .~ newTitle
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.updateTitle(note: newModel.meta, url: url, oldTitle: model.meta.title)]
-            case let .changeContent(newContent):
+                let metaURL = model.notebook.noteMetaURL(for: newModel.meta)
+                let contentURL = model.notebook.noteContentURL(for: newModel.meta)
+                effects = [
+                    .updateTitle(note: newModel.meta, url: metaURL, oldTitle: model.meta.title),
+                    .updateContent(content: newModel.content, url: contentURL, oldContent: model.content)
+                ]
+            case let .changeCells(newCells):
+                let newContent = Content(title: model.meta.title, cells: newCells)
                 newModel = model |> Model.lens.content .~ newContent
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
@@ -100,6 +130,7 @@ public enum Note {
             case let .didChangeTitle(oldTitle, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.title .~ oldTitle
+                            |> Model.lens.content.title .~ oldTitle
             case let .didChangeContent(oldContent, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.content .~ oldContent
