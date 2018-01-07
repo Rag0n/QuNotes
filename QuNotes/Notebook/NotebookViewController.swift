@@ -74,41 +74,38 @@ final public class NotebookViewController: UIViewController {
     fileprivate var notes: [String]!
 
     private lazy var searchController: UISearchController = {
-        let controller = UISearchController(searchResultsController: nil)
-        controller.searchResultsUpdater = self
-        controller.dimsBackgroundDuringPresentation = false
+        let s = UISearchController(searchResultsController: nil)
+        s.searchResultsUpdater = self
+        s.dimsBackgroundDuringPresentation = false
         self.definesPresentationContext = true
-        self.navigationItem.searchController = controller
-        return controller
+        self.navigationItem.searchController = s
+        return s
     }()
     private let tableView: UITableView = {
-        let result = UITableView()
-        NoteTableViewCell.registerFor(tableView: result, reuseIdentifier: Constants.noteCellReuseIdentifier)
-        result.rowHeight = UITableViewAutomaticDimension
-        result.estimatedRowHeight = 44
+        let t = UITableView()
+        NoteTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.noteCellReuseIdentifier)
+        t.estimatedRowHeight = 44
         let theme = AppEnvironment.current.theme
-        result.backgroundColor = theme.ligherDarkColor
-        result.separatorColor = theme.textColor.withAlphaComponent(0.5)
-        return result
+        t.backgroundColor = theme.ligherDarkColor
+        t.separatorColor = theme.textColor.withAlphaComponent(0.5)
+        return t
     }()
     private let addButton: UIButton = {
-        let result = UIButton(type: .system)
-
-        result.setTitle("notebook_add_note_button".localized, for: .normal)
-        result.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
-
-        return result
+        let b = UIButton(type: .system)
+        b.setTitle("notebook_add_note_button".localized, for: .normal)
+        b.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
+        return b
     }()
     private let titleTextField: UITextField = {
-        let result =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
-        result.textAlignment = .center
-        result.keyboardAppearance = .dark
-        result.returnKeyType = .done
-        result.keyboardType = .asciiCapable
+        let t =  UITextField(frame: CGRect(x: 0, y: 0, width: 120, height: 22))
+        t.textAlignment = .center
+        t.keyboardAppearance = .dark
+        t.returnKeyType = .done
+        t.keyboardType = .asciiCapable
         let attributes = [NSAttributedStringKey.foregroundColor: AppEnvironment.current.theme.textColor.withAlphaComponent(0.55)]
-        result.attributedPlaceholder = NSAttributedString(string: "notebook_title_placeholder".localized,
-                                                          attributes: attributes)
-        return result
+        t.attributedPlaceholder = NSAttributedString(string: "notebook_title_placeholder".localized,
+                                                     attributes: attributes)
+        return t
     }()
 
     private func setupNavigationBar() {

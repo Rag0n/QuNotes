@@ -12,8 +12,8 @@ import FlexLayout
 final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let theme = AppEnvironment.current.theme
-        contentView.flex.padding(8).minHeight(44).backgroundColor(theme.ligherDarkColor).define {
+        contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
+        contentView.flex.padding(8).minHeight(44).define {
             $0.addItem(titleLabel).grow(1)
         }
     }
@@ -41,10 +41,10 @@ final class LibraryTableViewCell: UITableViewCell {
     // MARK: - Private
 
     private let titleLabel: UILabel = {
-        let result = UILabel()
+        let l = UILabel()
         let theme = AppEnvironment.current.theme
-        result.textColor = theme.textColor
-        result.numberOfLines = 0
-        return result
+        l.textColor = theme.textColor
+        l.numberOfLines = 0
+        return l
     }()
 }

@@ -62,20 +62,19 @@ final public class LibraryViewController: UIViewController {
     fileprivate var dispatch: Library.ViewDispacher
 
     private let tableView: UITableView = {
-        let result = UITableView()
-        LibraryTableViewCell.registerFor(tableView: result, reuseIdentifier: Constants.libraryCellReuseIdentifier)
+        let t = UITableView()
+        LibraryTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.libraryCellReuseIdentifier)
         let theme = AppEnvironment.current.theme
-        result.backgroundColor = theme.ligherDarkColor
-        result.separatorColor = theme.textColor.withAlphaComponent(0.5)
-        result.rowHeight = UITableViewAutomaticDimension
-        result.estimatedRowHeight = 44
-        return result
+        t.backgroundColor = theme.ligherDarkColor
+        t.separatorColor = theme.textColor.withAlphaComponent(0.5)
+        t.estimatedRowHeight = 44
+        return t
     }()
     private let addButton: UIButton = {
-        let result = UIButton(type: .system)
-        result.setTitle("library_add_notebook_button".localized, for: .normal)
-        result.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
-        return result
+        let b = UIButton(type: .system)
+        b.setTitle("library_add_notebook_button".localized, for: .normal)
+        b.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
+        return b
     }()
 
     @objc private func addNotebookButtonDidTap() {

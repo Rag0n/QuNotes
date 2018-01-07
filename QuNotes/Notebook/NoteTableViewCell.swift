@@ -42,12 +42,12 @@ final class NoteTableViewCell: UITableViewCell {
     // MARK: - Private
 
     private let titleLabel: UILabel = {
-        let result = UILabel()
+        let l = UILabel()
         let theme =  AppEnvironment.current.theme
-        result.textColor = theme.textColor
-        result.backgroundColor = theme.ligherDarkColor
-        result.highlightedTextColor = theme.darkColor
-        result.numberOfLines = 0
-        return result
+        l.textColor = theme.textColor
+        l.backgroundColor = theme.ligherDarkColor
+        l.highlightedTextColor = theme.darkColor
+        l.numberOfLines = 0
+        return l
     }()
 }

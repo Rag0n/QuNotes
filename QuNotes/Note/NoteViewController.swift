@@ -78,38 +78,38 @@ public final class NoteViewController: UIViewController {
     fileprivate var dispatch: Note.ViewDispacher
 
     private let container: UIView = {
-        let result = UIView()
-        result.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
-        return result
+        let v = UIView()
+        v.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
+        return v
     }()
     private let titleTextField: UITextField = {
-        let result = UITextField()
+        let t = UITextField()
         let theme = AppEnvironment.current.theme
-        result.backgroundColor = theme.ligherDarkColor
-        result.textColor = theme.textColor
-        result.attributedPlaceholder = NSAttributedString(string: "note_title_placeholder".localized,
-                                                          attributes: [NSAttributedStringKey.foregroundColor: theme.textColor])
-        result.addTarget(self, action: #selector(NoteViewController.onTitleTextFieldChange), for: .editingChanged)
-        return result
+        t.backgroundColor = theme.ligherDarkColor
+        t.textColor = theme.textColor
+        t.attributedPlaceholder = NSAttributedString(string: "note_title_placeholder".localized,
+                                                     attributes: [NSAttributedStringKey.foregroundColor: theme.textColor])
+        t.addTarget(self, action: #selector(NoteViewController.onTitleTextFieldChange), for: .editingChanged)
+        return t
     }()
     private let tagView: WSTagsField = {
-        let result = WSTagsField(frame: .zero)
-        result.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
-        result.spaceBetweenTags = 10.0
-        result.font = .systemFont(ofSize: 12.0)
+        let t = WSTagsField(frame: .zero)
+        t.padding = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        t.spaceBetweenTags = 10.0
+        t.font = .systemFont(ofSize: 12.0)
         let theme = AppEnvironment.current.theme
-        result.textColor = theme.textColor
-        result.fieldTextColor = theme.textColor
-        result.selectedColor = theme.ligherDarkColor
-        result.selectedTextColor = theme.textColor
-        result.backgroundColor = theme.ligherDarkColor
-        return result
+        t.textColor = theme.textColor
+        t.fieldTextColor = theme.textColor
+        t.selectedColor = theme.ligherDarkColor
+        t.selectedTextColor = theme.textColor
+        t.backgroundColor = theme.ligherDarkColor
+        return t
     }()
     private let editor: Notepad = {
-        let result = Notepad(frame: CGRect.zero, themeFile: Constants.themeName)
-        result.keyboardAppearance = .dark
-        result.returnKeyType = .done
-        return result
+        let n = Notepad(frame: CGRect.zero, themeFile: Constants.themeName)
+        n.keyboardAppearance = .dark
+        n.returnKeyType = .done
+        return n
     }()
 
     private func setupNavigationBar() {
