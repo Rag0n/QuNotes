@@ -12,9 +12,8 @@ import FlexLayout
 final class NoteTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        let theme = AppEnvironment.current.theme
-
-        contentView.flex.padding(8).minHeight(44).backgroundColor(theme.ligherDarkColor).define {
+        contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
+        contentView.flex.minHeight(44).define {
             $0.addItem(titleLabel).grow(1)
         }
     }
@@ -25,6 +24,7 @@ final class NoteTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.flex.padding(contentView.layoutMargins)
         contentView.flex.layout(mode: .adjustHeight)
     }
 

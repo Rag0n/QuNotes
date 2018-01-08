@@ -13,7 +13,7 @@ final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
-        contentView.flex.padding(8).minHeight(44).define {
+        contentView.flex.minHeight(44).define {
             $0.addItem(titleLabel).grow(1)
         }
     }
@@ -24,6 +24,7 @@ final class LibraryTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
+        contentView.flex.padding(contentView.layoutMargins)
         contentView.flex.layout(mode: .adjustHeight)
     }
 
