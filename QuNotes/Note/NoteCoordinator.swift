@@ -49,6 +49,8 @@ extension Note {
 
         private func perform(effect: Core.Note.Effect) {
             switch effect {
+            case let .readContent(url):
+                break
             case let .updateTitle(note, url, oldTitle):
                 output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)

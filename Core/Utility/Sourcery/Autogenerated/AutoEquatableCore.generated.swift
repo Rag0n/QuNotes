@@ -133,6 +133,8 @@ public func == (lhs: Note.Effect, rhs: Note.Effect) -> Bool {
         if lhs.note != rhs.note { return false }
         if lhs.url != rhs.url { return false }
         return true
+    case (.readContent(let lhs), .readContent(let rhs)):
+        return lhs == rhs
     default: return false
     }
 }

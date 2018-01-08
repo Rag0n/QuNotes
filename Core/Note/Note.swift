@@ -67,9 +67,11 @@ public enum Note {
         case updateContent(content: Content, url: URL, oldContent: Content)
         case addTag(String, note: Meta, url: URL)
         case removeTag(String, note: Meta, url: URL)
+        case readContent(url: URL)
     }
 
     public enum Event {
+        case loadContent
         case changeTitle(String)
         case changeCells([Cell])
         case addTag(String)
@@ -95,6 +97,10 @@ public enum Note {
             var newModel = model
 
             switch event {
+            case .loadContent:
+                guard model.notebook != Notebook.Meta.Unspecified else { break }
+                let contentURL = model.notebook.noteContentURL(for: model.meta)
+                effects = [.readContent(url: contentURL)]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.meta.title .~ newTitle
                             |> Model.lens.content.title .~ newTitle

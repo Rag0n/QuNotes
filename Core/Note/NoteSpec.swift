@@ -34,6 +34,34 @@ class NoteExperimantalSpec: QuickSpec {
         describe("-evaluate:") {
             var event: Note.Event!
 
+            context("when receiving loadContent event") {
+                beforeEach {
+                    event = .loadContent
+                    e = e.evaluate(event: event)
+                }
+
+                context("when note is added to notebook") {
+                    beforeEach {
+                        let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
+                        let model = Note.Model(meta: meta, content: content, notebook: notebook)
+                        e = Note.Evaluator(model: model)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has readContent effect") {
+                        expect(e.effects).to(equalDiff([
+                            .readContent(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!)
+                        ]))
+                    }
+                }
+
+                context("when note is not added to notebook") {
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
             context("when receiving changeTitle event") {
                 beforeEach {
                     event = .changeTitle("new title")
