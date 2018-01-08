@@ -51,6 +51,10 @@ extension Note {
             switch effect {
             case let .readContent(url):
                 break
+            case let .didLoadContent(content):
+                break
+            case let .handleError(title, message):
+                break
             case let .updateTitle(note, url, oldTitle):
                 output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)

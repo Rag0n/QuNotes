@@ -8,6 +8,7 @@
 
 import Quick
 import Nimble
+import Result
 
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
@@ -58,6 +59,46 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when note is not added to notebook") {
                     it("doesnt have effects") {
                         expect(e.effects).to(beEmpty())
+                    }
+                }
+            }
+
+            context("when receiving didReadContent event") {
+                context("when successfully reads content") {
+                    let content = Note.Content(title: "title", cells: [Note.Cell(type: .text, data: "new content")])
+
+                    beforeEach {
+                        event = .didReadContent(Result(value: content))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("updates model with new content") {
+                        expect(e.model).to(equalDiff(
+                            Note.Model(meta: meta, content: content)
+                        ))
+                    }
+
+                    it("has didLoadContent effect") {
+                        expect(e.effects).to(equalDiff([
+                            .didLoadContent(content)
+                        ]))
+                    }
+                }
+
+                context("when fails to read content") {
+                    beforeEach {
+                        event = .didReadContent(Result(error: AnyError(error)))
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(model))
+                    }
+
+                    it("has handleError effect") {
+                        expect(e.effects).to(equalDiff([
+                            .handleError(title: "Unable to load content", message: "message")
+                        ]))
                     }
                 }
             }

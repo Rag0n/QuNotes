@@ -8,6 +8,7 @@
 
 import Foundation
 import Prelude
+import Result
 
 public enum Note {
     public struct Model: AutoEquatable, AutoLens {
@@ -68,10 +69,13 @@ public enum Note {
         case addTag(String, note: Meta, url: URL)
         case removeTag(String, note: Meta, url: URL)
         case readContent(url: URL)
+        case didLoadContent(Content)
+        case handleError(title: String, message: String)
     }
 
     public enum Event {
         case loadContent
+        case didReadContent(Result<Content, AnyError>)
         case changeTitle(String)
         case changeCells([Cell])
         case addTag(String)
@@ -101,6 +105,14 @@ public enum Note {
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 let contentURL = model.notebook.noteContentURL(for: model.meta)
                 effects = [.readContent(url: contentURL)]
+            case let .didReadContent(result):
+                guard case let .success(content) = result else {
+                    effects = [.handleError(title: "Unable to load content",
+                                            message: result.error!.localizedDescription)]
+                    break
+                }
+                newModel = model |> Model.lens.content .~ content
+                effects = [.didLoadContent(content)]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.meta.title .~ newTitle
                             |> Model.lens.content.title .~ newTitle

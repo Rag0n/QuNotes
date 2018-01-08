@@ -135,6 +135,12 @@ public func == (lhs: Note.Effect, rhs: Note.Effect) -> Bool {
         return true
     case (.readContent(let lhs), .readContent(let rhs)):
         return lhs == rhs
+    case (.didLoadContent(let lhs), .didLoadContent(let rhs)):
+        return lhs == rhs
+    case (.handleError(let lhs), .handleError(let rhs)):
+        if lhs.title != rhs.title { return false }
+        if lhs.message != rhs.message { return false }
+        return true
     default: return false
     }
 }
