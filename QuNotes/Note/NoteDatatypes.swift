@@ -37,6 +37,7 @@ public enum Note {
     }
 
     public enum CoordinatorEvent {
+        case didLoadContent(Core.Note.Content)
         case didDeleteNote(error: Error?)
         case didUpdateTitle(oldTitle: String, error: Error?)
         case didUpdateCells(oldCells: [Core.Note.Cell], error: Error?)

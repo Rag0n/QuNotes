@@ -191,6 +191,27 @@ class NoteEvaluatorSpec: QuickSpec {
         describe("-evaluate:CoordinatorEvent") {
             var event: Note.CoordinatorEvent!
 
+            context("when receiving didLoadContent event") {
+                let content = Dummy.content(withData: "loaded content")
+
+                beforeEach {
+                    event = .didLoadContent(content)
+                    e = e.evaluate(event: event)
+                }
+
+                it("updates model with new cells") {
+                    expect(e.model).to(equalDiff(
+                        Dummy.model(fromModel: model, cells: content.cells)
+                    ))
+                }
+
+                it("has updateContent effect") {
+                    expect(e.effects).to(equalDiff([
+                        .updateContent("loaded content")
+                    ]))
+                }
+            }
+
             context("when receiving didDeleteNote event") {
                 context("when successfuly deletes note") {
                     beforeEach {
@@ -302,7 +323,7 @@ class NoteEvaluatorSpec: QuickSpec {
                     it("has showError action") {
                         expect(e.actions).to(equalDiff([
                             .showError(title: "Failed to update content", message: Dummy.errorMessage)
-                            ]))
+                        ]))
                     }
 
                     it("has updateContent effect") {
@@ -424,5 +445,10 @@ private enum Dummy {
                           tags: tags ?? model.tags,
                           cells: cells ?? model.cells,
                           isNew: isNew ?? model.isNew)
+    }
+
+    static func content(withData data: String) -> Core.Note.Content {
+        let cells = [Core.Note.Cell(type: .text, data: data)]
+        return Core.Note.Content(title: note.title, cells: cells)
     }
 }

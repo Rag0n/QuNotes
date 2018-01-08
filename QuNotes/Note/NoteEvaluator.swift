@@ -69,6 +69,9 @@ extension Note {
             var newModel = model
 
             switch event {
+            case let .didLoadContent(content):
+                newModel = model |> Model.lens.cells .~ content.cells
+                effects = [.updateContent(content.cells.first?.data ?? "")]
             case let .didDeleteNote(error):
                 if let error = error {
                     actions = [.showError(title: "Failed to delete note", message: error.localizedDescription)]
