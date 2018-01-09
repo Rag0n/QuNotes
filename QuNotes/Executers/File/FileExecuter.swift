@@ -72,8 +72,7 @@ public struct FileExecuter: FileExecuterType {
         do {
             try FileManager.default.removeItem(at: url.appendedToDocumentsURL())
             return nil
-        }
-        catch {
+        } catch {
             return error
         }
     }
