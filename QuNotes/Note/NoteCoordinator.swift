@@ -19,6 +19,10 @@ extension Note {
             noteEvaluator = Core.Note.Evaluator(model: model)
         }
 
+        func onStart() {
+            dispatchToNote <| .loadContent
+        }
+
         var viewController: UIViewController {
             return noteViewController
         }
@@ -50,11 +54,13 @@ extension Note {
         private func perform(effect: Core.Note.Effect) {
             switch effect {
             case let .readContent(url):
-                break
+                let result = fileExecuter.readFile(at: url.appendedToDocumentsURL(), contentType: Core.Note.Content.self)
+                dispatchToNote <| .didReadContent(result)
             case let .didLoadContent(content):
-                break
+                dispatch <| .didLoadContent(content)
             case let .handleError(title, message):
-                break
+                // TODO: When UI is not loaded error will not be shown
+                showError(title: title, message: message)
             case let .updateTitle(note, url, oldTitle):
                 output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
