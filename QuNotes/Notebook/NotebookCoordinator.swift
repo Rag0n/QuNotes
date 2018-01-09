@@ -77,7 +77,6 @@ extension Notebook {
                 let notes = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Note.Meta.self) }
                 dispatchToNotebook <| .didReadNotes(notes)
             case let .handleError(title, message):
-                // TODO: When UI is not loaded error will not be shown
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes)

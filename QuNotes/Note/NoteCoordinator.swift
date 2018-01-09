@@ -59,7 +59,6 @@ extension Note {
             case let .didLoadContent(content):
                 dispatch <| .didLoadContent(content)
             case let .handleError(title, message):
-                // TODO: When UI is not loaded error will not be shown
                 showError(title: title, message: message)
             case let .updateTitle(note, url, oldTitle):
                 output = .updateNote(note)
