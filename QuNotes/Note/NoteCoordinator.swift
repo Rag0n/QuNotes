@@ -111,8 +111,8 @@ extension Note {
 
         private func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
-            evaluator.actions.forEach(perform)
             evaluator.effects.forEach(noteViewController.perform)
+            evaluator.actions.forEach(perform)
         }
 
         private func updateNote(note: Core.Note.Evaluator) {

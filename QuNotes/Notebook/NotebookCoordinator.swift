@@ -126,8 +126,8 @@ extension Notebook {
 
         private func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
-            evaluator.actions.forEach(perform)
             evaluator.effects.forEach(notebookViewController.perform)
+            evaluator.actions.forEach(perform)
         }
 
         private func updateNotebook(notebook: Core.Notebook.Evaluator) {

@@ -109,8 +109,8 @@ extension Library {
 
         private func updateEvaluator(evaluator: Evaluator) {
             self.evaluator = evaluator
-            evaluator.actions.forEach(perform)
             evaluator.effects.forEach(libraryViewController.perform)
+            evaluator.actions.forEach(perform)
         }
 
         private func updateLibrary(library: Core.Library.Evaluator) {
