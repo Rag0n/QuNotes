@@ -61,6 +61,9 @@ extension Notebook {
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNotebook <| .didAddNote(note, error: error)
                 dispatch <| .didAddNote(note, error: error)
+            case let .createNoteContent(content, url):
+                // TODO: Need to handle this erros aswell
+                _ = fileExecuter.createFile(atURL: url, content: content)
             case let .updateNotebook(notebook, url):
                 output = .updateNotebook(notebook)
                 let error = fileExecuter.createFile(atURL: url, content: notebook)

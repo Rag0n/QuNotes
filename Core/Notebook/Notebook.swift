@@ -34,6 +34,7 @@ public enum Notebook {
 
     public enum Effect: AutoEquatable {
         case createNote(Note.Meta, url: URL)
+        case createNoteContent(Note.Content, url: URL)
         case updateNotebook(Meta, url: URL)
         case deleteNote(Note.Meta, url: URL)
         case readDirectory(atURL: URL)
@@ -78,7 +79,13 @@ public enum Notebook {
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
                 let url = newModel.meta.noteMetaURL(for: noteToAdd)
-                effects = [.createNote(noteToAdd, url: url)]
+                let content = Note.Content(title: noteToAdd.title, cells: [])
+                let contentURL = newModel.meta.noteContentURL(for: noteToAdd)
+                // TODO: Here we are creating possibility for race condition
+                effects = [
+                    .createNoteContent(content, url: contentURL),
+                    .createNote(noteToAdd, url: url)
+                ]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removing(at: indexOfRemovedNote)

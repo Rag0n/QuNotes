@@ -81,8 +81,10 @@ class NotebookSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has createNote effect") {
+                    it("has createNote and createNoteContent effects") {
                         expect(e.effects).to(equalDiff([
+                            .createNoteContent(Note.Content(title: newNote.title, cells: []),
+                                               url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!),
                             .createNote(newNote,
                                         url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!)
                         ]))

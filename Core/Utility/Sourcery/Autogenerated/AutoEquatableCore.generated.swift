@@ -152,6 +152,10 @@ public func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
         if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
         return true
+    case (.createNoteContent(let lhs), .createNoteContent(let rhs)):
+        if lhs.0 != rhs.0 { return false }
+        if lhs.url != rhs.url { return false }
+        return true
     case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
         if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
