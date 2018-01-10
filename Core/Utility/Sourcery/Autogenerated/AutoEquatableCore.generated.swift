@@ -151,10 +151,8 @@ public func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
     case (.createNote(let lhs), .createNote(let rhs)):
         if lhs.0 != rhs.0 { return false }
         if lhs.url != rhs.url { return false }
-        return true
-    case (.createNoteContent(let lhs), .createNoteContent(let rhs)):
-        if lhs.0 != rhs.0 { return false }
-        if lhs.url != rhs.url { return false }
+        if lhs.content != rhs.content { return false }
+        if lhs.contentURL != rhs.contentURL { return false }
         return true
     case (.updateNotebook(let lhs), .updateNotebook(let rhs)):
         if lhs.0 != rhs.0 { return false }
@@ -173,6 +171,8 @@ public func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
         if lhs.message != rhs.message { return false }
         return true
     case (.didLoadNotes(let lhs), .didLoadNotes(let rhs)):
+        return lhs == rhs
+    case (.removeFile(let lhs), .removeFile(let rhs)):
         return lhs == rhs
     default: return false
     }

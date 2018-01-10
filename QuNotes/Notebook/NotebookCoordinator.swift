@@ -57,13 +57,11 @@ extension Notebook {
 
         private func perform(action: Core.Notebook.Effect) {
             switch action {
-            case let .createNote(note, url):
-                let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNotebook <| .didAddNote(note, error: error)
-                dispatch <| .didAddNote(note, error: error)
-            case let .createNoteContent(content, url):
-                // TODO: Need to handle this erros aswell
-                _ = fileExecuter.createFile(atURL: url, content: content)
+            case let .createNote(note, url, content, contentURL):
+                let metaError = fileExecuter.createFile(atURL: url, content: note)
+                let contentError = fileExecuter.createFile(atURL: contentURL, content: content)
+                dispatchToNotebook <| .didAddNote(note, error: metaError ?? contentError)
+                dispatch <| .didAddNote(note, error:  metaError ?? contentError)
             case let .updateNotebook(notebook, url):
                 output = .updateNotebook(notebook)
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
@@ -83,6 +81,8 @@ extension Notebook {
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes)
+            case let .removeFile(url):
+                _ = fileExecuter.deleteFile(at: url)
             }
         }
 

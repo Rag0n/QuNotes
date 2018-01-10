@@ -81,12 +81,12 @@ class NotebookSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has createNote and createNoteContent effects") {
+                    it("has createNote effects") {
                         expect(e.effects).to(equalDiff([
-                            .createNoteContent(Note.Content(title: newNote.title, cells: []),
-                                               url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!),
                             .createNote(newNote,
-                                        url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!)
+                                        url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
+                                        content: Note.Content(title: newNote.title, cells: []),
+                                        contentURL: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!)
                         ]))
                     }
 
@@ -268,6 +268,13 @@ class NotebookSpec: QuickSpec {
                         expect(e.model).to(equalDiff(
                             Notebook.Model(meta: model.meta, notes: [])
                         ))
+                    }
+
+                    it("has removeFile effect with note's meta and content") {
+                        expect(e.effects).to(equalDiff([
+                            .removeFile(url:  URL(string: "uuid.qvnotebook/noteUUID.qvnote/meta.json")!),
+                            .removeFile(url:  URL(string: "uuid.qvnotebook/noteUUID.qvnote/content.json")!),
+                        ]))
                     }
                 }
             }

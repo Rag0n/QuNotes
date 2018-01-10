@@ -33,14 +33,14 @@ public enum Notebook {
     }
 
     public enum Effect: AutoEquatable {
-        case createNote(Note.Meta, url: URL)
-        case createNoteContent(Note.Content, url: URL)
+        case createNote(Note.Meta, url: URL, content: Note.Content, contentURL: URL)
         case updateNotebook(Meta, url: URL)
         case deleteNote(Note.Meta, url: URL)
         case readDirectory(atURL: URL)
         case readNotes(urls: [URL])
         case handleError(title: String, message: String)
         case didLoadNotes([Note.Meta])
+        case removeFile(url: URL)
     }
 
     public enum Event {
@@ -81,11 +81,7 @@ public enum Notebook {
                 let url = newModel.meta.noteMetaURL(for: noteToAdd)
                 let content = Note.Content(title: noteToAdd.title, cells: [])
                 let contentURL = newModel.meta.noteContentURL(for: noteToAdd)
-                // TODO: Here we are creating possibility for race condition
-                effects = [
-                    .createNoteContent(content, url: contentURL),
-                    .createNote(noteToAdd, url: url)
-                ]
+                effects = [.createNote(noteToAdd, url: url, content: content, contentURL: contentURL)]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
                 let notes = model.notes.removing(at: indexOfRemovedNote)
@@ -115,6 +111,10 @@ public enum Notebook {
             case let .didAddNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
+                effects = [
+                    .removeFile(url: newModel.meta.noteMetaURL(for: note)),
+                    .removeFile(url: newModel.meta.noteContentURL(for: note)),
+                ]
             case let .didDeleteNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(note)
