@@ -166,26 +166,12 @@
 			remoteGlobalIDString = 1150D2D61FE4339800AC1427;
 			remoteInfo = Prelude;
 		};
-		1150D3031FE433C000AC1427 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 11B705731EEB42560039A863 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1150D2F81FE433C000AC1427;
-			remoteInfo = Core;
-		};
 		1150D30C1FE433C000AC1427 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 11B705731EEB42560039A863 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 1150D2F81FE433C000AC1427;
 			remoteInfo = Core;
-		};
-		11B705901EEB42570039A863 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 11B705731EEB42560039A863 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 11B7057A1EEB42570039A863;
-			remoteInfo = QuNotes;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -835,7 +821,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				1150D3041FE433C000AC1427 /* PBXTargetDependency */,
 			);
 			name = CoreTests;
 			productName = CoreTests;
@@ -895,7 +880,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				11B705911EEB42570039A863 /* PBXTargetDependency */,
 			);
 			name = QuNotesTests;
 			productName = QuNotesTests;
@@ -1229,20 +1213,10 @@
 			target = 1150D2D61FE4339800AC1427 /* Prelude */;
 			targetProxy = 1150D2DC1FE4339800AC1427 /* PBXContainerItemProxy */;
 		};
-		1150D3041FE433C000AC1427 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1150D2F81FE433C000AC1427 /* Core */;
-			targetProxy = 1150D3031FE433C000AC1427 /* PBXContainerItemProxy */;
-		};
 		1150D30D1FE433C000AC1427 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 1150D2F81FE433C000AC1427 /* Core */;
 			targetProxy = 1150D30C1FE433C000AC1427 /* PBXContainerItemProxy */;
-		};
-		11B705911EEB42570039A863 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 11B7057A1EEB42570039A863 /* QuNotes */;
-			targetProxy = 11B705901EEB42570039A863 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
