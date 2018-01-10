@@ -105,6 +105,6 @@ public enum Library {
 
 private extension Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
-        return notebooks.filter({ $0.uuid == notebookUUID }).count > 0
+        return notebooks.index { $0.uuid == notebookUUID } != nil
     }
 }
