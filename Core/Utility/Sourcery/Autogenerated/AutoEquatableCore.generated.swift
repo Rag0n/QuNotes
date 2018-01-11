@@ -172,7 +172,7 @@ public func == (lhs: Notebook.Effect, rhs: Notebook.Effect) -> Bool {
         return true
     case (.didLoadNotes(let lhs), .didLoadNotes(let rhs)):
         return lhs == rhs
-    case (.removeFile(let lhs), .removeFile(let rhs)):
+    case (.removeDirectory(let lhs), .removeDirectory(let rhs)):
         return lhs == rhs
     default: return false
     }

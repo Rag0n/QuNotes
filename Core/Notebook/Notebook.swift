@@ -40,7 +40,7 @@ public enum Notebook {
         case readNotes(urls: [URL])
         case handleError(title: String, message: String)
         case didLoadNotes([Note.Meta])
-        case removeFile(url: URL)
+        case removeDirectory(url: URL)
     }
 
     public enum Event {
@@ -112,10 +112,7 @@ public enum Notebook {
             case let .didAddNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
-                effects = [
-                    .removeFile(url: newModel.meta.noteMetaURL(for: note)),
-                    .removeFile(url: newModel.meta.noteContentURL(for: note)),
-                ]
+                effects = [.removeDirectory(url: newModel.meta.noteURL(for: note))]
             case let .didDeleteNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(note)

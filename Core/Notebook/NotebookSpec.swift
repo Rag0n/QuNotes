@@ -282,10 +282,9 @@ class NotebookSpec: QuickSpec {
                         ))
                     }
 
-                    it("has removeFile effect with note's meta and content") {
+                    it("has removeDirectory effect") {
                         expect(e.effects).to(equalDiff([
-                            .removeFile(url:  URL(string: "uuid.qvnotebook/noteUUID.qvnote/meta.json")!),
-                            .removeFile(url:  URL(string: "uuid.qvnotebook/noteUUID.qvnote/content.json")!),
+                            .removeDirectory(url:  URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
                         ]))
                     }
                 }

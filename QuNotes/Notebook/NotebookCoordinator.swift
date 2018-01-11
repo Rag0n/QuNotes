@@ -81,8 +81,8 @@ extension Notebook {
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
                 dispatch <| .didLoadNotes(notes)
-            case let .removeFile(url):
-                _ = fileExecuter.deleteFile(at: url)
+            case let .removeDirectory(url):
+                _ = fileExecuter.deleteDirectory(at: url)
             }
         }
 
