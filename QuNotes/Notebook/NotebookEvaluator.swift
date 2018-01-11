@@ -53,6 +53,7 @@ extension Notebook {
                 let note = model.notes[index]
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.deleteNote(note)]
+                effects = [.deleteNote(index: index, notes: titles(from: newModel))]
             case .deleteNotebook:
                 actions = [.deleteNotebook]
             case let .filterNotes(filter):

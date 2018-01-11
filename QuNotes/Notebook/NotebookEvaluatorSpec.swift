@@ -118,6 +118,12 @@ class NotebookEvaluatorSpec: QuickSpec {
                     ]))
                 }
 
+                it("has deleteNote effect") {
+                    expect(e.effects).to(equalDiff([
+                        .deleteNote(index: 0, notes: [])
+                    ]))
+                }
+
                 it("updates model by removing note") {
                     expect(e.model).to(equalDiff(
                         Notebook.Model(notebook: notebook, notes: [], filter: "")
