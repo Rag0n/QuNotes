@@ -107,6 +107,7 @@ public enum Notebook {
                     break
                 }
                 let notes = result.map { $0.value! }
+                newModel = model |> Model.lens.notes .~ notes
                 effects = [.didLoadNotes(notes)]
             case let .didAddNote(note, error):
                 guard error != nil else { break }

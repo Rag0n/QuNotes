@@ -197,6 +197,12 @@ class NotebookSpec: QuickSpec {
                             .didLoadNotes([])
                         ]))
                     }
+
+                    it("updates model with empty note list") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: meta, notes: [])
+                        ))
+                    }
                 }
 
                 context("when note list has result with note") {
@@ -211,6 +217,12 @@ class NotebookSpec: QuickSpec {
                         expect(e.effects).to(equalDiff([
                             .didLoadNotes([note])
                         ]))
+                    }
+
+                    it("updates model with one note") {
+                        expect(e.model).to(equalDiff(
+                            Notebook.Model(meta: meta, notes: [note])
+                        ))
                     }
                 }
 
