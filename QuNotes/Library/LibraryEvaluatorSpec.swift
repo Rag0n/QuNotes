@@ -344,7 +344,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to add notebook", message: "message")
+                            .showFailure(.addNotebook, reason: "message")
                         ]))
                     }
                 }
@@ -398,9 +398,9 @@ class LibraryEvaluatorSpec: QuickSpec {
                         ]))
                     }
 
-                    it("has showError action with message from error") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to delete notebook", message: "message")
+                            .showFailure(.deleteNotebook, reason: "message")
                         ]))
                     }
                 }

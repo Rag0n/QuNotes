@@ -37,8 +37,8 @@ extension Library {
                 dispatchToLibrary <| .addNotebook(notebook)
             case let .deleteNotebook(notebook):
                 dispatchToLibrary <| .removeNotebook(notebook)
-            case let .showError(title, message):
-                showError(title: title, message: message)
+            case let .showFailure(failure, reason):
+                showError(title: failure, message: reason)
             case let .showNotebook(notebook):
                 let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in

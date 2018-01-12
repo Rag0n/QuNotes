@@ -18,7 +18,7 @@ public enum Library {
         case addNotebook(Core.Notebook.Meta)
         case deleteNotebook(Core.Notebook.Meta)
         case showNotebook(Core.Notebook.Meta)
-        case showError(title: String, message: String)
+        case showFailure(Failure, reason: String)
     }
 
     public enum ViewEffect: AutoEquatable {
@@ -51,6 +51,11 @@ public enum Library {
 
     public enum CoordinatorResultEffect {
         case none
+    }
+
+    public enum Failure: AutoEquatable {
+        case addNotebook
+        case deleteNotebook
     }
 
     public typealias ViewDispacher = (_ event: ViewEvent) -> ()

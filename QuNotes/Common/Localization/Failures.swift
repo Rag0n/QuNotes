@@ -12,3 +12,13 @@ protocol Localizable {
     var localizedKey: String { get }
 }
 
+extension Library.Failure: Localizable {
+    var localizedKey: String {
+        switch self {
+        case .addNotebook:
+            return "library_adding_notebook_error"
+        case .deleteNotebook:
+            return "library_deleting_notebook_error"
+        }
+    }
+}

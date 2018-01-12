@@ -77,13 +77,13 @@ extension Library {
                 // then we need somehow to go back
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
-                actions = [.showError(title: "Failed to add notebook", message: error.localizedDescription)]
+                actions = [.showFailure(.addNotebook, reason: error.localizedDescription)]
             case let .didDeleteNotebook(notebook, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notebooks
                     .~ model.notebooks.appending(notebook).sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
-                actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
+                actions = [.showFailure(.deleteNotebook, reason: error.localizedDescription)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

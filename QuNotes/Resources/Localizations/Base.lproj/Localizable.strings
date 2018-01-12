@@ -15,3 +15,5 @@
 "library_title" = "Library";
 "library_delete_notebook_button" = "Delete";
 "library_add_notebook_button" = "Add";
+"library_adding_notebook_error" = "Failed to add notebook";
+"library_deleting_notebook_error" = "Failed to delete notebook";

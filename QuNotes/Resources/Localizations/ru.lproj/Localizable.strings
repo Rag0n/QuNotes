@@ -15,3 +15,5 @@
 "library_title" = "Библиотека";
 "library_delete_notebook_button" = "Удалить";
 "library_add_notebook_button" = "Создать";
+"library_adding_notebook_error" = "Ошибка создания записной книжки";
+"library_deleting_notebook_error" = "Ошибка удаления записной книжки";

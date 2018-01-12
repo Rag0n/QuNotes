@@ -78,9 +78,20 @@ public func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
         return lhs == rhs
     case (.showNotebook(let lhs), .showNotebook(let rhs)):
         return lhs == rhs
-    case (.showError(let lhs), .showError(let rhs)):
-        if lhs.title != rhs.title { return false }
-        if lhs.message != rhs.message { return false }
+    case (.showFailure(let lhs), .showFailure(let rhs)):
+        if lhs.0 != rhs.0 { return false }
+        if lhs.reason != rhs.reason { return false }
+        return true
+    default: return false
+    }
+}
+// MARK: - Library.Failure AutoEquatable
+extension Library.Failure: Equatable {}
+public func == (lhs: Library.Failure, rhs: Library.Failure) -> Bool {
+    switch (lhs, rhs) {
+    case (.addNotebook, .addNotebook):
+        return true
+    case (.deleteNotebook, .deleteNotebook):
         return true
     default: return false
     }
