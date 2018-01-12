@@ -38,6 +38,8 @@ class LibraryEvaluatorSpec: QuickSpec {
                 beforeEach {
                     e = Library.Evaluator(notebooks:  [firstNotebook, secondNotebook])
                     event = .addNotebook
+                    e.generateUUID = { "newUUID" }
+                    e = e.evaluate(event: event)
                 }
 
                 it("creates notebook model with unique uuid") {
@@ -47,20 +49,22 @@ class LibraryEvaluatorSpec: QuickSpec {
                 }
 
                 it("updates model by adding notebook meta and sorting notebooks") {
-                    e.generateUUID = { "newUUID" }
-                    expect(e.evaluate(event: event).model.notebooks)
-                        .to(equal([notebook, firstNotebook, secondNotebook]))
+                    expect(e.model).to(equalDiff(
+                        Library.Model(notebooks: [notebook, firstNotebook, secondNotebook])
+                    ))
                 }
 
                 it("has addNotebook action with notebook model") {
                     e.generateUUID = { "newUUID" }
-                    expect(e.evaluate(event: event).actions[0])
-                        .to(equal(.addNotebook(notebook)))
+                    expect(e.actions).to(equalDiff([
+                        .addNotebook(notebook)
+                    ]))
                 }
 
                 it("has addNotebook effect with correct viewModels and index") {
-                    expect(e.evaluate(event: event).effects[0])
-                        .to(equal(.addNotebook(index: 0, notebooks: expectedViewModels)))
+                    expect(e.effects).to(equalDiff([
+                        .addNotebook(index: 0, notebooks: expectedViewModels)
+                    ]))
                 }
             }
 
@@ -304,42 +308,44 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when successfully adds notebook") {
                     beforeEach {
                         event = .didAddNotebook(notebook, error: nil)
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
                     it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                        expect(e.actions).to(beEmpty())
                     }
 
                     it("hasnt got any effects") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(beEmpty())
+                        expect(e.effects).to(beEmpty())
                     }
                 }
 
                 context("when failed to add notebook") {
                     beforeEach {
                         event = .didAddNotebook(notebook, error: underlyingError)
+                        e = e.evaluate(event: event)
                     }
 
                     it("removes that notebook from model") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .to(equal([anotherNotebook]))
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [anotherNotebook])
+                        ))
                     }
 
                     it("has updateAllNotebooks effect with view models without notebook") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.updateAllNotebooks([anotherNotebookViewModel])))
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotebooks([anotherNotebookViewModel])
+                        ]))
                     }
 
-                    it("has showError action with message from error") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.showError(title: "Failed to add notebook", message: "message")))
+                    it("has showFailure action") {
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to add notebook", message: "message")
+                        ]))
                     }
                 }
             }
@@ -358,43 +364,44 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when successfully deletes notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(notebook, error: nil)
+                        e = e.evaluate(event: event)
                     }
 
                     it("doesnt update model") {
-                        expect(e.evaluate(event: event).model)
-                            .to(equal(model))
+                        expect(e.model).to(equalDiff(model))
                     }
 
                     it("hasnt got any actions") {
-                        expect(e.evaluate(event: event).actions)
-                            .to(beEmpty())
+                        expect(e.actions).to(beEmpty())
                     }
 
                     it("hasnt got any effects") {
-                        expect(e.evaluate(event: event).effects)
-                            .to(beEmpty())
+                        expect(e.effects).to(beEmpty())
                     }
                 }
 
                 context("when fails to delete notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(notebook, error: error)
+                        e = e.evaluate(event: event)
                     }
 
                     it("adds that notebook back to model") {
-                        expect(e.evaluate(event: event).model.notebooks)
-                            .to(equal([anotherNotebook, notebook]))
+                        expect(e.model).to(equalDiff(
+                            Library.Model(notebooks: [anotherNotebook, notebook])
+                        ))
                     }
 
                     it("has updateAllNotebooks effect with view models with notebook") {
-                        expect(e.evaluate(event: event).effects[0])
-                            .to(equal(.updateAllNotebooks([anotherNotebookViewModel,
-                                                           notebookViewModel])))
+                        expect(e.effects).to(equalDiff([
+                            .updateAllNotebooks([anotherNotebookViewModel, notebookViewModel])
+                        ]))
                     }
 
                     it("has showError action with message from error") {
-                        expect(e.evaluate(event: event).actions[0])
-                            .to(equal(.showError(title: "Failed to delete notebook", message: "message")))
+                        expect(e.actions).to(equalDiff([
+                            .showError(title: "Failed to delete notebook", message: "message")
+                        ]))
                     }
                 }
             }
