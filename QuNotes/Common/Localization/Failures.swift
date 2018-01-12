@@ -37,3 +37,20 @@ extension Notebook.Failure: Localizable {
         }
     }
 }
+
+extension Note.Failure: Localizable {
+    var localizedKey: String {
+        switch self {
+        case .addTag:
+            return "note_adding_tag_error"
+        case .removeTag:
+            return "note_removing_tag_error"
+        case .deleteNote:
+            return "note_deleting_error"
+        case .updateContent:
+            return "note_updating_content_error"
+        case .updateTitle:
+            return "note_updating_title_error"
+        }
+    }
+}

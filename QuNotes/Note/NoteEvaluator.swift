@@ -74,29 +74,29 @@ extension Note {
                 effects = [.updateContent(content.cells.first?.data ?? "")]
             case let .didDeleteNote(error):
                 if let error = error {
-                    actions = [.showError(title: "Failed to delete note", message: error.localizedDescription)]
+                    actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
                 } else {
                     actions = [.finish]
                 }
             case let .didUpdateTitle(oldTitle, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.title .~ oldTitle
-                actions = [.showError(title: "Failed to update title", message: error.localizedDescription)]
+                actions = [.showFailure(.updateTitle, reason: error.localizedDescription)]
                 effects = [.updateTitle(oldTitle)]
             case let .didUpdateCells(oldCells, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.cells .~ oldCells
-                actions = [.showError(title: "Failed to update content", message: error.localizedDescription)]
+                actions = [.showFailure(.updateContent, reason: error.localizedDescription)]
                 effects = [.updateContent(oldCells.first?.data ?? "")]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
-                actions = [.showError(title: "Failed to add tag", message: error.localizedDescription)]
+                actions = [.showFailure(.addTag, reason: error.localizedDescription)]
                 effects = [.removeTag(tag)]
             case let .didRemoveTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.appending(tag)
-                actions = [.showError(title: "Failed to remove tag", message: error.localizedDescription)]
+                actions = [.showFailure(.removeTag, reason: error.localizedDescription)]
                 effects = [.addTag(tag)]
             }
 

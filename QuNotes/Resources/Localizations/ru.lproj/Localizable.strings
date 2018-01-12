@@ -7,6 +7,11 @@
 */
 
 "note_title_placeholder" = "Заголовок";
+"note_deleting_error" = "Ошибки удаления заметки";
+"note_updating_title_error" = "Ошибка обновления заголовка";
+"note_updating_content_error" = "Ошибка обновления контента";
+"note_adding_tag_error" = "Ошибка добавления тега";
+"note_removing_tag_error" = "Ошибка удаления тега";
 
 "notebook_add_note_button" = "Создать";
 "notebook_delete_note_button" = "Удалить";

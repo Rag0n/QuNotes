@@ -129,9 +129,26 @@ public func == (lhs: Note.Action, rhs: Note.Action) -> Bool {
         return true
     case (.finish, .finish):
         return true
-    case (.showError(let lhs), .showError(let rhs)):
-        if lhs.title != rhs.title { return false }
-        if lhs.message != rhs.message { return false }
+    case (.showFailure(let lhs), .showFailure(let rhs)):
+        if lhs.0 != rhs.0 { return false }
+        if lhs.reason != rhs.reason { return false }
+        return true
+    default: return false
+    }
+}
+// MARK: - Note.Failure AutoEquatable
+extension Note.Failure: Equatable {}
+public func == (lhs: Note.Failure, rhs: Note.Failure) -> Bool {
+    switch (lhs, rhs) {
+    case (.deleteNote, .deleteNote):
+        return true
+    case (.updateTitle, .updateTitle):
+        return true
+    case (.updateContent, .updateContent):
+        return true
+    case (.addTag, .addTag):
+        return true
+    case (.removeTag, .removeTag):
         return true
     default: return false
     }

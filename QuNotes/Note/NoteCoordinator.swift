@@ -46,8 +46,8 @@ extension Note {
                 navigationController.popViewController(animated: true)
             case .finish:
                 navigationController.popViewController(animated: true)
-            case let .showError(title, message):
-                showError(title: title, message: message)
+            case let .showFailure(failure, reason):
+                showError(title: failure, message: reason)
             }
         }
 

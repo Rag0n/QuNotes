@@ -232,9 +232,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to delete note", message: Dummy.errorMessage)
+                            .showFailure(.deleteNote, reason: Dummy.errorMessage)
                         ]))
                     }
                 }
@@ -272,9 +272,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         ))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to update title", message: Dummy.errorMessage)
+                            .showFailure(.updateTitle, reason: Dummy.errorMessage)
                         ]))
                     }
 
@@ -320,9 +320,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         ))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to update content", message: Dummy.errorMessage)
+                            .showFailure(.updateContent, reason: Dummy.errorMessage)
                         ]))
                     }
 
@@ -366,9 +366,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         ))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to add tag", message: Dummy.errorMessage)
+                            .showFailure(.addTag, reason: Dummy.errorMessage)
                         ]))
                     }
 
@@ -412,9 +412,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         ))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to remove tag", message: Dummy.errorMessage)
+                            .showFailure(.removeTag, reason: Dummy.errorMessage)
                         ]))
                     }
 

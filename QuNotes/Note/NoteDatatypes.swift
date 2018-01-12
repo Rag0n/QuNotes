@@ -24,7 +24,7 @@ public enum Note {
         case removeTag(String)
         case deleteNote
         case finish
-        case showError(title: String, message: String)
+        case showFailure(Failure, reason: String)
     }
 
     public enum ViewEffect: AutoEquatable {
@@ -58,6 +58,14 @@ public enum Note {
         case updateNote(Core.Note.Meta)
         case deleteNote(Core.Note.Meta)
         case none
+    }
+
+    public enum Failure: AutoEquatable {
+        case deleteNote
+        case updateTitle
+        case updateContent
+        case addTag
+        case removeTag
     }
 
     public typealias ViewDispacher = (_ event: ViewEvent) -> ()
