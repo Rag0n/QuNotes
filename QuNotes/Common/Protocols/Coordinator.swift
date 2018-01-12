@@ -21,8 +21,23 @@ extension Coordinator {
         // No op
     }
 
+    func showError(title: Localizable, message: String) {
+        let alertController = UIAlertController(title: title.localizedKey.localized,
+                                                message: message,
+                                                preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        alertController.addAction(cancelAction)
+        // Need to delay to the next run loop because in the current loop
+        // view controller can potentionally be not in the window hierharchy
+        DispatchQueue.main.async {
+            self.viewController.present(alertController, animated: true, completion: nil)
+        }
+    }
+
     func showError(title: String, message: String) {
-        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let alertController = UIAlertController(title: title,
+                                                message: message,
+                                                preferredStyle: .alert)
         let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
         alertController.addAction(cancelAction)
         // Need to delay to the next run loop because in the current loop

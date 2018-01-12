@@ -13,6 +13,7 @@
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
 		111743751F5216AC006EDA89 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743741F5216AC006EDA89 /* Coordinator.swift */; };
+		111AA65A20091ADD00BA795B /* Failures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111AA65920091ADD00BA795B /* Failures.swift */; };
 		11239E4D1FD5EE2F0076C94C /* NotebookEvaluator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */; };
 		112B61E91FFE5C93009EBD2D /* YogaKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 112B61E81FFE5C93009EBD2D /* YogaKit.framework */; };
 		112D49831EF5391400C75B6A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 112D49821EF5391400C75B6A /* main.swift */; };
@@ -234,6 +235,7 @@
 		111161E21FA7B61100023B27 /* NoteSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSpec.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		111743741F5216AC006EDA89 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		111AA65920091ADD00BA795B /* Failures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Failures.swift; sourceTree = "<group>"; };
 		112B61E81FFE5C93009EBD2D /* YogaKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YogaKit.framework; path = Carthage/Build/iOS/YogaKit.framework; sourceTree = "<group>"; };
 		112D49821EF5391400C75B6A /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		113504291F16BA01001938FD /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
@@ -558,6 +560,7 @@
 			children = (
 				11A1A72A1FF03F1D000743CF /* LocalizedString.swift */,
 				11A1A7291FF03F1D000743CF /* String+LocalizedString.swift */,
+				111AA65920091ADD00BA795B /* Failures.swift */,
 			);
 			path = Localization;
 			sourceTree = "<group>";
@@ -1141,6 +1144,7 @@
 				1138B0011FE8311B002D28DC /* AppEnvironment.swift in Sources */,
 				1150D3491FE441AF00AC1427 /* Array+Extensions.swift in Sources */,
 				118AA0351F8EB7180014CA3D /* NotebookEvaluator.swift in Sources */,
+				111AA65A20091ADD00BA795B /* Failures.swift in Sources */,
 				11EA22261F8A105A0042CB96 /* LibraryEvaluator.swift in Sources */,
 				11C41FF11F74477300397DD9 /* LibraryCoordinator.swift in Sources */,
 				117D151F1FB63F4500410F6F /* URL+Extensions.swift in Sources */,
