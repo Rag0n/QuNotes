@@ -11,6 +11,10 @@
 "notebook_add_note_button" = "Создать";
 "notebook_delete_note_button" = "Удалить";
 "notebook_title_placeholder" = "Новый блокнот";
+"notebook_updating_title_error" = "Ошибка обновления записной книжки";
+"notebook_deleting_error" = "Ошибка удаления записной книжки";
+"notebook_adding_note_error" = "Ошибка создания заметки";
+"notebook_deleting_note_error" = "Ошибка удаления заметки";
 
 "library_title" = "Библиотека";
 "library_delete_notebook_button" = "Удалить";

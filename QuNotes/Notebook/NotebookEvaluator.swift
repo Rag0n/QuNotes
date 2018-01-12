@@ -91,11 +91,10 @@ extension Notebook {
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notebook .~ notebook
                 effects = [.updateTitle(notebook.name)]
-                actions = [.showError(title: "Failed to update notebook's title",
-                                      message: error.localizedDescription)]
+                actions = [.showFailure(.updateNotebook, reason: error.localizedDescription)]
             case let .didDeleteNotebook(error):
                 if let error = error {
-                    actions = [.showError(title: "Failed to delete notebook", message: error.localizedDescription)]
+                    actions = [.showFailure(.deleteNotebook, reason: error.localizedDescription)]
                     break
                 }
                 actions = [.finish]
@@ -108,14 +107,14 @@ extension Notebook {
                     break
                 }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
-                actions = [.showError(title: "Failed to add note", message: error.localizedDescription)]
+                actions = [.showFailure(.addNote, reason: error.localizedDescription)]
                 let index = model.notes.index(of: note)!
                 effects = [.deleteNote(index: index, notes: titles(from: newModel))]
             case let .didDeleteNote(note, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
-                actions = [.showError(title: "Failed to delete note", message: error.localizedDescription)]
+                actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
                 let index = newModel.notes.index(of: note)!
                 effects = [.addNote(index: index, notes: titles(from: newModel))]
             }

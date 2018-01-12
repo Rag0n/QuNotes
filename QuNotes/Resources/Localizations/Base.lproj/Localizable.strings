@@ -11,6 +11,10 @@
 "notebook_add_note_button" = "Add";
 "notebook_delete_note_button" = "Delete";
 "notebook_title_placeholder" = "New notebook";
+"notebook_updating_title_error" = "Failed to update notebook";
+"notebook_deleting_error" = "Failed to delete notebook";
+"notebook_adding_note_error" = "Failed to add note";
+"notebook_deleting_note_error" = "Failed to delete note";
 
 "library_title" = "Library";
 "library_delete_notebook_button" = "Delete";

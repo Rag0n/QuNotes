@@ -22,3 +22,18 @@ extension Library.Failure: Localizable {
         }
     }
 }
+
+extension Notebook.Failure: Localizable {
+    var localizedKey: String {
+        switch self {
+        case .addNote:
+            return "notebook_adding_note_error"
+        case .deleteNote:
+            return "notebook_deleting_note_error"
+        case .deleteNotebook:
+            return "notebook_deleting_error"
+        case .updateNotebook:
+            return "notebook_updating_title_error"
+        }
+    }
+}

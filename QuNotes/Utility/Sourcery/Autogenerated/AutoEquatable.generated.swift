@@ -173,9 +173,24 @@ public func == (lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
         return lhs == rhs
     case (.finish, .finish):
         return true
-    case (.showError(let lhs), .showError(let rhs)):
-        if lhs.title != rhs.title { return false }
-        if lhs.message != rhs.message { return false }
+    case (.showFailure(let lhs), .showFailure(let rhs)):
+        if lhs.0 != rhs.0 { return false }
+        if lhs.reason != rhs.reason { return false }
+        return true
+    default: return false
+    }
+}
+// MARK: - Notebook.Failure AutoEquatable
+extension Notebook.Failure: Equatable {}
+public func == (lhs: Notebook.Failure, rhs: Notebook.Failure) -> Bool {
+    switch (lhs, rhs) {
+    case (.addNote, .addNote):
+        return true
+    case (.deleteNote, .deleteNote):
+        return true
+    case (.deleteNotebook, .deleteNotebook):
+        return true
+    case (.updateNotebook, .updateNotebook):
         return true
     default: return false
     }

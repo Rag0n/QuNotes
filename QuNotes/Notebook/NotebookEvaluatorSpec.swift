@@ -458,10 +458,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         ]))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to update notebook's title",
-                                       message: Dummy.errorMessage)
+                            .showFailure(.updateNotebook, reason: Dummy.errorMessage)
                         ]))
                     }
 
@@ -493,10 +492,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         e = e.evaluate(event: event)
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to delete notebook",
-                                       message: Dummy.errorMessage)
+                            .showFailure(.deleteNotebook, reason: Dummy.errorMessage)
                         ]))
                     }
                 }
@@ -546,9 +544,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         ))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to add note", message: Dummy.errorMessage)
+                            .showFailure(.addNote, reason: Dummy.errorMessage)
                         ]))
                     }
 
@@ -602,9 +600,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                         ))
                     }
 
-                    it("has showError action") {
+                    it("has showFailure action") {
                         expect(e.actions).to(equalDiff([
-                            .showError(title: "Failed to delete note", message: Dummy.errorMessage)
+                            .showFailure(.deleteNote, reason: Dummy.errorMessage)
                         ]))
                     }
 

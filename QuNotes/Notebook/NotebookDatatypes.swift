@@ -23,7 +23,7 @@ public enum Notebook {
         case deleteNotebook
         case updateNotebook(title: String)
         case finish
-        case showError(title: String, message: String)
+        case showFailure(Failure, reason: String)
     }
 
     public enum ViewEffect: AutoEquatable {
@@ -60,6 +60,13 @@ public enum Notebook {
         case updateNotebook(Core.Notebook.Meta)
         case deleteNotebook(Core.Notebook.Meta)
         case none
+    }
+
+    public enum Failure: AutoEquatable {
+        case addNote
+        case deleteNote
+        case deleteNotebook
+        case updateNotebook
     }
 
     public typealias ViewDispacher = (_ event: Notebook.ViewEvent) -> ()
