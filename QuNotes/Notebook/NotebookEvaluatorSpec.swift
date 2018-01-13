@@ -13,6 +13,7 @@ import Core
 class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {
         let notebook = Core.Notebook.Meta(uuid: "uuid", name: "name")
+        let model = Notebook.Model(notebook: notebook, notes: [], filter: Dummy.filter)
         var e: Notebook.Evaluator!
 
         beforeEach {
@@ -56,7 +57,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("updates model by adding new note") {
                     expect(e.model).to(equalDiff(
-                        Notebook.Model(notebook: notebook, notes: [expectedNote, anotherNote], filter: "")
+                        Dummy.model(fromModel: model, notes:  [expectedNote, anotherNote])
                     ))
                 }
 
@@ -126,7 +127,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("updates model by removing note") {
                     expect(e.model).to(equalDiff(
-                        Notebook.Model(notebook: notebook, notes: [], filter: "")
+                        Dummy.model(fromModel: model, notes:  [])
                     ))
                 }
             }
@@ -161,8 +162,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("updates model with empty filter") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [firstNote, secondNote, thirdNote],
-                                           filter: "")
+                            Dummy.model(fromModel: model, notes:  [firstNote, secondNote, thirdNote], filter: "")
                         ))
                     }
 
@@ -181,8 +181,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("updates model with lowecased filter") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [firstNote, secondNote, thirdNote],
-                                           filter: "ab")
+                            Dummy.model(fromModel: model, notes:  [firstNote, secondNote, thirdNote], filter: "ab")
                         ))
                     }
 
@@ -268,7 +267,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("updates model by replacing old note with new note") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [updatedNote, anotherNote], filter: "")
+                            Dummy.model(fromModel: model, notes: [updatedNote, anotherNote])
                         ))
                     }
 
@@ -287,7 +286,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [anotherNote], filter: "")
+                            Dummy.model(fromModel: model, notes: [anotherNote])
                         ))
                     }
 
@@ -314,7 +313,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("removes note with that uuid from model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [anotherNote], filter: "")
+                            Dummy.model(fromModel: model, notes: [anotherNote])
                         ))
                     }
 
@@ -337,9 +336,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("doesnt update model") {
-                        expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [], filter: "")
-                        ))
+                        expect(e.model).to(equalDiff(model))
                     }
 
                     it("doesnt have actions") {
@@ -361,7 +358,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has model with empty notebooks") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [], filter: "")
+                            Dummy.model(fromModel: model, notes: [])
                         ))
                     }
 
@@ -389,8 +386,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                         it("has model with sorted by title notes") {
                             expect(e.model).to(equalDiff(
-                                Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote],
-                                               filter: "a")
+                                Dummy.model(fromModel: model, notes: [secondNote, firstNote, thirdNote], filter: "a")
                             ))
                         }
 
@@ -408,8 +404,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                         it("has model with sorted by title notes") {
                             expect(e.model).to(equalDiff(
-                                Notebook.Model(notebook: notebook, notes: [secondNote, firstNote, thirdNote],
-                                               filter: "")
+                                Dummy.model(fromModel: model, notes: [secondNote, firstNote, thirdNote])
                             ))
                         }
 
@@ -440,9 +435,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     }
 
                     it("doesnt update model") {
-                        expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [], filter: "")
-                        ))
+                        expect(e.model).to(equalDiff(model))
                     }
                 }
 
@@ -466,7 +459,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("updates model by setting notebook to the old") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: oldNotebook, notes: [], filter: "")
+                            Dummy.model(fromModel: model, notebook: oldNotebook)
                         ))
                     }
                 }
@@ -501,7 +494,6 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didAddNote event") {
-
                 let note = Dummy.note(withTitle: "aT", tags: ["t"])
                 let addedNote = Dummy.note(withTitle: "sN", tags: [])
 
@@ -523,7 +515,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [note, addedNote], filter: "")
+                            Dummy.model(fromModel: model, notes: [note, addedNote])
                         ))
                     }
 
@@ -540,7 +532,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("removes note from model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [note], filter: "")
+                            Dummy.model(fromModel: model, notes: [note])
                         ))
                     }
 
@@ -575,7 +567,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [note], filter: "")
+                            Dummy.model(fromModel: model, notes: [note])
                         ))
                     }
 
@@ -596,7 +588,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("adds deleted note back to model") {
                         expect(e.model).to(equalDiff(
-                            Notebook.Model(notebook: notebook, notes: [deletedNote, note], filter: "")
+                            Dummy.model(fromModel: model, notes: [deletedNote, note])
                         ))
                     }
 
@@ -620,8 +612,16 @@ class NotebookEvaluatorSpec: QuickSpec {
 private enum Dummy {
     static let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: errorMessage])
     static let errorMessage = "message"
+    static let filter = ""
 
     static func note(withTitle title: String, tags: [String] = [], uuid: String = UUID().uuidString, date: Double = 5) -> Core.Note.Meta {
         return Core.Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: date, created_at: date)
+    }
+
+    static func model(fromModel model: Notebook.Model, notebook: Core.Notebook.Meta? = nil,
+                      notes: [Core.Note.Meta]? = nil, filter: String? = nil) -> Notebook.Model {
+        return Notebook.Model(notebook: notebook ?? model.notebook,
+                              notes: notes ?? model.notes,
+                              filter: filter ?? model.filter)
     }
 }
