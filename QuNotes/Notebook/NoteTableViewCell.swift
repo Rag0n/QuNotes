@@ -13,7 +13,8 @@ final class NoteTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
-        contentView.flex.minHeight(44).define {
+        let scaledMinHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: minHeight)
+        contentView.flex.minHeight(scaledMinHeight).define {
             $0.addItem(titleLabel).grow(1)
         }
     }
@@ -34,6 +35,13 @@ final class NoteTableViewCell: UITableViewCell {
         return contentView.frame.size
     }
 
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
+        let scaledMinHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: minHeight)
+        contentView.flex.minHeight(scaledMinHeight)
+    }
+
     func set(title: String) {
         titleLabel.text = title
         titleLabel.flex.markDirty()
@@ -48,6 +56,10 @@ final class NoteTableViewCell: UITableViewCell {
         l.backgroundColor = theme.ligherDarkColor
         l.highlightedTextColor = theme.darkColor
         l.numberOfLines = 0
+        l.font = UIFont.preferredFont(forTextStyle: .body)
+        l.adjustsFontForContentSizeCategory = true
         return l
     }()
+
+    private let minHeight: CGFloat = 44
 }
