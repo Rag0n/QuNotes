@@ -13,7 +13,6 @@ final class LibraryTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
-        let scaledMinHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: minHeight)
         contentView.flex.minHeight(scaledMinHeight).define {
             $0.addItem(titleLabel).grow(1)
         }
@@ -38,7 +37,6 @@ final class LibraryTableViewCell: UITableViewCell {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
-        let scaledMinHeight = UIFontMetrics(forTextStyle: .body).scaledValue(for: minHeight)
         contentView.flex.minHeight(scaledMinHeight)
     }
 
@@ -60,4 +58,7 @@ final class LibraryTableViewCell: UITableViewCell {
     }()
 
     private let minHeight: CGFloat = 44
+    private var scaledMinHeight: CGFloat {
+        return UIFontMetrics(forTextStyle: .body).scaledValue(for: minHeight)
+    }
 }
