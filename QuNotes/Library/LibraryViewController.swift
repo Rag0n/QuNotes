@@ -47,9 +47,15 @@ final public class LibraryViewController: UIViewController {
         tableView.delegate = self
     }
 
-    public override func viewDidLayoutSubviews() {
+    override public func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         view.flex.layout()
+    }
+
+    override public func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
+        addButton.flex.markDirty()
     }
 
     // MARK: - Private
@@ -73,6 +79,8 @@ final public class LibraryViewController: UIViewController {
     private let addButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("library_add_notebook_button".localized, for: .normal)
+        b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
+        b.titleLabel?.adjustsFontForContentSizeCategory = true
         b.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
         return b
     }()
