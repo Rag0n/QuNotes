@@ -55,6 +55,7 @@ final class NoteTableViewCell: UITableViewCell {
         l.numberOfLines = 0
         l.font = UIFont.preferredFont(forTextStyle: .body)
         l.adjustsFontForContentSizeCategory = true
+        l.lineBreakMode = .byWordWrapping
         return l
     }()
 
