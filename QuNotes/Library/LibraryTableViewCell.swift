@@ -50,6 +50,8 @@ final class LibraryTableViewCell: UITableViewCell {
         let l = UILabel()
         let theme = AppEnvironment.current.theme
         l.textColor = theme.textColor
+        l.backgroundColor = theme.ligherDarkColor
+        l.highlightedTextColor = theme.darkColor
         l.numberOfLines = 0
         l.font = UIFont.preferredFont(forTextStyle: .body)
         l.adjustsFontForContentSizeCategory = true
