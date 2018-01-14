@@ -48,7 +48,7 @@ public final class NoteViewController: UIViewController {
         view.backgroundColor = .black
 
         container.flex.define {
-            $0.addItem(titleTextField).height(20)
+            $0.addItem(titleTextField).height(scaledTitleTextFieldHeight)
             $0.addItem(tagView).maxHeight(80)
             $0.addItem(editor).grow(1)
         }
@@ -70,12 +70,23 @@ public final class NoteViewController: UIViewController {
         container.flex.layout()
     }
 
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        guard traitCollection.preferredContentSizeCategory != previousTraitCollection?.preferredContentSizeCategory else { return }
+        titleTextField.flex.height(scaledTitleTextFieldHeight)
+    }
+
     // MARK: - Private
 
     private enum Constants {
         static let themeName = "one-dark"
+        static let titleTextFieldHeight: CGFloat = 20
     }
     fileprivate var dispatch: Note.ViewDispacher
+
+    private var scaledTitleTextFieldHeight: CGFloat {
+        return UIFontMetrics(forTextStyle: .body).scaledValue(for: Constants.titleTextFieldHeight)
+    }
 
     private let container: UIView = {
         let v = UIView()
@@ -89,6 +100,8 @@ public final class NoteViewController: UIViewController {
         t.textColor = theme.textColor
         t.attributedPlaceholder = NSAttributedString(string: "note_title_placeholder".localized,
                                                      attributes: [NSAttributedStringKey.foregroundColor: theme.textColor])
+        t.font = UIFont.preferredFont(forTextStyle: .body)
+        t.adjustsFontForContentSizeCategory = true
         t.addTarget(self, action: #selector(NoteViewController.onTitleTextFieldChange), for: .editingChanged)
         return t
     }()
