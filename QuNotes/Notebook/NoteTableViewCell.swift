@@ -24,13 +24,12 @@ final class NoteTableViewCell: UITableViewCell {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.flex.padding(contentView.layoutMargins)
         contentView.flex.layout(mode: .adjustHeight)
     }
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         contentView.frame = CGRect(origin: contentView.frame.origin, size: size)
-        contentView.flex.layout(mode: .adjustHeight)
+        contentView.flex.padding(contentView.layoutMargins).layout(mode: .adjustHeight)
         return contentView.frame.size
     }
 
