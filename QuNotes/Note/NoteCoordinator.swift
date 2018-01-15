@@ -54,7 +54,7 @@ extension Note {
         private func perform(effect: Core.Note.Effect) {
             switch effect {
             case let .readContent(url):
-                let result = fileExecuter.readFile(at: url.appendedToDocumentsURL(), contentType: Core.Note.Content.self)
+                let result = fileExecuter.readFile(at: url, contentType: Core.Note.Content.self)
                 dispatchToNote <| .didReadContent(result)
             case let .didLoadContent(content):
                 dispatch <| .didLoadContent(content)
