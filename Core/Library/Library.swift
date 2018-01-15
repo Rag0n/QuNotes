@@ -20,8 +20,8 @@ public enum Library {
     }
 
     public enum Effect: AutoEquatable {
-        case createNotebook(Notebook.Meta, url: URL)
-        case deleteNotebook(Notebook.Meta, url: URL)
+        case createNotebook(Notebook.Meta, url: DynamicBaseURL)
+        case deleteNotebook(Notebook.Meta, url: DynamicBaseURL)
         case readBaseDirectory
         case readNotebooks(urls: [URL])
         case handleError(title: String, message: String)

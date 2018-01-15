@@ -168,10 +168,22 @@ extension Notebook.Meta {
         return URL(string: uuid)!.appendingPathExtension(Notebook.Model.Extension.notebook)
     }
 
+    func notebookURL() -> DynamicBaseURL {
+        return URL(string: uuid)!.appendingPathExtension(Notebook.Model.Extension.notebook)
+            |> DynamicBaseURL.init
+    }
+
     func metaURL() -> URL {
         return notebookURL()
             .appendingPathComponent(Notebook.Model.Component.meta)
             .appendingPathExtension(Notebook.Model.Extension.json)
+    }
+
+    func metaURL() -> DynamicBaseURL {
+        return notebookURL()
+            .appendingPathComponent(Notebook.Model.Component.meta)
+            .appendingPathExtension(Notebook.Model.Extension.json)
+            |> DynamicBaseURL.init
     }
 
     func noteURL(for note: Note.Meta) -> URL {

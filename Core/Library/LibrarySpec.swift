@@ -45,8 +45,7 @@ class LibrarySpec: QuickSpec {
 
                     it("has createNotebook effect with notebook & meta url") {
                         expect(e.effects).to(equalDiff([
-                            .createNotebook(newNotebook,
-                                            url: URL(string: "newNotebookUUID.qvnotebook/meta.json")!)
+                            .createNotebook(newNotebook, url: Dummy.url("newNotebookUUID.qvnotebook/meta.json"))
                         ]))
                     }
 
@@ -88,8 +87,7 @@ class LibrarySpec: QuickSpec {
 
                     it("has deleteNotebook effect with notebook url") {
                         expect(e.effects).to(equalDiff([
-                            .deleteNotebook(notebook,
-                                            url: URL(string: "notebookUUID.qvnotebook")!)
+                            .deleteNotebook(notebook, url: Dummy.url("notebookUUID.qvnotebook"))
                         ]))
                     }
                 }
@@ -322,5 +320,9 @@ private enum Dummy {
 
     static func error(withMessage message: String) -> NSError {
         return NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+    }
+
+    static func url(_ string: String) -> DynamicBaseURL {
+        return DynamicBaseURL(url: URL(string: string)!)
     }
 }
