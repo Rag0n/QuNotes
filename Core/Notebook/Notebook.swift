@@ -33,14 +33,14 @@ public enum Notebook {
     }
 
     public enum Effect: AutoEquatable {
-        case createNote(Note.Meta, url: URL, content: Note.Content, contentURL: URL)
-        case updateNotebook(Meta, url: URL)
-        case deleteNote(Note.Meta, url: URL)
-        case readDirectory(atURL: URL)
+        case createNote(Note.Meta, url: DynamicBaseURL, content: Note.Content, contentURL: DynamicBaseURL)
+        case updateNotebook(Meta, url: DynamicBaseURL)
+        case deleteNote(Note.Meta, url: DynamicBaseURL)
+        case readDirectory(atURL: DynamicBaseURL)
         case readNotes(urls: [URL])
         case handleError(title: String, message: String)
         case didLoadNotes([Note.Meta])
-        case removeDirectory(url: URL)
+        case removeDirectory(url: DynamicBaseURL)
     }
 
     public enum Event {
@@ -134,74 +134,64 @@ public enum Notebook {
 // MARK: Model API
 
 extension Notebook.Model {
-    func notebookURL() -> URL {
+    private var notebookPlainURL: URL {
         return URL(string: meta.uuid)!.appendingPathExtension(Extension.notebook)
     }
 
-    func noteBookMetaURL() -> URL {
-        return notebookURL()
+    func notebookURL() -> DynamicBaseURL {
+        return notebookPlainURL |> DynamicBaseURL.init
+    }
+
+    func noteBookMetaURL() -> DynamicBaseURL {
+        return notebookPlainURL
             .appendingPathComponent(Component.meta)
             .appendingPathExtension(Extension.json)
-    }
-
-    func noteURL(forNote note: Note.Model) -> URL {
-        return notebookURL()
-            .appendingPathComponent(note.meta.uuid)
-            .appendingPathExtension(Extension.note)
-    }
-
-    func noteMetaURL(forNote note: Note.Model) -> URL {
-        return noteURL(forNote: note)
-            .appendingPathComponent(Component.meta)
-            .appendingPathExtension(Extension.json)
-    }
-
-    func noteContentURL(forNote note: Note.Model) -> URL {
-        return noteURL(forNote: note)
-            .appendingPathComponent(Component.content)
-            .appendingPathExtension(Extension.json)
+            |> DynamicBaseURL.init
     }
 }
 
 extension Notebook.Meta {
-    func notebookURL() -> URL {
-        return URL(string: uuid)!.appendingPathExtension(Notebook.Model.Extension.notebook)
+    private var notebookPlainURL: URL {
+        return URL(string: uuid)!
+            .appendingPathExtension(Notebook.Model.Extension.notebook)
     }
 
-    func notebookURL() -> DynamicBaseURL {
-        return URL(string: uuid)!.appendingPathExtension(Notebook.Model.Extension.notebook)
-            |> DynamicBaseURL.init
-    }
-
-    func metaURL() -> URL {
-        return notebookURL()
-            .appendingPathComponent(Notebook.Model.Component.meta)
-            .appendingPathExtension(Notebook.Model.Extension.json)
-    }
-
-    func metaURL() -> DynamicBaseURL {
-        return notebookURL()
-            .appendingPathComponent(Notebook.Model.Component.meta)
-            .appendingPathExtension(Notebook.Model.Extension.json)
-            |> DynamicBaseURL.init
-    }
-
-    func noteURL(for note: Note.Meta) -> URL {
-        return notebookURL()
+    private func notePlainURL(for note: Note.Meta) -> URL {
+        return notebookPlainURL
             .appendingPathComponent(note.uuid)
             .appendingPathExtension(Notebook.Model.Extension.note)
     }
 
-    func noteMetaURL(for note: Note.Meta) -> URL {
-        return noteURL(for: note)
-            .appendingPathComponent(Notebook.Model.Component.meta)
-            .appendingPathExtension(Notebook.Model.Extension.json)
+    func noteURL(for note: Note.Meta) -> DynamicBaseURL {
+        return notebookPlainURL
+            .appendingPathComponent(note.uuid)
+            .appendingPathExtension(Notebook.Model.Extension.note)
+            |> DynamicBaseURL.init
     }
 
-    func noteContentURL(for note: Note.Meta) -> URL {
-        return noteURL(for: note)
+    func notebookURL() -> DynamicBaseURL {
+        return notebookPlainURL |> DynamicBaseURL.init
+    }
+
+    func metaURL() -> DynamicBaseURL {
+        return notebookPlainURL
+            .appendingPathComponent(Notebook.Model.Component.meta)
+            .appendingPathExtension(Notebook.Model.Extension.json)
+            |> DynamicBaseURL.init
+    }
+
+    func noteMetaURL(for note: Note.Meta) -> DynamicBaseURL {
+        return notePlainURL(for: note)
+            .appendingPathComponent(Notebook.Model.Component.meta)
+            .appendingPathExtension(Notebook.Model.Extension.json)
+            |> DynamicBaseURL.init
+    }
+
+    func noteContentURL(for note: Note.Meta) -> DynamicBaseURL {
+        return notePlainURL(for: note)
             .appendingPathComponent(Notebook.Model.Component.content)
             .appendingPathExtension(Notebook.Model.Extension.json)
+            |> DynamicBaseURL.init
     }
 }
 

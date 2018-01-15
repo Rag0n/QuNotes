@@ -47,7 +47,7 @@ class NotebookSpec: QuickSpec {
 
                 it("has readDirectory effect") {
                     expect(e.effects).to(equalDiff([
-                        .readDirectory(atURL: URL(string: "uuid.qvnotebook")!)
+                        .readDirectory(atURL: Dummy.url("uuid.qvnotebook"))
                     ]))
                 }
             }
@@ -61,7 +61,7 @@ class NotebookSpec: QuickSpec {
                 it("has updateFile effect with notebook & notebook URL") {
                     expect(e.effects).to(equalDiff([
                         .updateNotebook(Notebook.Meta(uuid: "uuid", name: "new name"),
-                                        url: URL(string: "uuid.qvnotebook/meta.json")!)
+                                        url: Dummy.url("uuid.qvnotebook/meta.json"))
                     ]))
                 }
 
@@ -84,9 +84,9 @@ class NotebookSpec: QuickSpec {
                     it("has createNote effects") {
                         expect(e.effects).to(equalDiff([
                             .createNote(newNote,
-                                        url: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/meta.json")!,
+                                        url: Dummy.url("uuid.qvnotebook/newNoteUUID.qvnote/meta.json"),
                                         content: Note.Content(title: newNote.title, cells: []),
-                                        contentURL: URL(string: "uuid.qvnotebook/newNoteUUID.qvnote/content.json")!)
+                                        contentURL: Dummy.url("uuid.qvnotebook/newNoteUUID.qvnote/content.json"))
                         ]))
                     }
 
@@ -122,7 +122,7 @@ class NotebookSpec: QuickSpec {
 
                     it("has deleteFile effect with URL of deleted note") {
                         expect(e.effects).to(equalDiff([
-                            .deleteNote(note, url: URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
+                            .deleteNote(note, url: Dummy.url("uuid.qvnotebook/noteUUID.qvnote"))
                         ]))
                     }
 
@@ -284,7 +284,7 @@ class NotebookSpec: QuickSpec {
 
                     it("has removeDirectory effect") {
                         expect(e.effects).to(equalDiff([
-                            .removeDirectory(url:  URL(string: "uuid.qvnotebook/noteUUID.qvnote")!)
+                            .removeDirectory(url: Dummy.url("uuid.qvnotebook/noteUUID.qvnote"))
                         ]))
                     }
                 }
@@ -356,5 +356,9 @@ private enum Dummy {
 
     static func error(withMessage message: String) -> NSError {
         return NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+    }
+
+    static func url(_ string: String) -> DynamicBaseURL {
+        return DynamicBaseURL(url: URL(string: string)!)
     }
 }
