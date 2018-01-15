@@ -51,7 +51,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("has readContent effect") {
                         expect(e.effects).to(equalDiff([
-                            .readContent(url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!)
+                            .readContent(url: Dummy.url("notebookUUID.qvnotebook/uuid.qvnote/content.json"))
                         ]))
                     }
                 }
@@ -133,10 +133,10 @@ class NoteExperimantalSpec: QuickSpec {
                     it("has updateTitle and updateContnet effects") {
                         expect(e.effects).to(equalDiff([
                             .updateTitle(note: Dummy.meta(fromMeta: meta, title: "new title", updated_at: 15),
-                                         url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!,
+                                         url: Dummy.url("notebookUUID.qvnotebook/uuid.qvnote/meta.json"),
                                          oldTitle: "title"),
                             .updateContent(content: Note.Content(title: "new title", cells: content.cells),
-                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
+                                           url: Dummy.url("notebookUUID.qvnotebook/uuid.qvnote/content.json"),
                                            oldContent: content)
                         ]))
                     }
@@ -176,7 +176,7 @@ class NoteExperimantalSpec: QuickSpec {
                     it("has updateContent effect") {
                         expect(e.effects).to(equalDiff([
                             .updateContent(content:  Note.Content(title: meta.title, cells: newCells),
-                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/content.json")!,
+                                           url: Dummy.url("notebookUUID.qvnotebook/uuid.qvnote/content.json"),
                                            oldContent: content)
                         ]))
                     }
@@ -229,7 +229,7 @@ class NoteExperimantalSpec: QuickSpec {
                             expect(e.effects).to(equalDiff([
                                 .addTag("new tag",
                                         note: Dummy.meta(fromMeta: meta, tags: ["tag", "new tag"], updated_at: 20),
-                                        url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
+                                        url: Dummy.url("notebookUUID.qvnotebook/uuid.qvnote/meta.json"))
                             ]))
                         }
                     }
@@ -267,7 +267,7 @@ class NoteExperimantalSpec: QuickSpec {
                             expect(e.effects).to(equalDiff([
                                 .removeTag("tag",
                                            note: Dummy.meta(fromMeta: meta, tags: [], updated_at: 22),
-                                           url: URL(string: "notebookUUID.qvnotebook/uuid.qvnote/meta.json")!)
+                                           url: Dummy.url("notebookUUID.qvnotebook/uuid.qvnote/meta.json"))
                             ]))
                         }
                     }
@@ -418,5 +418,9 @@ private enum Dummy {
         return Note.Model(meta: newMeta,
                           content: content ?? model.content,
                           notebook: notebook ?? model.notebook)
+    }
+
+    static func url(_ string: String) -> DynamicBaseURL {
+        return DynamicBaseURL(url: URL(string: string)!)
     }
 }

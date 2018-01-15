@@ -64,11 +64,11 @@ public enum Note {
     }
 
     public enum Effect: AutoEquatable {
-        case updateTitle(note: Meta, url: URL, oldTitle: String)
-        case updateContent(content: Content, url: URL, oldContent: Content)
-        case addTag(String, note: Meta, url: URL)
-        case removeTag(String, note: Meta, url: URL)
-        case readContent(url: URL)
+        case updateTitle(note: Meta, url: DynamicBaseURL, oldTitle: String)
+        case updateContent(content: Content, url: DynamicBaseURL, oldContent: Content)
+        case addTag(String, note: Meta, url: DynamicBaseURL)
+        case removeTag(String, note: Meta, url: DynamicBaseURL)
+        case readContent(url: DynamicBaseURL)
         case didLoadContent(Content)
         case handleError(title: String, message: String)
     }
