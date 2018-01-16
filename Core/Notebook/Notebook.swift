@@ -70,10 +70,10 @@ public enum Notebook {
 
             switch event {
             case .loadNotes:
-                effects = [.readDirectory(atURL: model.notebookURL())]
+                effects = [.readDirectory(atURL: model.meta.notebookURL())]
             case let .changeName(newName):
                 newModel = model |> Model.lens.meta.name .~ newName
-                let url = newModel.noteBookMetaURL()
+                let url = newModel.meta.metaURL()
                 effects = [.updateNotebook(newModel.meta, url: url)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
@@ -131,41 +131,23 @@ public enum Notebook {
     }
 }
 
-// MARK: Model API
-
-extension Notebook.Model {
-    private var notebookPlainURL: URL {
-        return URL(string: meta.uuid)!.appendingPathExtension(Extension.notebook)
-    }
-
-    func notebookURL() -> DynamicBaseURL {
-        return notebookPlainURL |> DynamicBaseURL.init
-    }
-
-    func noteBookMetaURL() -> DynamicBaseURL {
-        return notebookPlainURL
-            .appendingPathComponent(Component.meta)
-            .appendingPathExtension(Extension.json)
-            |> DynamicBaseURL.init
-    }
-}
-
+// MARK: Meta API
 extension Notebook.Meta {
     private var notebookPlainURL: URL {
         return URL(string: uuid)!
-            .appendingPathExtension(Notebook.Model.Extension.notebook)
+            .appendingPathExtension(Extension.notebook)
     }
 
     private func notePlainURL(for note: Note.Meta) -> URL {
         return notebookPlainURL
             .appendingPathComponent(note.uuid)
-            .appendingPathExtension(Notebook.Model.Extension.note)
+            .appendingPathExtension(Extension.note)
     }
 
     func noteURL(for note: Note.Meta) -> DynamicBaseURL {
         return notebookPlainURL
             .appendingPathComponent(note.uuid)
-            .appendingPathExtension(Notebook.Model.Extension.note)
+            .appendingPathExtension(Extension.note)
             |> DynamicBaseURL.init
     }
 
@@ -175,22 +157,22 @@ extension Notebook.Meta {
 
     func metaURL() -> DynamicBaseURL {
         return notebookPlainURL
-            .appendingPathComponent(Notebook.Model.Component.meta)
-            .appendingPathExtension(Notebook.Model.Extension.json)
+            .appendingPathComponent(Component.meta)
+            .appendingPathExtension(Extension.json)
             |> DynamicBaseURL.init
     }
 
     func noteMetaURL(for note: Note.Meta) -> DynamicBaseURL {
         return notePlainURL(for: note)
-            .appendingPathComponent(Notebook.Model.Component.meta)
-            .appendingPathExtension(Notebook.Model.Extension.json)
+            .appendingPathComponent(Component.meta)
+            .appendingPathExtension(Extension.json)
             |> DynamicBaseURL.init
     }
 
     func noteContentURL(for note: Note.Meta) -> DynamicBaseURL {
         return notePlainURL(for: note)
-            .appendingPathComponent(Notebook.Model.Component.content)
-            .appendingPathExtension(Notebook.Model.Extension.json)
+            .appendingPathComponent(Component.content)
+            .appendingPathExtension(Extension.json)
             |> DynamicBaseURL.init
     }
 }
@@ -201,7 +183,9 @@ private extension Notebook.Model {
     func hasNote(withUUID noteUUID: String) -> Bool {
         return notes.filter({ $0.uuid == noteUUID }).count > 0
     }
+}
 
+private extension Notebook.Meta {
     enum Extension {
         static let json = "json"
         static let note = "qvnote"
