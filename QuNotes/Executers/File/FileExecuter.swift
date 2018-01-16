@@ -16,33 +16,16 @@ public struct FileExecuter: FileExecuterType {
         encoder.outputFormatting = .prettyPrinted
     }
 
-    public func createFile<T: Encodable>(atURL url: URL, content: T) -> Error? {
-        let write = content |> dataFromContent |> writeData
-        return url.appendedToDocumentsURL() |> write
-    }
-
     public func createFile<T: Encodable>(atURL url: DynamicBaseURL, content: T) -> Error? {
         return url.documentsBase |> (content |> dataFromContent |> writeData)
-    }
-
-    public func deleteDirectory(at url: URL) -> Error? {
-        return url |> removeItem
     }
 
     public func deleteDirectory(at url: DynamicBaseURL) -> Error? {
         return url |> removeItem
     }
 
-    public func deleteFile(at url: URL) -> Error? {
-        return url |> removeItem
-    }
-
     public func deleteFile(at url: DynamicBaseURL) -> Error? {
         return url |> removeItem
-    }
-
-    public func contentOfFolder(at url: URL) -> Result<[URL], NSError> {
-        return Result(try contentOfFolder(at: url.appendedToDocumentsURL()))
     }
 
     public func contentOfFolder(at url: DynamicBaseURL) -> Result<[URL], NSError> {
@@ -64,13 +47,7 @@ public struct FileExecuter: FileExecuterType {
     }
 
     public func readFile<T: Decodable>(at url: DynamicBaseURL, contentType: T.Type) -> Result<T, AnyError> {
-        do {
-            let data = try Data(contentsOf: url.documentsBase)
-            let content = try decoder.decode(contentType, from: data)
-            return Result.success(content)
-        } catch {
-            return Result.failure(AnyError(error))
-        }
+        return readFile(at: url.documentsBase, contentType: contentType)
     }
 
     // MARK: - Private
