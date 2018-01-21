@@ -19,7 +19,8 @@ public final class NoteViewController: UIViewController {
         case .focusOnTitle:
             titleTextField.becomeFirstResponder()
         case let .updateContent(content):
-            editor.text = content
+            self.content = content
+            // TODO: need to update cell's size
         case let .showTags(tags):
             tagView.addTags(tags)
             invalidateTagLayout()
@@ -50,13 +51,13 @@ public final class NoteViewController: UIViewController {
         container.flex.define {
             $0.addItem(titleTextField).height(scaledTitleTextFieldHeight)
             $0.addItem(tagView).maxHeight(80)
-            $0.addItem(editor).grow(1)
+            $0.addItem(tableView).grow(1)
         }
         view.addSubview(container)
 
         setupNavigationBar()
         setupTagView()
-        editor.delegate = self
+        tableView.dataSource = self
     }
 
     public override func viewDidLoad() {
@@ -81,8 +82,10 @@ public final class NoteViewController: UIViewController {
     private enum Constants {
         static let themeName = "one-dark"
         static let titleTextFieldHeight: CGFloat = 20
+        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }
     fileprivate var dispatch: Note.ViewDispacher
+    fileprivate var content: String = ""
 
     private var scaledTitleTextFieldHeight: CGFloat {
         return UIFontMetrics(forTextStyle: .body).scaledValue(for: Constants.titleTextFieldHeight)
@@ -118,11 +121,15 @@ public final class NoteViewController: UIViewController {
         t.backgroundColor = theme.ligherDarkColor
         return t
     }()
-    private let editor: Notepad = {
-        let n = Notepad(frame: CGRect.zero, themeFile: Constants.themeName)
-        n.keyboardAppearance = .dark
-        n.returnKeyType = .done
-        return n
+    private let tableView: UITableView = {
+        let t = UITableView()
+        NoteTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.noteCellReuseIdentifier)
+        t.estimatedRowHeight = 44
+        let theme = AppEnvironment.current.theme
+        t.backgroundColor = theme.ligherDarkColor
+        t.separatorColor = theme.textColor.withAlphaComponent(0.5)
+        t.allowsSelection = false
+        return t
     }()
 
     private func setupNavigationBar() {
@@ -155,10 +162,18 @@ public final class NoteViewController: UIViewController {
     }
 }
 
-// MARK: - UITextViewDelegate
+// MARK: - UITableViewDataSource
 
-extension NoteViewController: UITextViewDelegate {
-    public func textViewDidChange(_ textView: UITextView) {
-        dispatch(.changeContent(textView.text ?? ""))
+extension NoteViewController: UITableViewDataSource {
+    public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 1
+    }
+
+    public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
+        cell.set(content: content) { [unowned self] newContent in
+            self.dispatch(.changeContent(newContent))
+        }
+        return cell
     }
 }
