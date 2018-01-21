@@ -73,7 +73,7 @@ final public class NotebookViewController: UIViewController {
     // MARK: - Private
 
     fileprivate enum Constants {
-        static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
+        static let notebookCellReuseIdentifier = "notebookCellReuseIdentifier"
     }
 
     fileprivate var dispatch: Notebook.ViewDispacher
@@ -89,7 +89,7 @@ final public class NotebookViewController: UIViewController {
     }()
     private let tableView: UITableView = {
         let t = UITableView()
-        NoteTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.noteCellReuseIdentifier)
+        NotebookTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.notebookCellReuseIdentifier)
         t.estimatedRowHeight = 44
         let theme = AppEnvironment.current.theme
         t.backgroundColor = theme.ligherDarkColor
@@ -158,7 +158,7 @@ extension NotebookViewController: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.notebookCellReuseIdentifier, for: indexPath) as! NotebookTableViewCell
         cell.set(title: notes[indexPath.row])
         return cell
     }

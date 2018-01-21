@@ -85,7 +85,7 @@
 		1150D3621FE4542B00AC1427 /* Result.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 11B705A71EEBD3810039A863 /* Result.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1150D3631FE454D400AC1427 /* NoteDatatypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */; };
 		1150D3641FE454E100AC1427 /* SourceryProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1190D5B11FC1D4AF0064D569 /* SourceryProtocols.swift */; };
-		115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
+		115818A61F6B06F4009C9BB2 /* NotebookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NotebookTableViewCell.swift */; };
 		1160CCDE1F954A560033E9E2 /* NoteEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */; };
 		1168798A1F798EC2009461D6 /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
 		116E40B81FC0BE570096BC6C /* FailingFileExecuter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */; };
@@ -117,7 +117,7 @@
 		11AE3C761F194E7D00A13A74 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AE3C721F194E1700A13A74 /* WSTagsField.framework */; };
 		11B704CC1FE5031A0044D54D /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11C41FEC1F7444EC00397DD9 /* LibraryViewController.swift */; };
 		11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 116879881F798EC2009461D6 /* LibraryTableViewCell.swift */; };
-		11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */; };
+		11B704CE1FE503270044D54D /* NotebookTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 115818A41F6B06F4009C9BB2 /* NotebookTableViewCell.swift */; };
 		11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */; };
 		11B704D31FE503F50044D54D /* Prelude.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1150D2D71FE4339800AC1427 /* Prelude.framework */; };
 		11B705861EEB42570039A863 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 11B705851EEB42570039A863 /* Assets.xcassets */; };
@@ -260,7 +260,7 @@
 		1150D3581FE4535A00AC1427 /* NoteDatatypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDatatypes.swift; sourceTree = "<group>"; };
 		1153327A1FACFCF3008FEC2A /* Library.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Library.swift; sourceTree = "<group>"; };
 		1153327D1FACFD02008FEC2A /* LibrarySpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibrarySpec.swift; sourceTree = "<group>"; };
-		115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
+		115818A41F6B06F4009C9BB2 /* NotebookTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookTableViewCell.swift; sourceTree = "<group>"; };
 		1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteEvaluatorSpec.swift; sourceTree = "<group>"; };
 		116879881F798EC2009461D6 /* LibraryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryTableViewCell.swift; sourceTree = "<group>"; };
 		116E40B71FC0BE570096BC6C /* FailingFileExecuter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FailingFileExecuter.swift; sourceTree = "<group>"; };
@@ -710,7 +710,7 @@
 				118AA0341F8EB7180014CA3D /* NotebookEvaluator.swift */,
 				1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */,
 				B212585B6051AFE4EAD9C533 /* NotebookViewController.swift */,
-				115818A41F6B06F4009C9BB2 /* NoteTableViewCell.swift */,
+				115818A41F6B06F4009C9BB2 /* NotebookTableViewCell.swift */,
 			);
 			path = Notebook;
 			sourceTree = "<group>";
@@ -1118,7 +1118,7 @@
 				1138B0031FE831B1002D28DC /* Environment.swift in Sources */,
 				11E139661FF42C0400DD3AE9 /* TableViewCell+Extensions.swift in Sources */,
 				1150D35B1FE453E600AC1427 /* NoteViewController.swift in Sources */,
-				11B704CE1FE503270044D54D /* NoteTableViewCell.swift in Sources */,
+				11B704CE1FE503270044D54D /* NotebookTableViewCell.swift in Sources */,
 				11FFCB0B1FED8CB2003908D4 /* Language.swift in Sources */,
 				119B7A531FE999F000563244 /* FileExecuter.swift in Sources */,
 				11406FA91FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
@@ -1162,7 +1162,7 @@
 				1138AFFB1FE82D9D002D28DC /* Theme.swift in Sources */,
 				B212519979AE4BCC7FA2E105 /* NotebookCoordinator.swift in Sources */,
 				111743711F520C24006EDA89 /* NavigationController.swift in Sources */,
-				115818A61F6B06F4009C9BB2 /* NoteTableViewCell.swift in Sources */,
+				115818A61F6B06F4009C9BB2 /* NotebookTableViewCell.swift in Sources */,
 				1138AFF71FE82D22002D28DC /* Environment.swift in Sources */,
 				B212515A4CD07F0490A3D3FF /* NotebookViewController.swift in Sources */,
 				117D151C1FB61CCA00410F6F /* FileExecuter.swift in Sources */,
