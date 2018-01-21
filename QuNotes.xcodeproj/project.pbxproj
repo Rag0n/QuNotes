@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1109567B1F99307A0043AE2D /* NotebookEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */; };
 		1109567D1F993E190043AE2D /* LibraryEvaluatorSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */; };
+		1110B0F22015228D00AD0C97 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110B0F12015228D00AD0C97 /* NoteTableViewCell.swift */; };
+		1110B0F32015228D00AD0C97 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1110B0F12015228D00AD0C97 /* NoteTableViewCell.swift */; };
 		1114FFAF2006B245008D326E /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 11FFCB081FED8CA8003908D4 /* Language.swift */; };
 		111743711F520C24006EDA89 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 111743701F520C24006EDA89 /* NavigationController.swift */; };
 		111743721F521295006EDA89 /* Notepad.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 119955FC1F07C0FD007AB79A /* Notepad.framework */; };
@@ -231,6 +233,7 @@
 /* Begin PBXFileReference section */
 		1109567A1F99307A0043AE2D /* NotebookEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookEvaluatorSpec.swift; sourceTree = "<group>"; };
 		1109567C1F993E190043AE2D /* LibraryEvaluatorSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryEvaluatorSpec.swift; sourceTree = "<group>"; };
+		1110B0F12015228D00AD0C97 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		111161E01FA7B5B600023B27 /* NotebookSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotebookSpec.swift; sourceTree = "<group>"; };
 		111161E21FA7B61100023B27 /* NoteSpec.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteSpec.swift; sourceTree = "<group>"; };
 		111743701F520C24006EDA89 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
@@ -723,6 +726,7 @@
 				B212579A3ECACA82786D76AC /* NoteEvaluator.swift */,
 				1160CCDD1F954A560033E9E2 /* NoteEvaluatorSpec.swift */,
 				B212509F1CE5CE5D33073575 /* NoteViewController.swift */,
+				1110B0F12015228D00AD0C97 /* NoteTableViewCell.swift */,
 			);
 			path = Note;
 			sourceTree = "<group>";
@@ -1114,6 +1118,7 @@
 				11B704CD1FE503230044D54D /* LibraryTableViewCell.swift in Sources */,
 				119B7A511FE9887800563244 /* FileExecuterType.swift in Sources */,
 				1138B0061FE847CC002D28DC /* ThemeExecuter.swift in Sources */,
+				1110B0F32015228D00AD0C97 /* NoteTableViewCell.swift in Sources */,
 				11B704CF1FE5032A0044D54D /* NotebookViewController.swift in Sources */,
 				1138B0031FE831B1002D28DC /* Environment.swift in Sources */,
 				11E139661FF42C0400DD3AE9 /* TableViewCell+Extensions.swift in Sources */,
@@ -1137,6 +1142,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				11406FA81FE4583600BEF81F /* LibraryDatatypes.swift in Sources */,
+				1110B0F22015228D00AD0C97 /* NoteTableViewCell.swift in Sources */,
 				11406FA51FE4582500BEF81F /* NotebookDatatypes.swift in Sources */,
 				1150D3591FE4535A00AC1427 /* NoteDatatypes.swift in Sources */,
 				B2125A06DCB1F626D494BE69 /* NoteViewController.swift in Sources */,
