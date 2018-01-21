@@ -20,7 +20,17 @@ public final class NoteViewController: UIViewController {
             titleTextField.becomeFirstResponder()
         case let .updateContent(content):
             self.content = content
-            // TODO: need to update cell's size
+            // TODO: prototype solution, need to fix it.
+            // Need to just mark cells as dirty so it resizes
+            // Also there is issue with reloading because it causes to resign first responder
+            guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? NoteTableViewCell else {
+                break
+            }
+            cell.set(content: content) { [unowned self] newContent in
+                self.dispatch(.changeContent(newContent))
+            }
+            tableView.beginUpdates()
+            tableView.endUpdates()
         case let .showTags(tags):
             tagView.addTags(tags)
             invalidateTagLayout()
@@ -58,6 +68,7 @@ public final class NoteViewController: UIViewController {
         setupNavigationBar()
         setupTagView()
         tableView.dataSource = self
+        tableView.delegate = self
     }
 
     public override func viewDidLoad() {
@@ -176,4 +187,9 @@ extension NoteViewController: UITableViewDataSource {
         }
         return cell
     }
+}
+
+// MARK: - UITableViewDelegate
+
+extension NoteViewController: UITableViewDelegate {
 }
