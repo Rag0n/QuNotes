@@ -18,9 +18,10 @@ public final class NoteViewController: UIViewController {
             titleTextField.text = title
         case .focusOnTitle:
             titleTextField.becomeFirstResponder()
-        case let .updateContent(content):
         case let .updateCells(cells):
             break
+        case let .updateContent(index, contents):
+            let content = contents[index]
             self.content = content
             // TODO: prototype solution, need to fix it.
             // Need to just mark cells as dirty so it resizes

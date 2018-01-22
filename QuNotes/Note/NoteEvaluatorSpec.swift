@@ -58,42 +58,49 @@ class NoteEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving changeContent event") {
-                let expectedCells =  [Core.Note.Cell(type: .text, data: "newContent")]
+                let cells = [Dummy.cell(withContent: "content"),
+                             Dummy.cell(withContent: "anotherContent")]
 
                 beforeEach {
+                    e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
                     event = .changeContent("newContent", index: 0)
                     e = e.evaluate(event: event)
                 }
 
                 it("has updateContent effect") {
                     expect(e.effects).to(equalDiff([
-                        .updateContent("newContent")
+                        .updateContent(index: 0, cells: ["newContent", "anotherContent"])
                     ]))
                 }
 
                 it("has updateCells action") {
                     expect(e.actions).to(equalDiff([
-                        .updateCells(expectedCells)
+                        .updateCells([Dummy.cell(withContent: "newContent"),
+                                      Dummy.cell(withContent: "anotherContent")])
                     ]))
                 }
 
                 context("when model has cell with that index") {
                     it("updates model by replacing cell") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, cells: expectedCells)
+                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "newContent"),
+                                                                  Dummy.cell(withContent: "anotherContent")])
                         ))
                     }
                 }
 
                 context("when model doesnt hove cell with that index") {
                     beforeEach {
-                        e = Note.Evaluator(note: Dummy.note, cells: [], isNew: Dummy.isNew)
+                        e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
+                        event = .changeContent("newContent", index: 2)
                         e = e.evaluate(event: event)
                     }
 
                     it("updates model by creating new cell") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, cells: expectedCells)
+                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content"),
+                                                                  Dummy.cell(withContent: "anotherContent"),
+                                                                  Dummy.cell(withContent: "newContent")])
                         ))
                     }
                 }
@@ -450,5 +457,9 @@ private enum Dummy {
     static func content(withData data: String) -> Core.Note.Content {
         let cells = [Core.Note.Cell(type: .text, data: data)]
         return Core.Note.Content(title: note.title, cells: cells)
+    }
+
+    static func cell(withContent content: String) -> Core.Note.Cell {
+        return Core.Note.Cell(type: .text, data: content)
     }
 }

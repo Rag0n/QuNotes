@@ -43,7 +43,7 @@ extension Note {
                 let newCells = model.updateOrCreateCell(withIndex: index, content: newContent)
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
-                effects = [.updateContent(newContent)]
+                effects = [.updateContent(index: index, cells: newCells.map({$0.data}))]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(newTitle)]

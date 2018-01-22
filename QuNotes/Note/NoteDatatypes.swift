@@ -30,7 +30,7 @@ public enum Note {
     public enum ViewEffect: AutoEquatable {
         case updateTitle(String)
         case focusOnTitle
-        case updateContent(String)
+        case updateContent(index: Int, cells: [String])
         case updateCells([String])
         case showTags([String])
         case addTag(String)
