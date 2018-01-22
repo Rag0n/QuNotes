@@ -71,7 +71,7 @@ extension Note {
             switch event {
             case let .didLoadContent(content):
                 newModel = model |> Model.lens.cells .~ content.cells
-                effects = [.updateContent(content.cells.first?.data ?? "")]
+                effects = [.updateCells(content.cells.map { $0.data })]
             case let .didDeleteNote(error):
                 if let error = error {
                     actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
@@ -87,7 +87,7 @@ extension Note {
                 guard let error = error else { break }
                 newModel = model |> Model.lens.cells .~ oldCells
                 actions = [.showFailure(.updateContent, reason: error.localizedDescription)]
-                effects = [.updateContent(oldCells.first?.data ?? "")]
+                effects = [.updateCells(oldCells.map { $0.data })]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)

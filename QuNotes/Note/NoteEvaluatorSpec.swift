@@ -205,9 +205,9 @@ class NoteEvaluatorSpec: QuickSpec {
                     ))
                 }
 
-                it("has updateContent effect") {
+                it("has updateCells effect") {
                     expect(e.effects).to(equalDiff([
-                        .updateContent("loaded content")
+                        .updateCells(["loaded content"])
                     ]))
                 }
             }
@@ -326,9 +326,9 @@ class NoteEvaluatorSpec: QuickSpec {
                         ]))
                     }
 
-                    it("has updateContent effect") {
+                    it("has updateCells effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateContent("old content")
+                            .updateCells(["old content"])
                         ]))
                     }
                 }

@@ -31,6 +31,7 @@ public enum Note {
         case updateTitle(String)
         case focusOnTitle
         case updateContent(String)
+        case updateCells([String])
         case showTags([String])
         case addTag(String)
         case removeTag(String)
