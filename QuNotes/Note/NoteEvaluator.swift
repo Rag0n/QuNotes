@@ -40,13 +40,7 @@ extension Note {
                     effects += [.focusOnTitle]
                 }
             case let .changeContent(newContent, index):
-                let newCell = Core.Note.Cell(type: .text, data: newContent)
-                var newCells = model.cells
-                if index < model.cells.count {
-                    newCells[index] = newCell
-                } else {
-                    newCells.append(newCell)
-                }
+                let newCells = model.updateOrCreateCell(withIndex: index, content: newContent)
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
                 effects = [.updateContent(newContent)]
@@ -107,6 +101,19 @@ extension Note {
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
+        }
+    }
+}
+
+// MARK: - Private
+
+private extension Note.Model {
+    func updateOrCreateCell(withIndex index: Int, content: String) -> [Core.Note.Cell] {
+        let newCell = Core.Note.Cell(type: .text, data: content)
+        if index < cells.count {
+            return cells.replacing(at: index, new: newCell)
+        } else {
+            return cells.appending(newCell)
         }
     }
 }
