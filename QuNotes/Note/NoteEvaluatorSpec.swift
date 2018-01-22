@@ -61,7 +61,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 let expectedCells =  [Core.Note.Cell(type: .text, data: "newContent")]
 
                 beforeEach {
-                    event = .changeContent("newContent")
+                    event = .changeContent("newContent", index: 0)
                     e = e.evaluate(event: event)
                 }
 
@@ -77,21 +77,21 @@ class NoteEvaluatorSpec: QuickSpec {
                     ]))
                 }
 
-                context("when there is some cell in the model") {
-                    it("should update model by replacing cell") {
+                context("when model has cell with that index") {
+                    it("updates model by replacing cell") {
                         expect(e.model).to(equalDiff(
                             Dummy.model(fromModel: model, cells: expectedCells)
                         ))
                     }
                 }
 
-                context("when there is no cells in the model") {
+                context("when model doesnt hove cell with that index") {
                     beforeEach {
                         e = Note.Evaluator(note: Dummy.note, cells: [], isNew: Dummy.isNew)
                         e = e.evaluate(event: event)
                     }
 
-                    it("should update model by creating new cell") {
+                    it("updates model by creating new cell") {
                         expect(e.model).to(equalDiff(
                             Dummy.model(fromModel: model, cells: expectedCells)
                         ))

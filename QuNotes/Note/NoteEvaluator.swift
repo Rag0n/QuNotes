@@ -39,8 +39,14 @@ extension Note {
                 if model.isNew {
                     effects += [.focusOnTitle]
                 }
-            case let .changeContent(newContent):
-                let newCells = [Core.Note.Cell(type: .text, data: newContent)]
+            case let .changeContent(newContent, index):
+                let newCell = Core.Note.Cell(type: .text, data: newContent)
+                var newCells = model.cells
+                if index < model.cells.count {
+                    newCells[index] = newCell
+                } else {
+                    newCells.append(newCell)
+                }
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
                 effects = [.updateContent(newContent)]

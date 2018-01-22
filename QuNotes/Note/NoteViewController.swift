@@ -27,7 +27,7 @@ public final class NoteViewController: UIViewController {
                 break
             }
             cell.set(content: content) { [unowned self] newContent in
-                self.dispatch(.changeContent(newContent))
+                self.dispatch(.changeContent(newContent, index: 0))
             }
             tableView.beginUpdates()
             tableView.endUpdates()
@@ -183,7 +183,7 @@ extension NoteViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
         cell.set(content: content) { [unowned self] newContent in
-            self.dispatch(.changeContent(newContent))
+            self.dispatch(.changeContent(newContent, index: 0))
         }
         return cell
     }

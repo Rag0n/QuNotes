@@ -47,7 +47,7 @@ public enum Note {
 
     public enum ViewEvent {
         case didLoad
-        case changeContent(String)
+        case changeContent(String, index: Int)
         case changeTitle(String)
         case delete
         case addTag(String)
