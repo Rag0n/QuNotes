@@ -40,8 +40,9 @@ extension Note {
                     effects += [.focusOnTitle]
                 }
             case let .changeCell(newContent, index):
-                // TODO: separate creating and updating
-                let newCells = model.updateOrCreateCell(withIndex: index, content: newContent)
+                guard index < model.cells.count else { break }
+                let newCell = Core.Note.Cell(type: .text, data: newContent)
+                let newCells = model.cells.replacing(at: index, new: newCell)
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
                 effects = [.updateCell(index: index, cells: newCells.stringifyCells())]
@@ -113,17 +114,6 @@ extension Note {
 }
 
 // MARK: - Private
-
-private extension Note.Model {
-    func updateOrCreateCell(withIndex index: Int, content: String) -> [Core.Note.Cell] {
-        let newCell = Core.Note.Cell(type: .text, data: content)
-        if index < cells.count {
-            return cells.replacing(at: index, new: newCell)
-        } else {
-            return cells.appending(newCell)
-        }
-    }
-}
 
 private extension Array where Element == Core.Note.Cell {
     func stringifyCells() -> [String] {

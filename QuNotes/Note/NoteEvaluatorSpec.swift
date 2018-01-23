@@ -58,29 +58,31 @@ class NoteEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving changeCell event") {
-                let cells = [Dummy.cell(withContent: "content"),
-                             Dummy.cell(withContent: "anotherContent")]
-
                 beforeEach {
+                    let cells = [Dummy.cell(withContent: "content"),
+                                 Dummy.cell(withContent: "anotherContent")]
                     e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
-                    event = .changeCell("newContent", index: 0)
-                    e = e.evaluate(event: event)
-                }
-
-                it("has updateCell effect") {
-                    expect(e.effects).to(equalDiff([
-                        .updateCell(index: 0, cells: ["newContent", "anotherContent"])
-                    ]))
-                }
-
-                it("has updateCells action") {
-                    expect(e.actions).to(equalDiff([
-                        .updateCells([Dummy.cell(withContent: "newContent"),
-                                      Dummy.cell(withContent: "anotherContent")])
-                    ]))
                 }
 
                 context("when model has cell with that index") {
+                    beforeEach {
+                        event = .changeCell("newContent", index: 0)
+                        e = e.evaluate(event: event)
+                    }
+
+                    it("has updateCell effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateCell(index: 0, cells: ["newContent", "anotherContent"])
+                            ]))
+                    }
+
+                    it("has updateCells action") {
+                        expect(e.actions).to(equalDiff([
+                            .updateCells([Dummy.cell(withContent: "newContent"),
+                                          Dummy.cell(withContent: "anotherContent")])
+                            ]))
+                    }
+
                     it("updates model by replacing cell") {
                         expect(e.model).to(equalDiff(
                             Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "newContent"),
@@ -91,16 +93,22 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when model doesnt hove cell with that index") {
                     beforeEach {
-                        e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
                         event = .changeCell("newContent", index: 2)
                         e = e.evaluate(event: event)
                     }
 
-                    it("updates model by creating new cell") {
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+
+                    it("doesnt update model") {
                         expect(e.model).to(equalDiff(
                             Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content"),
-                                                                  Dummy.cell(withContent: "anotherContent"),
-                                                                  Dummy.cell(withContent: "newContent")])
+                                                                  Dummy.cell(withContent: "anotherContent")])
                         ))
                     }
                 }
