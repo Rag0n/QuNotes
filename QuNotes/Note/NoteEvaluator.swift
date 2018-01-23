@@ -40,10 +40,11 @@ extension Note {
                     effects += [.focusOnTitle]
                 }
             case let .changeContent(newContent, index):
+                // TODO: separate creating and updating
                 let newCells = model.updateOrCreateCell(withIndex: index, content: newContent)
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
-                effects = [.updateContent(index: index, cells: newCells.map({$0.data}))]
+                effects = [.updateContent(index: index, cells: newCells.stringifyCells())]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(newTitle)]
@@ -71,7 +72,7 @@ extension Note {
             switch event {
             case let .didLoadContent(content):
                 newModel = model |> Model.lens.cells .~ content.cells
-                effects = [.updateCells(content.cells.map { $0.data })]
+                effects = [.updateCells(content.cells.stringifyCells())]
             case let .didDeleteNote(error):
                 if let error = error {
                     actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
@@ -87,7 +88,7 @@ extension Note {
                 guard let error = error else { break }
                 newModel = model |> Model.lens.cells .~ oldCells
                 actions = [.showFailure(.updateContent, reason: error.localizedDescription)]
-                effects = [.updateCells(oldCells.map { $0.data })]
+                effects = [.updateCells(oldCells.stringifyCells())]
             case let .didAddTag(tag, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
@@ -115,5 +116,11 @@ private extension Note.Model {
         } else {
             return cells.appending(newCell)
         }
+    }
+}
+
+private extension Array where Element == Core.Note.Cell {
+    func stringifyCells() -> [String] {
+        return self.map { $0.data }
     }
 }
