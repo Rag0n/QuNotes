@@ -161,7 +161,7 @@ public func == (lhs: Note.ViewEffect, rhs: Note.ViewEffect) -> Bool {
         return lhs == rhs
     case (.focusOnTitle, .focusOnTitle):
         return true
-    case (.updateContent(let lhs), .updateContent(let rhs)):
+    case (.updateCell(let lhs), .updateCell(let rhs)):
         if lhs.index != rhs.index { return false }
         if lhs.cells != rhs.cells { return false }
         return true

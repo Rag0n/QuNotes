@@ -22,7 +22,7 @@ public final class NoteViewController: UIViewController {
             break
         case let .addCell(index, cells):
             break
-        case let .updateContent(index, contents):
+        case let .updateCell(index, contents):
             let content = contents[index]
             self.content = content
             // TODO: prototype solution, need to fix it.
@@ -32,7 +32,7 @@ public final class NoteViewController: UIViewController {
                 break
             }
             cell.set(content: content) { [unowned self] newContent in
-                self.dispatch(.changeContent(newContent, index: 0))
+                self.dispatch(.changeCell(newContent, index: 0))
             }
             tableView.beginUpdates()
             tableView.endUpdates()
@@ -188,7 +188,7 @@ extension NoteViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
         cell.set(content: content) { [unowned self] newContent in
-            self.dispatch(.changeContent(newContent, index: 0))
+            self.dispatch(.changeCell(newContent, index: 0))
         }
         return cell
     }
