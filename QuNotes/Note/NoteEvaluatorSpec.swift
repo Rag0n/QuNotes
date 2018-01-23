@@ -106,6 +106,33 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
 
+            context("when receiving addCell event") {
+                beforeEach {
+                    event = .addCell
+                    e = e.evaluate(event: event)
+                }
+
+                it("has addCell effect") {
+                    expect(e.effects).to(equalDiff([
+                        .addCell(index: 1, cells: ["content", ""])
+                    ]))
+                }
+
+                it("has updateCells action") {
+                    expect(e.actions).to(equalDiff([
+                        .updateCells([Dummy.cell(withContent: "content"),
+                                      Dummy.cell(withContent: "")])
+                    ]))
+                }
+
+                it("updates model by appending empty cell") {
+                    expect(e.model).to(equalDiff(
+                        Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content"),
+                                                              Dummy.cell(withContent: "")])
+                    ))
+                }
+            }
+
             context("when receiving changeTitle event") {
                 beforeEach {
                     event = .changeTitle("newTitle")

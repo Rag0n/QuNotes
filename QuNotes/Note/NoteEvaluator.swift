@@ -45,6 +45,12 @@ extension Note {
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
                 effects = [.updateContent(index: index, cells: newCells.stringifyCells())]
+            case .addCell:
+                let newCell = Core.Note.Cell(type: .text, data: "")
+                let newCells = model.cells.appending(newCell)
+                newModel = model |> Model.lens.cells .~ newCells
+                actions = [.updateCells(newCells)]
+                effects = [.addCell(index: model.cells.count, cells: newCells.stringifyCells())]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(newTitle)]

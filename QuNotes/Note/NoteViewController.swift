@@ -20,6 +20,8 @@ public final class NoteViewController: UIViewController {
             titleTextField.becomeFirstResponder()
         case let .updateCells(cells):
             break
+        case let .addCell(index, cells):
+            break
         case let .updateContent(index, contents):
             let content = contents[index]
             self.content = content
