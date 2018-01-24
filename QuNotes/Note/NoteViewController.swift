@@ -19,14 +19,19 @@ public final class NoteViewController: UIViewController {
         case .focusOnTitle:
             titleTextField.becomeFirstResponder()
         case let .updateCells(cells):
-            break
+            self.cells = cells
+            tableView.reloadData()
         case let .addCell(index, cells):
-            break
+            self.cells = cells
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.insertRows(at: [indexPath], with: .automatic)
         case let .removeCell(index, cells):
-            break
-        case let .updateCell(index, contents):
-            let content = contents[index]
-            self.content = content
+            self.cells = cells
+            let indexPath = IndexPath(row: index, section: 0)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        case let .updateCell(index, cells):
+            self.cells = cells
+            let content = cells[index]
             // TODO: prototype solution, need to fix it.
             // Need to just mark cells as dirty so it resizes
             // Also there is issue with reloading because it causes to resign first responder
@@ -103,7 +108,7 @@ public final class NoteViewController: UIViewController {
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }
     fileprivate var dispatch: Note.ViewDispacher
-    fileprivate var content: String = ""
+    fileprivate var cells: [String] = []
 
     private var scaledTitleTextFieldHeight: CGFloat {
         return UIFontMetrics(forTextStyle: .body).scaledValue(for: Constants.titleTextFieldHeight)
@@ -184,11 +189,12 @@ public final class NoteViewController: UIViewController {
 
 extension NoteViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return cells.count
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
+        let content = cells[indexPath.row]
         cell.set(content: content) { [unowned self] newContent in
             self.dispatch(.changeCell(newContent, index: 0))
         }
