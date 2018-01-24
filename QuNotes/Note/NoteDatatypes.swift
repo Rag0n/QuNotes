@@ -32,6 +32,7 @@ public enum Note {
         case focusOnTitle
         case updateCell(index: Int, cells: [String])
         case addCell(index: Int, cells: [String])
+        case removeCell(index: Int, cells: [String])
         case updateCells([String])
         case showTags([String])
         case addTag(String)
@@ -51,6 +52,7 @@ public enum Note {
         case didLoad
         case changeCell(String, index: Int)
         case addCell
+        case removeCell(index: Int)
         case changeTitle(String)
         case delete
         case addTag(String)

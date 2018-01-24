@@ -52,6 +52,11 @@ extension Note {
                 newModel = model |> Model.lens.cells .~ newCells
                 actions = [.updateCells(newCells)]
                 effects = [.addCell(index: model.cells.count, cells: newCells.stringifyCells())]
+            case let .removeCell(index):
+                let newCells = model.cells.removing(at: index)
+                newModel = model |> Model.lens.cells .~ newCells
+                actions = [.updateCells(newCells)]
+                effects = [.removeCell(index: index, cells: newCells.stringifyCells())]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(newTitle)]

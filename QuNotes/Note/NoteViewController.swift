@@ -22,6 +22,8 @@ public final class NoteViewController: UIViewController {
             break
         case let .addCell(index, cells):
             break
+        case let .removeCell(index, cells):
+            break
         case let .updateCell(index, contents):
             let content = contents[index]
             self.content = content

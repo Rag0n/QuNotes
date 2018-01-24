@@ -141,6 +141,34 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
 
+            context("when receiving removeCell event") {
+                beforeEach {
+                    let cells = [Dummy.cell(withContent: "content"),
+                                 Dummy.cell(withContent: "anotherContent")]
+                    e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
+                    event = .removeCell(index: 0)
+                    e = e.evaluate(event: event)
+                }
+
+                it("has removeCell effect") {
+                    expect(e.effects).to(equalDiff([
+                        .removeCell(index: 0, cells: ["anotherContent"])
+                    ]))
+                }
+
+                it("has updateCells action") {
+                    expect(e.actions).to(equalDiff([
+                        .updateCells([Dummy.cell(withContent: "anotherContent")])
+                    ]))
+                }
+
+                it("updates model by removing cell") {
+                    expect(e.model).to(equalDiff(
+                        Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "anotherContent")])
+                    ))
+                }
+            }
+
             context("when receiving changeTitle event") {
                 beforeEach {
                     event = .changeTitle("newTitle")

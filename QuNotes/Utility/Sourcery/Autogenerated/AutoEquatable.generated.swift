@@ -169,6 +169,10 @@ public func == (lhs: Note.ViewEffect, rhs: Note.ViewEffect) -> Bool {
         if lhs.index != rhs.index { return false }
         if lhs.cells != rhs.cells { return false }
         return true
+    case (.removeCell(let lhs), .removeCell(let rhs)):
+        if lhs.index != rhs.index { return false }
+        if lhs.cells != rhs.cells { return false }
+        return true
     case (.updateCells(let lhs), .updateCells(let rhs)):
         return lhs == rhs
     case (.showTags(let lhs), .showTags(let rhs)):
