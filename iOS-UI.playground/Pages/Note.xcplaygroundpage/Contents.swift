@@ -15,6 +15,15 @@ let frame = parent.view.frame
 PlaygroundPage.current.liveView = parent
 parent.view.frame = frame
 
-//controller.perform(effect: .updateTitle(title: "Title"))
+controller.perform(effect: .updateTitle("Title"))
 controller.perform(effect: .addTag("first tag"))
 controller.perform(effect: .addTag("second tag"))
+controller.perform(effect: .updateCells(["cell1", "cell2"]))
+
+delay(for: .seconds(1)) {
+    controller.perform(effect: .addCell(index: 1, cells: ["cell1", "cell3", "cell2"]))
+}
+
+delay(for: .seconds(2)) {
+    controller.perform(effect: .removeCell(index: 1, cells: ["cell1", "cell2"]))
+}
