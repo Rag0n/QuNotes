@@ -15,7 +15,9 @@ final class NoteTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
+        let backgroundColor = AppEnvironment.current.theme.ligherDarkColor
+        self.backgroundColor = backgroundColor
+        contentView.backgroundColor = backgroundColor
         contentView.flex.minHeight(scaledMinHeight).define {
             $0.addItem(editor).grow(1)
         }
