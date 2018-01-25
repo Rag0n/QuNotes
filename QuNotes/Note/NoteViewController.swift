@@ -31,18 +31,7 @@ public final class NoteViewController: UIViewController {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         case let .updateCell(index, cells):
             self.cells = cells
-            let content = cells[index]
-            // TODO: prototype solution, need to fix it.
-            // Need to just mark cells as dirty so it resizes
-            // Also there is issue with reloading because it causes to resign first responder
-            guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? NoteTableViewCell else {
-                break
-            }
-            cell.set(content: content) { [unowned self] newContent in
-                self.dispatch(.changeCell(newContent, index: 0))
-            }
-            tableView.beginUpdates()
-            tableView.endUpdates()
+            reloadCell(withIndex: index)
         case let .showTags(tags):
             tagView.addTags(tags)
             invalidateTagLayout()
@@ -105,6 +94,7 @@ public final class NoteViewController: UIViewController {
     private enum Constants {
         static let themeName = "one-dark"
         static let titleTextFieldHeight: CGFloat = 20
+        static let estimatedNoteCellHeight: CGFloat = 44
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }
     fileprivate var dispatch: Note.ViewDispacher
@@ -147,7 +137,7 @@ public final class NoteViewController: UIViewController {
     private let tableView: UITableView = {
         let t = UITableView()
         NoteTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.noteCellReuseIdentifier)
-        t.estimatedRowHeight = 44
+        t.estimatedRowHeight = Constants.estimatedNoteCellHeight
         let theme = AppEnvironment.current.theme
         t.backgroundColor = theme.ligherDarkColor
         t.separatorColor = theme.textColor.withAlphaComponent(0.5)
@@ -176,6 +166,21 @@ public final class NoteViewController: UIViewController {
         view.setNeedsLayout()
     }
 
+    private func reloadCell(withIndex index: Int) {
+        let indexPath = IndexPath(row: index, section: 0)
+        guard let cell = tableView.cellForRow(at: indexPath) as? NoteTableViewCell else { return }
+        updateCell(cell, index: index)
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+
+    private func updateCell(_ cell: NoteTableViewCell, index: Int) {
+        let content = cells[index]
+        cell.set(content: content) { [unowned self] newContent in
+            self.dispatch(.changeCell(newContent, index: index))
+        }
+    }
+
     @objc private func onDeleteButtonClick() {
         dispatch(.delete)
     }
@@ -194,10 +199,7 @@ extension NoteViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
-        let content = cells[indexPath.row]
-        cell.set(content: content) { [unowned self] newContent in
-            self.dispatch(.changeCell(newContent, index: 0))
-        }
+        updateCell(cell, index: indexPath.row)
         return cell
     }
 }
