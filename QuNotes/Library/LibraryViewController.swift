@@ -61,6 +61,7 @@ final public class LibraryViewController: UIViewController {
     // MARK: - Private
 
     fileprivate enum Constants {
+        static let estimatedCellHeight: CGFloat = 44
         static let libraryCellReuseIdentifier = "libraryCellReuseIdentifier"
     }
     
@@ -73,7 +74,7 @@ final public class LibraryViewController: UIViewController {
         let theme = AppEnvironment.current.theme
         t.backgroundColor = theme.ligherDarkColor
         t.separatorColor = theme.textColor.withAlphaComponent(0.5)
-        t.estimatedRowHeight = 44
+        t.estimatedRowHeight = Constants.estimatedCellHeight
         return t
     }()
     private let addButton: UIButton = {

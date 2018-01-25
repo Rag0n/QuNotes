@@ -46,6 +46,10 @@ final class NotebookTableViewCell: UITableViewCell {
 
     // MARK: - Private
 
+    private enum Constants {
+        static let minHeight: CGFloat = 44
+    }
+
     private let titleLabel: UILabel = {
         let l = UILabel()
         let theme =  AppEnvironment.current.theme
@@ -59,8 +63,7 @@ final class NotebookTableViewCell: UITableViewCell {
         return l
     }()
 
-    private let minHeight: CGFloat = 44
     private var scaledMinHeight: CGFloat {
-        return UIFontMetrics(forTextStyle: .body).scaledValue(for: minHeight)
+        return UIFontMetrics(forTextStyle: .body).scaledValue(for: Constants.minHeight)
     }
 }

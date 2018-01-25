@@ -73,6 +73,7 @@ final public class NotebookViewController: UIViewController {
     // MARK: - Private
 
     fileprivate enum Constants {
+        static let estimatedCellHeight: CGFloat = 44
         static let notebookCellReuseIdentifier = "notebookCellReuseIdentifier"
     }
 
@@ -90,7 +91,7 @@ final public class NotebookViewController: UIViewController {
     private let tableView: UITableView = {
         let t = UITableView()
         NotebookTableViewCell.registerFor(tableView: t, reuseIdentifier: Constants.notebookCellReuseIdentifier)
-        t.estimatedRowHeight = 44
+        t.estimatedRowHeight = Constants.estimatedCellHeight
         let theme = AppEnvironment.current.theme
         t.backgroundColor = theme.ligherDarkColor
         t.separatorColor = theme.textColor.withAlphaComponent(0.5)
