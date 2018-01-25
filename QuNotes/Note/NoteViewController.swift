@@ -207,4 +207,18 @@ extension NoteViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 
 extension NoteViewController: UITableViewDelegate {
+    public func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let deleteAction = deleteContextualAction(forIndexPath: indexPath)
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        return configuration
+    }
+
+    private func deleteContextualAction(forIndexPath indexPath: IndexPath) -> UIContextualAction {
+        let action = UIContextualAction(style: .destructive, title: "note_delete_content_cell_button".localized) { [unowned self] (action, view, success) in
+            self.dispatch(.removeCell(index: indexPath.row))
+            success(true)
+        }
+        action.backgroundColor = .red
+        return action
+    }
 }

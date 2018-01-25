@@ -12,6 +12,7 @@
 "note_updating_content_error" = "Failed to update content";
 "note_adding_tag_error" = "Failed to add tag";
 "note_removing_tag_error" = "Failed to remove tag";
+"note_delete_content_cell_button" = "Delete";
 
 "notebook_add_note_button" = "Add";
 "notebook_delete_note_button" = "Delete";
