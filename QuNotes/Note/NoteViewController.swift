@@ -81,8 +81,10 @@ public final class NoteViewController: UIViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        print("safe frame \(view.safeAreaLayoutGuide.layoutFrame)")
         container.frame = view.safeAreaLayoutGuide.layoutFrame
         container.flex.layout()
+        print("container: \(container.frame)")
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -193,15 +195,15 @@ public final class NoteViewController: UIViewController {
 
     private func updateCell(_ cell: NoteTableViewCell, index: Int) {
         let content = cells[index]
-        cell.set(content: content) { [unowned self] newContent in
+        // TODO: On end editing should reset height to max
+        cell.set(content: content, maxHeight: tableView.bounds.size.height) { [unowned self] newContent in
             self.dispatch(.changeCell(newContent, index: index))
         }
     }
 
     private func animateKeyboardInsets(forNotificationUserInfo userInfo: [AnyHashable: Any], intersection: CGRect) {
-        let animationDuration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
-        let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
-        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+        guard let animationDuration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue else { return }
+        guard let animationCurveRaw = (userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber)?.uintValue else { return }
         let animationCurve = UIViewAnimationOptions(rawValue: animationCurveRaw)
 
         UIView.animate(withDuration: animationDuration, delay: 0, options: animationCurve, animations: {

@@ -35,7 +35,7 @@ final class NoteTableViewCell: UITableViewCell {
 
     override func sizeThatFits(_ size: CGSize) -> CGSize {
         contentView.frame = CGRect(origin: contentView.frame.origin, size: size)
-        contentView.flex.padding(contentView.layoutMargins).layout(mode: .adjustHeight)
+        contentView.flex.padding(contentView.layoutMargins).maxHeight(maxHeight).layout(mode: .adjustHeight)
         return contentView.frame.size
     }
 
@@ -45,7 +45,8 @@ final class NoteTableViewCell: UITableViewCell {
         contentView.flex.minHeight(scaledMinHeight)
     }
 
-    func set(content: String, onContentChange: @escaping OnContentChange) {
+    func set(content: String, maxHeight: CGFloat = CGFloat.greatestFiniteMagnitude, onContentChange: @escaping OnContentChange) {
+        self.maxHeight = maxHeight
         self.onContentChange = onContentChange
         editor.text = content
         editor.flex.markDirty()
@@ -58,6 +59,7 @@ final class NoteTableViewCell: UITableViewCell {
         static let themeName = "one-dark"
     }
 
+    private var maxHeight: CGFloat = CGFloat.greatestFiniteMagnitude
     private var onContentChange: OnContentChange?
 
     private let editor: Notepad = {
