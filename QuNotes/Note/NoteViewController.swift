@@ -63,6 +63,7 @@ public final class NoteViewController: UIViewController {
             $0.addItem(titleTextField).height(scaledTitleTextFieldHeight).margin(0, 8, 0, 8)
             $0.addItem(tagView).maxHeight(80)
             $0.addItem(tableView).grow(1)
+            $0.addItem(addButton).position(.absolute).alignSelf(.center).bottom(20)
         }
         view.addSubview(container)
 
@@ -144,6 +145,14 @@ public final class NoteViewController: UIViewController {
         t.allowsSelection = false
         return t
     }()
+    private let addButton: UIButton = {
+        let b = UIButton(type: .system)
+        b.setTitle("note_add_content_cell_button".localized, for: .normal)
+        b.titleLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
+        b.titleLabel!.adjustsFontForContentSizeCategory = true
+        b.addTarget(self, action: #selector(NoteViewController.addCell), for: .touchUpInside)
+        return b
+    }()
 
     private func setupNavigationBar() {
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
@@ -187,6 +196,10 @@ public final class NoteViewController: UIViewController {
 
     @objc private func onTitleTextFieldChange() {
         dispatch(.changeTitle(titleTextField.text ?? ""))
+    }
+
+    @objc private func addCell() {
+        dispatch(.addCell)
     }
 }
 

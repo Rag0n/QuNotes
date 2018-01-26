@@ -13,6 +13,7 @@
 "note_adding_tag_error" = "Ошибка добавления тега";
 "note_removing_tag_error" = "Ошибка удаления тега";
 "note_delete_content_cell_button" = "Удалить";
+"note_add_content_cell_button" = "Создать";
 
 "notebook_add_note_button" = "Создать";
 "notebook_delete_note_button" = "Удалить";
