@@ -69,6 +69,7 @@ public final class NoteViewController: UIViewController {
 
         setupNavigationBar()
         setupTagView()
+        setupKeyboardAvoidingBehaviour()
         tableView.dataSource = self
         tableView.delegate = self
     }
@@ -170,6 +171,13 @@ public final class NoteViewController: UIViewController {
         }
     }
 
+    private func setupKeyboardAvoidingBehaviour() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(NoteViewController.handleKeyboardChangingFrame(notification:)),
+                                               name: NSNotification.Name.UIKeyboardWillChangeFrame,
+                                               object: nil)
+    }
+
     private func invalidateTagLayout() {
         tagView.flex.markDirty()
         view.setNeedsLayout()
@@ -188,6 +196,28 @@ public final class NoteViewController: UIViewController {
         cell.set(content: content) { [unowned self] newContent in
             self.dispatch(.changeCell(newContent, index: index))
         }
+    }
+
+    private func animateKeyboardInsets(forNotificationUserInfo userInfo: [AnyHashable: Any], intersection: CGRect) {
+        let animationDuration: TimeInterval = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+        let animationCurveRawNSN = userInfo[UIKeyboardAnimationCurveUserInfoKey] as? NSNumber
+        let animationCurveRaw = animationCurveRawNSN?.uintValue ?? UIViewAnimationOptions.curveEaseInOut.rawValue
+        let animationCurve = UIViewAnimationOptions(rawValue: animationCurveRaw)
+
+        UIView.animate(withDuration: animationDuration, delay: 0, options: animationCurve, animations: {
+            self.additionalSafeAreaInsets.bottom = intersection.height
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+
+    @objc private func handleKeyboardChangingFrame(notification: Notification) {
+        guard let userInfo = notification.userInfo else { return }
+        guard let keyboardFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+
+        let keyboardFrameInView = view.convert(keyboardFrame, from: nil)
+        let safeAreaFrame = view.safeAreaLayoutGuide.layoutFrame.insetBy(dx: 0, dy: -additionalSafeAreaInsets.bottom)
+        let intersection = safeAreaFrame.intersection(keyboardFrameInView)
+        animateKeyboardInsets(forNotificationUserInfo: userInfo, intersection: intersection)
     }
 
     @objc private func onDeleteButtonClick() {
