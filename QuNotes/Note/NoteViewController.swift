@@ -60,7 +60,7 @@ public final class NoteViewController: UIViewController {
         view.backgroundColor = .black
 
         container.flex.define {
-            $0.addItem(titleTextField).height(scaledTitleTextFieldHeight)
+            $0.addItem(titleTextField).height(scaledTitleTextFieldHeight).margin(0, 8, 0, 8)
             $0.addItem(tagView).maxHeight(80)
             $0.addItem(tableView).grow(1)
         }
