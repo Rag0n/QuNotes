@@ -43,10 +43,10 @@ public enum Note {
     public enum CoordinatorEvent {
         case didLoadContent(Core.Note.Content)
         case didDeleteNote(error: Error?)
-        case didUpdateTitle(oldTitle: String, error: Error?)
+        case didUpdateTitle(oldTitle: String, note: Core.Note.Meta, error: Error?)
         case didUpdateCells(oldCells: [Core.Note.Cell], error: Error?)
-        case didAddTag(String, error: Error?)
-        case didRemoveTag(String, error: Error?)
+        case didAddTag(String, note: Core.Note.Meta, error: Error?)
+        case didRemoveTag(String, note: Core.Note.Meta, error: Error?)
     }
 
     public enum ViewEvent {

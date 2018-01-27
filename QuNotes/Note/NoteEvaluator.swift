@@ -91,8 +91,11 @@ extension Note {
                 } else {
                     actions = [.finish]
                 }
-            case let .didUpdateTitle(oldTitle, error):
-                guard let error = error else { break }
+            case let .didUpdateTitle(oldTitle, note, error):
+                guard let error = error else {
+                    actions = [.didUpdateNote(note)]
+                    break
+                }
                 newModel = model |> Model.lens.title .~ oldTitle
                 actions = [.showFailure(.updateTitle, reason: error.localizedDescription)]
                 effects = [.updateTitle(oldTitle)]
@@ -101,13 +104,19 @@ extension Note {
                 newModel = model |> Model.lens.cells .~ oldCells
                 actions = [.showFailure(.updateContent, reason: error.localizedDescription)]
                 effects = [.updateCells(oldCells.stringifyCells())]
-            case let .didAddTag(tag, error):
-                guard let error = error else { break }
+            case let .didAddTag(tag, note, error):
+                guard let error = error else {
+                    actions = [.didUpdateNote(note)]
+                    break
+                }
                 newModel = model |> Model.lens.tags .~ model.tags.removing(tag)
                 actions = [.showFailure(.addTag, reason: error.localizedDescription)]
                 effects = [.removeTag(tag)]
-            case let .didRemoveTag(tag, error):
-                guard let error = error else { break }
+            case let .didRemoveTag(tag, note, error):
+                guard let error = error else {
+                    actions = [.didUpdateNote(note)]
+                    break
+                }
                 newModel = model |> Model.lens.tags .~ model.tags.appending(tag)
                 actions = [.showFailure(.removeTag, reason: error.localizedDescription)]
                 effects = [.addTag(tag)]

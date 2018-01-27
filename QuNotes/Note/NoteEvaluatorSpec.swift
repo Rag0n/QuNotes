@@ -312,8 +312,10 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving didUpdateTitle event") {
                 context("when successfully updates title") {
+                    let note = Dummy.note()
+
                     beforeEach {
-                        event = .didUpdateTitle(oldTitle: "old title", error: nil)
+                        event = .didUpdateTitle(oldTitle: "old title", note: note, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -325,14 +327,16 @@ class NoteEvaluatorSpec: QuickSpec {
                         expect(e.effects).to(beEmpty())
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("has didUpdateNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .didUpdateNote(note)
+                        ]))
                     }
                 }
 
                 context("when fails to update title") {
                     beforeEach {
-                        event = .didUpdateTitle(oldTitle: "old title", error: Dummy.error)
+                        event = .didUpdateTitle(oldTitle: "old title", note: Dummy.note(), error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -406,8 +410,10 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving didAddTag event") {
                 context("when successfully adds tag") {
+                    let note = Dummy.note()
+
                     beforeEach {
-                        event = .didAddTag("tag", error: nil)
+                        event = .didAddTag("tag", note: note, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -419,14 +425,16 @@ class NoteEvaluatorSpec: QuickSpec {
                         expect(e.effects).to(beEmpty())
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("has didUpdateNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .didUpdateNote(note)
+                        ]))
                     }
                 }
 
                 context("when fails to add tag") {
                     beforeEach {
-                        event = .didAddTag("tag", error: Dummy.error)
+                        event = .didAddTag("tag", note: Dummy.note(), error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -452,8 +460,10 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving didRemoveTag event") {
                 context("when successfully removes tag") {
+                    let note = Dummy.note()
+
                     beforeEach {
-                        event = .didRemoveTag("removed tag", error: nil)
+                        event = .didRemoveTag("removed tag", note: note, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -465,14 +475,16 @@ class NoteEvaluatorSpec: QuickSpec {
                         expect(e.effects).to(beEmpty())
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("has didUpdateNote action") {
+                        expect(e.actions).to(equalDiff([
+                            .didUpdateNote(note)
+                        ]))
                     }
                 }
 
                 context("when fails to remove tag") {
                     beforeEach {
-                        event = .didRemoveTag("removed tag", error: Dummy.error)
+                        event = .didRemoveTag("removed tag", note: Dummy.note(), error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 
@@ -524,5 +536,11 @@ private enum Dummy {
 
     static func cell(withContent content: String) -> Core.Note.Cell {
         return Core.Note.Cell(type: .text, data: content)
+    }
+
+    static func note(withUUUID uuid: String = UUID.init().uuidString,
+                     title: String = "title",
+                     tags: [String] = []) -> Core.Note.Meta {
+        return Core.Note.Meta(uuid: uuid, title: title, tags: tags, updated_at: 1, created_at: 1)
     }
 }

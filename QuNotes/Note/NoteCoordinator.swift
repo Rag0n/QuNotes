@@ -65,7 +65,7 @@ extension Note {
             case let .updateTitle(note, url, oldTitle):
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didChangeTitle(oldTitle: oldTitle, error: error)
-                dispatch <| .didUpdateTitle(oldTitle: oldTitle, error: error)
+                dispatch <| .didUpdateTitle(oldTitle: oldTitle, note: note, error: error)
             case let .updateContent(content, url, oldContent):
                 let error = fileExecuter.createFile(atURL: url, content: content)
                 dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
@@ -73,11 +73,11 @@ extension Note {
             case let .addTag(tag, note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didAddTag(tag, error: error)
-                dispatch <| .didAddTag(tag, error: error)
+                dispatch <| .didAddTag(tag, note: note, error: error)
             case let .removeTag(tag, note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didRemoveTag(tag, error: error)
-                dispatch <| .didRemoveTag(tag, error: error)
+                dispatch <| .didRemoveTag(tag, note: note, error: error)
             }
         }
 
