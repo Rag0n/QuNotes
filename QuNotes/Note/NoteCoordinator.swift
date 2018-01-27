@@ -48,6 +48,8 @@ extension Note {
                 navigationController.popViewController(animated: true)
             case let .showFailure(failure, reason):
                 showError(title: failure, message: reason)
+            case let .didUpdateNote(note):
+                output = .updateNote(note)
             }
         }
 
@@ -61,7 +63,6 @@ extension Note {
             case let .handleError(title, message):
                 showError(title: title, message: message)
             case let .updateTitle(note, url, oldTitle):
-                output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didChangeTitle(oldTitle: oldTitle, error: error)
                 dispatch <| .didUpdateTitle(oldTitle: oldTitle, error: error)
@@ -70,12 +71,10 @@ extension Note {
                 dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
                 dispatch <| .didUpdateCells(oldCells: oldContent.cells, error: error)
             case let .addTag(tag, note, url):
-                output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didAddTag(tag, error: error)
                 dispatch <| .didAddTag(tag, error: error)
             case let .removeTag(tag, note, url):
-                output = .updateNote(note)
                 let error = fileExecuter.createFile(atURL: url, content: note)
                 dispatchToNote <| .didRemoveTag(tag, error: error)
                 dispatch <| .didRemoveTag(tag, error: error)

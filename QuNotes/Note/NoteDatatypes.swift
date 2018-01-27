@@ -25,6 +25,7 @@ public enum Note {
         case deleteNote
         case finish
         case showFailure(Failure, reason: String)
+        case didUpdateNote(Core.Note.Meta)
     }
 
     public enum ViewEffect: AutoEquatable {
