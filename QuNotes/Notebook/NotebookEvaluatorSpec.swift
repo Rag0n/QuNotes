@@ -422,7 +422,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when successfuly updates notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(oldNotebook, error: nil)
+                        event = .didUpdateNotebook(oldNotebook: oldNotebook, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -441,7 +441,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to update notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(oldNotebook, error: Dummy.error)
+                        event = .didUpdateNotebook(oldNotebook: oldNotebook, error: Dummy.error)
                         e = e.evaluate(event: event)
                     }
 

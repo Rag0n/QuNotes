@@ -62,11 +62,11 @@ extension Notebook {
                 let contentError = fileExecuter.createFile(atURL: contentURL, content: content)
                 dispatchToNotebook <| .didAddNote(note, error: metaError ?? contentError)
                 dispatch <| .didAddNote(note, error:  metaError ?? contentError)
-            case let .updateNotebook(notebook, url):
+            case let .updateNotebook(notebook, url, oldNotebook):
                 output = .updateNotebook(notebook)
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
-                dispatchToNotebook <| .didUpdateNotebook(notebook, error: error)
-                dispatch <| .didUpdateNotebook(notebook, error: error)
+                dispatchToNotebook <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
+                dispatch <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
             case let .deleteNote(note, url):
                 let error = fileExecuter.deleteFile(at: url)
                 dispatchToNotebook <| .didDeleteNote(note, error: error)
