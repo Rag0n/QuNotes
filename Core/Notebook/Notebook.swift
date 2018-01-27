@@ -34,7 +34,7 @@ public enum Notebook {
 
     public enum Effect: AutoEquatable {
         case createNote(Note.Meta, url: DynamicBaseURL, content: Note.Content, contentURL: DynamicBaseURL)
-        case updateNotebook(Meta, url: DynamicBaseURL)
+        case updateNotebook(Meta, url: DynamicBaseURL, oldNotebook: Meta)
         case deleteNote(Note.Meta, url: DynamicBaseURL)
         case readDirectory(atURL: DynamicBaseURL)
         case readNotes(urls: [URL])
@@ -52,7 +52,7 @@ public enum Notebook {
         case didReadNotes([Result<Note.Meta, AnyError>])
         case didAddNote(Note.Meta, error: Error?)
         case didDeleteNote(Note.Meta, error: Error?)
-        case didUpdateNotebook(Meta, error: Error?)
+        case didUpdateNotebook(oldNotebook: Meta, error: Error?)
     }
 
     public struct Evaluator {
@@ -74,7 +74,7 @@ public enum Notebook {
             case let .changeName(newName):
                 newModel = model |> Model.lens.meta.name .~ newName
                 let url = newModel.meta.metaURL()
-                effects = [.updateNotebook(newModel.meta, url: url)]
+                effects = [.updateNotebook(newModel.meta, url: url, oldNotebook: model.meta)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
@@ -116,9 +116,9 @@ public enum Notebook {
             case let .didDeleteNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(note)
-            case let .didUpdateNotebook(notebook, error):
+            case let .didUpdateNotebook(oldNotebook, error):
                 guard error != nil else { break }
-                newModel = model |> Model.lens.meta.name .~ notebook.name
+                newModel = model |> Model.lens.meta.name .~ oldNotebook.name
             }
 
             return Evaluator(effects: effects, model: newModel)

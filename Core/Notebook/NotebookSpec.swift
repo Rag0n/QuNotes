@@ -61,7 +61,8 @@ class NotebookSpec: QuickSpec {
                 it("has updateFile effect with notebook & notebook URL") {
                     expect(e.effects).to(equalDiff([
                         .updateNotebook(Notebook.Meta(uuid: "uuid", name: "new name"),
-                                        url: Dummy.url("uuid.qvnotebook/meta.json"))
+                                        url: Dummy.url("uuid.qvnotebook/meta.json"),
+                                        oldNotebook: meta)
                     ]))
                 }
 
@@ -323,7 +324,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when successfilly updated notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(oldNotebook, error: nil)
+                        event = .didUpdateNotebook(oldNotebook: oldNotebook, error: nil)
                         e = e.evaluate(event: event)
                     }
 
@@ -334,7 +335,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when fails to update notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(oldNotebook, error: error)
+                        event = .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
                         e = e.evaluate(event: event)
                     }
 
