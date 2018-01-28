@@ -73,9 +73,9 @@ extension Library {
         private func handleNotebookCoordinatorOutput(output: Notebook.CoordinatorImp.ResultEffect) {
             switch output {
             case let .updateNotebook(notebook):
-                self.dispatch <| .updateNotebook(notebook)
+                dispatch <| .updateNotebook(notebook)
             case let .deleteNotebook(notebook):
-                self.dispatch <| .deleteNotebook(notebook)
+                dispatch <| .deleteNotebook(notebook)
             case .none:
                 break
             }
