@@ -115,15 +115,15 @@ extension Notebook {
         // MARK: Utility
 
         private func dispatch(event: ViewEvent) {
-            event |> evaluator.evaluate |> updateEvaluator
+            event |> evaluator.evaluating |> updateEvaluator
         }
 
         private func dispatch(event: CoordinatorEvent) {
-            event |> evaluator.evaluate |> updateEvaluator
+            event |> evaluator.evaluating |> updateEvaluator
         }
 
         private func dispatchToNotebook(event: Core.Notebook.Event) {
-            event |> notebookEvaluator.evaluate |> updateNotebook
+            event |> notebookEvaluator.evaluating |> updateNotebook
         }
 
         private func updateEvaluator(evaluator: Evaluator) {

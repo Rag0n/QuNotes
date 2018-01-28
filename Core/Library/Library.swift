@@ -47,7 +47,7 @@ public enum Library {
             effects = []
         }
 
-        public func evaluate(event: Event) -> Evaluator {
+        public func evaluating(event: Event) -> Evaluator {
             var effects: [Effect] = []
             var modelUpdate = { (oldModel: Library.Model) in return self.model }
 

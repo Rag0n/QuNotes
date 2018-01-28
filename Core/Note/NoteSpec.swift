@@ -32,13 +32,13 @@ class NoteExperimantalSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:") {
+        describe("-evaluating:") {
             var event: Note.Event!
 
             context("when receiving loadContent event") {
                 beforeEach {
                     event = .loadContent
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 context("when note is added to notebook") {
@@ -46,7 +46,7 @@ class NoteExperimantalSpec: QuickSpec {
                         let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
                         let model = Note.Model(meta: meta, content: content, notebook: notebook)
                         e = Note.Evaluator(model: model)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has readContent effect") {
@@ -69,7 +69,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     beforeEach {
                         event = .didReadContent(Result(value: content))
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model with new content") {
@@ -88,7 +88,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when fails to read content") {
                     beforeEach {
                         event = .didReadContent(Result(error: AnyError(error)))
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -107,7 +107,7 @@ class NoteExperimantalSpec: QuickSpec {
                 beforeEach {
                     event = .changeTitle("new title")
                     e.currentTimestamp = { 15 }
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("updates model by changing title, content's title and updatedDate") {
@@ -127,7 +127,7 @@ class NoteExperimantalSpec: QuickSpec {
                         let model = Note.Model(meta: meta, content: content, notebook: notebook)
                         e = Note.Evaluator(model: model)
                         e.currentTimestamp = { 15 }
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateTitle and updateContnet effects") {
@@ -151,7 +151,7 @@ class NoteExperimantalSpec: QuickSpec {
                 beforeEach {
                     event = .changeCells(newCells)
                     e.currentTimestamp = { 16 }
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("updates model by changing content's cells and updatedDate") {
@@ -170,7 +170,7 @@ class NoteExperimantalSpec: QuickSpec {
                         let notebook = Notebook.Meta(uuid: "notebookUUID", name: "name")
                         let model = Note.Model(meta: meta, content: content, notebook: notebook)
                         e = Note.Evaluator(model: model)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateContent effect") {
@@ -187,7 +187,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when tag was already added") {
                     beforeEach {
                         event = .addTag("tag")
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -203,7 +203,7 @@ class NoteExperimantalSpec: QuickSpec {
                     beforeEach {
                         event = .addTag("new tag")
                         e.currentTimestamp = { 18 }
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model by appending tag and updating updateDate") {
@@ -222,7 +222,7 @@ class NoteExperimantalSpec: QuickSpec {
                             let model = Note.Model(meta: meta, content: content, notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 20 }
-                            e = e.evaluate(event: event)
+                            e = e.evaluating(event: event)
                         }
 
                         it("has addTag effect") {
@@ -241,7 +241,7 @@ class NoteExperimantalSpec: QuickSpec {
                     beforeEach {
                         event = .removeTag("tag")
                         e.currentTimestamp = { 20 }
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model by removing tag and updating updatedDate") {
@@ -260,7 +260,7 @@ class NoteExperimantalSpec: QuickSpec {
                             let model = Note.Model(meta: meta, content: content, notebook: notebook)
                             e = Note.Evaluator(model: model)
                             e.currentTimestamp = { 22 }
-                            e = e.evaluate(event: event)
+                            e = e.evaluating(event: event)
                         }
 
                         it("has removeTag effect") {
@@ -276,7 +276,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when that tag doesnt exist") {
                     beforeEach {
                         event = .removeTag("not existing tag")
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -293,7 +293,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when successfully changes title") {
                     beforeEach {
                         event = .didChangeTitle(oldTitle: "old title", error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -304,7 +304,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when fails to change title") {
                     beforeEach {
                         event = .didChangeTitle(oldTitle: "old title", error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model by setting title back to the old") {
@@ -323,7 +323,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when successfully changes content") {
                     beforeEach {
                         event = .didChangeContent(oldContent: oldContent, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -334,7 +334,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when fails to change content") {
                     beforeEach {
                         event = .didChangeContent(oldContent: oldContent, error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model by setting content back to the old") {
@@ -349,7 +349,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when successfully adds tag") {
                     beforeEach {
                         event = .didAddTag("tag", error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -360,7 +360,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when fails to add tag") {
                     beforeEach {
                         event = .didAddTag("tag", error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("removes tag from the model") {
@@ -375,7 +375,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when successfuly removes tag") {
                     beforeEach {
                         event = .didRemoveTag("removed tag", error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -386,7 +386,7 @@ class NoteExperimantalSpec: QuickSpec {
                 context("when fails to remove tag") {
                     beforeEach {
                         event = .didRemoveTag("removed tag", error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("adds removed tag back to model") {

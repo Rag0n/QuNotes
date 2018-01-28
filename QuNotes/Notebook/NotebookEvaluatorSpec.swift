@@ -20,13 +20,13 @@ class NotebookEvaluatorSpec: QuickSpec {
             e = Notebook.Evaluator(notebook: notebook)
         }
 
-        describe("-evaluate:ViewEvent") {
+        describe("-evaluating:ViewEvent") {
             var event: Notebook.ViewEvent!
 
             context("when receiving didLoad event") {
                 beforeEach {
                     event = .didLoad
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has updateTitle effect") {
@@ -37,16 +37,15 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving addNote event") {
-
                 let anotherNote = Dummy.note(withTitle: "aT", tags: ["t"])
                 let expectedNote = Dummy.note(withTitle: "", uuid: "nUUID", date: 66)
 
                 beforeEach {
                     event = .addNote
-                    e = e.evaluate(event: .didLoadNotes([anotherNote]))
+                    e = e.evaluating(event: .didLoadNotes([anotherNote]))
                     e.currentTimestamp = { 66 }
                     e.generateUUID = { "nUUID" }
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has addNote actions") {
@@ -75,13 +74,13 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 beforeEach {
                     event = .selectNote(index: 1)
-                    e = e.evaluate(event: .didLoadNotes([note, secondNote, thirdNote]))
+                    e = e.evaluating(event: .didLoadNotes([note, secondNote, thirdNote]))
                 }
 
                 context("when model has filter") {
                     beforeEach {
-                        e = e.evaluate(event: .filterNotes(filter: "b"))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .filterNotes(filter: "b"))
+                            .evaluating(event: event)
                     }
 
                     it("has showNote action") {
@@ -93,7 +92,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when model doesnt have filter") {
                     beforeEach {
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has showNote action") {
@@ -109,8 +108,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 beforeEach {
                     event = .deleteNote(index: 0)
-                    e = e.evaluate(event: .didLoadNotes([note]))
-                        .evaluate(event: event)
+                    e = e.evaluating(event: .didLoadNotes([note]))
+                        .evaluating(event: event)
                 }
 
                 it("has deleteNote action") {
@@ -135,7 +134,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             context("when receiving deleteNotebook event") {
                 beforeEach {
                     event = .deleteNotebook
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has deleteNotebook action") {
@@ -151,13 +150,13 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let thirdNote = Dummy.note(withTitle: "g", tags: ["t"])
 
                 beforeEach {
-                    e = e.evaluate(event: .didLoadNotes([firstNote, secondNote, thirdNote]))
+                    e = e.evaluating(event: .didLoadNotes([firstNote, secondNote, thirdNote]))
                 }
 
                 context("when filter is not passed") {
                     beforeEach {
                         event = .filterNotes(filter: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model with empty filter") {
@@ -176,7 +175,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when filter is passed") {
                     beforeEach {
                         event = .filterNotes(filter: "aB")
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model with lowecased filter") {
@@ -196,7 +195,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             context("when receiving didStartToEditTitle event") {
                 beforeEach {
                     event = .didStartToEditTitle
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has hideBackButton effect") {
@@ -210,7 +209,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when title is passed") {
                     beforeEach {
                         event = .didFinishToEditTitle(newTitle: "new title")
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateNotebook action with passed title") {
@@ -229,7 +228,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when title is not passed") {
                     beforeEach {
                         event = .didFinishToEditTitle(newTitle: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateNotebook action with empty title") {
@@ -247,7 +246,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:CoordinatorEvent") {
+        describe("-evaluating:CoordinatorEvent") {
             var event: Notebook.CoordinatorEvent!
 
             context("when receiving updateNote event") {
@@ -261,8 +260,8 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when note with that uuid is exist in model") {
                     beforeEach {
                         let oldNote = Dummy.note(withTitle: "old title", uuid: updatedNote.uuid)
-                        e = e.evaluate(event: .didLoadNotes([anotherNote, oldNote]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotes([anotherNote, oldNote]))
+                            .evaluating(event: event)
                     }
 
                     it("updates model by replacing old note with new note") {
@@ -280,8 +279,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when note with that uuid doesnt exist in model") {
                     beforeEach {
-                        e = e.evaluate(event: .didLoadNotes([anotherNote]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotes([anotherNote]))
+                            .evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -307,8 +306,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when note with that uuid is exist in model") {
                     beforeEach {
-                        e = e.evaluate(event: .didLoadNotes([anotherNote, noteInModel]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotes([anotherNote, noteInModel]))
+                            .evaluating(event: event)
                     }
 
                     it("removes note with that uuid from model") {
@@ -332,7 +331,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when note with that uuid doesnt exist in model") {
                     beforeEach {
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -353,7 +352,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when note list is empty") {
                     beforeEach {
                         event = .didLoadNotes([])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has model with empty notebooks") {
@@ -380,8 +379,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     context("when model has filter") {
                         beforeEach {
-                            e = e.evaluate(event: .filterNotes(filter: "a"))
-                                .evaluate(event: event)
+                            e = e.evaluating(event: .filterNotes(filter: "a"))
+                                .evaluating(event: event)
                         }
 
                         it("has model with sorted by title notes") {
@@ -399,7 +398,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     context("when model doesnt have filter") {
                         beforeEach {
-                            e = e.evaluate(event: event)
+                            e = e.evaluating(event: event)
                         }
 
                         it("has model with sorted by title notes") {
@@ -423,7 +422,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when successfuly updates notebook") {
                     beforeEach {
                         event = .didUpdateNotebook(oldNotebook: oldNotebook, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt have effects") {
@@ -442,7 +441,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when fails to update notebook") {
                     beforeEach {
                         event = .didUpdateNotebook(oldNotebook: oldNotebook, error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateTitle effect") {
@@ -469,7 +468,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when successfuly deletes notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has finish action") {
@@ -482,7 +481,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when fails to delete notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has showFailure action") {
@@ -498,13 +497,13 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let addedNote = Dummy.note(withTitle: "sN", tags: [])
 
                 beforeEach {
-                    e = e.evaluate(event: .didLoadNotes([note, addedNote]))
+                    e = e.evaluating(event: .didLoadNotes([note, addedNote]))
                 }
 
                 context("when successfully adds note") {
                     beforeEach {
                         event = .didAddNote(addedNote, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has showNote action") {
@@ -527,7 +526,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when fails to add note") {
                     beforeEach {
                         event = .didAddNote(addedNote, error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("removes note from model") {
@@ -551,18 +550,17 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didDeleteNote event") {
-
                 let note = Dummy.note(withTitle: "bT", tags: ["t"])
                 let deletedNote = Dummy.note(withTitle: "aN")
 
                 beforeEach {
-                    e = e.evaluate(event: .didLoadNotes([note]))
+                    e = e.evaluating(event: .didLoadNotes([note]))
                 }
 
                 context("when successfully deletes note") {
                     beforeEach {
                         event = .didDeleteNote(deletedNote, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -583,7 +581,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 context("when fails to delete note") {
                     beforeEach {
                         event = .didDeleteNote(deletedNote, error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("adds deleted note back to model") {

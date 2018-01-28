@@ -19,7 +19,7 @@ class LibraryEvaluatorSpec: QuickSpec {
             e = Library.Evaluator()
         }
 
-        describe("-evaluate:ViewEvent") {
+        describe("-evaluating:ViewEvent") {
             var event: Library.ViewEvent!
 
             context("when receiving addNotebook event") {
@@ -31,12 +31,12 @@ class LibraryEvaluatorSpec: QuickSpec {
                     e = Library.Evaluator(notebooks: [firstNotebook, secondNotebook])
                     event = .addNotebook
                     e.generateUUID = { "newUUID" }
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("creates notebook model with unique uuid") {
-                    let firstAction = e.evaluate(event: event).actions[0]
-                    let secondAction = e.evaluate(event: event).actions[0]
+                    let firstAction = e.evaluating(event: event).actions[0]
+                    let secondAction = e.evaluating(event: event).actions[0]
                     expect(firstAction).toNot(equal(secondAction))
                 }
 
@@ -74,7 +74,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when notebook with that index exists") {
                     beforeEach {
                         event = .deleteNotebook(index: 1)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model by removing notebook meta") {
@@ -99,7 +99,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when notebook with that index doesnt exist") {
                     beforeEach {
                         event = .deleteNotebook(index: 3)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -120,7 +120,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 beforeEach {
                     event = .selectNotebook(index: 0)
                     e = Library.Evaluator(notebooks: [Core.Notebook.Meta(uuid: "uuid", name: "name")])
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has showNotebook action") {
@@ -131,7 +131,7 @@ class LibraryEvaluatorSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:CoordinatorEvent") {
+        describe("-evaluating:CoordinatorEvent") {
             var event: Library.CoordinatorEvent!
 
             context("when receiving updateNotebook event") {
@@ -145,8 +145,8 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when notebook with that uuid exist in model") {
                     beforeEach {
                         let oldNotebook = Core.Notebook.Meta(uuid: notebook.uuid, name: "old name")
-                        e = e.evaluate(event: .didLoadNotebooks([secondNotebook, oldNotebook]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotebooks([secondNotebook, oldNotebook]))
+                            .evaluating(event: event)
                     }
 
                     it("updates notebook with that uuid in model") {
@@ -167,8 +167,8 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when notebook with that uuid doesnt exist in model") {
                     beforeEach {
-                        e = e.evaluate(event: .didLoadNotebooks([secondNotebook]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotebooks([secondNotebook]))
+                            .evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -197,8 +197,8 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when notebook with that uuid exist in model") {
                     beforeEach {
-                        e = e.evaluate(event: .didLoadNotebooks([notebook, secondNotebook]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotebooks([notebook, secondNotebook]))
+                            .evaluating(event: event)
                     }
 
                     it("removes notebook from model") {
@@ -222,8 +222,8 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 context("when notebook with that uuid doesnt exist in model") {
                     beforeEach {
-                        e = e.evaluate(event: .didLoadNotebooks([secondNotebook]))
-                            .evaluate(event: event)
+                        e = e.evaluating(event: .didLoadNotebooks([secondNotebook]))
+                            .evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -246,7 +246,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when notebook list is empty") {
                     beforeEach {
                         event = .didLoadNotebooks([])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has model with empty notebooks") {
@@ -267,7 +267,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                     beforeEach {
                         event = .didLoadNotebooks([firstNotebook, secondNotebook, thirdNotebook])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has model with sorted by name notebooks") {
@@ -300,7 +300,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when successfully adds notebook") {
                     beforeEach {
                         event = .didAddNotebook(notebook, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -319,7 +319,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when failed to add notebook") {
                     beforeEach {
                         event = .didAddNotebook(notebook, error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("removes that notebook from model") {
@@ -354,7 +354,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when successfully deletes notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(notebook, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -373,7 +373,7 @@ class LibraryEvaluatorSpec: QuickSpec {
                 context("when fails to delete notebook") {
                     beforeEach {
                         event = .didDeleteNotebook(notebook, error: Dummy.anyError)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("adds that notebook back to model") {

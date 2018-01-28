@@ -19,7 +19,7 @@ class NoteEvaluatorSpec: QuickSpec {
             e = Note.Evaluator(note: Dummy.note, cells: Dummy.cells, isNew: Dummy.isNew)
         }
 
-        describe("-evaluate:ViewEvent") {
+        describe("-evaluating:ViewEvent") {
             var event: Note.ViewEvent!
 
             context("when receiving didLoad event") {
@@ -30,7 +30,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when note is new") {
                     beforeEach {
                         e = Note.Evaluator(note: Dummy.note, cells: Dummy.cells, isNew: true)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateTitle, showTags and focusOnTitle effects") {
@@ -45,7 +45,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when note is not new") {
                     beforeEach {
                         e = Note.Evaluator(note: Dummy.note, cells: Dummy.cells, isNew: false)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateTitle and showTags effects") {
@@ -67,7 +67,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when model has cell with that index") {
                     beforeEach {
                         event = .changeCell("newContent", index: 0)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has updateCell effect") {
@@ -94,7 +94,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when model doesnt hove cell with that index") {
                     beforeEach {
                         event = .changeCell("newContent", index: 2)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt have effects") {
@@ -117,7 +117,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving addCell event") {
                 beforeEach {
                     event = .addCell
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has addCell effect") {
@@ -147,7 +147,7 @@ class NoteEvaluatorSpec: QuickSpec {
                                  Dummy.cell(withContent: "anotherContent")]
                     e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
                     event = .removeCell(index: 0)
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has removeCell effect") {
@@ -172,7 +172,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving changeTitle event") {
                 beforeEach {
                     event = .changeTitle("newTitle")
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has updateTitle action") {
@@ -197,7 +197,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving delete event") {
                 beforeEach {
                     event = .delete
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has delete action") {
@@ -210,7 +210,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving addTag event") {
                 beforeEach {
                     event = .addTag("new tag")
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has addTag action") {
@@ -235,7 +235,7 @@ class NoteEvaluatorSpec: QuickSpec {
             context("when receiving removeTag event") {
                 beforeEach {
                     event = .removeTag("tag")
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has removeTag action") {
@@ -258,7 +258,7 @@ class NoteEvaluatorSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:CoordinatorEvent") {
+        describe("-evaluating:CoordinatorEvent") {
             var event: Note.CoordinatorEvent!
 
             context("when receiving didLoadContent event") {
@@ -266,7 +266,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 beforeEach {
                     event = .didLoadContent(content)
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("updates model with new cells") {
@@ -286,7 +286,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when successfuly deletes note") {
                     beforeEach {
                         event = .didDeleteNote(error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has finish action") {
@@ -299,7 +299,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when fails to delete note") {
                     beforeEach {
                         event = .didDeleteNote(error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has showFailure action") {
@@ -316,7 +316,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     beforeEach {
                         event = .didUpdateTitle(oldTitle: "old title", note: note, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -337,7 +337,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when fails to update title") {
                     beforeEach {
                         event = .didUpdateTitle(oldTitle: "old title", note: Dummy.note(), error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model with old title") {
@@ -366,7 +366,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when successfully updates cells") {
                     beforeEach {
                         event = .didUpdateCells(oldCells: oldCells, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -385,7 +385,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when fails to update cells") {
                     beforeEach {
                         event = .didUpdateCells(oldCells: oldCells, error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model with old content") {
@@ -414,7 +414,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     beforeEach {
                         event = .didAddTag("tag", note: note, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -435,7 +435,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when fails to add tag") {
                     beforeEach {
                         event = .didAddTag("tag", note: Dummy.note(), error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("removes tag from model") {
@@ -464,7 +464,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     beforeEach {
                         event = .didRemoveTag("removed tag", note: note, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -485,7 +485,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 context("when fails to remove tag") {
                     beforeEach {
                         event = .didRemoveTag("removed tag", note: Dummy.note(), error: Dummy.error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("adds tag back to model") {

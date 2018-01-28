@@ -96,15 +96,15 @@ extension Note {
         // MARK: Utility
 
         private func dispatch(event: ViewEvent) {
-            event |> evaluator.evaluate |> updateEvaluator
+            event |> evaluator.evaluating |> updateEvaluator
         }
 
         private func dispatch(event: CoordinatorEvent) {
-            event |> evaluator.evaluate |> updateEvaluator
+            event |> evaluator.evaluating |> updateEvaluator
         }
 
         private func dispatchToNote(event: Core.Note.Event) {
-            event |> noteEvaluator.evaluate |> updateNote
+            event |> noteEvaluator.evaluating |> updateNote
         }
 
         private func updateEvaluator(evaluator: Evaluator) {

@@ -96,15 +96,15 @@ extension Library {
         // MARK: Utility
 
         private func dispatch(event: ViewEvent) {
-            updateEvaluator <| evaluator.evaluate(event: event)
+            updateEvaluator <| evaluator.evaluating(event: event)
         }
 
         private func dispatch(event: CoordinatorEvent) {
-            updateEvaluator <| evaluator.evaluate(event: event)
+            updateEvaluator <| evaluator.evaluating(event: event)
         }
 
         private func dispatchToLibrary(event: Core.Library.Event) {
-            updateLibrary <| libraryEvaluator.evaluate(event: event)
+            updateLibrary <| libraryEvaluator.evaluating(event: event)
         }
 
         private func updateEvaluator(evaluator: Evaluator) {

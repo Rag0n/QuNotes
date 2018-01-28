@@ -31,7 +31,7 @@ class LibrarySpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:") {
+        describe("-evaluating:") {
             var event: Library.Event!
 
             context("when receiving addNotebook event") {
@@ -40,7 +40,7 @@ class LibrarySpec: QuickSpec {
 
                     beforeEach {
                         event = .addNotebook(newNotebook)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has createNotebook effect with notebook & meta url") {
@@ -59,7 +59,7 @@ class LibrarySpec: QuickSpec {
                 context("when notebook with that uuid is already added") {
                     beforeEach {
                         event = .addNotebook(notebook)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt have effects") {
@@ -76,7 +76,7 @@ class LibrarySpec: QuickSpec {
                 context("when notebook with that uuid was added") {
                     beforeEach {
                         event = .removeNotebook(notebook)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("removes notebook from model") {
@@ -96,7 +96,7 @@ class LibrarySpec: QuickSpec {
                     beforeEach {
                         let notAddedNotebook = Dummy.notebook()
                         event = .removeNotebook(notAddedNotebook)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -112,7 +112,7 @@ class LibrarySpec: QuickSpec {
             context("when receiving loadNotebooks event") {
                 beforeEach {
                     event = .loadNotebooks
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("doesnt update model") {
@@ -131,7 +131,7 @@ class LibrarySpec: QuickSpec {
                     beforeEach {
                         let notebook = Dummy.notebook()
                         event = .didAddNotebook(notebook, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -147,7 +147,7 @@ class LibrarySpec: QuickSpec {
                     context("when notebook is in model") {
                         beforeEach {
                             event = .didAddNotebook(notebook, error: error)
-                            e = e.evaluate(event: event)
+                            e = e.evaluating(event: event)
                         }
 
                         it("removes notebook from model") {
@@ -161,7 +161,7 @@ class LibrarySpec: QuickSpec {
                         beforeEach {
                             let anotherNotebook = Dummy.notebook()
                             event = .didAddNotebook(anotherNotebook, error: error)
-                            e = e.evaluate(event: event)
+                            e = e.evaluating(event: event)
                         }
 
                         it("does nothing") {
@@ -178,7 +178,7 @@ class LibrarySpec: QuickSpec {
                 context("when successfully removes notebook") {
                     beforeEach {
                         event = .didRemoveNotebook(removedNotebook, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -193,7 +193,7 @@ class LibrarySpec: QuickSpec {
                 context("when fails to remove notebook") {
                     beforeEach {
                         event = .didRemoveNotebook(removedNotebook, error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("adds notebook back to model") {
@@ -213,7 +213,7 @@ class LibrarySpec: QuickSpec {
                             URL(string: "/secondNotebookURL.qvnotebook")!,
                         ]
                         event = .didReadBaseDirectory(urls: Result(value: urls))
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has readNotebooks effect with notebook urls & notebook meta type") {
@@ -227,7 +227,7 @@ class LibrarySpec: QuickSpec {
                 context("when fails to read directories") {
                     beforeEach {
                         event = .didReadBaseDirectory(urls: Result(error: error))
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has handleError effect") {
@@ -242,7 +242,7 @@ class LibrarySpec: QuickSpec {
                 context("when notebooks list is empty") {
                     beforeEach {
                         event = .didReadNotebooks([])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has didLoadNotebooks effect with empty list") {
@@ -263,7 +263,7 @@ class LibrarySpec: QuickSpec {
 
                     beforeEach {
                         event = .didReadNotebooks([Result(value: notebook)])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has didLoadNotebooks effect with 1 notebook") {
@@ -282,7 +282,7 @@ class LibrarySpec: QuickSpec {
                 context("when notebook list has result with error") {
                     beforeEach {
                         event = .didReadNotebooks([Result(error: AnyError(error))])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has handleError effect with message from error") {
@@ -299,7 +299,7 @@ class LibrarySpec: QuickSpec {
                         event = .didReadNotebooks([Result(error: AnyError(error)),
                                                    Result(value: notebook),
                                                    Result(error: AnyError(secondError))])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has handleError effect with combined message from errors") {

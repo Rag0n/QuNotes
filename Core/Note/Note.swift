@@ -96,7 +96,7 @@ public enum Note {
             effects = []
         }
 
-        public func evaluate(event: Event) -> Evaluator {
+        public func evaluating(event: Event) -> Evaluator {
             var effects: [Effect] = []
             var newModel = model
 

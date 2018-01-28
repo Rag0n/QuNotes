@@ -25,7 +25,7 @@ extension Note {
             self.model = model
         }
 
-        func evaluate(event: ViewEvent) -> Evaluator {
+        func evaluating(event: ViewEvent) -> Evaluator {
             var actions: [Action] = []
             var effects: [ViewEffect] = []
             var newModel = model
@@ -76,7 +76,7 @@ extension Note {
             return Evaluator(effects: effects, actions: actions, model: newModel)
         }
 
-        func evaluate(event: CoordinatorEvent) -> Evaluator {
+        func evaluating(event: CoordinatorEvent) -> Evaluator {
             var actions: [Action] = []
             var effects: [ViewEffect] = []
             var newModel = model

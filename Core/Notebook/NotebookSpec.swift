@@ -32,13 +32,13 @@ class NotebookSpec: QuickSpec {
             }
         }
 
-        describe("-evaluate:") {
+        describe("-evaluating:") {
             var event: Notebook.Event!
 
             context("when receiving loadNotes event") {
                 beforeEach {
                     event = .loadNotes
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("doesnt update model") {
@@ -55,7 +55,7 @@ class NotebookSpec: QuickSpec {
             context("when receiving changeName event") {
                 beforeEach {
                     event = .changeName("new name")
-                    e = e.evaluate(event: event)
+                    e = e.evaluating(event: event)
                 }
 
                 it("has updateFile effect with notebook & notebook URL") {
@@ -79,7 +79,7 @@ class NotebookSpec: QuickSpec {
 
                     beforeEach {
                         event = .addNote(newNote)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has createNote effects") {
@@ -101,7 +101,7 @@ class NotebookSpec: QuickSpec {
                 context("when note with that uuid is already added") {
                     beforeEach {
                         event = .addNote(note)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt have effects") {
@@ -118,7 +118,7 @@ class NotebookSpec: QuickSpec {
                 context("when passed note is exist") {
                     beforeEach {
                         event = .removeNote(note)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has deleteFile effect with URL of deleted note") {
@@ -139,7 +139,7 @@ class NotebookSpec: QuickSpec {
 
                     beforeEach {
                         event = .removeNote(notAddedNote)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt have effects") {
@@ -161,7 +161,7 @@ class NotebookSpec: QuickSpec {
                             URL(string: "/uuid/secondNote.qvnote")!,
                         ]
                         event = .didReadDirectory(urls: Result(value: urls))
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has readNotes effect with notes urls") {
@@ -175,7 +175,7 @@ class NotebookSpec: QuickSpec {
                 context("when fails to read directories") {
                     beforeEach {
                         event = .didReadDirectory(urls: Result(error: error))
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has handleError effect") {
@@ -190,7 +190,7 @@ class NotebookSpec: QuickSpec {
                 context("when note list is empty") {
                     beforeEach {
                         event = .didReadNotes([])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has didLoadNotes effect with empty list") {
@@ -211,7 +211,7 @@ class NotebookSpec: QuickSpec {
 
                     beforeEach {
                         event = .didReadNotes([Result(value: note)])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has didLoadNotes effect with 1 note") {
@@ -230,7 +230,7 @@ class NotebookSpec: QuickSpec {
                 context("when note list has result with error") {
                     beforeEach {
                         event = .didReadNotes([Result(error: AnyError(error))])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has handleError effect with message from error") {
@@ -247,7 +247,7 @@ class NotebookSpec: QuickSpec {
                         event = .didReadNotes([Result(error: AnyError(error)),
                                                Result(value: note),
                                                Result(error: AnyError(secondError))])
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("has handleError effect with combined message from errors") {
@@ -263,7 +263,7 @@ class NotebookSpec: QuickSpec {
                     beforeEach {
                         let note = Dummy.note()
                         event = .didAddNote(note, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -274,7 +274,7 @@ class NotebookSpec: QuickSpec {
                 context("when fails to add note") {
                     beforeEach {
                         event = .didAddNote(note, error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("removes note from model") {
@@ -295,7 +295,7 @@ class NotebookSpec: QuickSpec {
                 context("when successfully deletes note") {
                     beforeEach {
                         event = .didDeleteNote(note, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -308,7 +308,7 @@ class NotebookSpec: QuickSpec {
 
                     beforeEach {
                         event = .didDeleteNote(deletedNote, error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("adds note back to model") {
@@ -325,7 +325,7 @@ class NotebookSpec: QuickSpec {
                 context("when successfilly updated notebook") {
                     beforeEach {
                         event = .didUpdateNotebook(oldNotebook: oldNotebook, error: nil)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("doesnt update model") {
@@ -336,7 +336,7 @@ class NotebookSpec: QuickSpec {
                 context("when fails to update notebook") {
                     beforeEach {
                         event = .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
-                        e = e.evaluate(event: event)
+                        e = e.evaluating(event: event)
                     }
 
                     it("updates model by setting the old name") {
