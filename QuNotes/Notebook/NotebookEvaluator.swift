@@ -39,8 +39,7 @@ extension Notebook {
             case .didLoad:
                 effects = [.updateTitle(model.notebook.name)]
             case .addNote:
-                let note = Core.Note.Meta(uuid: generateUUID(), title: "", tags: [],
-                                     updated_at: currentTimestamp(), created_at: currentTimestamp())
+                let note = newNote()
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
                 let indexOfNote = newModel.notes.index(of: note)!
@@ -67,7 +66,7 @@ extension Notebook {
                 actions = [.updateNotebook(title: newTitle ?? "")]
             }
 
-            return Evaluator(effects: effects, actions: actions, model: newModel	)
+            return Evaluator(effects: effects, actions: actions, model: newModel)
         }
 
         func evaluate(event: CoordinatorEvent) -> Evaluator {
@@ -144,5 +143,12 @@ private extension Notebook.Model {
 
     func index(ofNote note: Core.Note.Meta) -> Array<Core.Note.Meta>.Index? {
         return notes.index { $0.uuid == note.uuid }
+    }
+}
+
+private extension Notebook.Evaluator {
+    func newNote() -> Core.Note.Meta {
+        let time = currentTimestamp()
+        return Core.Note.Meta(uuid: generateUUID(), title: "", tags: [], updated_at: time, created_at: time)
     }
 }
