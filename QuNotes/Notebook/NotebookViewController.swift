@@ -100,8 +100,8 @@ final public class NotebookViewController: UIViewController {
     private let addButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("notebook_add_note_button".localized, for: .normal)
-        b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        b.titleLabel?.adjustsFontForContentSizeCategory = true
+        b.titleLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
+        b.titleLabel!.adjustsFontForContentSizeCategory = true
         b.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
         return b
     }()

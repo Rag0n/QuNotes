@@ -81,10 +81,8 @@ public final class NoteViewController: UIViewController {
 
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        print("safe frame \(view.safeAreaLayoutGuide.layoutFrame)")
         container.frame = view.safeAreaLayoutGuide.layoutFrame
         container.flex.layout()
-        print("container: \(container.frame)")
     }
 
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
