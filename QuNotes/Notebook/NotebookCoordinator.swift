@@ -52,6 +52,8 @@ extension Notebook {
                 navigationController.pushCoordinator(coordinator: noteCoordinator, animated: true) { [unowned self] in
                     self.handleNoteCoordinatorOutput(output: noteCoordinator.output)
                 }
+            case let .didUpdateNotebook(notebook):
+                output = .updateNotebook(notebook)
             }
         }
 
@@ -63,7 +65,6 @@ extension Notebook {
                 dispatchToNotebook <| .didAddNote(note, error: metaError ?? contentError)
                 dispatch <| .didAddNote(note, error:  metaError ?? contentError)
             case let .updateNotebook(notebook, url, oldNotebook):
-                output = .updateNotebook(notebook)
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
                 dispatchToNotebook <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
                 dispatch <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)

@@ -208,6 +208,8 @@ public func == (lhs: Notebook.Action, rhs: Notebook.Action) -> Bool {
         if lhs.0 != rhs.0 { return false }
         if lhs.reason != rhs.reason { return false }
         return true
+    case (.didUpdateNotebook(let lhs), .didUpdateNotebook(let rhs)):
+        return lhs == rhs
     default: return false
     }
 }

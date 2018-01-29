@@ -24,6 +24,7 @@ public enum Notebook {
         case updateNotebook(title: String)
         case finish
         case showFailure(Failure, reason: String)
+        case didUpdateNotebook(Core.Notebook.Meta)
     }
 
     public enum ViewEffect: AutoEquatable {
