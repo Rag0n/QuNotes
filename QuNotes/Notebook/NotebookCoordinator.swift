@@ -67,7 +67,7 @@ extension Notebook {
             case let .updateNotebook(notebook, url, oldNotebook):
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
                 dispatchToNotebook <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
-                dispatch <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
+                dispatch <| .didUpdateNotebook(oldNotebook: oldNotebook, notebook: notebook, error: error)
             case let .deleteNote(note, url):
                 let error = fileExecuter.deleteFile(at: url)
                 dispatchToNotebook <| .didDeleteNote(note, error: error)

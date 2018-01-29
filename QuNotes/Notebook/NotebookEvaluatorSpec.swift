@@ -420,8 +420,10 @@ class NotebookEvaluatorSpec: QuickSpec {
                 let oldNotebook = Core.Notebook.Meta(uuid: notebook.uuid, name: "old name")
 
                 context("when successfuly updates notebook") {
+                    let notebook = Dummy.notebook()
+
                     beforeEach {
-                        event = .didUpdateNotebook(oldNotebook: oldNotebook, error: nil)
+                        event = .didUpdateNotebook(oldNotebook: oldNotebook, notebook: notebook, error: nil)
                         e = e.evaluating(event: event)
                     }
 
@@ -429,8 +431,10 @@ class NotebookEvaluatorSpec: QuickSpec {
                         expect(e.effects).to(beEmpty())
                     }
 
-                    it("doesnt have actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("has didUpdateNotebook action") {
+                        expect(e.actions).to(equalDiff([
+                            .didUpdateNotebook(notebook)
+                        ]))
                     }
 
                     it("doesnt update model") {
@@ -440,7 +444,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 context("when fails to update notebook") {
                     beforeEach {
-                        event = .didUpdateNotebook(oldNotebook: oldNotebook, error: Dummy.error)
+                        let notebook = Dummy.notebook()
+                        event = .didUpdateNotebook(oldNotebook: oldNotebook, notebook: notebook, error: Dummy.error)
                         e = e.evaluating(event: event)
                     }
 
@@ -621,5 +626,10 @@ private enum Dummy {
         return Notebook.Model(notebook: notebook ?? model.notebook,
                               notes: notes ?? model.notes,
                               filter: filter ?? model.filter)
+    }
+
+    static func notebook(withUUUID uuid: String = UUID.init().uuidString,
+                         title: String = "title") -> Core.Notebook.Meta {
+        return Core.Notebook.Meta(uuid: uuid, name: title)
     }
 }

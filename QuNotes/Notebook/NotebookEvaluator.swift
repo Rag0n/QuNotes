@@ -86,10 +86,13 @@ extension Notebook {
                 newModel = model |> Model.lens.notes .~ model.notes.removing(at: index)
                 actions = [.deleteNote(noteToRemove)]
                 effects = [.deleteNote(index: index, notes: titles(from: newModel))]
-            case let .didUpdateNotebook(notebook, error):
-                guard let error = error else { break }
-                newModel = model |> Model.lens.notebook .~ notebook
-                effects = [.updateTitle(notebook.name)]
+            case let .didUpdateNotebook(oldNotebook, notebook, error):
+                guard let error = error else {
+                    actions = [.didUpdateNotebook(notebook)]
+                    break
+                }
+                newModel = model |> Model.lens.notebook .~ oldNotebook
+                effects = [.updateTitle(oldNotebook.name)]
                 actions = [.showFailure(.updateNotebook, reason: error.localizedDescription)]
             case let .didDeleteNotebook(error):
                 if let error = error {
