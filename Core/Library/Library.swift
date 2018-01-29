@@ -34,7 +34,7 @@ public enum Library {
         case removeNotebook(Notebook.Meta)
         case didAddNotebook(Notebook.Meta, error: Error?)
         case didRemoveNotebook(Notebook.Meta, error: Error?)
-        case didReadBaseDirectory(urls: Result<[URL], NSError>)
+        case didReadBaseDirectory(urls: Result<[URL], AnyError>)
         case didReadNotebooks([Result<Notebook.Meta, AnyError>])
     }
 

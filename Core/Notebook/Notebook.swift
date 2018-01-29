@@ -48,7 +48,7 @@ public enum Notebook {
         case changeName(String)
         case addNote(Note.Meta)
         case removeNote(Note.Meta)
-        case didReadDirectory(urls: Result<[URL], NSError>)
+        case didReadDirectory(urls: Result<[URL], AnyError>)
         case didReadNotes([Result<Note.Meta, AnyError>])
         case didAddNote(Note.Meta, error: Error?)
         case didDeleteNote(Note.Meta, error: Error?)

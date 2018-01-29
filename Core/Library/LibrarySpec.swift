@@ -15,6 +15,7 @@ class LibrarySpec: QuickSpec {
         let notebook = Dummy.notebook(uuid: "notebookUUID")
         let model = Library.Model(notebooks: [notebook])
         let error = Dummy.error(withMessage: "message")
+        let anyError = AnyError(error)
         var e: Library.Evaluator!
 
         beforeEach {
@@ -226,7 +227,7 @@ class LibrarySpec: QuickSpec {
 
                 context("when fails to read directories") {
                     beforeEach {
-                        event = .didReadBaseDirectory(urls: Result(error: error))
+                        event = .didReadBaseDirectory(urls: Result(error: anyError))
                         e = e.evaluating(event: event)
                     }
 

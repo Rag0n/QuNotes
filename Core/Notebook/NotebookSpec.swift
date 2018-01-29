@@ -13,6 +13,7 @@ import Result
 class NotebookSpec: QuickSpec {
     override func spec() {
         let error = Dummy.error(withMessage: "message")
+        let anyError = AnyError(error)
         let note = Dummy.note(uuid: "noteUUID")
         let meta = Notebook.Meta(uuid: "uuid", name: "name")
         let model = Notebook.Model(meta: meta, notes: [note])
@@ -174,7 +175,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when fails to read directories") {
                     beforeEach {
-                        event = .didReadDirectory(urls: Result(error: error))
+                        event = .didReadDirectory(urls: Result(error: anyError))
                         e = e.evaluating(event: event)
                     }
 

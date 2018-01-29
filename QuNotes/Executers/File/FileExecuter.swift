@@ -28,11 +28,11 @@ public struct FileExecuter: FileExecuterType {
         return url |> removeItem
     }
 
-    public func contentOfFolder(at url: DynamicBaseURL) -> Result<[URL], NSError> {
+    public func contentOfFolder(at url: DynamicBaseURL) -> Result<[URL], AnyError> {
         return Result(try contentOfFolder(at: url.documentsBase))
     }
 
-    public func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
+    public func contentOfDocumentsFolder() -> Result<[URL], AnyError>  {
         return Result(try contentOfFolder(at: URL.documentsURL()))
     }
 

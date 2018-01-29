@@ -24,24 +24,27 @@ struct FailingFileExecuter: FileExecuterType {
         return error
     }
 
-    func contentOfFolder(at url: DynamicBaseURL) -> Result<[URL], NSError> {
-        return Result(error: error)
+    func contentOfFolder(at url: DynamicBaseURL) -> Result<[URL], AnyError> {
+        return Result(error: anyError)
     }
 
-    func contentOfDocumentsFolder() -> Result<[URL], NSError>  {
-        return Result(error: error)
+    func contentOfDocumentsFolder() -> Result<[URL], AnyError>  {
+        return Result(error: anyError)
     }
 
     func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
-        return Result(error: AnyError(error))
+        return Result(error: anyError)
     }
 
     func readFile<T: Decodable>(at url: DynamicBaseURL, contentType: T.Type) -> Result<T, AnyError> {
-        return Result(error: AnyError(error))
+        return Result(error: anyError)
     }
 
     // MARL: - Private
 
-    let error = NSError(domain: "Error domain", code: 123,
-                        userInfo: [NSLocalizedDescriptionKey: "message"])
+    private let error = NSError(domain: "Error domain", code: 123,
+                                userInfo: [NSLocalizedDescriptionKey: "message"])
+    private var anyError: AnyError {
+        return AnyError(error)
+    }
 }
