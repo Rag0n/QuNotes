@@ -13,7 +13,6 @@ import Result
 class NotebookSpec: QuickSpec {
     override func spec() {
         let error = Dummy.error(withMessage: "message")
-        let anyError = AnyError(error)
         let note = Dummy.note(uuid: "noteUUID")
         let meta = Notebook.Meta(uuid: "uuid", name: "name")
         let model = Notebook.Model(meta: meta, notes: [note])
@@ -175,7 +174,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when fails to read directories") {
                     beforeEach {
-                        event = .didReadDirectory(urls: Result(error: anyError))
+                        event = .didReadDirectory(urls: Result(error: error))
                         e = e.evaluating(event: event)
                     }
 
@@ -230,7 +229,7 @@ class NotebookSpec: QuickSpec {
 
                 context("when note list has result with error") {
                     beforeEach {
-                        event = .didReadNotes([Result(error: AnyError(error))])
+                        event = .didReadNotes([Result(error: error)])
                         e = e.evaluating(event: event)
                     }
 
@@ -245,9 +244,9 @@ class NotebookSpec: QuickSpec {
                     beforeEach {
                         let note = Dummy.note()
                         let secondError = Dummy.error(withMessage: "secondMessage")
-                        event = .didReadNotes([Result(error: AnyError(error)),
+                        event = .didReadNotes([Result(error: error),
                                                Result(value: note),
-                                               Result(error: AnyError(secondError))])
+                                               Result(error: secondError)])
                         e = e.evaluating(event: event)
                     }
 
@@ -356,8 +355,9 @@ private enum Dummy {
         return Note.Meta(uuid: uuid, title: uuid + "title", tags: [uuid + "tag"], updated_at: 7, created_at: 7)
     }
 
-    static func error(withMessage message: String) -> NSError {
-        return NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+    static func error(withMessage message: String) -> AnyError {
+        let underlyingError = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: message])
+        return AnyError(underlyingError)
     }
 
     static func url(_ string: String) -> DynamicBaseURL {

@@ -12,7 +12,7 @@ import Result
 
 class NoteExperimantalSpec: QuickSpec {
     override func spec() {
-        let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"])
+        let error = AnyError(NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"]))
         let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
         let content = Note.Content(title: "title", cells: [Note.Cell(type: .text, data: "content")])
         let model = Note.Model(meta: meta, content: content)
@@ -87,7 +87,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                 context("when fails to read content") {
                     beforeEach {
-                        event = .didReadContent(Result(error: AnyError(error)))
+                        event = .didReadContent(Result(error: error))
                         e = e.evaluating(event: event)
                     }
 
