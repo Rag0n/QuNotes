@@ -17,7 +17,12 @@ public struct FileExecuter: FileExecuterType {
     }
 
     public func createFile<T: Encodable>(atURL url: DynamicBaseURL, content: T) -> Error? {
-        return url.documentsBase |> (content |> dataFromContent |> writeData)
+        do {
+            try writeContentToFile(at: url.documentsBase, content: content)
+            return nil
+        } catch {
+            return error
+        }
     }
 
     public func deleteDirectory(at url: DynamicBaseURL) -> Error? {
@@ -36,18 +41,12 @@ public struct FileExecuter: FileExecuterType {
         return Result(try contentOfFolder(at: URL.documentsURL()))
     }
 
-    public func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
-        do {
-            let data = try Data(contentsOf: url)
-            let content = try decoder.decode(contentType, from: data)
-            return Result.success(content)
-        } catch {
-            return Result.failure(AnyError(error))
-        }
-    }
-
     public func readFile<T: Decodable>(at url: DynamicBaseURL, contentType: T.Type) -> Result<T, AnyError> {
         return readFile(at: url.documentsBase, contentType: contentType)
+    }
+
+    public func readFile<T: Decodable>(at url: URL, contentType: T.Type) -> Result<T, AnyError> {
+        return Result(try readAndDecodeFile(at: url, contentType: contentType))
     }
 
     // MARK: - Private
@@ -55,21 +54,10 @@ public struct FileExecuter: FileExecuterType {
     private var encoder = JSONEncoder()
     private var decoder = JSONDecoder()
 
-    private func dataFromContent<T: Encodable>(_ content: T) -> Result<Data, AnyError> {
-        return Result(try encoder.encode(content))
-    }
-
-    private func writeData(data result: Result<Data, AnyError>) -> (URL) -> Error? {
-        return { url in
-            guard let data = result.value else { return result.error?.error }
-            do {
-                try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
-                try data.write(to: url)
-                return nil
-            } catch {
-                return error
-            }
-        }
+    private func writeContentToFile<T: Encodable>(at url: URL, content: T) throws {
+        let data = try encoder.encode(content)
+        try FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true, attributes: nil)
+        try data.write(to: url)
     }
 
     private func removeItem(at url: DynamicBaseURL) -> Error? {
@@ -94,6 +82,11 @@ public struct FileExecuter: FileExecuterType {
         return try FileManager.default.contentsOfDirectory(at: url,
                                                            includingPropertiesForKeys: nil,
                                                            options: [])
+    }
+
+    private func readAndDecodeFile<T: Decodable>(at url: URL, contentType: T.Type) throws -> T {
+        let data = try Data(contentsOf: url)
+        return try decoder.decode(contentType, from: data)
     }
 }
 
