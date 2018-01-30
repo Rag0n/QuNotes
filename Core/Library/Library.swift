@@ -49,25 +49,25 @@ public enum Library {
 
         public func evaluating(event: Event) -> Evaluator {
             var effects: [Effect] = []
-            var modelUpdate = { (oldModel: Library.Model) in return self.model }
+            var newModel = model
 
             switch (event) {
             case .loadNotebooks:
                 effects = [.readBaseDirectory]
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
-                modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.appending(notebook)
                 effects = [.createNotebook(notebook, url: notebook.metaURL())]
             case let .removeNotebook(notebookMeta):
                 guard let notebook = model.notebooks.first(where: { $0.uuid == notebookMeta.uuid }) else { break }
-                modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
                 effects = [.deleteNotebook(notebook, url: notebook.notebookURL())]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
-                modelUpdate = Model.lens.notebooks .~ model.notebooks.removing(notebook)
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
             case let .didRemoveNotebook(notebook, error):
                 guard error != nil else { break }
-                modelUpdate = Model.lens.notebooks .~ model.notebooks.appending(notebook)
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.appending(notebook)
             case let .didReadBaseDirectory(result):
                 guard let urls = result.value else {
                     effects = [.handleError(title: "Failed to load notebooks",
@@ -79,19 +79,16 @@ public enum Library {
                     .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
                 effects = [.readNotebooks(urls: metaURLs)]
             case let .didReadNotebooks(results):
-                let errors = results.filter { $0.error != nil }
-                if errors.count > 0 {
-                    var errorMessage = errors.reduce("") { $0 + $1.error!.localizedDescription + "\n" }
-                    errorMessage = String(errorMessage.dropLast(1))
-                    effects = [.handleError(title: "Unable to load notebooks", message: errorMessage)]
+                guard noErrorsInResults(results) else {
+                    effects = [.handleError(title: "Unable to load notebooks",
+                                            message: results |> reduceResultsToErrorSubString >>> String.init)]
                     break
                 }
-                let notebooks = results.map { $0.value! }
-                modelUpdate = Model.lens.notebooks .~ notebooks
-                effects = [.didLoadNotebooks(notebooks)]
+                newModel = model |> Model.lens.notebooks .~ results.map { $0.value! }
+                effects = [.didLoadNotebooks(newModel.notebooks)]
             }
 
-            return Evaluator(effects: effects, model: modelUpdate(model))
+            return Evaluator(effects: effects, model: newModel)
         }
 
         private init(effects: [Effect], model: Model) {
@@ -107,4 +104,19 @@ private extension Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
         return notebooks.index { $0.uuid == notebookUUID } != nil
     }
+}
+
+private func noErrorsInResults(_ results: [Result<Notebook.Meta, AnyError>]) -> Bool {
+    return results.first(where: resultIsError) == nil
+}
+
+private func reduceResultsToErrorSubString(_ error: [Result<Notebook.Meta, AnyError>]) -> String.SubSequence {
+    return error
+        .filter(resultIsError)
+        .reduce("") { $0 + $1.error!.localizedDescription + "\n" }
+        .dropLast()
+}
+
+private func resultIsError(_ result: Result<Notebook.Meta, AnyError>) -> Bool {
+    return result.error != nil
 }
