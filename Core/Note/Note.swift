@@ -103,8 +103,7 @@ public enum Note {
             switch event {
             case .loadContent:
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let contentURL = model.notebook.noteContentURL(for: model.meta)
-                effects = [.readContent(url: contentURL)]
+                effects = [.readContent(url: model.notebook.noteContentURL(for: model.meta))]
             case let .didReadContent(result):
                 guard case let .success(content) = result else {
                     effects = [.handleError(title: "Unable to load content",
@@ -129,22 +128,23 @@ public enum Note {
                 newModel = model |> Model.lens.content .~ newContent
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let url = model.notebook.noteContentURL(for: newModel.meta)
-                effects = [.updateContent(content: newContent, url: url, oldContent: model.content)]
+                effects = [.updateContent(content: newContent,
+                                          url: model.notebook.noteContentURL(for: newModel.meta),
+                                          oldContent: model.content)]
             case let .addTag(tag):
                 guard !model.hasTag(tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.addTag(tag, note: newModel.meta, url: url)]
+                effects = [.addTag(tag, note: newModel.meta,
+                                   url: model.notebook.noteMetaURL(for: newModel.meta))]
             case let .removeTag(tag):
                 guard let indexOfTag = model.meta.tags.index(of: tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(at: indexOfTag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let url = model.notebook.noteMetaURL(for: newModel.meta)
-                effects = [.removeTag(tag, note: newModel.meta, url: url)]
+                effects = [.removeTag(tag, note: newModel.meta,
+                                      url: model.notebook.noteMetaURL(for: newModel.meta))]
             case let .didChangeTitle(oldTitle, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.title .~ oldTitle
