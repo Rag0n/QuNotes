@@ -73,21 +73,18 @@ public enum Notebook {
                 effects = [.readDirectory(atURL: model.meta.notebookURL())]
             case let .changeName(newName):
                 newModel = model |> Model.lens.meta.name .~ newName
-                let url = newModel.meta.metaURL()
-                effects = [.updateNotebook(newModel.meta, url: url, oldNotebook: model.meta)]
+                effects = [.updateNotebook(newModel.meta, url: newModel.meta.metaURL(), oldNotebook: model.meta)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
-                let url = newModel.meta.noteMetaURL(for: noteToAdd)
-                let content = Note.Content(title: noteToAdd.title, cells: [])
-                let contentURL = newModel.meta.noteContentURL(for: noteToAdd)
-                effects = [.createNote(noteToAdd, url: url, content: content, contentURL: contentURL)]
+                effects = [.createNote(noteToAdd,
+                                       url: newModel.meta.noteMetaURL(for: noteToAdd),
+                                       content: Note.Content(title: noteToAdd.title, cells: []),
+                                       contentURL: newModel.meta.noteContentURL(for: noteToAdd))]
             case let .removeNote(noteToRemove):
                 guard let indexOfRemovedNote = model.notes.index(of: noteToRemove) else { break }
-                let notes = model.notes.removing(at: indexOfRemovedNote)
-                newModel = model |> Model.lens.notes .~ notes
-                let url = newModel.meta.noteURL(for: noteToRemove)
-                effects = [.deleteNote(noteToRemove, url: url)]
+                newModel = model |> Model.lens.notes .~ model.notes.removing(at: indexOfRemovedNote)
+                effects = [.deleteNote(noteToRemove, url: newModel.meta.noteURL(for: noteToRemove))]
             case let .didReadDirectory(result):
                 guard let urls = result.value else {
                     effects = [.handleError(title: "Failed to load notes",
@@ -95,20 +92,17 @@ public enum Notebook {
                     break
                 }
                 let notesURL = urls
-                    .filter { $0.pathExtension == "qvnote" }
-                    .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
+                    .filter { $0.pathExtension == Meta.Extension.note }
+                    .map { $0.appendingPathComponent(Meta.Component.meta).appendingPathExtension(Meta.Extension.json) }
                 effects = [.readNotes(urls: notesURL)]
-            case let .didReadNotes(result):
-                let errors = result.filter { $0.error != nil }
-                guard errors.count == 0 else {
-                    var errorMessage = errors.reduce("") { $0 + $1.error!.localizedDescription + "\n" }
-                    errorMessage = String(errorMessage.dropLast(1))
-                    effects = [.handleError(title: "Unable to load notes", message: errorMessage)]
+            case let .didReadNotes(results):
+                guard noErrorsInResults(results) else {
+                    effects = [.handleError(title: "Unable to load notes",
+                                            message: results |> reduceResultsToErrorSubString >>> String.init)]
                     break
                 }
-                let notes = result.map { $0.value! }
-                newModel = model |> Model.lens.notes .~ notes
-                effects = [.didLoadNotes(notes)]
+                newModel = model |> Model.lens.notes .~ results.map { $0.value! }
+                effects = [.didLoadNotes(newModel.notes)]
             case let .didAddNote(note, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
@@ -185,7 +179,7 @@ private extension Notebook.Model {
     }
 }
 
-private extension Notebook.Meta {
+internal extension Notebook.Meta {
     enum Extension {
         static let json = "json"
         static let note = "qvnote"

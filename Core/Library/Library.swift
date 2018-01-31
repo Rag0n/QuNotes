@@ -75,8 +75,8 @@ public enum Library {
                     break
                 }
                 let metaURLs = urls
-                    .filter { $0.pathExtension == "qvnotebook" }
-                    .map { $0.appendingPathComponent("meta").appendingPathExtension("json") }
+                    .filter { $0.pathExtension == Notebook.Meta.Extension.notebook }
+                    .map { $0.appendingPathComponent(Notebook.Meta.Component.meta).appendingPathExtension(Notebook.Meta.Extension.json) }
                 effects = [.readNotebooks(urls: metaURLs)]
             case let .didReadNotebooks(results):
                 guard noErrorsInResults(results) else {
@@ -106,17 +106,17 @@ private extension Library.Model {
     }
 }
 
-private func noErrorsInResults(_ results: [Result<Notebook.Meta, AnyError>]) -> Bool {
+internal func noErrorsInResults<T>(_ results: [Result<T, AnyError>]) -> Bool {
     return results.first(where: resultIsError) == nil
 }
 
-private func reduceResultsToErrorSubString(_ error: [Result<Notebook.Meta, AnyError>]) -> String.SubSequence {
+internal func reduceResultsToErrorSubString<T>(_ error: [Result<T, AnyError>]) -> String.SubSequence {
     return error
         .filter(resultIsError)
         .reduce("") { $0 + $1.error!.localizedDescription + "\n" }
         .dropLast()
 }
 
-private func resultIsError(_ result: Result<Notebook.Meta, AnyError>) -> Bool {
+private func resultIsError<T>(_ result: Result<T, AnyError>) -> Bool {
     return result.error != nil
 }
