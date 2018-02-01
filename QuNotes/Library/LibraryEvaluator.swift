@@ -33,8 +33,8 @@ extension Library {
                 let notebook = Core.Notebook.Meta(uuid: generateUUID(), name: "")
                 newModel = model |> Model.lens.notebooks
                     .~ model.notebooks.appending(notebook).sorted(by: name)
-                let indexOfNewNotebook = newModel.notebooks.index(of: notebook)!
-                effects = [.addNotebook(index: indexOfNewNotebook, notebooks: viewModels(from: newModel))]
+                effects = [.addNotebook(index: newModel.notebooks.index(of: notebook)!,
+                                        notebooks: viewModels(from: newModel))]
                 actions = [.addNotebook(notebook)]
             case let .deleteNotebook(index):
                 guard index < model.notebooks.count else { break }
@@ -62,8 +62,7 @@ extension Library {
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
             case let .deleteNotebook(notebook):
                 guard let index = model.index(ofNotebook: notebook) else { break }
-                newModel = model |> Model.lens.notebooks .~
-                    model.notebooks.removing(at: index)
+                newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(at: index)
                 effects = [.deleteNotebook(index: index, notebooks: viewModels(from: newModel))]
                 actions = [.deleteNotebook(notebook)]
             case let .didLoadNotebooks(notebooks):

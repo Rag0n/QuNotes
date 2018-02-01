@@ -42,13 +42,13 @@ extension Notebook {
                 let note = newNote()
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
-                let indexOfNote = newModel.notes.index(of: note)!
                 actions = [.addNote(note)]
-                effects = [.addNote(index: indexOfNote, notes: titles(from: newModel))]
-            case .selectNote(let index):
+                effects = [.addNote(index: newModel.notes.index(of: note)!,
+                                    notes: titles(from: newModel))]
+            case let .selectNote(index):
                 let note = model.filteredNotes[index]
                 actions = [.showNote(note, isNew: false)]
-            case .deleteNote(let index):
+            case let .deleteNote(index):
                 let note = model.notes[index]
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.deleteNote(note)]
@@ -61,7 +61,7 @@ extension Notebook {
                 effects = [.updateAllNotes(titles(from: newModel))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
-            case .didFinishToEditTitle(let newTitle):
+            case let .didFinishToEditTitle(newTitle):
                 effects = [.showBackButton]
                 actions = [.updateNotebook(title: newTitle ?? "")]
             }
@@ -82,9 +82,8 @@ extension Notebook {
                 effects = [.updateAllNotes(titles(from: newModel))]
             case let .deleteNote(note):
                 guard let index = model.index(ofNote: note) else { break }
-                let noteToRemove = model.notes[index]
                 newModel = model |> Model.lens.notes .~ model.notes.removing(at: index)
-                actions = [.deleteNote(noteToRemove)]
+                actions = [.deleteNote(model.notes[index])]
                 effects = [.deleteNote(index: index, notes: titles(from: newModel))]
             case let .didUpdateNotebook(oldNotebook, notebook, error):
                 guard let error = error else {
@@ -110,15 +109,15 @@ extension Notebook {
                 }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.showFailure(.addNote, reason: error.localizedDescription)]
-                let index = model.notes.index(of: note)!
-                effects = [.deleteNote(index: index, notes: titles(from: newModel))]
+                effects = [.deleteNote(index: model.notes.index(of: note)!,
+                                       notes: titles(from: newModel))]
             case let .didDeleteNote(note, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
                 actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
-                let index = newModel.notes.index(of: note)!
-                effects = [.addNote(index: index, notes: titles(from: newModel))]
+                effects = [.addNote(index: newModel.notes.index(of: note)!,
+                                    notes: titles(from: newModel))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)

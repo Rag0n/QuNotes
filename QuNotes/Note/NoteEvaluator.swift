@@ -42,21 +42,18 @@ extension Note {
             case let .changeCell(newContent, index):
                 guard index < model.cells.count else { break }
                 let newCell = Core.Note.Cell(type: .text, data: newContent)
-                let newCells = model.cells.replacing(at: index, new: newCell)
-                newModel = model |> Model.lens.cells .~ newCells
-                actions = [.updateCells(newCells)]
-                effects = [.updateCell(index: index, cells: newCells.stringifyCells())]
+                newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, new: newCell)
+                actions = [.updateCells(newModel.cells)]
+                effects = [.updateCell(index: index, cells: newModel.cells.stringifyCells())]
             case .addCell:
                 let newCell = Core.Note.Cell(type: .text, data: "")
-                let newCells = model.cells.appending(newCell)
-                newModel = model |> Model.lens.cells .~ newCells
-                actions = [.updateCells(newCells)]
-                effects = [.addCell(index: model.cells.count, cells: newCells.stringifyCells())]
+                newModel = model |> Model.lens.cells .~ model.cells.appending(newCell)
+                actions = [.updateCells(newModel.cells)]
+                effects = [.addCell(index: model.cells.count, cells: newModel.cells.stringifyCells())]
             case let .removeCell(index):
-                let newCells = model.cells.removing(at: index)
-                newModel = model |> Model.lens.cells .~ newCells
-                actions = [.updateCells(newCells)]
-                effects = [.removeCell(index: index, cells: newCells.stringifyCells())]
+                newModel = model |> Model.lens.cells .~ model.cells.removing(at: index)
+                actions = [.updateCells(newModel.cells)]
+                effects = [.removeCell(index: index, cells: newModel.cells.stringifyCells())]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(newTitle)]
