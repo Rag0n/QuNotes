@@ -16,7 +16,7 @@ extension Library {
         init(withNavigationController navigationController: NavigationController) {
             self.navigationController = navigationController
             evaluator = Evaluator()
-            libraryEvaluator = Core.Library.Evaluator(model: Core.Library.Model(notebooks: []))
+            coreEvaluator = Core.Library.Evaluator(model: Core.Library.Model(notebooks: []))
         }
 
         func onStart() {
@@ -84,14 +84,12 @@ extension Library {
         // MARK: State
 
         private let navigationController: NavigationController
-        private var evaluator: Evaluator
-        private var libraryEvaluator: Core.Library.Evaluator
-        private lazy var libraryViewController: LibraryViewController = {
-            return LibraryViewController(withDispatch: dispatch)
-        }()
+        private lazy var libraryViewController = LibraryViewController(withDispatch: dispatch)
         private var fileExecuter: FileExecuterType {
             return AppEnvironment.current.fileExecuter
         }
+        private var evaluator: Evaluator
+        private var coreEvaluator: Core.Library.Evaluator
 
         // MARK: Utility
 
@@ -104,7 +102,7 @@ extension Library {
         }
 
         private func dispatchToLibrary(event: Core.Library.Event) {
-            updateLibrary <| libraryEvaluator.evaluating(event: event)
+            updateCoreEvaluator <| coreEvaluator.evaluating(event: event)
         }
 
         private func updateEvaluator(evaluator: Evaluator) {
@@ -113,9 +111,9 @@ extension Library {
             evaluator.actions.forEach(perform)
         }
 
-        private func updateLibrary(library: Core.Library.Evaluator) {
-            self.libraryEvaluator = library
-            library.effects.forEach(perform)
+        private func updateCoreEvaluator(coreEvaluator: Core.Library.Evaluator) {
+            self.coreEvaluator = coreEvaluator
+            coreEvaluator.effects.forEach(perform)
         }
     }
 }

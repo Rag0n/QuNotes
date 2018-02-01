@@ -16,11 +16,11 @@ extension Note {
             evaluator = Evaluator(note: note, cells: [], isNew: isNewNote)
             let content = Core.Note.Content(title: note.title, cells: [])
             let model = Core.Note.Model(meta: note, content: content, notebook: notebook)
-            noteEvaluator = Core.Note.Evaluator(model: model)
+            coreEvaluator = Core.Note.Evaluator(model: model)
         }
 
         func onStart() {
-            dispatchToNote <| .loadContent
+            dispatchToCore <| .loadContent
         }
 
         var viewController: UIViewController {
@@ -34,13 +34,13 @@ extension Note {
         private func perform(action: Action) {
             switch action {
             case let .updateTitle(title):
-                dispatchToNote <| .changeTitle(title)
+                dispatchToCore <| .changeTitle(title)
             case let .updateCells(cells):
-                dispatchToNote <| .changeCells(cells)
+                dispatchToCore <| .changeCells(cells)
             case let .addTag(tag):
-                dispatchToNote <| .addTag(tag)
+                dispatchToCore <| .addTag(tag)
             case let .removeTag(tag):
-                dispatchToNote <| .removeTag(tag)
+                dispatchToCore <| .removeTag(tag)
             case .deleteNote:
                 output = .deleteNote(note)
                 navigationController.popViewController(animated: true)
@@ -57,41 +57,40 @@ extension Note {
             switch effect {
             case let .readContent(url):
                 let result = fileExecuter.readFile(at: url, contentType: Core.Note.Content.self)
-                dispatchToNote <| .didReadContent(result)
+                dispatchToCore <| .didReadContent(result)
             case let .didLoadContent(content):
                 dispatch <| .didLoadContent(content)
             case let .handleError(title, message):
                 showError(title: title, message: message)
             case let .updateTitle(note, url, oldTitle):
                 let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNote <| .didChangeTitle(oldTitle: oldTitle, error: error)
+                dispatchToCore <| .didChangeTitle(oldTitle: oldTitle, error: error)
                 dispatch <| .didUpdateTitle(oldTitle: oldTitle, note: note, error: error)
             case let .updateContent(content, url, oldContent):
                 let error = fileExecuter.createFile(atURL: url, content: content)
-                dispatchToNote <| .didChangeContent(oldContent: oldContent, error: error)
+                dispatchToCore <| .didChangeContent(oldContent: oldContent, error: error)
                 dispatch <| .didUpdateCells(oldCells: oldContent.cells, error: error)
             case let .addTag(tag, note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNote <| .didAddTag(tag, error: error)
+                dispatchToCore <| .didAddTag(tag, error: error)
                 dispatch <| .didAddTag(tag, note: note, error: error)
             case let .removeTag(tag, note, url):
                 let error = fileExecuter.createFile(atURL: url, content: note)
-                dispatchToNote <| .didRemoveTag(tag, error: error)
+                dispatchToCore <| .didRemoveTag(tag, error: error)
                 dispatch <| .didRemoveTag(tag, note: note, error: error)
             }
         }
 
         // MARK: State
+
         private let navigationController: NavigationController
         private let note: Core.Note.Meta
-        private var evaluator: Evaluator
-        private var noteEvaluator: Core.Note.Evaluator
-        private lazy var noteViewController: NoteViewController = {
-            return NoteViewController(withDispatch: dispatch)
-        }()
+        private lazy var noteViewController = NoteViewController(withDispatch: dispatch)
         private var fileExecuter: FileExecuterType {
             return AppEnvironment.current.fileExecuter
         }
+        private var evaluator: Evaluator
+        private var coreEvaluator: Core.Note.Evaluator
 
         // MARK: Utility
 
@@ -103,8 +102,8 @@ extension Note {
             event |> evaluator.evaluating |> updateEvaluator
         }
 
-        private func dispatchToNote(event: Core.Note.Event) {
-            event |> noteEvaluator.evaluating |> updateNote
+        private func dispatchToCore(event: Core.Note.Event) {
+            event |> coreEvaluator.evaluating |> updateCoreEvaluator
         }
 
         private func updateEvaluator(evaluator: Evaluator) {
@@ -113,9 +112,9 @@ extension Note {
             evaluator.actions.forEach(perform)
         }
 
-        private func updateNote(note: Core.Note.Evaluator) {
-            self.noteEvaluator = note
-            note.effects.forEach(perform)
+        private func updateCoreEvaluator(coreEvaluator: Core.Note.Evaluator) {
+            self.coreEvaluator = coreEvaluator
+            coreEvaluator.effects.forEach(perform)
         }
     }
 }

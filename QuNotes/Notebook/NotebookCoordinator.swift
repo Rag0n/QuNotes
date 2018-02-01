@@ -15,12 +15,12 @@ extension Notebook {
         init(withNavigationController navigationController: NavigationController, notebook: Core.Notebook.Meta) {
             self.navigationController = navigationController
             self.evaluator = Evaluator(notebook: notebook)
-            self.notebookEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
+            self.coreEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
             self.notebook = notebook
         }
 
         func onStart() {
-            .loadNotes |> dispatchToNotebook
+            .loadNotes |> dispatchToCore
         }
 
         var viewController: UIViewController {
@@ -34,11 +34,11 @@ extension Notebook {
         private func perform(action: Action) {
             switch action {
             case let .addNote(note):
-                dispatchToNotebook <| .addNote(note)
+                dispatchToCore <| .addNote(note)
             case let .deleteNote(note):
-                dispatchToNotebook <| .removeNote(note)
+                dispatchToCore <| .removeNote(note)
             case let .updateNotebook(title):
-                dispatchToNotebook <| .changeName(title)
+                dispatchToCore <| .changeName(title)
             case .deleteNotebook:
                 output = .deleteNotebook(notebook)
                 navigationController.popViewController(animated: true)
@@ -62,22 +62,22 @@ extension Notebook {
             case let .createNote(note, url, content, contentURL):
                 let metaError = fileExecuter.createFile(atURL: url, content: note)
                 let contentError = fileExecuter.createFile(atURL: contentURL, content: content)
-                dispatchToNotebook <| .didAddNote(note, error: metaError ?? contentError)
+                dispatchToCore <| .didAddNote(note, error: metaError ?? contentError)
                 dispatch <| .didAddNote(note, error:  metaError ?? contentError)
             case let .updateNotebook(notebook, url, oldNotebook):
                 let error = fileExecuter.createFile(atURL: url, content: notebook)
-                dispatchToNotebook <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
+                dispatchToCore <| .didUpdateNotebook(oldNotebook: oldNotebook, error: error)
                 dispatch <| .didUpdateNotebook(oldNotebook: oldNotebook, notebook: notebook, error: error)
             case let .deleteNote(note, url):
                 let error = fileExecuter.deleteFile(at: url)
-                dispatchToNotebook <| .didDeleteNote(note, error: error)
+                dispatchToCore <| .didDeleteNote(note, error: error)
                 dispatch <| .didDeleteNote(note, error: error)
             case let .readDirectory(url):
                 let urls = fileExecuter.contentOfFolder(at: url)
-                dispatchToNotebook <| .didReadDirectory(urls: urls)
+                dispatchToCore <| .didReadDirectory(urls: urls)
             case let .readNotes(urls):
                 let notes = urls.map { fileExecuter.readFile(at: $0, contentType: Core.Note.Meta.self) }
-                dispatchToNotebook <| .didReadNotes(notes)
+                dispatchToCore <| .didReadNotes(notes)
             case let .handleError(title, message):
                 showError(title: title, message: message)
             case let .didLoadNotes(notes):
@@ -101,8 +101,6 @@ extension Notebook {
         // MARK: State
 
         private let navigationController: NavigationController
-        private var evaluator: Evaluator
-        private var notebookEvaluator: Core.Notebook.Evaluator
         private let notebook: Core.Notebook.Meta
         private lazy var notebookViewController: NotebookViewController = {
             let vc = NotebookViewController(withDispatch: dispatch)
@@ -112,6 +110,8 @@ extension Notebook {
         private var fileExecuter: FileExecuterType {
             return AppEnvironment.current.fileExecuter
         }
+        private var evaluator: Evaluator
+        private var coreEvaluator: Core.Notebook.Evaluator
 
         // MARK: Utility
 
@@ -123,8 +123,8 @@ extension Notebook {
             event |> evaluator.evaluating |> updateEvaluator
         }
 
-        private func dispatchToNotebook(event: Core.Notebook.Event) {
-            event |> notebookEvaluator.evaluating |> updateNotebook
+        private func dispatchToCore(event: Core.Notebook.Event) {
+            event |> coreEvaluator.evaluating |> updateCoreEvaluator
         }
 
         private func updateEvaluator(evaluator: Evaluator) {
@@ -133,9 +133,9 @@ extension Notebook {
             evaluator.actions.forEach(perform)
         }
 
-        private func updateNotebook(notebook: Core.Notebook.Evaluator) {
-            self.notebookEvaluator = notebook
-            notebook.effects.forEach(perform)
+        private func updateCoreEvaluator(coreEvaluator: Core.Notebook.Evaluator) {
+            self.coreEvaluator = coreEvaluator
+            coreEvaluator.effects.forEach(perform)
         }
     }
 }
