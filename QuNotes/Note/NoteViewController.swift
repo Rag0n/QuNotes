@@ -10,6 +10,7 @@ import UIKit
 import Notepad
 import WSTagsField
 import FlexLayout
+import Prelude
 
 public final class NoteViewController: UIViewController {
     public func perform(effect: Note.ViewEffect) {
@@ -164,10 +165,10 @@ public final class NoteViewController: UIViewController {
 
     private func setupTagView() {
         tagView.onDidAddTag = { [unowned self] _, tag in
-            self.dispatch(.addTag(tag.text))
+            self.dispatch <| .addTag(tag.text)
         }
         tagView.onDidRemoveTag = { [unowned self] _, tag in
-            self.dispatch(.removeTag(tag.text))
+            self.dispatch <| .removeTag(tag.text)
         }
     }
 
@@ -195,7 +196,7 @@ public final class NoteViewController: UIViewController {
         let content = cells[index]
         // TODO: On end editing should reset height to max
         cell.set(content: content, maxHeight: tableView.bounds.size.height) { [unowned self] newContent in
-            self.dispatch(.changeCell(newContent, index: index))
+            self.dispatch <| .changeCell(newContent, index: index)
         }
     }
 
@@ -221,15 +222,15 @@ public final class NoteViewController: UIViewController {
     }
 
     @objc private func onDeleteButtonClick() {
-        dispatch(.delete)
+        dispatch <| .delete
     }
 
     @objc private func onTitleTextFieldChange() {
-        dispatch(.changeTitle(titleTextField.text ?? ""))
+        dispatch <| .changeTitle(titleTextField.text ?? "")
     }
 
     @objc private func addCell() {
-        dispatch(.addCell)
+        dispatch <| .addCell
     }
 }
 
