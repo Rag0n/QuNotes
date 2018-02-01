@@ -78,7 +78,7 @@ final public class NotebookViewController: UIViewController {
     }
 
     fileprivate var dispatch: Notebook.ViewDispacher
-    fileprivate var notes: [String]!
+    fileprivate var notes: [String] = []
 
     private lazy var searchController: UISearchController = {
         let s = UISearchController(searchResultsController: nil)
@@ -155,7 +155,7 @@ final public class NotebookViewController: UIViewController {
 
 extension NotebookViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notes?.count ?? 0
+        return notes.count
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

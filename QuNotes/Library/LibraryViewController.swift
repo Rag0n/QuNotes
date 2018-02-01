@@ -65,7 +65,7 @@ final public class LibraryViewController: UIViewController {
         static let libraryCellReuseIdentifier = "libraryCellReuseIdentifier"
     }
     
-    fileprivate var notebooks: [Library.NotebookViewModel]!
+    fileprivate var notebooks: [Library.NotebookViewModel] = []
     fileprivate var dispatch: Library.ViewDispacher
 
     private let tableView: UITableView = {
@@ -95,7 +95,7 @@ final public class LibraryViewController: UIViewController {
 
 extension LibraryViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return notebooks?.count ?? 0
+        return notebooks.count
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
