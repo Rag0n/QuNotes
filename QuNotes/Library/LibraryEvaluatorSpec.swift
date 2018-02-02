@@ -125,7 +125,7 @@ class LibraryEvaluatorSpec: QuickSpec {
 
                 it("has showNotebook action") {
                     expect(e.actions).to(equalDiff([
-                        .showNotebook(Core.Notebook.Meta(uuid: "uuid", name: "name"))
+                        .showNotebook(Core.Notebook.Meta(uuid: "uuid", name: "name"), isNew: false)
                     ]))
                 }
             }
@@ -307,8 +307,10 @@ class LibraryEvaluatorSpec: QuickSpec {
                         expect(e.model).to(equalDiff(model))
                     }
 
-                    it("hasnt got any actions") {
-                        expect(e.actions).to(beEmpty())
+                    it("has showNotebook action") {
+                        expect(e.actions).to(equalDiff([
+                            .showNotebook(notebook, isNew: true)
+                        ]))
                     }
 
                     it("hasnt got any effects") {

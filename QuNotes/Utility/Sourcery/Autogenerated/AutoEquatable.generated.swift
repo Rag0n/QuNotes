@@ -77,7 +77,9 @@ public func == (lhs: Library.Action, rhs: Library.Action) -> Bool {
     case (.deleteNotebook(let lhs), .deleteNotebook(let rhs)):
         return lhs == rhs
     case (.showNotebook(let lhs), .showNotebook(let rhs)):
-        return lhs == rhs
+        if lhs.0 != rhs.0 { return false }
+        if lhs.isNew != rhs.isNew { return false }
+        return true
     case (.showFailure(let lhs), .showFailure(let rhs)):
         if lhs.0 != rhs.0 { return false }
         if lhs.reason != rhs.reason { return false }

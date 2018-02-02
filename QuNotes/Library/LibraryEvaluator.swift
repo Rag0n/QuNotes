@@ -43,7 +43,7 @@ extension Library {
                 effects = [.deleteNotebook(index: index, notebooks: viewModels(from: newModel))]
                 actions = [.deleteNotebook(notebook)]
             case let .selectNotebook(index):
-                actions = [.showNotebook(model.notebooks[index])]
+                actions = [.showNotebook(model.notebooks[index], isNew: false)]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -69,11 +69,10 @@ extension Library {
                 newModel = model |> Model.lens.notebooks .~ notebooks.sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
             case let .didAddNotebook(notebook, error):
-                guard let error = error else { break }
-                // TODO: check if that notebook is still exist in model
-                // If not - should do nothing
-                // Also check if we are not select that notebook; If that notebook is selected,
-                // then we need somehow to go back
+                guard let error = error else {
+                    actions = [.showNotebook(notebook, isNew: true)]
+                    break
+                }
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
                 actions = [.showFailure(.addNotebook, reason: error.localizedDescription)]

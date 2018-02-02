@@ -39,7 +39,7 @@ extension Library {
                 dispatchToLibrary <| .removeNotebook(notebook)
             case let .showFailure(failure, reason):
                 showError(title: failure, message: reason)
-            case let .showNotebook(notebook):
+            case let .showNotebook(notebook, isNew):
                 let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController, notebook: notebook)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
                     self.handleNotebookCoordinatorOutput(output: notebookCoordinator.output)
