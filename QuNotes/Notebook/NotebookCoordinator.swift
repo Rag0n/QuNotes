@@ -16,7 +16,7 @@ extension Notebook {
              notebook: Core.Notebook.Meta,
              isNew: Bool) {
             self.navigationController = navigationController
-            self.evaluator = Evaluator(notebook: notebook)
+            self.evaluator = Evaluator(notebook: notebook, isNew: isNew)
             self.coreEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
             self.notebook = notebook
         }

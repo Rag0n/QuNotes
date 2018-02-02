@@ -18,10 +18,10 @@ extension Notebook {
         var generateUUID: () -> String = { UUID().uuidString }
         var currentTimestamp: () -> Double = { Date().timeIntervalSince1970 }
 
-        init(notebook: Core.Notebook.Meta) {
+        init(notebook: Core.Notebook.Meta, isNew: Bool) {
             effects = []
             actions = []
-            model = Model(notebook: notebook, notes: [], filter: "")
+            model = Model(notebook: notebook, notes: [], filter: "", isNew: isNew)
         }
 
         fileprivate init(effects: [ViewEffect], actions: [Action], model: Model) {

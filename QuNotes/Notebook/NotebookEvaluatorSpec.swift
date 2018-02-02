@@ -13,11 +13,11 @@ import Core
 class NotebookEvaluatorSpec: QuickSpec {
     override func spec() {
         let notebook = Core.Notebook.Meta(uuid: "uuid", name: "name")
-        let model = Notebook.Model(notebook: notebook, notes: [], filter: Dummy.filter)
+        let model = Notebook.Model(notebook: notebook, notes: [], filter: Dummy.filter, isNew: false)
         var e: Notebook.Evaluator!
 
         beforeEach {
-            e = Notebook.Evaluator(notebook: notebook)
+            e = Notebook.Evaluator(notebook: notebook, isNew: false)
         }
 
         describe("-evaluating:ViewEvent") {
@@ -622,10 +622,12 @@ private enum Dummy {
     }
 
     static func model(fromModel model: Notebook.Model, notebook: Core.Notebook.Meta? = nil,
-                      notes: [Core.Note.Meta]? = nil, filter: String? = nil) -> Notebook.Model {
+                      notes: [Core.Note.Meta]? = nil, filter: String? = nil,
+                      isNew: Bool? = nil) -> Notebook.Model {
         return Notebook.Model(notebook: notebook ?? model.notebook,
                               notes: notes ?? model.notes,
-                              filter: filter ?? model.filter)
+                              filter: filter ?? model.filter,
+                              isNew: isNew ?? model.isNew)
     }
 
     static func notebook(withUUUID uuid: String = UUID.init().uuidString,

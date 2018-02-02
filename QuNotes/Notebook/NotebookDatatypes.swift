@@ -14,6 +14,7 @@ public enum Notebook {
         let notebook: Core.Notebook.Meta
         let notes: [Core.Note.Meta]
         let filter: String
+        let isNew: Bool
     }
 
     public enum Action: AutoEquatable {

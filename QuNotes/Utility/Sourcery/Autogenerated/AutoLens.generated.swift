@@ -48,19 +48,25 @@ extension Notebook.Model {
         static let notebook = Lens<Notebook.Model, Core.Notebook.Meta>(
             get: { $0.notebook },
             set: { notebook, model in
-                Notebook.Model(notebook: notebook, notes: model.notes, filter: model.filter)
+                Notebook.Model(notebook: notebook, notes: model.notes, filter: model.filter, isNew: model.isNew)
             }
         )
         static let notes = Lens<Notebook.Model, [Core.Note.Meta]>(
             get: { $0.notes },
             set: { notes, model in
-                Notebook.Model(notebook: model.notebook, notes: notes, filter: model.filter)
+                Notebook.Model(notebook: model.notebook, notes: notes, filter: model.filter, isNew: model.isNew)
             }
         )
         static let filter = Lens<Notebook.Model, String>(
             get: { $0.filter },
             set: { filter, model in
-                Notebook.Model(notebook: model.notebook, notes: model.notes, filter: filter)
+                Notebook.Model(notebook: model.notebook, notes: model.notes, filter: filter, isNew: model.isNew)
+            }
+        )
+        static let isNew = Lens<Notebook.Model, Bool>(
+            get: { $0.isNew },
+            set: { isNew, model in
+                Notebook.Model(notebook: model.notebook, notes: model.notes, filter: model.filter, isNew: isNew)
             }
         )
     }
