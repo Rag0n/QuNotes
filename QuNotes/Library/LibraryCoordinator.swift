@@ -40,7 +40,9 @@ extension Library {
             case let .showFailure(failure, reason):
                 showError(title: failure, message: reason)
             case let .showNotebook(notebook, isNew):
-                let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController, notebook: notebook)
+                let notebookCoordinator = Notebook.CoordinatorImp(withNavigationController: navigationController,
+                                                                  notebook: notebook,
+                                                                  isNew: isNew)
                 navigationController.pushCoordinator(coordinator: notebookCoordinator, animated: true) { [unowned self] in
                     self.handleNotebookCoordinatorOutput(output: notebookCoordinator.output)
                 }

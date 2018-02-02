@@ -12,7 +12,9 @@ import Prelude
 
 extension Notebook {
     final class CoordinatorImp: Coordinator {
-        init(withNavigationController navigationController: NavigationController, notebook: Core.Notebook.Meta) {
+        init(withNavigationController navigationController: NavigationController,
+             notebook: Core.Notebook.Meta,
+             isNew: Bool) {
             self.navigationController = navigationController
             self.evaluator = Evaluator(notebook: notebook)
             self.coreEvaluator = Core.Notebook.Evaluator(model: Core.Notebook.Model(meta: notebook, notes: []))
