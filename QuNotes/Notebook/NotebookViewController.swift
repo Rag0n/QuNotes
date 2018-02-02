@@ -22,6 +22,8 @@ final public class NotebookViewController: UIViewController {
             navigationItem.setHidesBackButton(false, animated: true)
         case let .updateTitle(title):
             titleTextField.text = title
+        case .focusOnTitle:
+            titleTextField.becomeFirstResponder()
         case let .deleteNote(index, notes):
             self.notes = notes
             let indexPath = IndexPath(row: index, section: 0)

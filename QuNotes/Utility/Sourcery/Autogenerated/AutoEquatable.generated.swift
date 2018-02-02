@@ -251,6 +251,8 @@ public func == (lhs: Notebook.ViewEffect, rhs: Notebook.ViewEffect) -> Bool {
         if lhs.index != rhs.index { return false }
         if lhs.notes != rhs.notes { return false }
         return true
+    case (.focusOnTitle, .focusOnTitle):
+        return true
     default: return false
     }
 }

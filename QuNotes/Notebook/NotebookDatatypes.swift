@@ -35,6 +35,7 @@ public enum Notebook {
         case updateTitle(String)
         case deleteNote(index: Int, notes: [String])
         case addNote(index: Int, notes: [String])
+        case focusOnTitle
     }
 
     public enum CoordinatorEvent {

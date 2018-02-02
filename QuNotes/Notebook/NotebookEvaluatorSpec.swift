@@ -26,13 +26,32 @@ class NotebookEvaluatorSpec: QuickSpec {
             context("when receiving didLoad event") {
                 beforeEach {
                     event = .didLoad
-                    e = e.evaluating(event: event)
                 }
 
-                it("has updateTitle effect") {
-                    expect(e.effects).to(equalDiff([
-                        .updateTitle("name")
-                    ]))
+                context("when notebook is new") {
+                    beforeEach {
+                        e = Notebook.Evaluator(notebook: notebook, isNew: true)
+                        e = e.evaluating(event: event)
+                    }
+
+                    it("has updateTitle & focusOnTitle effects") {
+                        expect(e.effects).to(equalDiff([
+                            .updateTitle("name"),
+                            .focusOnTitle
+                        ]))
+                    }
+                }
+
+                context("when notebook is not new") {
+                    beforeEach {
+                        e = e.evaluating(event: event)
+                    }
+
+                    it("has updateTitle effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateTitle("name")
+                        ]))
+                    }
                 }
             }
 

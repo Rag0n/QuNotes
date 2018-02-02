@@ -38,6 +38,9 @@ extension Notebook {
             switch event {
             case .didLoad:
                 effects = [.updateTitle(model.notebook.name)]
+                if model.isNew {
+                    effects += [.focusOnTitle]
+                }
             case .addNote:
                 let note = newNote()
                 newModel = model |> Model.lens.notes
