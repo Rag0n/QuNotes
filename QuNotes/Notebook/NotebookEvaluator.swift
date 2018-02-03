@@ -47,7 +47,7 @@ extension Notebook {
                     .~ model.notes.appending(note).sorted(by: title)
                 actions = [.addNote(note)]
                 effects = [.addNote(index: newModel.notes.index(of: note)!,
-                                    notes: titles(from: newModel))]
+                                    notes: viewModels(from: newModel))]
             case let .selectNote(index):
                 let note = model.filteredNotes[index]
                 actions = [.showNote(note, isNew: false)]
@@ -55,13 +55,13 @@ extension Notebook {
                 let note = model.notes[index]
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.deleteNote(note)]
-                effects = [.deleteNote(index: index, notes: titles(from: newModel))]
+                effects = [.deleteNote(index: index, notes: viewModels(from: newModel))]
             case .deleteNotebook:
                 actions = [.deleteNotebook]
             case let .filterNotes(filter):
                 let lowercasedFilter = filter?.lowercased() ?? ""
                 newModel = model |> Model.lens.filter .~ lowercasedFilter
-                effects = [.updateAllNotes(titles(from: newModel))]
+                effects = [.updateAllNotes(viewModels(from: newModel))]
             case .didStartToEditTitle:
                 effects = [.hideBackButton]
             case let .didFinishToEditTitle(newTitle):
@@ -82,12 +82,12 @@ extension Notebook {
                 guard let index = model.index(ofNote: note) else { break }
                 newModel = model |> Model.lens.notes .~
                     model.notes.replacing(at: index, new: note).sorted(by: title)
-                effects = [.updateAllNotes(titles(from: newModel))]
+                effects = [.updateAllNotes(viewModels(from: newModel))]
             case let .deleteNote(note):
                 guard let index = model.index(ofNote: note) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.removing(at: index)
                 actions = [.deleteNote(model.notes[index])]
-                effects = [.deleteNote(index: index, notes: titles(from: newModel))]
+                effects = [.deleteNote(index: index, notes: viewModels(from: newModel))]
             case let .didUpdateNotebook(oldNotebook, notebook, error):
                 guard let error = error else {
                     actions = [.didUpdateNotebook(notebook)]
@@ -104,7 +104,7 @@ extension Notebook {
                 actions = [.finish]
             case let .didLoadNotes(notes):
                 newModel = model |> Model.lens.notes .~ notes.sorted(by: title)
-                effects = [.updateAllNotes(titles(from: newModel))]
+                effects = [.updateAllNotes(viewModels(from: newModel))]
             case let .didAddNote(note, error):
                 guard let error = error else {
                     actions = [.showNote(note, isNew: true)]
@@ -113,14 +113,14 @@ extension Notebook {
                 newModel = model |> Model.lens.notes .~ model.notes.removing(note)
                 actions = [.showFailure(.addNote, reason: error.localizedDescription)]
                 effects = [.deleteNote(index: model.notes.index(of: note)!,
-                                       notes: titles(from: newModel))]
+                                       notes: viewModels(from: newModel))]
             case let .didDeleteNote(note, error):
                 guard let error = error else { break }
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
                 actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
                 effects = [.addNote(index: newModel.notes.index(of: note)!,
-                                    notes: titles(from: newModel))]
+                                    notes: viewModels(from: newModel))]
             }
 
             return Evaluator(effects: effects, actions: actions, model: newModel)
@@ -135,8 +135,10 @@ private extension Notebook {
         return lhs.title.lowercased() < rhs.title.lowercased()
     }
 
-    static func titles(from model: Model) -> [String] {
-        return model.filteredNotes.map { $0.title }
+    static func viewModels(from model: Model) -> [NoteViewModel] {
+//        let tags = model.notes.map { $0.tags.joined(separator: " ") }
+//        return NoteViewModel(title: model.note)
+        return model.filteredNotes.map { NoteViewModel(title: $0.title) }
     }
 }
 

@@ -81,7 +81,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                 it("has addNote effect") {
                     expect(e.effects).to(equalDiff([
-                        .addNote(index: 0, notes: ["", "aT"])
+                        .addNote(index: 0, notes: [Dummy.noteViewModel(withTitle: ""),
+                                                   Dummy.noteViewModel(withTitle: "aT")])
                     ]))
                 }
             }
@@ -186,7 +187,9 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect with all note's titles") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(["AB", "ab", "g"])
+                            .updateAllNotes([Dummy.noteViewModel(withTitle: "AB"),
+                                             Dummy.noteViewModel(withTitle: "ab"),
+                                             Dummy.noteViewModel(withTitle: "g")])
                         ]))
                     }
                 }
@@ -205,7 +208,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect with only titles that contains filter in any register") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(["AB", "ab"])
+                            .updateAllNotes([Dummy.noteViewModel(withTitle: "AB"),
+                                             Dummy.noteViewModel(withTitle: "ab")])
                         ]))
                     }
                 }
@@ -291,7 +295,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes(["new title", "z"])
+                            .updateAllNotes([Dummy.noteViewModel(withTitle: "new title"),
+                                             Dummy.noteViewModel(withTitle: "z")])
                         ]))
                     }
                 }
@@ -343,7 +348,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has deleteNote effect") {
                         expect(e.effects).to(equalDiff([
-                            .deleteNote(index: 0, notes: ["z"])
+                            .deleteNote(index: 0, notes: [Dummy.noteViewModel(withTitle: "z")])
                         ]))
                     }
                 }
@@ -410,7 +415,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                         it("has updateAllNotes effect with sorted and filtered viewModels") {
                             expect(e.effects).to(equalDiff([
-                                .updateAllNotes(["a", "ba"])
+                                .updateAllNotes([Dummy.noteViewModel(withTitle: "a"),
+                                                 Dummy.noteViewModel(withTitle: "ba")])
                             ]))
                         }
                     }
@@ -428,7 +434,9 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                         it("has updateAllNotes effect with sorted viewModels") {
                             expect(e.effects).to(equalDiff([
-                                .updateAllNotes(["a", "ba", "C"])
+                                .updateAllNotes([Dummy.noteViewModel(withTitle: "a"),
+                                                 Dummy.noteViewModel(withTitle: "ba"),
+                                                 Dummy.noteViewModel(withTitle: "C")])
                             ]))
                         }
                     }
@@ -567,7 +575,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it(("has deleteNote effect")) {
                         expect(e.effects).to(equalDiff([
-                            .deleteNote(index: 1, notes: ["aT"])
+                            .deleteNote(index: 1, notes: [Dummy.noteViewModel(withTitle: "aT")])
                         ]))
                     }
                 }
@@ -622,7 +630,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has addNote effect") {
                         expect(e.effects).to(equalDiff([
-                            .addNote(index: 0, notes: ["aN", "bT"])
+                            .addNote(index: 0, notes: [Dummy.noteViewModel(withTitle: "aN"),
+                                                       Dummy.noteViewModel(withTitle: "bT")])
                         ]))
                     }
                 }
@@ -652,5 +661,9 @@ private enum Dummy {
     static func notebook(withUUUID uuid: String = UUID.init().uuidString,
                          title: String = "title") -> Core.Notebook.Meta {
         return Core.Notebook.Meta(uuid: uuid, name: title)
+    }
+
+    static func noteViewModel(withTitle title: String, tags: String = "") -> Notebook.NoteViewModel {
+        return Notebook.NoteViewModel(title: title)
     }
 }

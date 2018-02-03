@@ -40,10 +40,10 @@ final class NotebookTableViewCell: UITableViewCell {
         contentView.flex.minHeight(scaledMinHeight)
     }
 
-    func set(title: String, tag: String = "") {
-        titleLabel.text = title
+    func render(with viewModel: Notebook.NoteViewModel) {
+        titleLabel.text = viewModel.title
         titleLabel.flex.markDirty()
-        tagsLabel.text = tag
+        tagsLabel.text = viewModel.tags
         tagsLabel.flex.markDirty()
     }
 

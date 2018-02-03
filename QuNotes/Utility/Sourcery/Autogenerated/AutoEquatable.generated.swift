@@ -56,6 +56,13 @@ public func == (lhs: Notebook.Model, rhs: Notebook.Model) -> Bool {
     guard lhs.isNew == rhs.isNew else { return false }
     return true
 }
+// MARK: - Notebook.NoteViewModel AutoEquatable
+extension Notebook.NoteViewModel: Equatable {}
+public func == (lhs: Notebook.NoteViewModel, rhs: Notebook.NoteViewModel) -> Bool {
+    guard lhs.title == rhs.title else { return false }
+    guard lhs.tags == rhs.tags else { return false }
+    return true
+}
 
 // MARK: - AutoEquatable for Enums
 // MARK: - Language AutoEquatable

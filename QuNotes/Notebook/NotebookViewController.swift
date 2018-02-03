@@ -80,7 +80,7 @@ final public class NotebookViewController: UIViewController {
     }
 
     fileprivate var dispatch: Notebook.ViewDispacher
-    fileprivate var notes: [String] = []
+    fileprivate var notes: [Notebook.NoteViewModel] = []
 
     private lazy var searchController: UISearchController = {
         let s = UISearchController(searchResultsController: nil)
@@ -162,7 +162,7 @@ extension NotebookViewController: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.notebookCellReuseIdentifier, for: indexPath) as! NotebookTableViewCell
-        cell.set(title: notes[indexPath.row])
+        cell.render(with: notes[indexPath.row])
         return cell
     }
 }

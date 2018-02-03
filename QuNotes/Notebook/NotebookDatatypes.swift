@@ -29,12 +29,12 @@ public enum Notebook {
     }
 
     public enum ViewEffect: AutoEquatable {
-        case updateAllNotes([String])
+        case updateAllNotes([NoteViewModel])
         case hideBackButton
         case showBackButton
         case updateTitle(String)
-        case deleteNote(index: Int, notes: [String])
-        case addNote(index: Int, notes: [String])
+        case deleteNote(index: Int, notes: [NoteViewModel])
+        case addNote(index: Int, notes: [NoteViewModel])
         case focusOnTitle
     }
 
@@ -57,6 +57,16 @@ public enum Notebook {
         case filterNotes(filter: String?)
         case didStartToEditTitle
         case didFinishToEditTitle(newTitle: String?)
+    }
+
+    public struct NoteViewModel: AutoEquatable {
+        let title: String
+        let tags: String
+
+        public init(title: String, tags: String = "") {
+            self.title = title
+            self.tags = tags
+        }
     }
 
     public enum CoordinatorResultEffect {
