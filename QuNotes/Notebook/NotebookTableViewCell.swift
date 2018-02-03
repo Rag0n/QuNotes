@@ -15,6 +15,7 @@ final class NotebookTableViewCell: UITableViewCell {
         contentView.backgroundColor = AppEnvironment.current.theme.ligherDarkColor
         contentView.flex.minHeight(scaledMinHeight).define {
             $0.addItem(titleLabel).grow(1)
+            $0.addItem(tagsLabel)
         }
     }
 
@@ -39,9 +40,11 @@ final class NotebookTableViewCell: UITableViewCell {
         contentView.flex.minHeight(scaledMinHeight)
     }
 
-    func set(title: String) {
+    func set(title: String, tag: String = "") {
         titleLabel.text = title
         titleLabel.flex.markDirty()
+        tagsLabel.text = tag
+        tagsLabel.flex.markDirty()
     }
 
     // MARK: - Private
@@ -58,6 +61,18 @@ final class NotebookTableViewCell: UITableViewCell {
         l.highlightedTextColor = theme.darkColor
         l.numberOfLines = 0
         l.font = UIFont.preferredFont(forTextStyle: .body)
+        l.adjustsFontForContentSizeCategory = true
+        l.lineBreakMode = .byWordWrapping
+        return l
+    }()
+    private let tagsLabel: UILabel = {
+        let l = UILabel()
+        let theme =  AppEnvironment.current.theme
+        l.textColor = theme.textColor
+        l.backgroundColor = theme.ligherDarkColor
+        l.highlightedTextColor = theme.darkColor
+        l.numberOfLines = 0
+        l.font = UIFont.preferredFont(forTextStyle: .caption1)
         l.adjustsFontForContentSizeCategory = true
         l.lineBreakMode = .byWordWrapping
         return l
