@@ -80,8 +80,8 @@ final public class LibraryViewController: UIViewController {
     private let addButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("library_add_notebook_button".localized, for: .normal)
-        b.titleLabel?.font = UIFont.preferredFont(forTextStyle: .headline)
-        b.titleLabel?.adjustsFontForContentSizeCategory = true
+        b.titleLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
+        b.titleLabel!.adjustsFontForContentSizeCategory = true
         b.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
         return b
     }()
