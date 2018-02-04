@@ -136,10 +136,15 @@ private extension Notebook {
     }
 
     static func viewModels(from model: Model) -> [NoteViewModel] {
-        return model.filteredNotes.map { NoteViewModel(title: $0.title, tags: tagString(from: $0.tags)) }
+        return model.filteredNotes.map(viewModel(fromNote:))
     }
 
-    static func tagString(from tags: [String]) -> String {
+    static func viewModel(fromNote note: Core.Note.Meta) -> NoteViewModel {
+        return NoteViewModel(title: note.title,
+                             tags: tagsString(from: note.tags))
+    }
+
+    static func tagsString(from tags: [String]) -> String {
         return tags.joined(separator: ", ")
     }
 }
