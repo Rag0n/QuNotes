@@ -82,7 +82,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                 it("has addNote effect") {
                     expect(e.effects).to(equalDiff([
                         .addNote(index: 0, notes: [Dummy.noteViewModel(withTitle: ""),
-                                                   Dummy.noteViewModel(withTitle: "aT")])
+                                                   Dummy.noteViewModel(withTitle: "aT", tags: "t")])
                     ]))
                 }
             }
@@ -187,9 +187,9 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect with all note's titles") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes([Dummy.noteViewModel(withTitle: "AB"),
-                                             Dummy.noteViewModel(withTitle: "ab"),
-                                             Dummy.noteViewModel(withTitle: "g")])
+                            .updateAllNotes([Dummy.noteViewModel(withTitle: "AB", tags: "t"),
+                                             Dummy.noteViewModel(withTitle: "ab", tags: "t"),
+                                             Dummy.noteViewModel(withTitle: "g", tags: "t")])
                         ]))
                     }
                 }
@@ -208,8 +208,8 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it("has updateAllNotes effect with only titles that contains filter in any register") {
                         expect(e.effects).to(equalDiff([
-                            .updateAllNotes([Dummy.noteViewModel(withTitle: "AB"),
-                                             Dummy.noteViewModel(withTitle: "ab")])
+                            .updateAllNotes([Dummy.noteViewModel(withTitle: "AB", tags: "t"),
+                                             Dummy.noteViewModel(withTitle: "ab", tags: "t")])
                         ]))
                     }
                 }
@@ -393,9 +393,9 @@ class NotebookEvaluatorSpec: QuickSpec {
                 }
 
                 context("when notebook list is not empty") {
-                    let firstNote = Dummy.note(withTitle: "ba", tags: ["t"])
-                    let secondNote = Dummy.note(withTitle: "a", tags: ["t"])
-                    let thirdNote = Dummy.note(withTitle: "C", tags: ["t"])
+                    let firstNote = Dummy.note(withTitle: "ba", tags: ["t1", "t2"])
+                    let secondNote = Dummy.note(withTitle: "a", tags: ["t3", "t4", "t5"])
+                    let thirdNote = Dummy.note(withTitle: "C", tags: ["t1"])
 
                     beforeEach {
                         event = .didLoadNotes([firstNote, secondNote, thirdNote])
@@ -409,14 +409,15 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                         it("has model with sorted by title notes") {
                             expect(e.model).to(equalDiff(
-                                Dummy.model(fromModel: model, notes: [secondNote, firstNote, thirdNote], filter: "a")
+                                Dummy.model(fromModel: model, notes: [secondNote, firstNote, thirdNote],
+                                            filter: "a")
                             ))
                         }
 
                         it("has updateAllNotes effect with sorted and filtered viewModels") {
                             expect(e.effects).to(equalDiff([
-                                .updateAllNotes([Dummy.noteViewModel(withTitle: "a"),
-                                                 Dummy.noteViewModel(withTitle: "ba")])
+                                .updateAllNotes([Dummy.noteViewModel(withTitle: "a", tags: "t3, t4, t5"),
+                                                 Dummy.noteViewModel(withTitle: "ba", tags: "t1, t2")])
                             ]))
                         }
                     }
@@ -434,9 +435,9 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                         it("has updateAllNotes effect with sorted viewModels") {
                             expect(e.effects).to(equalDiff([
-                                .updateAllNotes([Dummy.noteViewModel(withTitle: "a"),
-                                                 Dummy.noteViewModel(withTitle: "ba"),
-                                                 Dummy.noteViewModel(withTitle: "C")])
+                                .updateAllNotes([Dummy.noteViewModel(withTitle: "a", tags: "t3, t4, t5"),
+                                                 Dummy.noteViewModel(withTitle: "ba", tags: "t1, t2"),
+                                                 Dummy.noteViewModel(withTitle: "C", tags: "t1")])
                             ]))
                         }
                     }
@@ -525,7 +526,7 @@ class NotebookEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didAddNote event") {
-                let note = Dummy.note(withTitle: "aT", tags: ["t"])
+                let note = Dummy.note(withTitle: "aT", tags: ["t1", "t2"])
                 let addedNote = Dummy.note(withTitle: "sN", tags: [])
 
                 beforeEach {
@@ -575,7 +576,7 @@ class NotebookEvaluatorSpec: QuickSpec {
 
                     it(("has deleteNote effect")) {
                         expect(e.effects).to(equalDiff([
-                            .deleteNote(index: 1, notes: [Dummy.noteViewModel(withTitle: "aT")])
+                            .deleteNote(index: 1, notes: [Dummy.noteViewModel(withTitle: "aT", tags: "t1, t2")])
                         ]))
                     }
                 }
@@ -631,7 +632,7 @@ class NotebookEvaluatorSpec: QuickSpec {
                     it("has addNote effect") {
                         expect(e.effects).to(equalDiff([
                             .addNote(index: 0, notes: [Dummy.noteViewModel(withTitle: "aN"),
-                                                       Dummy.noteViewModel(withTitle: "bT")])
+                                                       Dummy.noteViewModel(withTitle: "bT", tags: "t")])
                         ]))
                     }
                 }
@@ -664,6 +665,6 @@ private enum Dummy {
     }
 
     static func noteViewModel(withTitle title: String, tags: String = "") -> Notebook.NoteViewModel {
-        return Notebook.NoteViewModel(title: title)
+        return Notebook.NoteViewModel(title: title, tags: tags)
     }
 }
