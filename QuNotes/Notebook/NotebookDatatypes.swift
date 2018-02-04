@@ -63,7 +63,7 @@ public enum Notebook {
         let title: String
         let tags: String
 
-        public init(title: String, tags: String = "") {
+        public init(title: String, tags: String) {
             self.title = title
             self.tags = tags
         }
