@@ -14,5 +14,9 @@ let frame = parent.view.frame
 PlaygroundPage.current.liveView = parent
 parent.view.frame = frame
 
-controller.perform(effect: .updateAllNotes(["First note", "Second note", "Third note"]))
+let firstNote = Notebook.NoteViewModel(title: "First note", tags: "tag, second tag")
+let secondNote = Notebook.NoteViewModel(title: "Second note", tags: "tag, second tag")
+let thirdNote = Notebook.NoteViewModel(title: "Third note with a long long long long long title",
+                                       tags: "tag, second tag, really long long long long long long tag")
+controller.perform(effect: .updateAllNotes([firstNote, secondNote, thirdNote]))
 controller.perform(effect: .updateTitle("Notebook title"))
