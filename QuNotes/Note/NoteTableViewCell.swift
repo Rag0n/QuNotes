@@ -12,6 +12,10 @@ import Notepad
 
 final class NoteTableViewCell: UITableViewCell {
     typealias OnContentChange = (String) -> ()
+    typealias OnEditingEnd = () -> ()
+
+    var onEditingEnd: OnEditingEnd?
+    var maxHeight = CGFloat.greatestFiniteMagnitude
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -59,7 +63,6 @@ final class NoteTableViewCell: UITableViewCell {
         static let themeName = "one-dark"
     }
 
-    private var maxHeight: CGFloat = CGFloat.greatestFiniteMagnitude
     private var onContentChange: OnContentChange?
 
     private let editor: Notepad = {
@@ -78,5 +81,9 @@ final class NoteTableViewCell: UITableViewCell {
 extension NoteTableViewCell: UITextViewDelegate {
     public func textViewDidChange(_ textView: UITextView) {
         onContentChange?(textView.text ?? "")
+    }
+
+    public func textViewDidEndEditing(_ textView: UITextView) {
+        onEditingEnd?()
     }
 }

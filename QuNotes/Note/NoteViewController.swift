@@ -192,9 +192,14 @@ public final class NoteViewController: UIViewController {
 
     private func updateCell(_ cell: NoteTableViewCell, index: Int) {
         let content = cells[index]
-        // TODO: On end editing should reset height to max
         cell.set(content: content, maxHeight: tableView.bounds.size.height) { [unowned self] newContent in
             self.dispatch <| .changeCell(newContent, index: index)
+        }
+    }
+
+    private func handleEditingEnd(_ cell: NoteTableViewCell) {
+        cell.onEditingEnd = { [unowned cell] in
+            cell.maxHeight = CGFloat.greatestFiniteMagnitude
         }
     }
 
@@ -242,6 +247,7 @@ extension NoteViewController: UITableViewDataSource {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: Constants.noteCellReuseIdentifier, for: indexPath) as! NoteTableViewCell
         updateCell(cell, index: indexPath.row)
+        handleEditingEnd(cell)
         return cell
     }
 }
