@@ -40,8 +40,7 @@ final class LibraryTableViewCell: UITableViewCell {
     }
 
     func render(viewModel: Library.NotebookViewModel) {
-        titleLabel.text = viewModel.title
-        titleLabel.flex.markDirty()
+        titleLabel.markDirtyAndSetText(viewModel.title)
     }
 
     // MARK: - Private

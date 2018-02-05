@@ -41,10 +41,8 @@ final class NotebookTableViewCell: UITableViewCell {
     }
 
     func render(with viewModel: Notebook.NoteViewModel) {
-        titleLabel.text = viewModel.title
-        titleLabel.flex.markDirty()
-        tagsLabel.text = viewModel.tags
-        tagsLabel.flex.markDirty()
+        titleLabel.markDirtyAndSetText(viewModel.title)
+        tagsLabel.markDirtyAndSetText(viewModel.tags)
     }
 
     // MARK: - Private
