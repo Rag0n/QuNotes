@@ -82,7 +82,7 @@ final public class LibraryViewController: UIViewController {
         b.setTitle("library_add_notebook_button".localized, for: .normal)
         b.titleLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
         b.titleLabel!.adjustsFontForContentSizeCategory = true
-        b.addTarget(self, action: #selector(LibraryViewController.addNotebookButtonDidTap), for: .touchUpInside)
+        b.addTarget(self, action: #selector(addNotebookButtonDidTap), for: .touchUpInside)
         return b
     }()
 

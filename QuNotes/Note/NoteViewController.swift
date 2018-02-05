@@ -121,7 +121,7 @@ public final class NoteViewController: UIViewController {
                                                      attributes: [NSAttributedStringKey.foregroundColor: theme.textColor])
         t.font = UIFont.preferredFont(forTextStyle: .body)
         t.adjustsFontForContentSizeCategory = true
-        t.addTarget(self, action: #selector(NoteViewController.onTitleTextFieldChange), for: .editingChanged)
+        t.addTarget(self, action: #selector(onTitleTextFieldChange), for: .editingChanged)
         return t
     }()
     private let tagView: WSTagsField = {
@@ -152,14 +152,12 @@ public final class NoteViewController: UIViewController {
         b.setTitle("note_add_content_cell_button".localized, for: .normal)
         b.titleLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
         b.titleLabel!.adjustsFontForContentSizeCategory = true
-        b.addTarget(self, action: #selector(NoteViewController.addCell), for: .touchUpInside)
+        b.addTarget(self, action: #selector(addCell), for: .touchUpInside)
         return b
     }()
 
     private func setupNavigationBar() {
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
-                                           target: self,
-                                           action: #selector(NoteViewController.onDeleteButtonClick))
+        let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(onDeleteButtonClick))
         navigationItem.rightBarButtonItem = deleteButton
     }
 
@@ -174,7 +172,7 @@ public final class NoteViewController: UIViewController {
 
     private func setupKeyboardAvoidingBehaviour() {
         NotificationCenter.default.addObserver(self,
-                                               selector: #selector(NoteViewController.handleKeyboardChangingFrame(notification:)),
+                                               selector: #selector(handleKeyboardChangingFrame(notification:)),
                                                name: NSNotification.Name.UIKeyboardWillChangeFrame,
                                                object: nil)
     }

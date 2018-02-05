@@ -104,7 +104,7 @@ final public class NotebookViewController: UIViewController {
         b.setTitle("notebook_add_note_button".localized, for: .normal)
         b.titleLabel!.font = UIFont.preferredFont(forTextStyle: .headline)
         b.titleLabel!.adjustsFontForContentSizeCategory = true
-        b.addTarget(self, action: #selector(NotebookViewController.addNote), for: .touchUpInside)
+        b.addTarget(self, action: #selector(addNote), for: .touchUpInside)
         return b
     }()
     private let titleTextField: UITextField = {
@@ -133,7 +133,7 @@ final public class NotebookViewController: UIViewController {
     private func addDeleteButton() {
         let deleteButton = UIBarButtonItem(barButtonSystemItem: .trash,
                                            target: self,
-                                           action: #selector(NotebookViewController.onDeleteButtonClick))
+                                           action: #selector(onDeleteButtonClick))
         self.navigationItem.rightBarButtonItem = deleteButton
     }
 
@@ -161,7 +161,8 @@ extension NotebookViewController: UITableViewDataSource {
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.notebookCellReuseIdentifier, for: indexPath) as! NotebookTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.notebookCellReuseIdentifier,
+                                                 for: indexPath) as! NotebookTableViewCell
         cell.render(with: notes[indexPath.row])
         return cell
     }
