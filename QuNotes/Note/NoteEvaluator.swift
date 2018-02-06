@@ -42,7 +42,7 @@ extension Note {
             case let .changeCell(newContent, index):
                 guard index < model.cells.count else { break }
                 let newCell = Core.Note.Cell(type: .text, data: newContent)
-                newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, new: newCell)
+                newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, with: newCell)
                 actions = [.updateCells(newModel.cells)]
                 effects = [.updateCell(index: index, cells: newModel.cells.stringifyCells())]
             case .addCell:

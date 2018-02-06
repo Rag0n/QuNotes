@@ -26,7 +26,7 @@ extension Array where Element: Equatable {
         return updatedArray
     }
 
-    func replacing(at index: Int, new element: Element) -> [Element] {
+    func replacing(at index: Int, with element: Element) -> [Element] {
         var updatedArray = self
         updatedArray[index] = element
         return updatedArray

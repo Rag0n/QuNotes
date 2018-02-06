@@ -81,7 +81,7 @@ extension Notebook {
             case let .updateNote(note):
                 guard let index = model.index(ofNote: note) else { break }
                 newModel = model |> Model.lens.notes .~
-                    model.notes.replacing(at: index, new: note).sorted(by: title)
+                    model.notes.replacing(at: index, with: note).sorted(by: title)
                 effects = [.updateAllNotes(viewModels(from: newModel))]
             case let .deleteNote(note):
                 guard let index = model.index(ofNote: note) else { break }

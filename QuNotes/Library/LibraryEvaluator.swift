@@ -58,7 +58,7 @@ extension Library {
             case let .updateNotebook(notebook):
                 guard let index = model.index(ofNotebook: notebook) else { break }
                 newModel = model |> Model.lens.notebooks .~
-                    model.notebooks.replacing(at: index, new: notebook).sorted(by: name)
+                    model.notebooks.replacing(at: index, with: notebook).sorted(by: name)
                 effects = [.updateAllNotebooks(viewModels(from: newModel))]
             case let .deleteNotebook(notebook):
                 guard let index = model.index(ofNotebook: notebook) else { break }
