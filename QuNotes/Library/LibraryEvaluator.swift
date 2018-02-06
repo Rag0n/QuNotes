@@ -38,10 +38,9 @@ extension Library {
                 actions = [.addNotebook(notebook)]
             case let .deleteNotebook(index):
                 guard index < model.notebooks.count else { break }
-                let notebook = model.notebooks[index]
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(at: index)
                 effects = [.deleteNotebook(index: index, notebooks: viewModels(from: newModel))]
-                actions = [.deleteNotebook(notebook)]
+                actions = [.deleteNotebook(model.notebooks[index])]
             case let .selectNotebook(index):
                 actions = [.showNotebook(model.notebooks[index], isNew: false)]
             }

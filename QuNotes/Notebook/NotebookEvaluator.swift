@@ -42,7 +42,7 @@ extension Notebook {
                     effects += [.focusOnTitle]
                 }
             case .addNote:
-                let note = newNote()
+                let note = createNote()
                 newModel = model |> Model.lens.notes
                     .~ model.notes.appending(note).sorted(by: title)
                 actions = [.addNote(note)]
@@ -161,7 +161,7 @@ private extension Notebook.Model {
 }
 
 private extension Notebook.Evaluator {
-    func newNote() -> Core.Note.Meta {
+    func createNote() -> Core.Note.Meta {
         let time = currentTimestamp()
         return Core.Note.Meta(uuid: generateUUID(), title: "", tags: [], updated_at: time, created_at: time)
     }
