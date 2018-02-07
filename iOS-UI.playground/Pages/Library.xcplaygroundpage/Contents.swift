@@ -2,7 +2,9 @@ import UIKit
 import PlaygroundSupport
 import QuNotesUI
 
-AppEnvironment.push(environment: Environment(language: .ru))
+let useEnglishLanguage = true
+let language: Language = useEnglishLanguage ? .en : .ru
+AppEnvironment.push(environment: Environment(language: language))
 let controller = LibraryViewController { (event) in print(event) }
 let navigationController = UINavigationController(rootViewController: controller)
 ThemeExecuter.applyTheme(forView: navigationController.view)
