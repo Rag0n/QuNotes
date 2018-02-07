@@ -7,8 +7,19 @@ let controller = NotebookViewController { (event) in print(event) }
 let navigationController = UINavigationController(rootViewController: controller)
 ThemeExecuter.applyTheme(forView: navigationController.view)
 
-let (parent, _) = playgroundControllers(device: .phone4inch, orientation: .portrait,
-                                        child: navigationController)
+let useBiggestFont = false
+let useSmallestFont = true
+var fontTrait = UITraitCollection(preferredContentSizeCategory: .large)
+if useBiggestFont {
+    fontTrait = UITraitCollection(preferredContentSizeCategory: .accessibilityExtraExtraExtraLarge)
+} else if useSmallestFont {
+    fontTrait = UITraitCollection(preferredContentSizeCategory: .small)
+}
+let additionalTraitCollection = UITraitCollection.init(traitsFrom: [fontTrait])
+let (parent, _) = playgroundControllers(device: .phone5_5inch,
+                                        orientation: .portrait,
+                                        child: navigationController,
+                                        additionalTraits: additionalTraitCollection)
 
 let frame = parent.view.frame
 PlaygroundPage.current.liveView = parent
