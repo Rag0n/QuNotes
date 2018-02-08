@@ -287,7 +287,7 @@ class LibrarySpec: QuickSpec {
 
                     it("has handleError effect with message from error") {
                         expect(e.effects).to(equalDiff([
-                            .handleError(title: "Unable to load notebooks", message: "message")
+                            .handleError(title: "Failed to load notebooks", message: "message")
                         ]))
                     }
                 }
@@ -304,7 +304,7 @@ class LibrarySpec: QuickSpec {
 
                     it("has handleError effect with combined message from errors") {
                         expect(e.effects).to(equalDiff([
-                            .handleError(title: "Unable to load notebooks", message: "message\nsecondMessage")
+                            .handleError(title: "Failed to load notebooks", message: "message\nsecondMessage")
                         ]))
                     }
                 }

@@ -70,7 +70,7 @@ public enum Library {
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.appending(notebook)
             case let .didReadBaseDirectory(result):
                 guard let urls = result.value else {
-                    effects = [.handleError(title: "Failed to load notebooks",
+                    effects = [.handleError(title: Constants.notebooksLoadingErrorTitle,
                                             message: result.error!.localizedDescription)]
                     break
                 }
@@ -80,7 +80,7 @@ public enum Library {
                 effects = [.readNotebooks(urls: metaURLs)]
             case let .didReadNotebooks(results):
                 guard noErrorsInResults(results) else {
-                    effects = [.handleError(title: "Unable to load notebooks",
+                    effects = [.handleError(title: Constants.notebooksLoadingErrorTitle,
                                             message: results |> reduceResultsToErrorSubString >>> String.init)]
                     break
                 }
@@ -119,4 +119,8 @@ internal func reduceResultsToErrorSubString<T>(_ error: [Result<T, AnyError>]) -
 
 private func resultIsError<T>(_ result: Result<T, AnyError>) -> Bool {
     return result.error != nil
+}
+
+private enum Constants {
+    static let notebooksLoadingErrorTitle = "Failed to load notebooks"
 }
