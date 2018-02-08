@@ -103,7 +103,7 @@ public enum Note {
             switch event {
             case .loadContent:
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                effects = [.readContent(url: model.notebook.noteContentURL(for: model.meta))]
+                effects = [.readContent(url: model.contentURL)]
             case let .didReadContent(result):
                 guard case let .success(content) = result else {
                     effects = [.handleError(title: Constants.contentLoadingErrorTitle,
@@ -117,11 +117,9 @@ public enum Note {
                             |> Model.lens.content.title .~ newTitle
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                let metaURL = model.notebook.noteMetaURL(for: newModel.meta)
-                let contentURL = model.notebook.noteContentURL(for: newModel.meta)
                 effects = [
-                    .updateTitle(note: newModel.meta, url: metaURL, oldTitle: model.meta.title),
-                    .updateContent(content: newModel.content, url: contentURL, oldContent: model.content)
+                    .updateTitle(note: newModel.meta, url: newModel.metaURL, oldTitle: model.meta.title),
+                    .updateContent(content: newModel.content, url: newModel.contentURL, oldContent: model.content)
                 ]
             case let .changeCells(newCells):
                 let newContent = Content(title: model.meta.title, cells: newCells)
@@ -129,22 +127,20 @@ public enum Note {
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
                 effects = [.updateContent(content: newContent,
-                                          url: model.notebook.noteContentURL(for: newModel.meta),
+                                          url: model.contentURL,
                                           oldContent: model.content)]
             case let .addTag(tag):
                 guard !model.hasTag(tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.appending(tag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                effects = [.addTag(tag, note: newModel.meta,
-                                   url: model.notebook.noteMetaURL(for: newModel.meta))]
+                effects = [.addTag(tag, note: newModel.meta, url: newModel.metaURL)]
             case let .removeTag(tag):
                 guard let indexOfTag = model.meta.tags.index(of: tag) else { break }
                 newModel = model |> Model.lens.meta.tags .~ model.meta.tags.removing(at: indexOfTag)
                             |> Model.lens.meta.updated_at .~ currentTimestamp()
                 guard model.notebook != Notebook.Meta.Unspecified else { break }
-                effects = [.removeTag(tag, note: newModel.meta,
-                                      url: model.notebook.noteMetaURL(for: newModel.meta))]
+                effects = [.removeTag(tag, note: newModel.meta, url: newModel.metaURL)]
             case let .didChangeTitle(oldTitle, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.meta.title .~ oldTitle
@@ -173,6 +169,14 @@ public enum Note {
 // MARK: - Private
 
 private extension Note.Model {
+    var metaURL: DynamicBaseURL {
+        return notebook.noteMetaURL(for: meta)
+    }
+
+    var contentURL: DynamicBaseURL {
+        return notebook.noteContentURL(for: meta)
+    }
+
     func hasTag(_ tag: String) -> Bool {
         return meta.tags.index(of: tag) != nil
     }
