@@ -106,7 +106,7 @@ public enum Note {
                 effects = [.readContent(url: model.notebook.noteContentURL(for: model.meta))]
             case let .didReadContent(result):
                 guard case let .success(content) = result else {
-                    effects = [.handleError(title: "Unable to load content",
+                    effects = [.handleError(title: Constants.contentLoadingErrorTitle,
                                             message: result.error!.localizedDescription)]
                     break
                 }
@@ -176,4 +176,8 @@ private extension Note.Model {
     func hasTag(_ tag: String) -> Bool {
         return meta.tags.index(of: tag) != nil
     }
+}
+
+private enum Constants {
+    static let contentLoadingErrorTitle = "Failed to load content"
 }

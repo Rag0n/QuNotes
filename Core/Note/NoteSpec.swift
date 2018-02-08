@@ -97,7 +97,7 @@ class NoteExperimantalSpec: QuickSpec {
 
                     it("has handleError effect") {
                         expect(e.effects).to(equalDiff([
-                            .handleError(title: "Unable to load content", message: "message")
+                            .handleError(title: "Failed to load content", message: "message")
                         ]))
                     }
                 }
