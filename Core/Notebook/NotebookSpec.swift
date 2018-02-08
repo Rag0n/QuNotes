@@ -235,7 +235,7 @@ class NotebookSpec: QuickSpec {
 
                     it("has handleError effect with message from error") {
                         expect(e.effects).to(equalDiff([
-                            .handleError(title: "Unable to load notes", message: "message")
+                            .handleError(title: "Failed to load notes", message: "message")
                         ]))
                     }
                 }
@@ -252,7 +252,7 @@ class NotebookSpec: QuickSpec {
 
                     it("has handleError effect with combined message from errors") {
                         expect(e.effects).to(equalDiff([
-                            .handleError(title: "Unable to load notes", message: "message\nsecondMessage")
+                            .handleError(title: "Failed to load notes", message: "message\nsecondMessage")
                         ]))
                     }
                 }

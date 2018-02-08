@@ -87,7 +87,7 @@ public enum Notebook {
                 effects = [.deleteNote(noteToRemove, url: newModel.meta.noteURL(for: noteToRemove))]
             case let .didReadDirectory(result):
                 guard let urls = result.value else {
-                    effects = [.handleError(title: "Failed to load notes",
+                    effects = [.handleError(title: Constants.notesLoadingErrorTitle,
                                             message: result.error!.localizedDescription)]
                     break
                 }
@@ -97,7 +97,7 @@ public enum Notebook {
                 effects = [.readNotes(urls: notesURL)]
             case let .didReadNotes(results):
                 guard noErrorsInResults(results) else {
-                    effects = [.handleError(title: "Unable to load notes",
+                    effects = [.handleError(title: Constants.notesLoadingErrorTitle,
                                             message: results |> reduceResultsToErrorSubString >>> String.init)]
                     break
                 }
@@ -190,4 +190,8 @@ internal extension Notebook.Meta {
         static let meta = "meta"
         static let content = "content"
     }
+}
+
+private enum Constants {
+    static let notesLoadingErrorTitle = "Failed to load notes"
 }
