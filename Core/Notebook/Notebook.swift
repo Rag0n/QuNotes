@@ -91,9 +91,7 @@ public enum Notebook {
                                             message: result.error!.localizedDescription)]
                     break
                 }
-                let notesURL = urls
-                    .filter { $0.pathExtension == Meta.Extension.note }
-                    .map { $0.appendingPathComponent(Meta.Component.meta).appendingPathExtension(Meta.Extension.json) }
+                let notesURL = urls.filter(isNoteURL).map(toJSONmetaURL)
                 effects = [.readNotes(urls: notesURL)]
             case let .didReadNotes(results):
                 guard noErrorsInResults(results) else {
@@ -194,4 +192,14 @@ internal extension Notebook.Meta {
 
 private enum Constants {
     static let notesLoadingErrorTitle = "Failed to load notes"
+}
+
+private func isNoteURL(_ url: URL) -> Bool {
+    return url.pathExtension == Notebook.Meta.Extension.note
+}
+
+private func toJSONmetaURL(fromURL url: URL) -> URL {
+    return url
+        .appendingPathComponent(Notebook.Meta.Component.meta)
+        .appendingPathExtension(Notebook.Meta.Extension.json)
 }
