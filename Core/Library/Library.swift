@@ -74,9 +74,7 @@ public enum Library {
                                             message: result.error!.localizedDescription)]
                     break
                 }
-                let metaURLs = urls
-                    .filter { $0.pathExtension == Notebook.Meta.Extension.notebook }
-                    .map { $0.appendingPathComponent(Notebook.Meta.Component.meta).appendingPathExtension(Notebook.Meta.Extension.json) }
+                let metaURLs = urls.filter(isNotebookURL).map(toJSONmetaURL)
                 effects = [.readNotebooks(urls: metaURLs)]
             case let .didReadNotebooks(results):
                 guard noErrorsInResults(results) else {
@@ -117,10 +115,20 @@ internal func reduceResultsToErrorSubString<T>(_ error: [Result<T, AnyError>]) -
         .dropLast()
 }
 
+internal func toJSONmetaURL(fromURL url: URL) -> URL {
+    return url
+        .appendingPathComponent(Notebook.Meta.Component.meta)
+        .appendingPathExtension(Notebook.Meta.Extension.json)
+}
+
 private func resultIsError<T>(_ result: Result<T, AnyError>) -> Bool {
     return result.error != nil
 }
 
 private enum Constants {
     static let notebooksLoadingErrorTitle = "Failed to load notebooks"
+}
+
+private func isNotebookURL(_ url: URL) -> Bool {
+    return url.pathExtension == Notebook.Meta.Extension.notebook
 }

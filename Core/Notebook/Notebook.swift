@@ -197,9 +197,3 @@ private enum Constants {
 private func isNoteURL(_ url: URL) -> Bool {
     return url.pathExtension == Notebook.Meta.Extension.note
 }
-
-private func toJSONmetaURL(fromURL url: URL) -> URL {
-    return url
-        .appendingPathComponent(Notebook.Meta.Component.meta)
-        .appendingPathExtension(Notebook.Meta.Extension.json)
-}
