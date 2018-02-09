@@ -70,10 +70,10 @@ public enum Notebook {
 
             switch event {
             case .loadNotes:
-                effects = [.readDirectory(atURL: model.meta.notebookURL())]
+                effects = [.readDirectory(atURL: model.meta.notebookURL)]
             case let .changeName(newName):
                 newModel = model |> Model.lens.meta.name .~ newName
-                effects = [.updateNotebook(newModel.meta, url: newModel.meta.metaURL(), oldNotebook: model.meta)]
+                effects = [.updateNotebook(newModel.meta, url: newModel.meta.metaURL, oldNotebook: model.meta)]
             case let .addNote(noteToAdd):
                 guard !model.hasNote(withUUID: noteToAdd.uuid) else { break }
                 newModel = model |> Model.lens.notes .~ model.notes.appending(noteToAdd)
@@ -143,11 +143,11 @@ extension Notebook.Meta {
             |> DynamicBaseURL.init
     }
 
-    func notebookURL() -> DynamicBaseURL {
+    var notebookURL: DynamicBaseURL {
         return notebookPlainURL |> DynamicBaseURL.init
     }
 
-    func metaURL() -> DynamicBaseURL {
+    var metaURL: DynamicBaseURL {
         return notebookPlainURL
             .appendingPathComponent(Component.meta)
             .appendingPathExtension(Extension.json)

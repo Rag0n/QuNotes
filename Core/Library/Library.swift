@@ -57,11 +57,11 @@ public enum Library {
             case let .addNotebook(notebook):
                 guard !model.hasNotebook(withUUID: notebook.uuid) else { break }
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.appending(notebook)
-                effects = [.createNotebook(notebook, url: notebook.metaURL())]
+                effects = [.createNotebook(notebook, url: notebook.metaURL)]
             case let .removeNotebook(notebookMeta):
                 guard let notebook = model.notebooks.first(where: { $0.uuid == notebookMeta.uuid }) else { break }
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
-                effects = [.deleteNotebook(notebook, url: notebook.notebookURL())]
+                effects = [.deleteNotebook(notebook, url: notebook.notebookURL)]
             case let .didAddNotebook(notebook, error):
                 guard error != nil else { break }
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
