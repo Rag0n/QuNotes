@@ -59,7 +59,7 @@ public enum Library {
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.appending(notebook)
                 effects = [.createNotebook(notebook, url: notebook.metaURL)]
             case let .removeNotebook(notebookMeta):
-                guard let notebook = model.notebooks.first(where: { $0.uuid == notebookMeta.uuid }) else { break }
+                guard let notebook = model.notebook(withUUID: notebookMeta.uuid) else { break }
                 newModel = model |> Model.lens.notebooks .~ model.notebooks.removing(notebook)
                 effects = [.deleteNotebook(notebook, url: notebook.notebookURL)]
             case let .didAddNotebook(notebook, error):
@@ -101,6 +101,10 @@ public enum Library {
 private extension Library.Model {
     func hasNotebook(withUUID notebookUUID: String) -> Bool {
         return notebooks.index { $0.uuid == notebookUUID } != nil
+    }
+
+    func notebook(withUUID notebookUUID: String) -> Notebook.Meta? {
+        return notebooks.first { $0.uuid == notebookUUID }
     }
 }
 
