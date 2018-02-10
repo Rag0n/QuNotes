@@ -43,9 +43,9 @@ extension Notebook {
                 dispatchToCore <| .changeName(title)
             case .deleteNotebook:
                 output = .deleteNotebook(notebook)
-                navigationController.popViewController(animated: true)
+                navigationController.popCoordinator(animated: true)
             case .finish:
-                navigationController.popViewController(animated: true)
+                navigationController.popCoordinator(animated: true)
             case let .showFailure(failure, reason):
                 showError(title: failure, message: reason)
             case let .showNote(note, isNewNote):

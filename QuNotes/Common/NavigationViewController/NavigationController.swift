@@ -14,17 +14,14 @@ final class NavigationController: UIViewController {
     // MARK: - API
 
     func pushCoordinator<C: Coordinator>(coordinator: C, animated: Bool, onDispose: CoordinatorDisposeBlock? = nil) {
-        viewControllerToCoordinatorMap[coordinator.viewController] = coordinator
-        viewControllerToDisposeBlockMap[coordinator.viewController] = onDispose
+        let vc = coordinator.viewController
+        viewControllerToCoordinatorMap[vc] = coordinator
+        viewControllerToDisposeBlockMap[vc] = onDispose
         coordinator.onStart()
-        pushViewController(viewController: coordinator.viewController, animated: animated)
+        managedNavigationController.pushViewController(vc, animated: animated)
     }
 
-    func pushViewController(viewController: UIViewController, animated: Bool) {
-        managedNavigationController.pushViewController(viewController, animated: animated)
-    }
-
-    func popViewController(animated: Bool) {
+    func popCoordinator(animated: Bool) {
         managedNavigationController.popViewController(animated: animated)
     }
 
@@ -108,10 +105,10 @@ extension NavigationController: UINavigationControllerDelegate {
         return !managedNavigationController.viewControllers.contains(vc)
     }
 
-    private func cleanUpCoordinator(forViewController viewController: UIViewController) {
-        let onDisposeBlock = viewControllerToDisposeBlockMap[viewController]
-        viewControllerToCoordinatorMap[viewController] = nil
-        viewControllerToDisposeBlockMap[viewController] = nil
+    private func cleanUpCoordinator(forViewController vc: UIViewController) {
+        let onDisposeBlock = viewControllerToDisposeBlockMap[vc]
+        viewControllerToCoordinatorMap[vc] = nil
+        viewControllerToDisposeBlockMap[vc] = nil
         onDisposeBlock?()
     }
 }

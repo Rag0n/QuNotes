@@ -31,7 +31,7 @@ final class AppCoordinator: Coordinator {
 
     private let window: UIWindow
 
-    private lazy var navigationController: NavigationController = {
+    private let navigationController: NavigationController = {
         let vc = NavigationController()
         vc.preferLargeTitles()
         return vc

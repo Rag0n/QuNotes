@@ -43,9 +43,9 @@ extension Note {
                 dispatchToCore <| .removeTag(tag)
             case .deleteNote:
                 output = .deleteNote(note)
-                navigationController.popViewController(animated: true)
+                navigationController.popCoordinator(animated: true)
             case .finish:
-                navigationController.popViewController(animated: true)
+                navigationController.popCoordinator(animated: true)
             case let .showFailure(failure, reason):
                 showError(title: failure, message: reason)
             case let .didUpdateNote(note):
