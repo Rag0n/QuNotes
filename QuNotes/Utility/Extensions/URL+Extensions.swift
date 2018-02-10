@@ -9,11 +9,11 @@
 import Foundation
 
 extension URL {
-    static func documentsURL() -> URL {
+    static var documentsURL: URL {
         return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
 
-    func appendedToDocumentsURL() -> URL {
+    var appendedToDocumentsURL: URL {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         return documentsURL.appendingPathComponent(path)
     }

@@ -38,7 +38,7 @@ public struct FileExecuter: FileExecuterType {
     }
 
     public func contentOfDocumentsFolder() -> Result<[URL], AnyError>  {
-        return Result(try contentOfFolder(at: URL.documentsURL()))
+        return Result(try contentOfFolder(at: URL.documentsURL))
     }
 
     public func readFile<T: Decodable>(at url: DynamicBaseURL, contentType: T.Type) -> Result<T, AnyError> {
@@ -71,7 +71,7 @@ public struct FileExecuter: FileExecuterType {
 
     private func removeItem(at url: URL) -> Error? {
         do {
-            try FileManager.default.removeItem(at: url.appendedToDocumentsURL())
+            try FileManager.default.removeItem(at: url.appendedToDocumentsURL)
             return nil
         } catch {
             return error
@@ -92,6 +92,6 @@ public struct FileExecuter: FileExecuterType {
 
 private extension DynamicBaseURL {
     var documentsBase: URL {
-        return url.appendedToDocumentsURL()
+        return url.appendedToDocumentsURL
     }
 }

@@ -11,11 +11,11 @@ import Nimble
 
 class URLExtensionsSpec: QuickSpec {
     override func spec() {
-        describe("-appendedToDocumentsURL") {
+        describe("appendedToDocumentsURL") {
             let url = URL(string: "some/url")!
 
             it("inserts documents url to current url") {
-                expect(url.appendedToDocumentsURL().path)
+                expect(url.appendedToDocumentsURL.path)
                     .to(contain("/Documents/some/url"))
             }
         }
