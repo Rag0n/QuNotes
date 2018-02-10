@@ -13,6 +13,7 @@ protocol Coordinator: class {
     var viewController: UIViewController { get }
     var output: ResultEffect { get }
     func onStart()
+    func showError(title: Localizable, message: String)
     func showError(title: String, message: String)
 }
 
@@ -22,16 +23,7 @@ extension Coordinator {
     }
 
     func showError(title: Localizable, message: String) {
-        let alertController = UIAlertController(title: title.localizedKey.localized,
-                                                message: message,
-                                                preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        alertController.addAction(cancelAction)
-        // Need to delay to the next run loop because in the current loop
-        // view controller can potentionally be not in the window hierharchy
-        DispatchQueue.main.async {
-            self.viewController.present(alertController, animated: true, completion: nil)
-        }
+        showError(title: title.localizedKey.localized, message: message)
     }
 
     func showError(title: String, message: String) {
