@@ -51,7 +51,7 @@ public enum Note {
 
     public enum ViewEvent {
         case didLoad
-        case changeCell(String, index: Int)
+        case changeCellContent(String, index: Int)
         case addCell
         case removeCell(index: Int)
         case changeTitle(String)

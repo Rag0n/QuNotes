@@ -57,7 +57,7 @@ class NoteEvaluatorSpec: QuickSpec {
                 }
             }
 
-            context("when receiving changeCell event") {
+            context("when receiving changeCellContent event") {
                 beforeEach {
                     let cells = [Dummy.cell(withContent: "content"),
                                  Dummy.cell(withContent: "anotherContent")]
@@ -66,7 +66,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when model has cell with that index") {
                     beforeEach {
-                        event = .changeCell("newContent", index: 0)
+                        event = .changeCellContent("newContent", index: 0)
                         e = e.evaluating(event: event)
                     }
 
@@ -93,7 +93,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 context("when model doesnt hove cell with that index") {
                     beforeEach {
-                        event = .changeCell("newContent", index: 2)
+                        event = .changeCellContent("newContent", index: 2)
                         e = e.evaluating(event: event)
                     }
 

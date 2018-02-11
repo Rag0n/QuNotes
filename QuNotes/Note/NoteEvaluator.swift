@@ -39,7 +39,7 @@ extension Note {
                 if model.isNew {
                     effects += [.focusOnTitle]
                 }
-            case let .changeCell(newContent, index):
+            case let .changeCellContent(newContent, index):
                 guard index < model.cells.count else { break }
                 let newCell = Core.Note.Cell(type: .text, data: newContent)
                 newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, with: newCell)

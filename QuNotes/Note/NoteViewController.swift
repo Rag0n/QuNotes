@@ -193,7 +193,7 @@ public final class NoteViewController: UIViewController {
     private func updateCell(_ cell: NoteTableViewCell, index: Int) {
         let content = cells[index]
         cell.set(content: content, maxHeight: tableView.bounds.size.height) { [unowned self] newContent in
-            self.dispatch <| .changeCell(newContent, index: index)
+            self.dispatch <| .changeCellContent(newContent, index: index)
         }
     }
 
