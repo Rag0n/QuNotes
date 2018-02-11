@@ -14,7 +14,7 @@ class NoteExperimantalSpec: QuickSpec {
     override func spec() {
         let error = AnyError(NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: "message"]))
         let meta = Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 12, created_at: 12)
-        let content = Note.Content(title: "title", cells: [Note.Cell(type: .text, data: "content")])
+        let content = Note.Content(title: "title", cells: [Note.Cell(type: .markdown, data: "content")])
         let model = Note.Model(meta: meta, content: content)
         var e: Note.Evaluator!
 
@@ -65,7 +65,7 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving didReadContent event") {
                 context("when successfully reads content") {
-                    let content = Note.Content(title: "title", cells: [Note.Cell(type: .text, data: "new content")])
+                    let content = Note.Content(title: "title", cells: [Note.Cell(type: .markdown, data: "new content")])
 
                     beforeEach {
                         event = .didReadContent(Result(value: content))
@@ -145,7 +145,7 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving changeCells event") {
                 let newCells = [
-                    Note.Cell(type: .text, data: "new cell")
+                    Note.Cell(type: .markdown, data: "new cell")
                 ]
 
                 beforeEach {
@@ -318,7 +318,7 @@ class NoteExperimantalSpec: QuickSpec {
 
             context("when receiving didChangeContent event") {
                 let oldContent = Note.Content(title: model.meta.title,
-                                              cells: [Note.Cell(type: .text, data: "old content")])
+                                              cells: [Note.Cell(type: .markdown, data: "old content")])
 
                 context("when successfully changes content") {
                     beforeEach {

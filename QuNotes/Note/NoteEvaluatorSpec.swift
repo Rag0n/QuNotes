@@ -361,7 +361,7 @@ class NoteEvaluatorSpec: QuickSpec {
             }
 
             context("when receiving didUpdateCells event") {
-                let oldCells = [Core.Note.Cell(type: .text, data: "old content")]
+                let oldCells = [Core.Note.Cell(type: .markdown, data: "old content")]
 
                 context("when successfully updates cells") {
                     beforeEach {
@@ -514,7 +514,7 @@ class NoteEvaluatorSpec: QuickSpec {
 private enum Dummy {
     static let note = Core.Note.Meta(uuid: "uuid", title: "title", tags: ["tag"], updated_at: 14, created_at: 14)
     static let model = Note.Model(title: note.title, tags: note.tags, cells: cells, isNew: false)
-    static let cells = [Core.Note.Cell(type: .text, data: "content")]
+    static let cells = [Core.Note.Cell(type: .markdown, data: "content")]
     static let error = NSError(domain: "error domain", code: 1, userInfo: [NSLocalizedDescriptionKey: errorMessage])
     static let errorMessage = "message"
     static var isNew: Bool {
@@ -530,12 +530,12 @@ private enum Dummy {
     }
 
     static func content(withData data: String) -> Core.Note.Content {
-        let cells = [Core.Note.Cell(type: .text, data: data)]
+        let cells = [Core.Note.Cell(type: .markdown, data: data)]
         return Core.Note.Content(title: note.title, cells: cells)
     }
 
     static func cell(withContent content: String) -> Core.Note.Cell {
-        return Core.Note.Cell(type: .text, data: content)
+        return Core.Note.Cell(type: .markdown, data: content)
     }
 
     static func note(withUUUID uuid: String = UUID.init().uuidString,

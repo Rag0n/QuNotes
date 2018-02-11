@@ -41,12 +41,12 @@ extension Note {
                 }
             case let .changeCellContent(newContent, index):
                 guard index < model.cells.count else { break }
-                let newCell = Core.Note.Cell(type: .text, data: newContent)
+                let newCell = Core.Note.Cell(type: .markdown, data: newContent)
                 newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, with: newCell)
                 actions = [.updateCells(newModel.cells)]
                 effects = [.updateCell(index: index, cells: newModel.cells.stringifyCells())]
             case .addCell:
-                let newCell = Core.Note.Cell(type: .text, data: "")
+                let newCell = Core.Note.Cell(type: .markdown, data: "")
                 newModel = model |> Model.lens.cells .~ model.cells.appending(newCell)
                 actions = [.updateCells(newModel.cells)]
                 effects = [.addCell(index: model.cells.count, cells: newModel.cells.stringifyCells())]
