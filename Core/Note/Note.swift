@@ -61,6 +61,10 @@ public enum Note {
 
     public enum CellType: String, Codable {
         case markdown
+        case code
+        case latex
+        case diagram
+        case text
     }
 
     public enum Effect: AutoEquatable {
