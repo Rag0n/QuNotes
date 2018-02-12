@@ -45,6 +45,8 @@ extension Note {
                 newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, with: newCell)
                 actions = [.updateCells(newModel.cells)]
                 effects = [.updateCell(index: index, cells: newModel.cells.stringifyCells())]
+            case let .changeCellType(newType, index):
+                break
             case .addCell:
                 let newCell = Core.Note.Cell(type: .markdown, data: "")
                 newModel = model |> Model.lens.cells .~ model.cells.appending(newCell)
