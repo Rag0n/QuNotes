@@ -31,10 +31,10 @@ public enum Note {
     public enum ViewEffect: AutoEquatable {
         case updateTitle(String)
         case focusOnTitle
-        case updateCell(index: Int, cells: [String])
-        case addCell(index: Int, cells: [String])
-        case removeCell(index: Int, cells: [String])
-        case updateCells([String])
+        case updateCell(index: Int, cells: [CellViewModel])
+        case addCell(index: Int, cells: [CellViewModel])
+        case removeCell(index: Int, cells: [CellViewModel])
+        case updateCells([CellViewModel])
         case showTags([String])
         case addTag(String)
         case removeTag(String)
@@ -59,6 +59,16 @@ public enum Note {
         case delete
         case addTag(String)
         case removeTag(String)
+    }
+
+    public struct CellViewModel: AutoEquatable {
+        let content: String
+        let type: Core.Note.CellType
+
+        public init(content: String, type: Core.Note.CellType) {
+            self.content = content
+            self.type = type
+        }
     }
 
     public enum CoordinatorResultEffect {

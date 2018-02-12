@@ -38,6 +38,13 @@ public func == (lhs: Library.NotebookViewModel, rhs: Library.NotebookViewModel) 
     guard lhs.title == rhs.title else { return false }
     return true
 }
+// MARK: - Note.CellViewModel AutoEquatable
+extension Note.CellViewModel: Equatable {}
+public func == (lhs: Note.CellViewModel, rhs: Note.CellViewModel) -> Bool {
+    guard lhs.content == rhs.content else { return false }
+    guard lhs.type == rhs.type else { return false }
+    return true
+}
 // MARK: - Note.Model AutoEquatable
 extension Note.Model: Equatable {}
 internal func == (lhs: Note.Model, rhs: Note.Model) -> Bool {

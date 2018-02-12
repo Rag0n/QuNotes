@@ -72,8 +72,11 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateCell effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateCell(index: 0, cells: ["newContent", "anotherContent"])
-                            ]))
+                            .updateCell(index: 0, cells: [Note.CellViewModel(content: "newContent",
+                                                                             type: .markdown),
+                                                          Note.CellViewModel(content: "anotherContent",
+                                                                             type: .markdown)])
+                        ]))
                     }
 
                     it("has updateCells action") {
@@ -122,7 +125,8 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("has addCell effect") {
                     expect(e.effects).to(equalDiff([
-                        .addCell(index: 1, cells: ["content", ""])
+                        .addCell(index: 1, cells: [Note.CellViewModel(content: "content", type: .markdown),
+                                                   Note.CellViewModel(content: "", type: .markdown)])
                     ]))
                 }
 
@@ -152,7 +156,8 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("has removeCell effect") {
                     expect(e.effects).to(equalDiff([
-                        .removeCell(index: 0, cells: ["anotherContent"])
+                        .removeCell(index: 0, cells: [Note.CellViewModel(content: "anotherContent",
+                                                                         type: .markdown)])
                     ]))
                 }
 
@@ -277,7 +282,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                 it("has updateCells effect") {
                     expect(e.effects).to(equalDiff([
-                        .updateCells(["loaded content"])
+                        .updateCells([Note.CellViewModel(content: "loaded content", type: .markdown)])
                     ]))
                 }
             }
@@ -402,7 +407,8 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateCells effect") {
                         expect(e.effects).to(equalDiff([
-                            .updateCells(["old content"])
+                            .updateCells([Note.CellViewModel(content: "old content",
+                                                             type: .markdown)])
                         ]))
                     }
                 }

@@ -101,7 +101,7 @@ public final class NoteViewController: UIViewController {
         static let noteCellReuseIdentifier = "noteCellReuseIdentifier"
     }
     fileprivate var dispatch: Note.ViewDispacher
-    fileprivate var cells: [String] = []
+    fileprivate var cells: [Note.CellViewModel] = []
 
     private var scaledTitleTextFieldHeight: CGFloat {
         return UIFontMetrics(forTextStyle: .body).scaledValue(for: Constants.titleTextFieldHeight)
@@ -191,7 +191,7 @@ public final class NoteViewController: UIViewController {
     }
 
     private func updateCell(_ cell: NoteTableViewCell, index: Int) {
-        let content = cells[index]
+        let content = cells[index].content
         cell.set(content: content, maxHeight: tableView.bounds.size.height) { [unowned self] newContent in
             self.dispatch <| .changeCellContent(newContent, index: index)
         }

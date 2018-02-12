@@ -44,18 +44,18 @@ extension Note {
                 let newCell = Core.Note.Cell(type: .markdown, data: newContent)
                 newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, with: newCell)
                 actions = [.updateCells(newModel.cells)]
-                effects = [.updateCell(index: index, cells: newModel.cells.stringifyCells())]
+                effects = [.updateCell(index: index, cells: viewModels(from: newModel))]
             case let .changeCellType(newType, index):
                 break
             case .addCell:
                 let newCell = Core.Note.Cell(type: .markdown, data: "")
                 newModel = model |> Model.lens.cells .~ model.cells.appending(newCell)
                 actions = [.updateCells(newModel.cells)]
-                effects = [.addCell(index: model.cells.count, cells: newModel.cells.stringifyCells())]
+                effects = [.addCell(index: model.cells.count, cells: viewModels(from: newModel))]
             case let .removeCell(index):
                 newModel = model |> Model.lens.cells .~ model.cells.removing(at: index)
                 actions = [.updateCells(newModel.cells)]
-                effects = [.removeCell(index: index, cells: newModel.cells.stringifyCells())]
+                effects = [.removeCell(index: index, cells: viewModels(from: newModel))]
             case let .changeTitle(newTitle):
                 newModel = model |> Model.lens.title .~ newTitle
                 actions = [.updateTitle(newTitle)]
@@ -83,7 +83,7 @@ extension Note {
             switch event {
             case let .didLoadContent(content):
                 newModel = model |> Model.lens.cells .~ content.cells
-                effects = [.updateCells(content.cells.stringifyCells())]
+                effects = [.updateCells(viewModels(from: newModel))]
             case let .didDeleteNote(error):
                 if let error = error {
                     actions = [.showFailure(.deleteNote, reason: error.localizedDescription)]
@@ -102,7 +102,7 @@ extension Note {
                 guard let error = error else { break }
                 newModel = model |> Model.lens.cells .~ oldCells
                 actions = [.showFailure(.updateContent, reason: error.localizedDescription)]
-                effects = [.updateCells(oldCells.stringifyCells())]
+                effects = [.updateCells(viewModels(from: newModel))]
             case let .didAddTag(tag, note, error):
                 guard let error = error else {
                     actions = [.didUpdateNote(note)]
@@ -128,8 +128,12 @@ extension Note {
 
 // MARK: - Private
 
-private extension Array where Element == Core.Note.Cell {
-    func stringifyCells() -> [String] {
-        return self.map { $0.data }
+private extension Note {
+    static func viewModels(from model: Model) -> [CellViewModel] {
+        return model.cells.map(viewModelFromCell)
+    }
+
+    static func viewModelFromCell(_ cell: Core.Note.Cell) -> CellViewModel {
+        return CellViewModel(content: cell.data, type: cell.type)
     }
 }
