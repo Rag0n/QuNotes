@@ -41,8 +41,7 @@ extension Note {
                 }
             case let .changeCellContent(newContent, index):
                 guard index < model.cells.count else { break }
-                // TODO; fix type
-                let newCell = Core.Note.Cell(type: .markdown, data: newContent)
+                let newCell = Core.Note.Cell(type: model.cells[index].type, data: newContent)
                 newModel = model |> Model.lens.cells .~ model.cells.replacing(at: index, with: newCell)
                 actions = [.updateCells(newModel.cells)]
                 effects = [.updateCell(index: index, cells: viewModels(from: newModel))]

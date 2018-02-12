@@ -59,7 +59,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
             context("when receiving changeCellContent event") {
                 beforeEach {
-                    let cells = [Dummy.cell(withContent: "content"),
+                    let cells = [Dummy.cell(withContent: "content", type: .code),
                                  Dummy.cell(withContent: "anotherContent")]
                     e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
                 }
@@ -73,7 +73,7 @@ class NoteEvaluatorSpec: QuickSpec {
                     it("has updateCell effect") {
                         expect(e.effects).to(equalDiff([
                             .updateCell(index: 0, cells: [Note.CellViewModel(content: "newContent",
-                                                                             type: .markdown),
+                                                                             type: .code),
                                                           Note.CellViewModel(content: "anotherContent",
                                                                              type: .markdown)])
                         ]))
@@ -81,14 +81,15 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("has updateCells action") {
                         expect(e.actions).to(equalDiff([
-                            .updateCells([Dummy.cell(withContent: "newContent"),
+                            .updateCells([Dummy.cell(withContent: "newContent", type: .code),
                                           Dummy.cell(withContent: "anotherContent")])
                             ]))
                     }
 
                     it("updates model by replacing cell") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "newContent"),
+                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "newContent",
+                                                                             type: .code),
                                                                   Dummy.cell(withContent: "anotherContent")])
                         ))
                     }
@@ -110,7 +111,7 @@ class NoteEvaluatorSpec: QuickSpec {
 
                     it("doesnt update model") {
                         expect(e.model).to(equalDiff(
-                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content"),
+                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content", type: .code),
                                                                   Dummy.cell(withContent: "anotherContent")])
                         ))
                     }
