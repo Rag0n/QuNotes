@@ -94,9 +94,69 @@ class NoteEvaluatorSpec: QuickSpec {
                     }
                 }
 
-                context("when model doesnt hove cell with that index") {
+                context("when model doesnt have cell with that index") {
                     beforeEach {
                         event = .changeCellContent("newContent", index: 2)
+                        e = e.evaluating(event: event)
+                    }
+
+                    it("doesnt have effects") {
+                        expect(e.effects).to(beEmpty())
+                    }
+
+                    it("doesnt have actions") {
+                        expect(e.actions).to(beEmpty())
+                    }
+
+                    it("doesnt update model") {
+                        expect(e.model).to(equalDiff(
+                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content"),
+                                                                  Dummy.cell(withContent: "anotherContent")])
+                        ))
+                    }
+                }
+            }
+
+            context("when receiving changeCellType event") {
+                beforeEach {
+                    let cells = [Dummy.cell(withContent: "content"),
+                                 Dummy.cell(withContent: "anotherContent")]
+                    e = Note.Evaluator(note: Dummy.note, cells: cells, isNew: Dummy.isNew)
+                }
+
+                context("when model has cell with that index") {
+                    beforeEach {
+                        event = .changeCellType(Core.Note.CellType.code, index: 0)
+                        e = e.evaluating(event: event)
+                    }
+
+                    it("has updateCell effect") {
+                        expect(e.effects).to(equalDiff([
+                            .updateCell(index: 0, cells: [Note.CellViewModel(content: "content",
+                                                                             type: .code),
+                                                          Note.CellViewModel(content: "anotherContent",
+                                                                             type: .markdown)])
+                        ]))
+                    }
+
+                    it("has updateCells action") {
+                        expect(e.actions).to(equalDiff([
+                            .updateCells([Dummy.cell(withContent: "content", type: .code),
+                                          Dummy.cell(withContent: "anotherContent")])
+                            ]))
+                    }
+
+                    it("updates model by replacing cell") {
+                        expect(e.model).to(equalDiff(
+                            Dummy.model(fromModel: model, cells: [Dummy.cell(withContent: "content", type: .code),
+                                                                  Dummy.cell(withContent: "anotherContent")])
+                        ))
+                    }
+                }
+
+                context("when model doesnt have cell with that index") {
+                    beforeEach {
+                        event = .changeCellType(Core.Note.CellType.code, index: 2)
                         e = e.evaluating(event: event)
                     }
 
@@ -540,8 +600,8 @@ private enum Dummy {
         return Core.Note.Content(title: note.title, cells: cells)
     }
 
-    static func cell(withContent content: String) -> Core.Note.Cell {
-        return Core.Note.Cell(type: .markdown, data: content)
+    static func cell(withContent content: String, type: Core.Note.CellType = .markdown) -> Core.Note.Cell {
+        return Core.Note.Cell(type: type, data: content)
     }
 
     static func note(withUUUID uuid: String = UUID.init().uuidString,
